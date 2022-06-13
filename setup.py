@@ -38,7 +38,7 @@ if __name__ == "__main__":
         install_requires=["grpcio~=1.30", "protobuf~=3.20"],
         packages=setuptools.find_namespace_packages(".", include=("ansys.*",)),
         package_data={
-            "": ["*.proto", "*.pyi", "py.typed", "VERSION"],
+            "": ["*.pyi", "py.typed", "VERSION"],
         },
         entry_points={
             "ansys.tools.protoc_helper.proto_provider": [
