@@ -18,6 +18,8 @@ service DataModel {
   rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse);
 
   rpc CompositeGet(CompositeGetRequest) returns (CompositeGetResponse);
+
+  rpc GetStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse) {};
 }
 
 message NotifyChangesRequest {
@@ -115,4 +117,18 @@ message DataModelGetter {
 
 message CompositeGetResponse {
   google.protobuf.Value response = 1;
+}
+
+message GetStaticInfoRequest {
+  string path = 1;
+}
+
+message StaticInfo {
+  map<string, StaticInfo> menus = 1;
+  map<string, StaticInfo> commands = 2;
+  string help = 5;
+}
+
+message GetStaticInfoResponse {
+  StaticInfo info = 1;
 }
