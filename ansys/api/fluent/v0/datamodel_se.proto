@@ -18,6 +18,8 @@ service DataModel {
   rpc deleteObject(DeleteObjectRequest) returns (DeleteObjectResponse) {}
   rpc getAttributeValue(GetAttributeValueRequest) returns (GetAttributeValueResponse) {}
   rpc executeCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse) {}
+  rpc createCommandArguments(CreateCommandArgumentsRequest) returns (CreateCommandArgumentsResponse) {}
+  rpc deleteCommandArguments(DeleteCommandArgumentsRequest) returns (DeleteCommandArgumentsResponse) {}
   rpc getSpecs(GetSpecsRequest) returns (GetSpecsResponse) {}
   rpc getStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse) {}
 }
@@ -109,6 +111,26 @@ message ExecuteCommandResponse {
   utils.Variant result = 1;
   utils.Variant state = 2;
   repeated string deletedpaths = 3;
+}
+
+message CreateCommandArgumentsRequest {
+  string rules = 1;
+  string path = 2;
+  string command = 3;
+}
+
+message CreateCommandArgumentsResponse {
+  string commandid = 1;
+}
+
+message DeleteCommandArgumentsRequest {
+  string rules = 1;
+  string path = 2;
+  string command = 3;
+  string commandid = 4;
+}
+
+message DeleteCommandArgumentsResponse {
 }
 
 message GetSpecsRequest {
