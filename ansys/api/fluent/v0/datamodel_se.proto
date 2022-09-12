@@ -229,6 +229,7 @@ message GetSpecsResponse {
 message CommandArg {
   string type = 1;
   string name = 2;
+  StaticInfo info = 3;
 }
 
 message CommandInfo {
