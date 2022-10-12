@@ -75,7 +75,7 @@ message StaticInfo {
   string type = 1;
   // Children of current object.
   repeated StaticInfoMap children = 2;
-  // Commands availabe for current object.
+  // Commands available for current object.
   repeated StaticInfoMap commands = 3;
   // Arguments associated with the current command object.
   repeated StaticInfoMap arguments = 4;
