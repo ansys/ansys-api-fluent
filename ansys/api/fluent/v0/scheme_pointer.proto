@@ -14,10 +14,15 @@ message SchemePointer {
     SchemePointer cdr = 2;
   }
 
+  message SchemeList {
+    repeated SchemePointer item = 1;
+  }
+
   oneof val {
     Empty empty = 1;
     string sym = 2;
     SchemePair pair = 3;
+    SchemeList list = 9;
     double flonum = 4;
     sint64 fixednum = 5;
     string c = 6;
