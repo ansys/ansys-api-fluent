@@ -19,11 +19,13 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.7"
-      - name: Run protolint
-        uses: plexsystems/protolint-action@v0.6.0
+      - name: Install pre-commit
+        run: |
+          python -m pip install pre-commit          
+      - name: Run pre-commit
         if: always()
-        with:
-          configDirectory: .
+        run: |
+          pre-commit run --all-files --show-diff-on-failure
       - name: Install build requirements
         run: |
           pip install -U pip
