@@ -86,10 +86,10 @@ enum PayloadTag {
  */
 message FieldRequestInfo {
   oneof request {
-   SurfaceRequest surfaceRequest = 1;                // Surface request info.
-   ScalarFieldRequest scalarFieldRequest = 2;        // Scalar field request info.
-   VectorFieldRequest vectorFieldRequest = 3;        // Vector field request info.
-   PathlinesFieldRequest pathlinesFieldRequest = 4;  // Pathlines field request info.
+    SurfaceRequest surfaceRequest = 1;                // Surface request info.
+    ScalarFieldRequest scalarFieldRequest = 2;        // Scalar field request info.
+    VectorFieldRequest vectorFieldRequest = 3;        // Vector field request info.
+    PathlinesFieldRequest pathlinesFieldRequest = 4;  // Pathlines field request info.
   }
 }
 
@@ -97,12 +97,12 @@ message FieldRequestInfo {
  * Information about payload
  */
 message PayloadInfo {
-  uint64 surfaceId = 1;                                     // Surface id corresponding to field data.
-  string fieldName = 2;                                     // Field name e.g. vertices, faces, temperature, vector etc.
-  FieldType fieldType = 3;                                  // Field type.
-  uint64 fieldSize = 4;                                     // Field size. For bytes it will be number of bytes otherwise array size.
-  repeated PayloadTag payloadTag = 5  [deprecated = true];  //PayloadTag to provide extra information about payload. 
-  FieldRequestInfo fieldRequestInfo = 6;                    //Request info for the payload.
+  uint64 surfaceId = 1;                                    // Surface id corresponding to field data.
+  string fieldName = 2;                                    // Field name e.g. vertices, faces, temperature, vector etc.
+  FieldType fieldType = 3;                                 // Field type.
+  uint64 fieldSize = 4;                                    // Field size. For bytes it will be number of bytes otherwise array size.
+  repeated PayloadTag payloadTag = 5 [deprecated = true];  // PayloadTag to provide extra information about payload.
+  FieldRequestInfo fieldRequestInfo = 6;                   // Request info for the payload.
 }
 
 /**
@@ -169,13 +169,13 @@ message PathlinesFieldRequest {
   DataLocation dataLocation = 5;      // Scalar Field location (Nodes/Elements).
   sint32 steps = 6;                   // Pathlines step count.
   double stepSize = 7;                // Pathlines step size.
-  sint32 skip = 8;                    // Pathlines skip count. 
-  bool reverse = 9;                   // Flag to plot pathlines in reverse direction.  
-  bool accuracyControlOn = 10;        // Pathlines accuracy control flag. 
-  double tolerance = 11;              // Pathlines tolerance. 
+  sint32 skip = 8;                    // Pathlines skip count.
+  bool reverse = 9;                   // Flag to plot pathlines in reverse direction.
+  bool accuracyControlOn = 10;        // Pathlines accuracy control flag.
+  double tolerance = 11;              // Pathlines tolerance.
   sint32 coarsen = 12;                // Pathlines coarsen value.
-  string velocityDomain = 13;         // Pathlines velocity domain. 
-  repeated string zones = 14;         // Pathlines zones. 
+  string velocityDomain = 13;         // Pathlines velocity domain.
+  repeated string zones = 14;         // Pathlines zones.
 }
 
 /**
