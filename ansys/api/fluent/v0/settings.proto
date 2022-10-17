@@ -38,6 +38,9 @@ service Settings {
   /* Execute a command */
   rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse);
 
+  /* Execute a query */
+  rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse);
+
   /* Attribute access */
   rpc GetAttrs(GetAttrsRequest) returns (GetAttrsResponse);
 }
@@ -77,7 +80,9 @@ message StaticInfo {
   repeated StaticInfoMap children = 2;
   // Commands available for current object.
   repeated StaticInfoMap commands = 3;
-  // Arguments associated with the current command object.
+  // Queries available for current object.
+  repeated StaticInfoMap queries = 11;
+  // Arguments associated with the current command/query object.
   repeated StaticInfoMap arguments = 4;
   // Class template for named object instance.
   StaticInfo object_type = 5;
@@ -174,6 +179,16 @@ message ExecuteCommandRequest {
 }
 
 message ExecuteCommandResponse {
+  Value reply = 1;
+}
+
+message ExecuteQueryRequest {
+  PathInfo path_info = 1;
+  string query = 2;
+  Value args = 3;
+}
+
+message ExecuteQueryResponse {
   Value reply = 1;
 }
 
