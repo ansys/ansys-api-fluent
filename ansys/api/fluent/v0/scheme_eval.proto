@@ -9,7 +9,10 @@ package grpcRemoting;
 import "ansys/api/fluent/v0/scheme_pointer.proto";
 
 service SchemeEval {
-  rpc Eval(SchemePointer) returns (SchemePointer);
+  rpc Eval(SchemePointer) returns (SchemePointer) {
+    option deprecated = true;
+  }
+  rpc SchemeEval(SchemeEvalRequest) returns (SchemeEvalResponse);
   rpc Exec(ExecRequest) returns (ExecResponse);
   rpc StringEval(StringEvalRequest) returns (StringEvalResponse);
 }
@@ -22,6 +25,14 @@ message ExecRequest {
 
 message ExecResponse {
   string output = 1;
+}
+
+message SchemeEvalRequest {
+  SchemePointer input = 1;
+}
+
+message SchemeEvalResponse {
+  SchemePointer output = 1;
 }
 
 message StringEvalRequest {
