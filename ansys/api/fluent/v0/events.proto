@@ -41,7 +41,14 @@ message CalculationsEndedEvent {
 }
 
 /**
- * Event at case read.
+ * Event at start of case read.
+ */
+message AboutToReadCaseEvent {
+  string casefilepath = 1;  // Case file path.
+}
+
+/**
+ * Event after case is read.
  */
 message CaseReadEvent {
   string casefilepath = 1;  // Case file path.
@@ -70,6 +77,7 @@ message ProgressEvent {
 
 message BeginStreamingResponse {
   oneof as {
+    AboutToReadCaseEvent abouttoreadcaseevent = 1;
     CaseReadEvent casereadevent = 2;
     InitializedEvent initializedevent = 4;
     DataReadEvent datareadevent = 6;

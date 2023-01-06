@@ -209,4 +209,6 @@ message GetAttrsResponse {
   repeated AttrInfoMap named_object_children = 3;
   repeated GetAttrsResponse list_object_children = 4;
   repeated AttrInfoMap arguments = 5;
+  repeated AttrInfoMap commands = 6;
+  repeated AttrInfoMap queries = 7;
 }
