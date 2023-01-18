@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v0;
 
-import "ansys/api/fluent/v0/google/protobuf/struct.proto";
+import "google/protobuf/struct.proto";
 
 service DataModel {
   rpc NotifyChanges(NotifyChangesRequest) returns (stream NotifyChangesResponse);
