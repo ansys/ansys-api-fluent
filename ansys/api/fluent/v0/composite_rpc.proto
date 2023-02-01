@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package ansys.api.fluent.v0;
+
+service CompositeRpc {
+  rpc Transaction (stream TransactionRequest) returns (TransactionResponse);
+  rpc Query (stream QueryRequest) returns (stream QueryResponse);
+}
+
+message TransactionRequest {
+  string package = 1;
+  string service = 2;
+  string method = 3;
+  bytes request_body = 4;
+}
+
+enum TransactionStatus {
+  SUCCESSFUL = 0;
+  FAILED = 1;
+}
+
+message TransactionResponse {
+  TransactionStatus status = 1;
+  repeated bytes response_body = 2;
+}
+
+message QueryRequest {
+  string package = 1;
+  string service = 2;
+  string method = 3;
+  bytes request_body = 4;
+}
+
+message QueryResponse {
+  bytes response_body = 1;
+}
