@@ -22,6 +22,15 @@ service DataModel {
   rpc deleteCommandArguments(DeleteCommandArgumentsRequest) returns (DeleteCommandArgumentsResponse) {}
   rpc getSpecs(GetSpecsRequest) returns (GetSpecsResponse) {}
   rpc getStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse) {}
+
+  // Subscribe to datamodel events
+  rpc subscribeEvents(SubscribeEventsRequest) returns (SubscribeEventsResponse) {}
+
+  // Request streaming of previously subscribed events
+  rpc unsubscribeEvents(UnsubscribeEventsRequest) returns (UnsubscribeEventsResponse) {}
+
+  // Unsubscribe previously subscribed events
+  rpc BeginEventStreaming(EventRequest) returns (stream EventResponse) {}
 }
 
 message DataModelRequest {
@@ -252,4 +261,123 @@ message GetStaticInfoRequest {
 
 message GetStaticInfoResponse {
   StaticInfo info = 1;
+}
+
+message CreatedEventRequest {
+  string parentpath = 1;                    // parent-path of the created object
+  string childtype = 2;                     // type of the created object
+}
+
+message ModifiedEventRequest {
+  string path = 1;                          // path of the modified object
+}
+
+message DeletedEventRequest {
+  string path = 1;                          // path of the deleted object
+}
+
+message AffectedEventRequest {
+  string path = 1;                          // path of the affected object
+  string subtype = 2;
+}
+
+message AttributeChangedEventRequest {
+  string path = 1;                          // path of the object whose attribute is changed
+  string attribute = 2;                     // name of the attribute
+}
+
+message CommandAttributeChangedEventRequest {
+  string path = 1;                          // path of the object whose command attribute is changed
+  string command = 2;                       // name of the command
+  string attribute = 3;                     // name of the attribute
+}
+
+message DataModelEventRequest {
+  string rules = 1;
+  oneof eventrequest {
+    CreatedEventRequest createdEventRequest = 2;
+    ModifiedEventRequest modifiedEventRequest = 3;
+    DeletedEventRequest deletedEventRequest = 4;
+    AffectedEventRequest affectedEventRequest = 5;
+    AttributeChangedEventRequest attributeChangedEventRequest = 6;
+    CommandAttributeChangedEventRequest commandAttributeChangedEventRequest = 7;
+  }
+}
+
+message SubscribeEventsRequest {
+  repeated DataModelEventRequest eventrequest = 1;
+}
+
+enum SubscriptionStatus {
+  STATUS_UNSPECIFIED = 0;
+  STATUS_SUBSCRIBED = 1;
+  STATUS_UNSUBSCRIBED = 2;
+}
+
+message EventSubscription {
+  // tag is used to identify a subscribed event in server.
+  // A subcribed event can later be unsubscribed.
+  string tag = 1;
+  SubscriptionStatus status = 2;
+}
+
+message SubscribeEventsResponse {
+  repeated EventSubscription response = 1;
+}
+
+message UnsubscribeEventsRequest {
+  repeated string tag = 1;
+}
+
+message UnsubscribeEventsResponse {
+  repeated EventSubscription response = 1;
+}
+
+message EventRequest {
+}
+
+message CreatedEventResponse {
+  string parentpath = 1;                    // parent-path of the created object
+  string childtype = 2;                     // type of the created object
+  string childname = 3;                     // name of the created object
+}
+
+message ModifiedEventResponse {
+  string path = 1;                          // path of the modified object
+  utils.Variant value = 2;                  // value of the modified object
+}
+
+message DeletedEventResponse {
+  string path = 1;                          // path of the deleted object
+}
+
+message AffectedEventResponse {
+  string path = 1;                          // path of the affected object
+  string subtype = 2;
+}
+
+message AttributeChangedEventResponse {
+  string path = 1;                          // path of the object whose attribute is changed
+  string attribute = 2;                     // name of the attribute
+  utils.Variant value = 3;                  // value of the attribute
+}
+
+message CommandAttributeChangedEventResponse {
+  string path = 1;                          // path of the object whose command attribute is changed
+  string command = 2;                       // name of the command
+  string attribute = 3;                     // name of the attribute
+  utils.Variant value = 4;                  // value of the attribute
+}
+
+message EventResponse {
+  string tag = 1;
+  string rules = 2;
+  oneof eventresponse {
+    CreatedEventResponse createdEventResponse = 3;
+    ModifiedEventResponse modifiedEventResponse = 4;
+    DeletedEventResponse deletedEventResponse = 5;
+    AffectedEventResponse affectedEventResponse = 6;
+    AttributeChangedEventResponse attributeChangedEventResponse = 7;
+    CommandAttributeChangedEventResponse commandAttributeChangedEventResponse = 8;
+  }
 }
