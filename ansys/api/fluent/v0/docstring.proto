@@ -1,0 +1,81 @@
+//
+// Copyright 1987-2023 ANSYS, Inc. All Rights Reserved.
+//
+//
+// The  purpose of this proto is to serve all compononets of an api docstring
+// at a given api path. The interface should be agnostic of the client language
+// for which the docstring will be formed or the api backends in server
+// (Settings/Datamodel/TUI).
+
+syntax = "proto3";
+
+package ansys.api.fluent.v0;
+
+import "ansys/api/fluent/v0/variant.proto";
+
+service Docstring {
+  rpc GetMethodDocstring(GetMethodDocstringRequest) returns (GetMethodDocstringResponse);
+  rpc GetClassDocstring(GetClassDocstringRequest) returns (GetClassDocstringResponse);
+}
+
+message GetMethodDocstringRequest {
+  string path = 1;  // api path to the function
+}
+
+message FieldDocstring {
+  string name = 1;
+  string type = 2;        // string or oneof
+  bytes description = 3;  // bytes datatype to encode images
+  bool optional = 4;
+  utils.Variant default = 5;
+  repeated utils.Variant allowed_values = 6;
+}
+
+message ReturnValueDocstring {
+  string type = 1;        // string or oneof
+  bytes description = 2;  // bytes datatype to encode images
+}
+message ExceptionDocstring {
+  string type = 1;        // string or oneof
+  bytes description = 2;  // bytes datatype to encode images
+}
+
+message RelatedSectionDocstring {
+  string path = 1;
+  bytes description = 2;  // bytes datatype to encode images
+}
+
+message MethodDocstring {
+  string name = 1;
+  string summary = 2;
+  bytes extended_summary = 3;  // bytes datatype to encode images
+  repeated FieldDocstring parameters = 4;
+  ReturnValueDocstring returns = 5;
+  repeated ExceptionDocstring exceptions = 6;
+  repeated RelatedSectionDocstring related_sections = 7;
+  repeated bytes notes = 8;
+  repeated bytes references = 9;  // can use bibtex structure
+  repeated bytes examples = 10;
+}
+
+message GetMethodDocstringResponse {
+  MethodDocstring method = 1;
+}
+
+message GetClassDocstringRequest {
+  string path = 1;  // api path to the class
+}
+
+message GetClassDocstringResponse {
+  string name = 1;
+  string summary = 2;
+  bytes extended_summary = 3;  // bytes datatype to encode images
+  repeated FieldDocstring parameters = 4;
+  repeated FieldDocstring attributes = 5;
+  repeated MethodDocstring methods = 6;
+  repeated ExceptionDocstring exceptions = 7;
+  repeated RelatedSectionDocstring related_sections = 8;
+  repeated bytes notes = 9;
+  repeated bytes references = 10;  // can use bibtex structure
+  repeated bytes examples = 11;
+}
