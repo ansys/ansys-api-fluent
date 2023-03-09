@@ -33,9 +33,15 @@ service DataModel {
   rpc BeginEventStreaming(EventRequest) returns (stream EventResponse) {}
 }
 
+enum DiffState {
+  DIFFSTATE_FULL = 0;
+  DIFFSTATE_NOCOMMANDS = 1;
+}
+
 message DataModelRequest {
   string rules = 1;
   bool returnstatechanges = 2;
+  DiffState diffstate = 3;
 }
 
 message DataModelResponse {
@@ -292,6 +298,11 @@ message CommandAttributeChangedEventRequest {
   string attribute = 3;  // name of the attribute
 }
 
+message CommandExecutedEventRequest {
+  string path = 1;     // path of the object with the command
+  string command = 2;  // name of the command
+}
+
 message DataModelEventRequest {
   string rules = 1;
   oneof eventrequest {
@@ -301,6 +312,7 @@ message DataModelEventRequest {
     AffectedEventRequest affectedEventRequest = 5;
     AttributeChangedEventRequest attributeChangedEventRequest = 6;
     CommandAttributeChangedEventRequest commandAttributeChangedEventRequest = 7;
+    CommandExecutedEventRequest commandExecutedEventRequest = 8;
   }
 }
 
@@ -369,6 +381,12 @@ message CommandAttributeChangedEventResponse {
   utils.Variant value = 4;  // value of the attribute
 }
 
+message CommandExecutedEventResponse {
+  string path = 1;         // path of the object with the command
+  string command = 2;      // name of the command
+  utils.Variant args = 3;  // command arguments
+}
+
 message EventResponse {
   string tag = 1;
   string rules = 2;
@@ -379,5 +397,6 @@ message EventResponse {
     AffectedEventResponse affectedEventResponse = 6;
     AttributeChangedEventResponse attributeChangedEventResponse = 7;
     CommandAttributeChangedEventResponse commandAttributeChangedEventResponse = 8;
+    CommandExecutedEventResponse commandExecutedEventResponse = 9;
   }
 }
