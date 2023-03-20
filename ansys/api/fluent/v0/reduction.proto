@@ -4,7 +4,7 @@
 
 syntax = "proto3";
 
-package grpcRemoting;
+package ansys.api.fluent.v0;
 
 service ReductionQueries {
   rpc Area (AreaRequest) returns (AreaResponse) {}
