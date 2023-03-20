@@ -1,0 +1,189 @@
+//
+// Copyright 1987-2023 ANSYS, Inc. All Rights Reserved.
+//
+
+syntax = "proto3";
+
+package grpcRemoting;
+
+service ReductionQueries {
+  rpc Area (AreaRequest) returns (AreaResponse) {}
+  rpc AreaAve (AreaAveRequest) returns (AreaAveResponse) {}
+  rpc AreaInt (AreaIntRequest) returns (AreaIntResponse) {}
+  rpc Centroid (CentroidRequest) returns (CentroidResponse) {}
+  rpc Count (CountRequest) returns (CountResponse) {}
+  rpc Force (ForceRequest) returns (ForceResponse) {}
+  rpc MassAve (MassAveRequest) returns (MassAveResponse) {}
+  rpc MassFlowAve (MassFlowAveRequest) returns (MassFlowAveResponse) {}
+  rpc MassFlowAveAbs (MassFlowAveAbsRequest) returns (MassFlowAveAbsResponse) {}
+  rpc MassFlowInt (MassFlowIntRequest) returns (MassFlowIntResponse) {}
+  rpc MassInt (MassIntRequest) returns (MassIntResponse) {}
+  rpc Maximum (MaximumRequest) returns (MaximumResponse) {}
+  rpc Minimum (MinimumRequest) returns (MinimumResponse) {}
+  rpc PressureForce (PressureForceRequest) returns (PressureForceResponse) {}
+  rpc ViscousForce (ViscousForceRequest) returns (ViscousForceResponse) {}
+  rpc Volume (VolumeRequest) returns (VolumeResponse) {}
+  rpc VolumeAve (VolumeAveRequest) returns (VolumeAveResponse) {}
+  rpc VolumeInt (VolumeIntRequest) returns (VolumeIntResponse) {}
+}
+
+message Point {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+message AreaRequest {
+  repeated string locations = 1;
+}
+
+message AreaResponse {
+  double value = 1;
+}
+
+message AreaAveRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message AreaAveResponse {
+  double value = 1;
+}
+
+message AreaIntRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message AreaIntResponse {
+  double value = 1;
+}
+
+message CentroidRequest {
+  repeated string locations = 1;
+}
+
+message CentroidResponse {
+  Point value = 1;
+}
+
+message CountRequest {
+  repeated string locations = 1;
+}
+
+message CountResponse {
+  double value = 1;
+}
+
+message ForceRequest {
+  repeated string locations = 1;
+}
+
+message ForceResponse {
+  Point value = 1;
+}
+
+message MassAveRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message MassAveResponse {
+  double value = 1;
+}
+
+message MassFlowAveRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message MassFlowAveResponse {
+  double value = 1;
+}
+
+message MassFlowAveAbsRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message MassFlowAveAbsResponse {
+  double value = 1;
+}
+
+message MassFlowIntRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message MassFlowIntResponse {
+  double value = 1;
+}
+
+message MassIntRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message MassIntResponse {
+  double value = 1;
+}
+
+message MaximumRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message MaximumResponse {
+  double value = 1;
+}
+
+message MinimumRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message MinimumResponse {
+  double value = 1;
+}
+
+message PressureForceRequest {
+  repeated string locations = 1;
+}
+
+message PressureForceResponse {
+  Point value = 1;
+}
+
+message ViscousForceRequest {
+  repeated string locations = 1;
+}
+
+message ViscousForceResponse {
+  Point value = 1;
+}
+
+message VolumeRequest {
+  repeated string locations = 1;
+}
+
+message VolumeResponse {
+  double value = 1;
+}
+
+message VolumeAveRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message VolumeAveResponse {
+  double value = 1;
+}
+
+message VolumeIntRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message VolumeIntResponse {
+  double value = 1;
+}
