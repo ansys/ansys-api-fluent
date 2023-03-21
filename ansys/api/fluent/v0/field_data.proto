@@ -9,6 +9,9 @@ package grpcRemoting;
 import "ansys/api/fluent/v0/common.proto";
 
 service FieldData {
+  /* Begin fields streaming.*/
+  rpc BeginFieldsStreaming(BeginFieldsStreamingRequest) returns (stream BeginFieldsStreamingResponse) {}
+  
   /* Get fields e.g. scalar, vector, surfaces etc in a single request.*/
   rpc GetFields(GetFieldsRequest) returns (stream GetFieldsResponse);
 
@@ -121,6 +124,36 @@ message GetFieldsResponse {
     PayloadInfo payloadInfo = 6;      // Payload info.
   }
 }
+
+
+/**
+ * Request to stream fields.
+ * - Default chunk size is 256kb. Minimum chunk size is 8b and Maximum is 4Mb.
+ * - If true chunks of bytes will be streamed. Otherwise chunks of int/long/float or double array will be streamed.
+ */
+message BeginFieldsStreamingRequest {
+  uint32 chunkSize = 1;                // Chunk size.
+  bool provideBytesStream = 2;         // Bytes are streamed if true
+}
+
+/**
+ * BeginFieldsStreamingResponse can be either bytePayload or one of double/float/long/int payload.
+ * Whether data is sent as bytes or as arrays of double/float/long/int depends upon value
+ * of provideBytesStream in BeginFieldsStreamingRequest. During streaming first payloadInfo is
+ * streamed and then corresponding data is streamed.
+ */
+message BeginFieldsStreamingResponse {
+  oneof chunk {
+    bytes bytePayload = 1;            // Bytes payload.
+    DoublePayload doublePayload = 2;  // Double payload.
+    FloatPayload floatPayload = 3;    // Float payload.
+    LongPayload longPayload = 4;      // Long payload.
+    IntPayload intPayload = 5;        // Int payload.
+    PayloadInfo payloadInfo = 6;      // Payload info.
+  }
+}
+
+
 
 /**
  * Request for surface data.
