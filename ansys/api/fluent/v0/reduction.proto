@@ -12,6 +12,7 @@ service ReductionQueries {
   rpc AreaInt (AreaIntRequest) returns (AreaIntResponse) {}
   rpc Centroid (CentroidRequest) returns (CentroidResponse) {}
   rpc Count (CountRequest) returns (CountResponse) {}
+  rpc CountIf (CountIfRequest) returns (CountIfResponse) {}
   rpc Force (ForceRequest) returns (ForceResponse) {}
   rpc MassAve (MassAveRequest) returns (MassAveResponse) {}
   rpc MassFlowAve (MassFlowAveRequest) returns (MassFlowAveResponse) {}
@@ -25,6 +26,7 @@ service ReductionQueries {
   rpc Volume (VolumeRequest) returns (VolumeResponse) {}
   rpc VolumeAve (VolumeAveRequest) returns (VolumeAveResponse) {}
   rpc VolumeInt (VolumeIntRequest) returns (VolumeIntResponse) {}
+  rpc Moment (MomentRequest) returns (MomentResponse) {}
 }
 
 message Point {
@@ -72,6 +74,15 @@ message CountRequest {
 }
 
 message CountResponse {
+  double value = 1;
+}
+
+message CountIfRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message CountIfResponse {
   double value = 1;
 }
 
@@ -186,4 +197,13 @@ message VolumeIntRequest {
 
 message VolumeIntResponse {
   double value = 1;
+}
+
+message MomentRequest {
+  string expression = 1;
+  repeated string locations = 2;
+}
+
+message MomentResponse {
+  Point value = 1;
 }
