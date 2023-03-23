@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v0;
 
-service ReductionQueries {
+service Reduction {
   rpc Area (AreaRequest) returns (AreaResponse) {}
   rpc AreaAve (AreaAveRequest) returns (AreaAveResponse) {}
   rpc AreaInt (AreaIntRequest) returns (AreaIntResponse) {}
