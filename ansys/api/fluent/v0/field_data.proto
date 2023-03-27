@@ -128,11 +128,11 @@ message GetFieldsResponse {
 
 /**
  * Request to stream fields.
- * - Default chunk size is 256kb. Minimum chunk size is 8b and Maximum is 4Mb.
+ * - Default chunk size is 256KB. Minimum chunk size is 8B and Maximum is 4MB.
  * - If true chunks of bytes will be streamed. Otherwise chunks of int/long/float or double array will be streamed.
  */
 message BeginFieldsStreamingRequest {
-  uint32 chunkSize = 1;                // Chunk size.
+  uint32 chunkSize = 1;                // Chunk size in bytes.
   bool provideBytesStream = 2;         // Bytes are streamed if true
 }
 
@@ -213,11 +213,11 @@ message PathlinesFieldRequest {
 
 /**
  * Request for fields.
- * - Default chunk size is 256kb. Minimum chunk size is 8b and Maximum is 4Mb.
+ * - Default chunk size is 256KB. Minimum chunk size is 8B and Maximum is 4MB.
  * - If true chunks of bytes will be streamed. Otherwise chunks of int/long/float or double array will be streamed.
  */
 message GetFieldsRequest {
-  uint32 chunkSize = 1;                                      // Chunk size.
+  uint32 chunkSize = 1;                                      // Chunk size in bytes.
   bool provideBytesStream = 2;                               // Bytes are streamed if true
   repeated SurfaceRequest surfaceRequest = 3;                // Surface request.
   repeated ScalarFieldRequest scalarFieldRequest = 4;        // Scalar field request.
