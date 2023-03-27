@@ -11,7 +11,7 @@ import "ansys/api/fluent/v0/common.proto";
 service FieldData {
   /* Begin fields streaming.*/
   rpc BeginFieldsStreaming(BeginFieldsStreamingRequest) returns (stream BeginFieldsStreamingResponse) {}
-  
+
   /* Get fields e.g. scalar, vector, surfaces etc in a single request.*/
   rpc GetFields(GetFieldsRequest) returns (stream GetFieldsResponse);
 
@@ -125,15 +125,14 @@ message GetFieldsResponse {
   }
 }
 
-
 /**
  * Request to stream fields.
  * - Default chunk size is 256KB. Minimum chunk size is 8B and Maximum is 4MB.
  * - If true chunks of bytes will be streamed. Otherwise chunks of int/long/float or double array will be streamed.
  */
 message BeginFieldsStreamingRequest {
-  uint32 chunkSize = 1;                // Chunk size in bytes.
-  bool provideBytesStream = 2;         // Bytes are streamed if true
+  uint32 chunkSize = 1;         // Chunk size in bytes.
+  bool provideBytesStream = 2;  // Bytes are streamed if true
 }
 
 /**
@@ -152,8 +151,6 @@ message BeginFieldsStreamingResponse {
     PayloadInfo payloadInfo = 6;      // Payload info.
   }
 }
-
-
 
 /**
  * Request for surface data.
