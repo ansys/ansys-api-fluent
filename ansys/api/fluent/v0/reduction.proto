@@ -9,26 +9,26 @@ package ansys.api.fluent.v0;
 import "common_api.proto";
 
 service Reduction {
-  rpc Area (AreaRequest) returns (AreaResponse) {}
-  rpc AreaAve (AreaAveRequest) returns (AreaAveResponse) {}
-  rpc AreaInt (AreaIntRequest) returns (AreaIntResponse) {}
-  rpc Centroid (CentroidRequest) returns (CentroidResponse) {}
-  rpc Count (CountRequest) returns (CountResponse) {}
-  rpc CountIf (CountIfRequest) returns (CountIfResponse) {}
-  rpc Force (ForceRequest) returns (ForceResponse) {}
-  rpc MassAve (MassAveRequest) returns (MassAveResponse) {}
-  rpc MassFlowAve (MassFlowAveRequest) returns (MassFlowAveResponse) {}
-  rpc MassFlowAveAbs (MassFlowAveAbsRequest) returns (MassFlowAveAbsResponse) {}
-  rpc MassFlowInt (MassFlowIntRequest) returns (MassFlowIntResponse) {}
-  rpc MassInt (MassIntRequest) returns (MassIntResponse) {}
-  rpc Maximum (MaximumRequest) returns (MaximumResponse) {}
-  rpc Minimum (MinimumRequest) returns (MinimumResponse) {}
-  rpc PressureForce (PressureForceRequest) returns (PressureForceResponse) {}
-  rpc ViscousForce (ViscousForceRequest) returns (ViscousForceResponse) {}
-  rpc Volume (VolumeRequest) returns (VolumeResponse) {}
-  rpc VolumeAve (VolumeAveRequest) returns (VolumeAveResponse) {}
-  rpc VolumeInt (VolumeIntRequest) returns (VolumeIntResponse) {}
-  rpc Moment (MomentRequest) returns (MomentResponse) {}
+  rpc Area(AreaRequest) returns (AreaResponse) {}
+  rpc AreaAve(AreaAveRequest) returns (AreaAveResponse) {}
+  rpc AreaInt(AreaIntRequest) returns (AreaIntResponse) {}
+  rpc Centroid(CentroidRequest) returns (CentroidResponse) {}
+  rpc Count(CountRequest) returns (CountResponse) {}
+  rpc CountIf(CountIfRequest) returns (CountIfResponse) {}
+  rpc Force(ForceRequest) returns (ForceResponse) {}
+  rpc MassAve(MassAveRequest) returns (MassAveResponse) {}
+  rpc MassFlowAve(MassFlowAveRequest) returns (MassFlowAveResponse) {}
+  rpc MassFlowAveAbs(MassFlowAveAbsRequest) returns (MassFlowAveAbsResponse) {}
+  rpc MassFlowInt(MassFlowIntRequest) returns (MassFlowIntResponse) {}
+  rpc MassInt(MassIntRequest) returns (MassIntResponse) {}
+  rpc Maximum(MaximumRequest) returns (MaximumResponse) {}
+  rpc Minimum(MinimumRequest) returns (MinimumResponse) {}
+  rpc PressureForce(PressureForceRequest) returns (PressureForceResponse) {}
+  rpc ViscousForce(ViscousForceRequest) returns (ViscousForceResponse) {}
+  rpc Volume(VolumeRequest) returns (VolumeResponse) {}
+  rpc VolumeAve(VolumeAveRequest) returns (VolumeAveResponse) {}
+  rpc VolumeInt(VolumeIntRequest) returns (VolumeIntResponse) {}
+  rpc Moment(MomentRequest) returns (MomentResponse) {}
 }
 
 message AreaRequest {
