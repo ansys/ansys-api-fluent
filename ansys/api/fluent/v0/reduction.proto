@@ -6,6 +6,8 @@ syntax = "proto3";
 
 package ansys.api.fluent.v0;
 
+import "common_api.proto";
+
 service Reduction {
   rpc Area (AreaRequest) returns (AreaResponse) {}
   rpc AreaAve (AreaAveRequest) returns (AreaAveResponse) {}
@@ -27,12 +29,6 @@ service Reduction {
   rpc VolumeAve (VolumeAveRequest) returns (VolumeAveResponse) {}
   rpc VolumeInt (VolumeIntRequest) returns (VolumeIntResponse) {}
   rpc Moment (MomentRequest) returns (MomentResponse) {}
-}
-
-message Point {
-  double x = 1;
-  double y = 2;
-  double z = 3;
 }
 
 message AreaRequest {

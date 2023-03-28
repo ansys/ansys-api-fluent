@@ -1,0 +1,13 @@
+//
+// Copyright 1987-2023 ANSYS, Inc. All Rights Reserved.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v0;
+
+message Point {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
