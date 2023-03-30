@@ -1,0 +1,188 @@
+//
+// Copyright 1987-2023 ANSYS, Inc. All Rights Reserved.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v0;
+
+import "common_api.proto";
+
+service MeshingQueries {
+  rpc GetFaceZoneAtLocation(GetFaceZoneAtLocationRequest) returns (GetFaceZoneAtLocationResponse);
+  rpc GetCellZoneAtLocation(GetCellZoneAtLocationRequest) returns (GetCellZoneAtLocationResponse);
+  rpc GetZonesOfType(GetZonesOfTypeRequest) returns (GetZonesOfTypeResponse);
+  rpc GetZonesOfGroup(GetZonesOfGroupRequest) returns (GetZonesOfGroupResponse);
+  rpc GetFaceZonesOfFilter(GetFaceZonesOfFilterRequest) returns (GetFaceZonesOfFilterResponse);
+  rpc GetCellZonesOfFilter(GetCellZonesOfFilterRequest) returns (GetCellZonesOfFilterResponse);
+  rpc GetEdgeZonesOfFilter(GetEdgeZonesOfFilterRequest) returns (GetEdgeZonesOfFilterResponse);
+  rpc GetNodeZonesOfFilter(GetNodeZonesOfFilterRequest) returns (GetNodeZonesOfFilterResponse);
+  rpc GetObjectsOfType(GetObjectsOfTypeRequest) returns (GetObjectsOfTypeResponse);
+  rpc GetFaceZoneIdListOfObject(GetFaceZoneIdListOfObjectRequest) returns (GetFaceZoneIdListOfObjectResponse);
+  rpc GetEdgeZoneIdListOfObject(GetEdgeZoneIdListOfObjectRequest) returns (GetEdgeZoneIdListOfObjectResponse);
+  rpc GetCellZoneIdListOfObject(GetCellZoneIdListOfObjectRequest) returns (GetCellZoneIdListOfObjectResponse);
+  rpc GetFaceZonesSharedByRegionsOfType(GetFaceZonesSharedByRegionsOfTypeRequest) returns (GetFaceZonesSharedByRegionsOfTypeResponse);
+  rpc GetFaceZonesOfRegions(GetFaceZonesOfRegionsRequest) returns (GetFaceZonesOfRegionsResponse);
+  rpc GetFaceZonesOfLabels(GetFaceZonesOfLabelsRequest) returns (GetFaceZonesOfLabelsResponse);
+  rpc TgapiUtilGetFaceZoneIdListOfLabels(TgapiUtilGetFaceZoneIdListOfLabelsRequest) returns (TgapiUtilGetFaceZoneIdListOfLabelsResponse);
+  rpc GetFaceZonesOfObjects(GetFaceZonesOfObjectsRequest) returns (GetFaceZonesOfObjectsResponse);
+  rpc GetEdgeZonesOfObjects(GetEdgeZonesOfObjectsRequest) returns (GetEdgeZonesOfObjectsResponse);
+  rpc TgapiUtilGetFaceZoneIdListOfRegions(TgapiUtilGetFaceZoneIdListOfRegionsRequest) returns (TgapiUtilGetFaceZoneIdListOfRegionsResponse);
+}
+
+message GetFaceZoneAtLocationRequest {
+  Point location = 1;
+}
+
+message GetFaceZoneAtLocationResponse {
+  sint64 face_zone_id = 1;
+}
+
+message GetCellZoneAtLocationRequest {
+  Point location = 1;
+}
+
+message GetCellZoneAtLocationResponse {
+  sint64 cell_zone_id = 1;
+}
+
+message GetZonesOfTypeRequest {
+  string zone_type = 1;
+}
+
+message GetZonesOfTypeResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetZonesOfGroupRequest {
+  string group = 1;
+}
+
+message GetZonesOfGroupResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetFaceZonesOfFilterRequest {
+  string filter = 1;
+}
+
+message GetFaceZonesOfFilterResponse {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetCellZonesOfFilterRequest {
+  string filter = 1;
+}
+
+message GetCellZonesOfFilterResponse {
+  repeated sint64 cell_zone_ids = 1;
+}
+
+message GetEdgeZonesOfFilterRequest {
+  string filter = 1;
+}
+
+message GetEdgeZonesOfFilterResponse {
+  repeated sint64 edge_zone_ids = 1;
+}
+
+message GetNodeZonesOfFilterRequest {
+  string filter = 1;
+}
+
+message GetNodeZonesOfFilterResponse {
+  repeated sint64 node_zone_ids = 1;
+}
+
+message GetObjectsOfTypeRequest {
+  string type = 1;
+}
+
+message GetObjectsOfTypeResponse {
+  repeated string objects = 1;
+}
+
+message GetFaceZoneIdListOfObjectRequest {
+  string object = 1;
+}
+
+message GetFaceZoneIdListOfObjectResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetEdgeZoneIdListOfObjectRequest {
+  string object = 1;
+}
+
+message GetEdgeZoneIdListOfObjectResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetCellZoneIdListOfObjectRequest {
+  string object = 1;
+}
+
+message GetCellZoneIdListOfObjectResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetFaceZonesSharedByRegionsOfTypeRequest {
+  string object = 1;
+  string type = 2;
+}
+
+message GetFaceZonesSharedByRegionsOfTypeResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetFaceZonesOfRegionsRequest {
+  string object = 1;
+  repeated string types = 2;
+}
+
+message GetFaceZonesOfRegionsResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetFaceZonesOfLabelsRequest {
+  string object = 1;
+  repeated string types = 2;
+}
+
+message GetFaceZonesOfLabelsResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message TgapiUtilGetFaceZoneIdListOfLabelsRequest {
+  string object = 1;
+  repeated string types = 2;
+}
+
+message TgapiUtilGetFaceZoneIdListOfLabelsResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetFaceZonesOfObjectsRequest {
+  repeated string types = 2;
+}
+
+message GetFaceZonesOfObjectsResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetEdgeZonesOfObjectsRequest {
+  repeated string types = 2;
+}
+
+message GetEdgeZonesOfObjectsResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message TgapiUtilGetFaceZoneIdListOfRegionsRequest {
+  string object = 1;
+  repeated string types = 2;
+}
+
+message TgapiUtilGetFaceZoneIdListOfRegionsResponse {
+  repeated sint64 zone_ids = 1;
+}
