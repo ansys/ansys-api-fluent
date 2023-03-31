@@ -48,7 +48,8 @@ message GetCellZoneAtLocationResponse {
 }
 
 message GetZonesOfTypeRequest {
-  string zone_type = 1;
+  string object = 1;
+  repeated string types = 2;
 }
 
 message GetZonesOfTypeResponse {
@@ -56,7 +57,8 @@ message GetZonesOfTypeResponse {
 }
 
 message GetZonesOfGroupRequest {
-  string group = 1;
+  string object = 1;
+  repeated string types = 2;
 }
 
 message GetZonesOfGroupResponse {
@@ -64,35 +66,39 @@ message GetZonesOfGroupResponse {
 }
 
 message GetFaceZonesOfFilterRequest {
-  string filter = 1;
+  string object = 1;
+  repeated string types = 2;
 }
 
 message GetFaceZonesOfFilterResponse {
-  repeated sint64 face_zone_ids = 1;
+  repeated sint64 zone_ids = 1;
 }
 
 message GetCellZonesOfFilterRequest {
-  string filter = 1;
+  string object = 1;
+  repeated string types = 2;
 }
 
 message GetCellZonesOfFilterResponse {
-  repeated sint64 cell_zone_ids = 1;
+  repeated sint64 zone_ids = 1;
 }
 
 message GetEdgeZonesOfFilterRequest {
-  string filter = 1;
+  string object = 1;
+  repeated string types = 2;
 }
 
 message GetEdgeZonesOfFilterResponse {
-  repeated sint64 edge_zone_ids = 1;
+  repeated sint64 zone_ids = 1;
 }
 
 message GetNodeZonesOfFilterRequest {
-  string filter = 1;
+  string object = 1;
+  repeated string types = 2;
 }
 
 message GetNodeZonesOfFilterResponse {
-  repeated sint64 node_zone_ids = 1;
+  repeated sint64 zone_ids = 1;
 }
 
 message GetObjectsOfTypeRequest {
@@ -105,6 +111,7 @@ message GetObjectsOfTypeResponse {
 
 message GetFaceZoneIdListOfObjectRequest {
   string object = 1;
+  repeated string types = 2;
 }
 
 message GetFaceZoneIdListOfObjectResponse {
@@ -113,6 +120,7 @@ message GetFaceZoneIdListOfObjectResponse {
 
 message GetEdgeZoneIdListOfObjectRequest {
   string object = 1;
+  repeated string types = 2;
 }
 
 message GetEdgeZoneIdListOfObjectResponse {
@@ -121,6 +129,7 @@ message GetEdgeZoneIdListOfObjectResponse {
 
 message GetCellZoneIdListOfObjectRequest {
   string object = 1;
+  repeated string types = 2;
 }
 
 message GetCellZoneIdListOfObjectResponse {
@@ -164,7 +173,8 @@ message GetFaceZoneIdListOfLabelsResponse {
 }
 
 message GetFaceZonesOfObjectsRequest {
-  repeated string types = 1;
+  string object = 1;
+  repeated string types = 2;
 }
 
 message GetFaceZonesOfObjectsResponse {
@@ -172,7 +182,8 @@ message GetFaceZonesOfObjectsResponse {
 }
 
 message GetEdgeZonesOfObjectsRequest {
-  repeated string types = 1;
+  string object = 1;
+  repeated string types = 2;
 }
 
 message GetEdgeZonesOfObjectsResponse {
