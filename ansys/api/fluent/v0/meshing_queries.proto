@@ -24,10 +24,11 @@ service MeshingQueries {
   rpc GetFaceZonesSharedByRegionsOfType(GetFaceZonesSharedByRegionsOfTypeRequest) returns (GetFaceZonesSharedByRegionsOfTypeResponse);
   rpc GetFaceZonesOfRegions(GetFaceZonesOfRegionsRequest) returns (GetFaceZonesOfRegionsResponse);
   rpc GetFaceZonesOfLabels(GetFaceZonesOfLabelsRequest) returns (GetFaceZonesOfLabelsResponse);
-  rpc TgapiUtilGetFaceZoneIdListOfLabels(TgapiUtilGetFaceZoneIdListOfLabelsRequest) returns (TgapiUtilGetFaceZoneIdListOfLabelsResponse);
+  rpc GetFaceZoneIdListOfLabels(GetFaceZoneIdListOfLabelsRequest) returns (GetFaceZoneIdListOfLabelsResponse);
   rpc GetFaceZonesOfObjects(GetFaceZonesOfObjectsRequest) returns (GetFaceZonesOfObjectsResponse);
   rpc GetEdgeZonesOfObjects(GetEdgeZonesOfObjectsRequest) returns (GetEdgeZonesOfObjectsResponse);
-  rpc TgapiUtilGetFaceZoneIdListOfRegions(TgapiUtilGetFaceZoneIdListOfRegionsRequest) returns (TgapiUtilGetFaceZoneIdListOfRegionsResponse);
+  rpc GetFaceZoneIdListOfRegions(GetFaceZoneIdListOfRegionsRequest) returns (GetFaceZoneIdListOfRegionsResponse);
+  rpc GetPrismCellZones(GetPrismCellZonesRequest) returns (GetPrismCellZonesResponse);
 }
 
 message GetFaceZoneAtLocationRequest {
@@ -153,17 +154,17 @@ message GetFaceZonesOfLabelsResponse {
   repeated sint64 zone_ids = 1;
 }
 
-message TgapiUtilGetFaceZoneIdListOfLabelsRequest {
+message GetFaceZoneIdListOfLabelsRequest {
   string object = 1;
   repeated string types = 2;
 }
 
-message TgapiUtilGetFaceZoneIdListOfLabelsResponse {
+message GetFaceZoneIdListOfLabelsResponse {
   repeated sint64 zone_ids = 1;
 }
 
 message GetFaceZonesOfObjectsRequest {
-  repeated string types = 2;
+  repeated string types = 1;
 }
 
 message GetFaceZonesOfObjectsResponse {
@@ -171,18 +172,27 @@ message GetFaceZonesOfObjectsResponse {
 }
 
 message GetEdgeZonesOfObjectsRequest {
-  repeated string types = 2;
+  repeated string types = 1;
 }
 
 message GetEdgeZonesOfObjectsResponse {
   repeated sint64 zone_ids = 1;
 }
 
-message TgapiUtilGetFaceZoneIdListOfRegionsRequest {
+message GetFaceZoneIdListOfRegionsRequest {
   string object = 1;
   repeated string types = 2;
 }
 
-message TgapiUtilGetFaceZoneIdListOfRegionsResponse {
+message GetFaceZoneIdListOfRegionsResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetPrismCellZonesRequest {
+  string object = 1;
+  repeated string types = 2;
+}
+
+message GetPrismCellZonesResponse {
   repeated sint64 zone_ids = 1;
 }
