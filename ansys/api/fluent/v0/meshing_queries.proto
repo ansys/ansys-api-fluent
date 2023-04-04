@@ -29,6 +29,12 @@ service MeshingQueries {
   rpc GetEdgeZonesOfObjects(GetEdgeZonesOfObjectsRequest) returns (GetEdgeZonesOfObjectsResponse);
   rpc GetFaceZoneIdListOfRegions(GetFaceZoneIdListOfRegionsRequest) returns (GetFaceZoneIdListOfRegionsResponse);
   rpc GetPrismCellZones(GetPrismCellZonesRequest) returns (GetPrismCellZonesResponse);
+  rpc GetTetCellZones(GetTetCellZonesRequest) returns (GetTetCellZonesResponse);
+  rpc GetAdjacentCellZones(GetAdjacentCellZonesRequest) returns (GetAdjacentCellZonesResponse);
+  rpc GetAdjacentFaceZones(GetAdjacentFaceZonesRequest) returns (GetAdjacentFaceZonesResponse);
+  rpc GetAdjacentInteriorAndBoundaryFaceZones(GetAdjacentInteriorAndBoundaryFaceZonesRequest) returns (GetAdjacentInteriorAndBoundaryFaceZonesResponse);
+  rpc GetAdjacentZonesByEdgeConnectivity(GetAdjacentZonesByEdgeConnectivityRequest) returns (GetAdjacentZonesByEdgeConnectivityResponse);
+  rpc GetAdjacentZonesByNodeConnectivity(GetAdjacentZonesByNodeConnectivityRequest) returns (GetAdjacentZonesByNodeConnectivityResponse);
 }
 
 message GetFaceZoneAtLocationRequest {
@@ -196,5 +202,59 @@ message GetPrismCellZonesRequest {
 }
 
 message GetPrismCellZonesResponse {
+  repeated sint64 outputs = 1;
+}
+
+message GetTetCellZonesRequest {
+  string input = 1;
+  repeated string inputs = 2;
+}
+
+message GetTetCellZonesResponse {
+  repeated sint64 outputs = 1;
+}
+
+message GetAdjacentCellZonesRequest {
+  string input = 1;
+  repeated sint64 inputs = 2;
+}
+
+message GetAdjacentCellZonesResponse {
+  repeated sint64 outputs = 1;
+}
+
+message GetAdjacentFaceZonesRequest {
+  string input = 1;
+  repeated sint64 inputs = 2;
+}
+
+message GetAdjacentFaceZonesResponse {
+  repeated sint64 outputs = 1;
+}
+
+message GetAdjacentInteriorAndBoundaryFaceZonesRequest {
+  string input = 1;
+  repeated sint64 inputs = 2;
+}
+
+message GetAdjacentInteriorAndBoundaryFaceZonesResponse {
+  repeated sint64 outputs = 1;
+}
+
+message GetAdjacentZonesByEdgeConnectivityRequest {
+  string input = 1;
+  repeated sint64 inputs = 2;
+}
+
+message GetAdjacentZonesByEdgeConnectivityResponse {
+  repeated sint64 outputs = 1;
+}
+
+message GetAdjacentZonesByNodeConnectivityRequest {
+  string input = 1;
+  repeated sint64 inputs = 2;
+}
+
+message GetAdjacentZonesByNodeConnectivityResponse {
   repeated sint64 outputs = 1;
 }
