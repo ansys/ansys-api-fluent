@@ -581,7 +581,7 @@ message GetRegionVolumeRequest {
 }
 
 message GetRegionVolumeResponse {
-  repeated double outputs = 1;
+  double output = 1;
 }
 
 message GetRegionsOfFilterRequest {
