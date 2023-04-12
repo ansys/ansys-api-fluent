@@ -424,7 +424,7 @@ message GetMaxsizeCellZoneByVolumeRequest {
 }
 
 message GetMaxsizeCellZoneByVolumeResponse {
-  repeated sint64 outputs = 1;
+  sint64 output = 1;
 }
 
 message GetMaxsizeCellZoneByCountRequest {
@@ -434,7 +434,7 @@ message GetMaxsizeCellZoneByCountRequest {
 }
 
 message GetMaxsizeCellZoneByCountResponse {
-  repeated sint64 outputs = 1;
+  sint64 output = 1;
 }
 
 message GetMinsizeFaceZoneByAreaRequest {
@@ -444,7 +444,7 @@ message GetMinsizeFaceZoneByAreaRequest {
 }
 
 message GetMinsizeFaceZoneByAreaResponse {
-  repeated sint64 outputs = 1;
+  sint64 output = 1;
 }
 
 message GetMinsizeFaceZoneByCountRequest {
@@ -454,7 +454,7 @@ message GetMinsizeFaceZoneByCountRequest {
 }
 
 message GetMinsizeFaceZoneByCountResponse {
-  repeated sint64 outputs = 1;
+  sint64 output = 1;
 }
 
 message GetFaceZoneListByMaximumEntityCountRequest {
