@@ -69,6 +69,7 @@ service MeshingQueries {
   rpc GetObjectsOfFilter(GetObjectsOfFilterRequest) returns (GetObjectsOfFilterResponse);
   rpc GetRegionsOfObject(GetRegionsOfObjectRequest) returns (GetRegionsOfObjectResponse);
   rpc GetRegionNameListOfObject(GetRegionNameListOfObjectRequest) returns (GetRegionNameListOfObjectResponse);
+  rpc SortRegionsByVolume(SortRegionsByVolumeRequest) returns (SortRegionsByVolumeResponse);
   rpc GetRegionVolume(GetRegionVolumeRequest) returns (GetRegionVolumeResponse);
   rpc GetRegionsOfFilter(GetRegionsOfFilterRequest) returns (GetRegionsOfFilterResponse);
   rpc GetRegionNameListOfPattern(GetRegionNameListOfPatternRequest) returns (GetRegionNameListOfPatternResponse);
@@ -573,6 +574,20 @@ message GetRegionNameListOfObjectRequest {
 
 message GetRegionNameListOfObjectResponse {
   repeated string outputs = 1;
+}
+
+message CustomDoubleAndString {
+  double double_input = 1;
+  string string_input = 2;
+}
+
+message SortRegionsByVolumeRequest {
+  string string_input_1 = 1;
+  string string_input_2 = 2;
+}
+
+message SortRegionsByVolumeResponse {
+  repeated CustomDoubleAndString outputs = 1;
 }
 
 message GetRegionVolumeRequest {
