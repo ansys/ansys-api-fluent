@@ -577,8 +577,8 @@ message GetRegionNameListOfObjectResponse {
 }
 
 message CustomDoubleAndString {
-  double double_input = 1;
-  string string_input = 2;
+  double double_output = 1;
+  string string_output = 2;
 }
 
 message SortRegionsByVolumeRequest {
