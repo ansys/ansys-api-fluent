@@ -35,7 +35,7 @@ service MeshingQueries {
   rpc GetAdjacentInteriorAndBoundaryFaceZones(GetAdjacentInteriorAndBoundaryFaceZonesRequest) returns (GetAdjacentInteriorAndBoundaryFaceZonesResponse);
   rpc GetAdjacentZonesByEdgeConnectivity(GetAdjacentZonesByEdgeConnectivityRequest) returns (GetAdjacentZonesByEdgeConnectivityResponse);
   rpc GetAdjacentZonesByNodeConnectivity(GetAdjacentZonesByNodeConnectivityRequest) returns (GetAdjacentZonesByNodeConnectivityResponse);
-  // rpc GetSharedBoundaryZones(GetSharedBoundaryZonesRequest) returns (GetSharedBoundaryZonesResponse);
+  rpc GetSharedBoundaryZones(GetSharedBoundaryZonesRequest) returns (GetSharedBoundaryZonesResponse);
   rpc GetInteriorZonesConnectedToCellZones(GetInteriorZonesConnectedToCellZonesRequest) returns (GetInteriorZonesConnectedToCellZonesResponse);
   rpc GetFaceZonesWithZoneSpecificPrismsApplied(Empty) returns (GetFaceZonesWithZoneSpecificPrismsAppliedResponse);
   rpc GetFaceZonesOfPrismControls(GetFaceZonesOfPrismControlsRequest) returns (GetFaceZonesOfPrismControlsResponse);
@@ -75,6 +75,7 @@ service MeshingQueries {
   rpc GetRegionNameListOfPattern(GetRegionNameListOfPatternRequest) returns (GetRegionNameListOfPatternResponse);
   rpc GetRegionsOfFaceZones(GetRegionsOfFaceZonesRequest) returns (GetRegionsOfFaceZonesResponse);
   rpc GetRegionNameListOfFaceZones(GetRegionNameListOfFaceZonesRequest) returns (GetRegionNameListOfFaceZonesResponse);
+  rpc FindJoinPairs(FindJoinPairsRequest) returns (FindJoinPairsResponse);
   rpc ConvertZoneNameSymbolsToIds(ConvertZoneNameSymbolsToIdsRequest) returns (ConvertZoneNameSymbolsToIdsResponse);
   rpc ConvertZoneNameStringsToIds(ConvertZoneNameStringsToIdsRequest) returns (ConvertZoneNameStringsToIdsResponse);
   rpc ConvertZoneIdsToNameStrings(ConvertZoneIdsToNameStringsRequest) returns (ConvertZoneIdsToNameStringsResponse);
@@ -312,14 +313,14 @@ message GetAdjacentZonesByNodeConnectivityResponse {
   repeated sint64 outputs = 1;
 }
 
-// message GetSharedBoundaryZonesRequest {
-//   string input = 1;
-//   repeated sint64 inputs = 2;
-// }
+message GetSharedBoundaryZonesRequest {
+  string input = 1;
+  repeated sint64 inputs = 2;
+}
 
-// message GetSharedBoundaryZonesResponse {
-//   repeated string outputs = 1;
-// }
+message GetSharedBoundaryZonesResponse {
+  repeated sint64 outputs = 1;
+}
 
 message GetInteriorZonesConnectedToCellZonesRequest {
   string input = 1;
@@ -632,6 +633,26 @@ message GetRegionNameListOfFaceZonesRequest {
 
 message GetRegionNameListOfFaceZonesResponse {
   repeated string outputs = 1;
+}
+
+message OverlappingBoundingBox {
+  int64 zone_id_1 = 1;
+  int64 zone_id_2 = 2;
+  repeated double bounding_box_min = 3;
+  repeated double bounding_box_max = 4;
+}
+
+message FindJoinPairsRequest {
+  string input_1 = 1;
+  repeated sint64 int_inputs = 2;
+  repeated string string_inputs = 3;
+  double input_2 = 4;
+  bool input_3 = 5;
+  double input_4 = 6;
+}
+
+message FindJoinPairsResponse {
+  repeated OverlappingBoundingBox outputs = 1;
 }
 
 message ConvertZoneNameSymbolsToIdsRequest {
