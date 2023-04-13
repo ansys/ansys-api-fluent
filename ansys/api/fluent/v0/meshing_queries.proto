@@ -197,30 +197,30 @@ message GetFaceZonesSharedByRegionsOfTypeResponse {
 }
 
 message GetFaceZonesOfRegionsRequest {
-  string input = 1;
-  repeated string inputs = 2;
+  string object = 1;
+  repeated string regions = 2;
 }
 
 message GetFaceZonesOfRegionsResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 zone_ids = 1;
 }
 
 message GetFaceZonesOfLabelsRequest {
-  string input = 1;
-  repeated string inputs = 2;
+  string object = 1;
+  repeated string labels = 2;
 }
 
 message GetFaceZonesOfLabelsResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 zone_ids = 1;
 }
 
 message GetFaceZoneIdListOfLabelsRequest {
-  string input = 1;
-  repeated string inputs = 2;
+  string object = 1;
+  repeated string labels = 2;
 }
 
 message GetFaceZoneIdListOfLabelsResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 zone_ids = 1;
 }
 
 message GetFaceZonesOfObjectsRequest {
@@ -242,12 +242,12 @@ message GetEdgeZonesOfObjectsResponse {
 }
 
 message GetFaceZoneIdListOfRegionsRequest {
-  string input = 1;
-  repeated string inputs = 2;
+  string object = 1;
+  repeated string labels = 2;
 }
 
 message GetFaceZoneIdListOfRegionsResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 zone_ids = 1;
 }
 
 message GetPrismCellZonesRequest {
