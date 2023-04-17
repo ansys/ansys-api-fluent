@@ -98,51 +98,51 @@ message GetCellZoneAtLocationResponse {
 }
 
 message GetZonesOfTypeRequest {
-  string input = 1;
+  string type = 1;
 }
 
 message GetZonesOfTypeResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 zone_ids = 1;
 }
 
 message GetZonesOfGroupRequest {
-  string input = 1;
+  string group = 1;
 }
 
 message GetZonesOfGroupResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 zone_ids = 1;
 }
 
 message GetFaceZonesOfFilterRequest {
-  string input = 1;
+  string filter = 1;
 }
 
 message GetFaceZonesOfFilterResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 face_zone_ids = 1;
 }
 
 message GetCellZonesOfFilterRequest {
-  string input = 1;
+  string filter = 1;
 }
 
 message GetCellZonesOfFilterResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 cell_zone_ids = 1;
 }
 
 message GetEdgeZonesOfFilterRequest {
-  string input = 1;
+  string filter = 1;
 }
 
 message GetEdgeZonesOfFilterResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 edge_zone_ids = 1;
 }
 
 message GetNodeZonesOfFilterRequest {
-  string input = 1;
+  string filter = 1;
 }
 
 message GetNodeZonesOfFilterResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 node_zone_ids = 1;
 }
 
 message GetObjectsOfTypeRequest {
@@ -154,27 +154,27 @@ message GetObjectsOfTypeResponse {
 }
 
 message GetFaceZoneIdListOfObjectRequest {
-  string input = 1;
+  string object = 1;
 }
 
 message GetFaceZoneIdListOfObjectResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 face_zone_ids = 1;
 }
 
 message GetEdgeZoneIdListOfObjectRequest {
-  string input = 1;
+  string object = 1;
 }
 
 message GetEdgeZoneIdListOfObjectResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 edge_zone_ids = 1;
 }
 
 message GetCellZoneIdListOfObjectRequest {
-  string input = 1;
+  string object = 1;
 }
 
 message GetCellZoneIdListOfObjectResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 cell_zone_ids = 1;
 }
 
 message GetFaceZonesSharedByRegionsOfTypeRequest {
@@ -362,51 +362,51 @@ message GetUnreferencedCellZonesResponse {
 }
 
 message GetUnreferencedEdgeZonesOfFilterRequest {
-  string input = 1;
+  string filter = 1;
 }
 
 message GetUnreferencedEdgeZonesOfFilterResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 unreferenced_edge_zone_ids = 1;
 }
 
 message GetUnreferencedFaceZonesOfFilterRequest {
-  string input = 1;
+  string filter = 1;
 }
 
 message GetUnreferencedFaceZonesOfFilterResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 unreferenced_face_zone_ids = 1;
 }
 
 message GetUnreferencedCellZonesOfFilterRequest {
-  string input = 1;
+  string filter = 1;
 }
 
 message GetUnreferencedCellZonesOfFilterResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 unreferenced_cell_zone_ids = 1;
 }
 
 message GetUnreferencedEdgeZoneIdListOfPatternRequest {
-  string input = 1;
+  string pattern = 1;
 }
 
 message GetUnreferencedEdgeZoneIdListOfPatternResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 unreferenced_edge_zone_ids = 1;
 }
 
 message GetUnreferencedFaceZoneIdListOfPatternRequest {
-  string input = 1;
+  string pattern = 1;
 }
 
 message GetUnreferencedFaceZoneIdListOfPatternResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 unreferenced_face_zone_ids = 1;
 }
 
 message GetUnreferencedCellZoneIdListOfPatternRequest {
-  string input = 1;
+  string pattern = 1;
 }
 
 message GetUnreferencedCellZoneIdListOfPatternResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 unreferenced_cell_zone_ids = 1;
 }
 
 message GetMaxsizeCellZoneByVolumeRequest {
