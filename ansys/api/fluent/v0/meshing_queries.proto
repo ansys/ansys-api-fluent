@@ -76,16 +76,6 @@ service MeshingQueries {
   rpc GetRegionsOfFaceZones(GetRegionsOfFaceZonesRequest) returns (GetRegionsOfFaceZonesResponse);
   rpc GetRegionNameListOfFaceZones(GetRegionNameListOfFaceZonesRequest) returns (GetRegionNameListOfFaceZonesResponse);
   rpc FindJoinPairs(FindJoinPairsRequest) returns (FindJoinPairsResponse);
-  rpc ConvertZoneNameSymbolsToIds(ConvertZoneNameSymbolsToIdsRequest) returns (ConvertZoneNameSymbolsToIdsResponse);
-  rpc ConvertZoneNameStringsToIds(ConvertZoneNameStringsToIdsRequest) returns (ConvertZoneNameStringsToIdsResponse);
-  rpc ConvertZoneIdsToNameStrings(ConvertZoneIdsToNameStringsRequest) returns (ConvertZoneIdsToNameStringsResponse);
-  rpc ConvertZoneIdsToNameSymbols(ConvertZoneIdsToNameSymbolsRequest) returns (ConvertZoneIdsToNameSymbolsResponse);
-  rpc ConvertSymbolListToString(ConvertSymbolListToStringRequest) returns (ConvertSymbolListToStringResponse);
-  rpc CreateStringFromSymbolList(CreateStringFromSymbolListRequest) returns (CreateStringFromSymbolListResponse);
-  rpc IntegerListSubstract(IntegerListSubstractRequest) returns (IntegerListSubstractResponse);
-  rpc ListReplace(ListReplaceRequest) returns (ListReplaceResponse);
-  rpc RemoveElementFromList(RemoveElementFromListRequest) returns (RemoveElementFromListResponse);
-  rpc ListContains(ListContainsRequest) returns (ListContainsResponse);
 }
 
 message Empty {
@@ -653,89 +643,4 @@ message FindJoinPairsRequest {
 
 message FindJoinPairsResponse {
   repeated OverlappingBoundingBox outputs = 1;
-}
-
-message ConvertZoneNameSymbolsToIdsRequest {
-  repeated string inputs = 1;
-}
-
-message ConvertZoneNameSymbolsToIdsResponse {
-  repeated sint64 outputs = 1;
-}
-
-message ConvertZoneNameStringsToIdsRequest {
-  repeated string inputs = 1;
-}
-
-message ConvertZoneNameStringsToIdsResponse {
-  repeated sint64 outputs = 1;
-}
-
-message ConvertZoneIdsToNameStringsRequest {
-  repeated sint64 inputs = 1;
-}
-
-message ConvertZoneIdsToNameStringsResponse {
-  repeated string outputs = 1;
-}
-
-message ConvertZoneIdsToNameSymbolsRequest {
-  repeated sint64 inputs = 1;
-}
-
-message ConvertZoneIdsToNameSymbolsResponse {
-  repeated string outputs = 1;
-}
-
-message ConvertSymbolListToStringRequest {
-  repeated string inputs = 1;
-}
-
-message ConvertSymbolListToStringResponse {
-  string output = 1;
-}
-
-message CreateStringFromSymbolListRequest {
-  repeated string inputs = 1;
-}
-
-message CreateStringFromSymbolListResponse {
-  string output = 1;
-}
-
-message IntegerListSubstractRequest {
-  repeated sint64 inputs_1 = 1;
-  repeated sint64 inputs_2 = 2;
-}
-
-message IntegerListSubstractResponse {
-  repeated sint64 outputs = 1;
-}
-
-message ListReplaceRequest {
-  double input_1 = 1;
-  double input_2 = 2;
-  repeated double inputs = 3;
-}
-
-message ListReplaceResponse {
-  repeated double outputs = 1;
-}
-
-message RemoveElementFromListRequest {
-  repeated double inputs = 1;
-  double input = 2;
-}
-
-message RemoveElementFromListResponse {
-  repeated double outputs = 1;
-}
-
-message ListContainsRequest {
-  repeated double inputs = 1;
-  double input = 2;
-}
-
-message ListContainsResponse {
-  bool output = 1;
 }
