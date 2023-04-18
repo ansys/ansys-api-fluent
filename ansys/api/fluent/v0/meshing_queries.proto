@@ -257,66 +257,66 @@ message GetTetCellZonesResponse {
 }
 
 message GetAdjacentCellZonesRequest {
-  string input = 1;
-  repeated sint64 inputs = 2;
+  string zone_name_or_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
 }
 
 message GetAdjacentCellZonesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 adjacent_cell_zones = 1;
 }
 
 message GetAdjacentFaceZonesRequest {
-  string input = 1;
-  repeated sint64 inputs = 2;
+  string zone_name_or_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
 }
 
 message GetAdjacentFaceZonesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 adjacent_boundary_face_zones = 1;
 }
 
 message GetAdjacentInteriorAndBoundaryFaceZonesRequest {
-  string input = 1;
-  repeated sint64 inputs = 2;
+  string zone_name_or_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
 }
 
 message GetAdjacentInteriorAndBoundaryFaceZonesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 adjacent_interior_and_boundary_face_zones = 1;
 }
 
 message GetAdjacentZonesByEdgeConnectivityRequest {
-  string input = 1;
-  repeated sint64 inputs = 2;
+  string zone_name_or_pattern = 1;
+  repeated sint64 zone_ids = 2;
 }
 
 message GetAdjacentZonesByEdgeConnectivityResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 adjacent_zone_ids = 1;
 }
 
 message GetAdjacentZonesByNodeConnectivityRequest {
-  string input = 1;
-  repeated sint64 inputs = 2;
+  string zone_name_or_pattern = 1;
+  repeated sint64 zone_ids = 2;
 }
 
 message GetAdjacentZonesByNodeConnectivityResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 adjacent_zone_ids = 1;
 }
 
 message GetSharedBoundaryZonesRequest {
-  string input = 1;
-  repeated sint64 inputs = 2;
+  string cell_zone_name_or_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
 }
 
 message GetSharedBoundaryZonesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 shared_boundary_zone_ids = 1;
 }
 
 message GetInteriorZonesConnectedToCellZonesRequest {
-  string input = 1;
-  repeated sint64 inputs = 2;
+  string cell_zone_name_or_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
 }
 
 message GetInteriorZonesConnectedToCellZonesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 interior_zone_ids = 1;
 }
 
 message GetFaceZonesWithZoneSpecificPrismsAppliedResponse {
