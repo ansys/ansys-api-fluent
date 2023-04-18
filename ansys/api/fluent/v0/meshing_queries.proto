@@ -146,11 +146,11 @@ message GetNodeZonesOfFilterResponse {
 }
 
 message GetObjectsOfTypeRequest {
-  string input = 1;
+  string type = 1;
 }
 
 message GetObjectsOfTypeResponse {
-  repeated string outputs = 1;
+  repeated string objects = 1;
 }
 
 message GetFaceZoneIdListOfObjectRequest {
@@ -178,12 +178,12 @@ message GetCellZoneIdListOfObjectResponse {
 }
 
 message GetFaceZonesSharedByRegionsOfTypeRequest {
-  string input_1 = 1;
-  string input_2 = 2;
+  string mesh_object = 1;
+  string region_type = 2;
 }
 
 message GetFaceZonesSharedByRegionsOfTypeResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 shared_face_zone_ids = 1;
 }
 
 message GetFaceZonesOfRegionsRequest {
@@ -534,35 +534,35 @@ message GetAllObjectNameListResponse {
 }
 
 message GetObjectNameListOfTypeRequest {
-  string input = 1;
+  string type = 1;
 }
 
 message GetObjectNameListOfTypeResponse {
-  repeated string outputs = 1;
+  repeated string objects = 1;
 }
 
 message GetObjectsOfFilterRequest {
-  string input = 1;
+  string filter = 1;
 }
 
 message GetObjectsOfFilterResponse {
-  repeated string outputs = 1;
+  repeated string objects = 1;
 }
 
 message GetRegionsOfObjectRequest {
-  string input = 1;
+  string object = 1;
 }
 
 message GetRegionsOfObjectResponse {
-  repeated string outputs = 1;
+  repeated string regions = 1;
 }
 
 message GetRegionNameListOfObjectRequest {
-  string input = 1;
+  string object = 1;
 }
 
 message GetRegionNameListOfObjectResponse {
-  repeated string outputs = 1;
+  repeated string regions = 1;
 }
 
 message CustomDoubleAndString {
