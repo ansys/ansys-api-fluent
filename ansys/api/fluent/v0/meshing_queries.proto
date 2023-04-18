@@ -408,43 +408,43 @@ message GetUnreferencedCellZoneIdListOfPatternResponse {
 }
 
 message GetMaxsizeCellZoneByVolumeRequest {
-  string string_input = 1;
-  repeated sint64 int_inputs = 2;
-  repeated string string_inputs = 3;
+  string cell_zone_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
+  repeated string cell_zone_names = 3;
 }
 
 message GetMaxsizeCellZoneByVolumeResponse {
-  sint64 output = 1;
+  sint64 cell_zone_id = 1;
 }
 
 message GetMaxsizeCellZoneByCountRequest {
-  string string_input = 1;
-  repeated sint64 int_inputs = 2;
-  repeated string string_inputs = 3;
+  string cell_zone_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
+  repeated string cell_zone_names = 3;
 }
 
 message GetMaxsizeCellZoneByCountResponse {
-  sint64 output = 1;
+  sint64 cell_zone_id = 1;
 }
 
 message GetMinsizeFaceZoneByAreaRequest {
-  string string_input = 1;
-  repeated sint64 int_inputs = 2;
-  repeated string string_inputs = 3;
+  string face_zone_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
 }
 
 message GetMinsizeFaceZoneByAreaResponse {
-  sint64 output = 1;
+  sint64 face_zone_id = 1;
 }
 
 message GetMinsizeFaceZoneByCountRequest {
-  string string_input = 1;
-  repeated sint64 int_inputs = 2;
-  repeated string string_inputs = 3;
+  string face_zone_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
 }
 
 message GetMinsizeFaceZoneByCountResponse {
-  sint64 output = 1;
+  sint64 face_zone_id = 1;
 }
 
 message GetFaceZoneListByMaximumEntityCountRequest {
