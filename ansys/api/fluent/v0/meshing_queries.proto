@@ -320,7 +320,7 @@ message GetInteriorZonesConnectedToCellZonesResponse {
 }
 
 message GetFaceZonesWithZoneSpecificPrismsAppliedResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 face_zone_ids = 1;
 }
 
 message GetFaceZonesOfPrismControlsRequest {
@@ -332,31 +332,31 @@ message GetFaceZonesOfPrismControlsResponse {
 }
 
 message GetBafflesRequest {
-  repeated sint64 inputs = 1;
+  repeated sint64 face_zone_ids = 1;
 }
 
 message GetBafflesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 baffle_zone_ids = 1;
 }
 
 message GetEmbeddedBafflesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 embedded_baffles_zone_ids = 1;
 }
 
 message GetWrappedZonesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 wrapped_face_zone_ids = 1;
 }
 
 message GetUnreferencedEdgeZonesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 unreferenced_edge_zone_ids = 1;
 }
 
 message GetUnreferencedFaceZonesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 unreferenced_face_zone_ids = 1;
 }
 
 message GetUnreferencedCellZonesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 unreferenced_cell_zone_ids = 1;
 }
 
 message GetUnreferencedEdgeZonesOfFilterRequest {
