@@ -214,21 +214,19 @@ message GetFaceZoneIdListOfLabelsResponse {
 }
 
 message GetFaceZonesOfObjectsRequest {
-  string input = 1;
-  repeated string inputs = 2;
+  repeated string object_list = 1;
 }
 
 message GetFaceZonesOfObjectsResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 face_zone_ids = 1;
 }
 
 message GetEdgeZonesOfObjectsRequest {
-  string input = 1;
-  repeated string inputs = 2;
+  repeated string object_list = 1;
 }
 
 message GetEdgeZonesOfObjectsResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 edge_zone_ids = 1;
 }
 
 message GetFaceZoneIdListOfRegionsRequest {
