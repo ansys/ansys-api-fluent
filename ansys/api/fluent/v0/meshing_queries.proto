@@ -448,65 +448,65 @@ message GetMinsizeFaceZoneByCountResponse {
 }
 
 message GetFaceZoneListByMaximumEntityCountRequest {
-  sint64 int_input = 1;
-  bool bool_input = 2;
+  sint64 maximum_entity_count = 1;
+  bool only_boundary = 2;
 }
 
 message GetFaceZoneListByMaximumEntityCountResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 face_zone_ids = 1;
 }
 
 message GetEdgeZoneListByMaximumEntityCountRequest {
-  sint64 int_input = 1;
-  bool bool_input = 2;
+  sint64 maximum_entity_count = 1;
+  bool only_boundary = 2;
 }
 
 message GetEdgeZoneListByMaximumEntityCountResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 edge_zone_ids = 1;
 }
 
 message GetCellZoneListByMaximumEntityCountRequest {
-  sint64 int_input = 1;
+  sint64 maximum_entity_count = 1;
 }
 
 message GetCellZoneListByMaximumEntityCountResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 cell_zone_ids = 1;
 }
 
 message GetFaceZoneListByMaximumZoneAreaRequest {
-  sint64 int_input = 1;
+  sint64 maximum_zone_area = 1;
 }
 
 message GetFaceZoneListByMaximumZoneAreaResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 face_zone_ids = 1;
 }
 
 message GetFaceZoneListByMinimumZoneAreaRequest {
-  sint64 int_input = 1;
+  sint64 minimum_zone_area = 1;
 }
 
 message GetFaceZoneListByMinimumZoneAreaResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 face_zone_ids = 1;
 }
 
 message GetZonesWithFreeFacesRequest {
-  string string_input = 1;
-  repeated sint64 int_inputs = 2;
-  repeated string string_inputs = 3;
+  string face_zone_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
 }
 
 message GetZonesWithFreeFacesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 zones_with_free_faces = 1;
 }
 
 message GetZonesWithMultiFacesRequest {
-  string string_input = 1;
-  repeated sint64 int_inputs = 2;
-  repeated string string_inputs = 3;
+  string face_zone_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
 }
 
 message GetZonesWithMultiFacesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 zones_with_multi_connected_faces = 1;
 }
 
 message GetOverlappingFaceZonesRequest {
@@ -520,13 +520,13 @@ message GetOverlappingFaceZonesResponse {
 }
 
 message GetZonesWithMarkedFacesRequest {
-  string string_input = 1;
-  repeated sint64 int_inputs = 2;
-  repeated string string_inputs = 3;
+  string face_zone_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
 }
 
 message GetZonesWithMarkedFacesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 zones_with_marked_faces = 1;
 }
 
 message GetAllObjectNameListResponse {
