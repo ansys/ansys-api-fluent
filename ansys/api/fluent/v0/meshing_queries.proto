@@ -239,21 +239,21 @@ message GetFaceZoneIdListOfRegionsResponse {
 }
 
 message GetPrismCellZonesRequest {
-  string input = 1;
-  repeated string inputs = 2;
+  string zone_name_or_pattern = 1;
+  repeated string zones = 2;
 }
 
 message GetPrismCellZonesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 prism_cell_zones = 1;
 }
 
 message GetTetCellZonesRequest {
-  string input = 1;
-  repeated string inputs = 2;
+  string zone_name_or_pattern = 1;
+  repeated string zones = 2;
 }
 
 message GetTetCellZonesResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 tet_cell_zones = 1;
 }
 
 message GetAdjacentCellZonesRequest {
