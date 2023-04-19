@@ -324,11 +324,11 @@ message GetFaceZonesWithZoneSpecificPrismsAppliedResponse {
 }
 
 message GetFaceZonesOfPrismControlsRequest {
-  string input = 1;
+  string control_name = 1;
 }
 
 message GetFaceZonesOfPrismControlsResponse {
-  repeated sint64 outputs = 1;
+  repeated sint64 face_zone_ids = 1;
 }
 
 message GetBafflesRequest {
@@ -566,17 +566,17 @@ message GetRegionNameListOfObjectResponse {
 }
 
 message CustomDoubleAndString {
-  double double_output = 1;
-  string string_output = 2;
+  double volume = 1;
+  string region = 2;
 }
 
 message SortRegionsByVolumeRequest {
-  string string_input_1 = 1;
-  string string_input_2 = 2;
+  string object_name = 1;
+  string order = 2;
 }
 
 message SortRegionsByVolumeResponse {
-  repeated CustomDoubleAndString outputs = 1;
+  repeated CustomDoubleAndString regions = 1;
 }
 
 message GetRegionVolumeRequest {
@@ -589,38 +589,38 @@ message GetRegionVolumeResponse {
 }
 
 message GetRegionsOfFilterRequest {
-  string string_input_1 = 1;
-  string string_input_2 = 2;
+  string object = 1;
+  string filter = 2;
 }
 
 message GetRegionsOfFilterResponse {
-  repeated string outputs = 1;
+  repeated string regions = 1;
 }
 
 message GetRegionNameListOfPatternRequest {
-  string string_input_1 = 1;
-  string string_input_2 = 2;
+  string object = 1;
+  string region_name_or_pattern = 2;
 }
 
 message GetRegionNameListOfPatternResponse {
-  repeated string outputs = 1;
+  repeated string regions = 1;
 }
 
 message GetRegionsOfFaceZonesRequest {
-  repeated sint64 inputs = 1;
+  repeated sint64 face_zone_ids = 1;
 }
 
 message GetRegionsOfFaceZonesResponse {
-  repeated string outputs = 1;
+  repeated string regions = 1;
 }
 
 message GetRegionNameListOfFaceZonesRequest {
-  string input = 1;
-  repeated sint64 inputs = 2;
+  string face_zone_name_or_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
 }
 
 message GetRegionNameListOfFaceZonesResponse {
-  repeated string outputs = 1;
+  repeated string regions = 1;
 }
 
 message OverlappingBoundingBox {
@@ -631,14 +631,14 @@ message OverlappingBoundingBox {
 }
 
 message FindJoinPairsRequest {
-  string input_1 = 1;
-  repeated sint64 int_inputs = 2;
-  repeated string string_inputs = 3;
-  double input_2 = 4;
-  bool input_3 = 5;
-  double input_4 = 6;
+  string face_zone_name_or_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
+  double join_tolerance = 4;
+  bool absolute_tolerance = 5;
+  double join_angle = 6;
 }
 
 message FindJoinPairsResponse {
-  repeated OverlappingBoundingBox outputs = 1;
+  repeated OverlappingBoundingBox pairs = 1;
 }
