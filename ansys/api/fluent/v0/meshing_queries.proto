@@ -1,0 +1,644 @@
+//
+// Copyright 1987-2023 ANSYS, Inc. All Rights Reserved.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v0;
+
+import "ansys/api/fluent/v0/common_api.proto";
+
+service MeshingQueries {
+  rpc GetFaceZoneAtLocation(GetFaceZoneAtLocationRequest) returns (GetFaceZoneAtLocationResponse);
+  rpc GetCellZoneAtLocation(GetCellZoneAtLocationRequest) returns (GetCellZoneAtLocationResponse);
+  rpc GetZonesOfType(GetZonesOfTypeRequest) returns (GetZonesOfTypeResponse);
+  rpc GetZonesOfGroup(GetZonesOfGroupRequest) returns (GetZonesOfGroupResponse);
+  rpc GetFaceZonesOfFilter(GetFaceZonesOfFilterRequest) returns (GetFaceZonesOfFilterResponse);
+  rpc GetCellZonesOfFilter(GetCellZonesOfFilterRequest) returns (GetCellZonesOfFilterResponse);
+  rpc GetEdgeZonesOfFilter(GetEdgeZonesOfFilterRequest) returns (GetEdgeZonesOfFilterResponse);
+  rpc GetNodeZonesOfFilter(GetNodeZonesOfFilterRequest) returns (GetNodeZonesOfFilterResponse);
+  rpc GetObjectsOfType(GetObjectsOfTypeRequest) returns (GetObjectsOfTypeResponse);
+  rpc GetFaceZoneIdListOfObject(GetFaceZoneIdListOfObjectRequest) returns (GetFaceZoneIdListOfObjectResponse);
+  rpc GetEdgeZoneIdListOfObject(GetEdgeZoneIdListOfObjectRequest) returns (GetEdgeZoneIdListOfObjectResponse);
+  rpc GetCellZoneIdListOfObject(GetCellZoneIdListOfObjectRequest) returns (GetCellZoneIdListOfObjectResponse);
+  rpc GetFaceZonesSharedByRegionsOfType(GetFaceZonesSharedByRegionsOfTypeRequest) returns (GetFaceZonesSharedByRegionsOfTypeResponse);
+  rpc GetFaceZonesOfRegions(GetFaceZonesOfRegionsRequest) returns (GetFaceZonesOfRegionsResponse);
+  rpc GetFaceZonesOfLabels(GetFaceZonesOfLabelsRequest) returns (GetFaceZonesOfLabelsResponse);
+  rpc GetFaceZoneIdListOfLabels(GetFaceZoneIdListOfLabelsRequest) returns (GetFaceZoneIdListOfLabelsResponse);
+  rpc GetFaceZonesOfObjects(GetFaceZonesOfObjectsRequest) returns (GetFaceZonesOfObjectsResponse);
+  rpc GetEdgeZonesOfObjects(GetEdgeZonesOfObjectsRequest) returns (GetEdgeZonesOfObjectsResponse);
+  rpc GetFaceZoneIdListOfRegions(GetFaceZoneIdListOfRegionsRequest) returns (GetFaceZoneIdListOfRegionsResponse);
+  rpc GetPrismCellZones(GetPrismCellZonesRequest) returns (GetPrismCellZonesResponse);
+  rpc GetTetCellZones(GetTetCellZonesRequest) returns (GetTetCellZonesResponse);
+  rpc GetAdjacentCellZones(GetAdjacentCellZonesRequest) returns (GetAdjacentCellZonesResponse);
+  rpc GetAdjacentFaceZones(GetAdjacentFaceZonesRequest) returns (GetAdjacentFaceZonesResponse);
+  rpc GetAdjacentInteriorAndBoundaryFaceZones(GetAdjacentInteriorAndBoundaryFaceZonesRequest) returns (GetAdjacentInteriorAndBoundaryFaceZonesResponse);
+  rpc GetAdjacentZonesByEdgeConnectivity(GetAdjacentZonesByEdgeConnectivityRequest) returns (GetAdjacentZonesByEdgeConnectivityResponse);
+  rpc GetAdjacentZonesByNodeConnectivity(GetAdjacentZonesByNodeConnectivityRequest) returns (GetAdjacentZonesByNodeConnectivityResponse);
+  rpc GetSharedBoundaryZones(GetSharedBoundaryZonesRequest) returns (GetSharedBoundaryZonesResponse);
+  rpc GetInteriorZonesConnectedToCellZones(GetInteriorZonesConnectedToCellZonesRequest) returns (GetInteriorZonesConnectedToCellZonesResponse);
+  rpc GetFaceZonesWithZoneSpecificPrismsApplied(Empty) returns (GetFaceZonesWithZoneSpecificPrismsAppliedResponse);
+  rpc GetFaceZonesOfPrismControls(GetFaceZonesOfPrismControlsRequest) returns (GetFaceZonesOfPrismControlsResponse);
+  rpc GetBaffles(GetBafflesRequest) returns (GetBafflesResponse);
+  rpc GetEmbeddedBaffles(Empty) returns (GetEmbeddedBafflesResponse);
+  rpc GetWrappedZones(Empty) returns (GetWrappedZonesResponse);
+  rpc GetUnreferencedEdgeZones(Empty) returns (GetUnreferencedEdgeZonesResponse);
+  rpc GetUnreferencedFaceZones(Empty) returns (GetUnreferencedFaceZonesResponse);
+  rpc GetUnreferencedCellZones(Empty) returns (GetUnreferencedCellZonesResponse);
+  rpc GetUnreferencedEdgeZonesOfFilter(GetUnreferencedEdgeZonesOfFilterRequest) returns (GetUnreferencedEdgeZonesOfFilterResponse);
+  rpc GetUnreferencedFaceZonesOfFilter(GetUnreferencedFaceZonesOfFilterRequest) returns (GetUnreferencedFaceZonesOfFilterResponse);
+  rpc GetUnreferencedCellZonesOfFilter(GetUnreferencedCellZonesOfFilterRequest) returns (GetUnreferencedCellZonesOfFilterResponse);
+  rpc GetUnreferencedEdgeZoneIdListOfPattern(GetUnreferencedEdgeZoneIdListOfPatternRequest) returns (GetUnreferencedEdgeZoneIdListOfPatternResponse);
+  rpc GetUnreferencedFaceZoneIdListOfPattern(GetUnreferencedFaceZoneIdListOfPatternRequest) returns (GetUnreferencedFaceZoneIdListOfPatternResponse);
+  rpc GetUnreferencedCellZoneIdListOfPattern(GetUnreferencedCellZoneIdListOfPatternRequest) returns (GetUnreferencedCellZoneIdListOfPatternResponse);
+  rpc GetMaxsizeCellZoneByVolume(GetMaxsizeCellZoneByVolumeRequest) returns (GetMaxsizeCellZoneByVolumeResponse);
+  rpc GetMaxsizeCellZoneByCount(GetMaxsizeCellZoneByCountRequest) returns (GetMaxsizeCellZoneByCountResponse);
+  rpc GetMinsizeFaceZoneByArea(GetMinsizeFaceZoneByAreaRequest) returns (GetMinsizeFaceZoneByAreaResponse);
+  rpc GetMinsizeFaceZoneByCount(GetMinsizeFaceZoneByCountRequest) returns (GetMinsizeFaceZoneByCountResponse);
+  rpc GetFaceZoneListByMaximumEntityCount(GetFaceZoneListByMaximumEntityCountRequest) returns (GetFaceZoneListByMaximumEntityCountResponse);
+  rpc GetEdgeZoneListByMaximumEntityCount(GetEdgeZoneListByMaximumEntityCountRequest) returns (GetEdgeZoneListByMaximumEntityCountResponse);
+  rpc GetCellZoneListByMaximumEntityCount(GetCellZoneListByMaximumEntityCountRequest) returns (GetCellZoneListByMaximumEntityCountResponse);
+  rpc GetFaceZoneListByMaximumZoneArea(GetFaceZoneListByMaximumZoneAreaRequest) returns (GetFaceZoneListByMaximumZoneAreaResponse);
+  rpc GetFaceZoneListByMinimumZoneArea(GetFaceZoneListByMinimumZoneAreaRequest) returns (GetFaceZoneListByMinimumZoneAreaResponse);
+  rpc GetZonesWithFreeFaces(GetZonesWithFreeFacesRequest) returns (GetZonesWithFreeFacesResponse);
+  rpc GetZonesWithMultiFaces(GetZonesWithMultiFacesRequest) returns (GetZonesWithMultiFacesResponse);
+  rpc GetOverlappingFaceZones(GetOverlappingFaceZonesRequest) returns (GetOverlappingFaceZonesResponse);
+  rpc GetZonesWithMarkedFaces(GetZonesWithMarkedFacesRequest) returns (GetZonesWithMarkedFacesResponse);
+  rpc GetAllObjectNameList(Empty) returns (GetAllObjectNameListResponse);
+  rpc GetObjectNameListOfType(GetObjectNameListOfTypeRequest) returns (GetObjectNameListOfTypeResponse);
+  rpc GetObjectsOfFilter(GetObjectsOfFilterRequest) returns (GetObjectsOfFilterResponse);
+  rpc GetRegionsOfObject(GetRegionsOfObjectRequest) returns (GetRegionsOfObjectResponse);
+  rpc GetRegionNameListOfObject(GetRegionNameListOfObjectRequest) returns (GetRegionNameListOfObjectResponse);
+  rpc SortRegionsByVolume(SortRegionsByVolumeRequest) returns (SortRegionsByVolumeResponse);
+  rpc GetRegionVolume(GetRegionVolumeRequest) returns (GetRegionVolumeResponse);
+  rpc GetRegionsOfFilter(GetRegionsOfFilterRequest) returns (GetRegionsOfFilterResponse);
+  rpc GetRegionNameListOfPattern(GetRegionNameListOfPatternRequest) returns (GetRegionNameListOfPatternResponse);
+  rpc GetRegionsOfFaceZones(GetRegionsOfFaceZonesRequest) returns (GetRegionsOfFaceZonesResponse);
+  rpc GetRegionNameListOfFaceZones(GetRegionNameListOfFaceZonesRequest) returns (GetRegionNameListOfFaceZonesResponse);
+  rpc FindJoinPairs(FindJoinPairsRequest) returns (FindJoinPairsResponse);
+}
+
+message Empty {
+}
+
+message GetFaceZoneAtLocationRequest {
+  Point location = 1;
+}
+
+message GetFaceZoneAtLocationResponse {
+  sint64 face_zone_id = 1;
+}
+
+message GetCellZoneAtLocationRequest {
+  Point location = 1;
+}
+
+message GetCellZoneAtLocationResponse {
+  sint64 cell_zone_id = 1;
+}
+
+message GetZonesOfTypeRequest {
+  string type = 1;
+}
+
+message GetZonesOfTypeResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetZonesOfGroupRequest {
+  string group = 1;
+}
+
+message GetZonesOfGroupResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetFaceZonesOfFilterRequest {
+  string filter = 1;
+}
+
+message GetFaceZonesOfFilterResponse {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetCellZonesOfFilterRequest {
+  string filter = 1;
+}
+
+message GetCellZonesOfFilterResponse {
+  repeated sint64 cell_zone_ids = 1;
+}
+
+message GetEdgeZonesOfFilterRequest {
+  string filter = 1;
+}
+
+message GetEdgeZonesOfFilterResponse {
+  repeated sint64 edge_zone_ids = 1;
+}
+
+message GetNodeZonesOfFilterRequest {
+  string filter = 1;
+}
+
+message GetNodeZonesOfFilterResponse {
+  repeated sint64 node_zone_ids = 1;
+}
+
+message GetObjectsOfTypeRequest {
+  string type = 1;
+}
+
+message GetObjectsOfTypeResponse {
+  repeated string objects = 1;
+}
+
+message GetFaceZoneIdListOfObjectRequest {
+  string object = 1;
+}
+
+message GetFaceZoneIdListOfObjectResponse {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetEdgeZoneIdListOfObjectRequest {
+  string object = 1;
+}
+
+message GetEdgeZoneIdListOfObjectResponse {
+  repeated sint64 edge_zone_ids = 1;
+}
+
+message GetCellZoneIdListOfObjectRequest {
+  string object = 1;
+}
+
+message GetCellZoneIdListOfObjectResponse {
+  repeated sint64 cell_zone_ids = 1;
+}
+
+message GetFaceZonesSharedByRegionsOfTypeRequest {
+  string mesh_object = 1;
+  string region_type = 2;
+}
+
+message GetFaceZonesSharedByRegionsOfTypeResponse {
+  repeated sint64 shared_face_zone_ids = 1;
+}
+
+message GetFaceZonesOfRegionsRequest {
+  string object = 1;
+  repeated string regions = 2;
+}
+
+message GetFaceZonesOfRegionsResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetFaceZonesOfLabelsRequest {
+  string object = 1;
+  repeated string labels = 2;
+}
+
+message GetFaceZonesOfLabelsResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetFaceZoneIdListOfLabelsRequest {
+  string object = 1;
+  repeated string labels = 2;
+}
+
+message GetFaceZoneIdListOfLabelsResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetFaceZonesOfObjectsRequest {
+  repeated string object_list = 1;
+}
+
+message GetFaceZonesOfObjectsResponse {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetEdgeZonesOfObjectsRequest {
+  repeated string object_list = 1;
+}
+
+message GetEdgeZonesOfObjectsResponse {
+  repeated sint64 edge_zone_ids = 1;
+}
+
+message GetFaceZoneIdListOfRegionsRequest {
+  string object = 1;
+  repeated string labels = 2;
+}
+
+message GetFaceZoneIdListOfRegionsResponse {
+  repeated sint64 zone_ids = 1;
+}
+
+message GetPrismCellZonesRequest {
+  string zone_name_or_pattern = 1;
+  repeated string zones = 2;
+}
+
+message GetPrismCellZonesResponse {
+  repeated sint64 prism_cell_zones = 1;
+}
+
+message GetTetCellZonesRequest {
+  string zone_name_or_pattern = 1;
+  repeated string zones = 2;
+}
+
+message GetTetCellZonesResponse {
+  repeated sint64 tet_cell_zones = 1;
+}
+
+message GetAdjacentCellZonesRequest {
+  string zone_name_or_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+}
+
+message GetAdjacentCellZonesResponse {
+  repeated sint64 adjacent_cell_zones = 1;
+}
+
+message GetAdjacentFaceZonesRequest {
+  string zone_name_or_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
+}
+
+message GetAdjacentFaceZonesResponse {
+  repeated sint64 adjacent_boundary_face_zones = 1;
+}
+
+message GetAdjacentInteriorAndBoundaryFaceZonesRequest {
+  string zone_name_or_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
+}
+
+message GetAdjacentInteriorAndBoundaryFaceZonesResponse {
+  repeated sint64 adjacent_interior_and_boundary_face_zones = 1;
+}
+
+message GetAdjacentZonesByEdgeConnectivityRequest {
+  string zone_name_or_pattern = 1;
+  repeated sint64 zone_ids = 2;
+}
+
+message GetAdjacentZonesByEdgeConnectivityResponse {
+  repeated sint64 adjacent_zone_ids = 1;
+}
+
+message GetAdjacentZonesByNodeConnectivityRequest {
+  string zone_name_or_pattern = 1;
+  repeated sint64 zone_ids = 2;
+}
+
+message GetAdjacentZonesByNodeConnectivityResponse {
+  repeated sint64 adjacent_zone_ids = 1;
+}
+
+message GetSharedBoundaryZonesRequest {
+  string cell_zone_name_or_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
+}
+
+message GetSharedBoundaryZonesResponse {
+  repeated sint64 shared_boundary_zone_ids = 1;
+}
+
+message GetInteriorZonesConnectedToCellZonesRequest {
+  string cell_zone_name_or_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+}
+
+message GetInteriorZonesConnectedToCellZonesResponse {
+  repeated sint64 interior_zone_ids = 1;
+}
+
+message GetFaceZonesWithZoneSpecificPrismsAppliedResponse {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetFaceZonesOfPrismControlsRequest {
+  string control_name = 1;
+}
+
+message GetFaceZonesOfPrismControlsResponse {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetBafflesRequest {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetBafflesResponse {
+  repeated sint64 baffle_zone_ids = 1;
+}
+
+message GetEmbeddedBafflesResponse {
+  repeated sint64 embedded_baffles_zone_ids = 1;
+}
+
+message GetWrappedZonesResponse {
+  repeated sint64 wrapped_face_zone_ids = 1;
+}
+
+message GetUnreferencedEdgeZonesResponse {
+  repeated sint64 unreferenced_edge_zone_ids = 1;
+}
+
+message GetUnreferencedFaceZonesResponse {
+  repeated sint64 unreferenced_face_zone_ids = 1;
+}
+
+message GetUnreferencedCellZonesResponse {
+  repeated sint64 unreferenced_cell_zone_ids = 1;
+}
+
+message GetUnreferencedEdgeZonesOfFilterRequest {
+  string filter = 1;
+}
+
+message GetUnreferencedEdgeZonesOfFilterResponse {
+  repeated sint64 unreferenced_edge_zone_ids = 1;
+}
+
+message GetUnreferencedFaceZonesOfFilterRequest {
+  string filter = 1;
+}
+
+message GetUnreferencedFaceZonesOfFilterResponse {
+  repeated sint64 unreferenced_face_zone_ids = 1;
+}
+
+message GetUnreferencedCellZonesOfFilterRequest {
+  string filter = 1;
+}
+
+message GetUnreferencedCellZonesOfFilterResponse {
+  repeated sint64 unreferenced_cell_zone_ids = 1;
+}
+
+message GetUnreferencedEdgeZoneIdListOfPatternRequest {
+  string pattern = 1;
+}
+
+message GetUnreferencedEdgeZoneIdListOfPatternResponse {
+  repeated sint64 unreferenced_edge_zone_ids = 1;
+}
+
+message GetUnreferencedFaceZoneIdListOfPatternRequest {
+  string pattern = 1;
+}
+
+message GetUnreferencedFaceZoneIdListOfPatternResponse {
+  repeated sint64 unreferenced_face_zone_ids = 1;
+}
+
+message GetUnreferencedCellZoneIdListOfPatternRequest {
+  string pattern = 1;
+}
+
+message GetUnreferencedCellZoneIdListOfPatternResponse {
+  repeated sint64 unreferenced_cell_zone_ids = 1;
+}
+
+message GetMaxsizeCellZoneByVolumeRequest {
+  string cell_zone_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
+  repeated string cell_zone_names = 3;
+}
+
+message GetMaxsizeCellZoneByVolumeResponse {
+  sint64 cell_zone_id = 1;
+}
+
+message GetMaxsizeCellZoneByCountRequest {
+  string cell_zone_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
+  repeated string cell_zone_names = 3;
+}
+
+message GetMaxsizeCellZoneByCountResponse {
+  sint64 cell_zone_id = 1;
+}
+
+message GetMinsizeFaceZoneByAreaRequest {
+  string face_zone_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
+}
+
+message GetMinsizeFaceZoneByAreaResponse {
+  sint64 face_zone_id = 1;
+}
+
+message GetMinsizeFaceZoneByCountRequest {
+  string face_zone_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
+}
+
+message GetMinsizeFaceZoneByCountResponse {
+  sint64 face_zone_id = 1;
+}
+
+message GetFaceZoneListByMaximumEntityCountRequest {
+  sint64 maximum_entity_count = 1;
+  bool only_boundary = 2;
+}
+
+message GetFaceZoneListByMaximumEntityCountResponse {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetEdgeZoneListByMaximumEntityCountRequest {
+  sint64 maximum_entity_count = 1;
+  bool only_boundary = 2;
+}
+
+message GetEdgeZoneListByMaximumEntityCountResponse {
+  repeated sint64 edge_zone_ids = 1;
+}
+
+message GetCellZoneListByMaximumEntityCountRequest {
+  sint64 maximum_entity_count = 1;
+}
+
+message GetCellZoneListByMaximumEntityCountResponse {
+  repeated sint64 cell_zone_ids = 1;
+}
+
+message GetFaceZoneListByMaximumZoneAreaRequest {
+  sint64 maximum_zone_area = 1;
+}
+
+message GetFaceZoneListByMaximumZoneAreaResponse {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetFaceZoneListByMinimumZoneAreaRequest {
+  sint64 minimum_zone_area = 1;
+}
+
+message GetFaceZoneListByMinimumZoneAreaResponse {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetZonesWithFreeFacesRequest {
+  string face_zone_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
+}
+
+message GetZonesWithFreeFacesResponse {
+  repeated sint64 zones_with_free_faces = 1;
+}
+
+message GetZonesWithMultiFacesRequest {
+  string face_zone_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
+}
+
+message GetZonesWithMultiFacesResponse {
+  repeated sint64 zones_with_multi_connected_faces = 1;
+}
+
+message GetOverlappingFaceZonesRequest {
+  string face_zone_name_or_pattern = 1;
+  double area_tolerance = 2;
+  double distance_tolerance = 3;
+}
+
+message GetOverlappingFaceZonesResponse {
+  repeated sint64 overlapping_face_zone_ids = 1;
+}
+
+message GetZonesWithMarkedFacesRequest {
+  string face_zone_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
+}
+
+message GetZonesWithMarkedFacesResponse {
+  repeated sint64 zones_with_marked_faces = 1;
+}
+
+message GetAllObjectNameListResponse {
+  repeated string objects = 1;
+}
+
+message GetObjectNameListOfTypeRequest {
+  string type = 1;
+}
+
+message GetObjectNameListOfTypeResponse {
+  repeated string objects = 1;
+}
+
+message GetObjectsOfFilterRequest {
+  string filter = 1;
+}
+
+message GetObjectsOfFilterResponse {
+  repeated string objects = 1;
+}
+
+message GetRegionsOfObjectRequest {
+  string object = 1;
+}
+
+message GetRegionsOfObjectResponse {
+  repeated string regions = 1;
+}
+
+message GetRegionNameListOfObjectRequest {
+  string object = 1;
+}
+
+message GetRegionNameListOfObjectResponse {
+  repeated string regions = 1;
+}
+
+message CustomDoubleAndString {
+  double volume = 1;
+  string region = 2;
+}
+
+message SortRegionsByVolumeRequest {
+  string object_name = 1;
+  string order = 2;
+}
+
+message SortRegionsByVolumeResponse {
+  repeated CustomDoubleAndString regions = 1;
+}
+
+message GetRegionVolumeRequest {
+  string object_name = 1;
+  string region_name = 2;
+}
+
+message GetRegionVolumeResponse {
+  double region_volume = 1;
+}
+
+message GetRegionsOfFilterRequest {
+  string object = 1;
+  string filter = 2;
+}
+
+message GetRegionsOfFilterResponse {
+  repeated string regions = 1;
+}
+
+message GetRegionNameListOfPatternRequest {
+  string object = 1;
+  string region_name_or_pattern = 2;
+}
+
+message GetRegionNameListOfPatternResponse {
+  repeated string regions = 1;
+}
+
+message GetRegionsOfFaceZonesRequest {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetRegionsOfFaceZonesResponse {
+  repeated string regions = 1;
+}
+
+message GetRegionNameListOfFaceZonesRequest {
+  string face_zone_name_or_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+}
+
+message GetRegionNameListOfFaceZonesResponse {
+  repeated string regions = 1;
+}
+
+message OverlappingBoundingBox {
+  int64 zone_id_1 = 1;
+  int64 zone_id_2 = 2;
+  repeated double bounding_box_min = 3;
+  repeated double bounding_box_max = 4;
+}
+
+message FindJoinPairsRequest {
+  string face_zone_name_or_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
+  double join_tolerance = 4;
+  bool absolute_tolerance = 5;
+  double join_angle = 6;
+}
+
+message FindJoinPairsResponse {
+  repeated OverlappingBoundingBox pairs = 1;
+}
