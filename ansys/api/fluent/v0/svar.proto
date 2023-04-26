@@ -1,0 +1,109 @@
+//
+// Copyright 1987-2023 ANSYS, Inc. All Rights Reserved.
+//
+
+syntax = "proto3";
+import "ansys/api/fluent/v0/field_data.proto";
+
+package grpcRemoting;
+
+service svar {
+  rpc GetZonesInfo(GetZonesInfoRequest) returns (GetZonesInfoResponse);
+  rpc GetSvarsInfo(GetSvarsInfoRequest) returns (GetSvarsInfoResponse);
+  rpc GetSvarData(GetSvarDataRequest) returns (stream GetSvarDataResponse);
+  rpc SetSvarData(stream SetSvarDataRequest) returns (SetSvarDataResponse);
+}
+
+message GetZonesInfoRequest {
+}
+
+message GetZonesInfoResponse {
+  repeated DomainInfo domainsInfo = 1;  // Domains Info.
+  repeated ZoneInfo zonesInfo = 2;      // Zones Info.
+}
+
+message DomainInfo {
+  string name = 1;      // Domain name.
+  uint32 domainId = 2;  // Domain ID.
+}
+
+message ZoneInfo {
+  string name = 1;                            // Zone name.
+  uint64 zoneId = 2;                          // Zone ID.
+  string zoneType = 3;                        // Zone type e.g. velocity-inlet.
+  ThreadType threadType = 4;                  // Zone thread type.
+  repeated PartitionInfo partitionsInfo = 5;  // Partitions info.
+}
+
+enum ThreadType {
+  CELL_THREAD = 0;
+  FACE_THREAD = 1;
+}
+
+message PartitionInfo {
+  uint64 count = 1;       // Count in partition
+  uint64 startIndex = 2;  // Global start index
+  uint64 endIndex = 3;    // Global end index
+}
+
+message GetSvarsInfoRequest {
+  uint32 domainId = 1;  // Domain ID.
+  uint64 zoneId = 2;    // Zone ID.
+}
+
+message GetSvarsInfoResponse {
+  repeated SvarInfo svarsInfo = 1;  // SVARs Info
+}
+
+message SvarInfo {
+  string name = 1;          // SVAR name.
+  uint32 dimension = 2;     // Dimension e.g. for centroid it will be 3.
+  FieldType fieldType = 3;  // Data Type defined in field_data.proto.
+}
+
+message GetSvarDataRequest {
+  uint32 chunkSize = 1;         // Chunk size.
+  bool provideBytesStream = 2;  // Bytes are streamed if true.
+  string name = 3;              // SVAR Name.
+  uint32 domainId = 4;          // Domain ID.
+  repeated uint64 zones = 5;    // List of zone IDs.
+}
+
+message GetSvarDataResponse {
+  oneof array {
+    Payload payload = 1;   // Payload.
+    Info payloadInfo = 2;  // Payload info.
+  }
+}
+
+message Info {
+  FieldType fieldType = 1;  // Field type.
+  uint64 fieldSize = 2;     // Field size. For bytes it will be number of bytes otherwise array size.
+  uint64 zone = 3;          // Zone ID.
+}
+
+message Payload {
+  oneof chunk {
+    bytes bytePayload = 1;            // Bytes payload.
+    DoublePayload doublePayload = 2;  // Double payload.
+    FloatPayload floatPayload = 3;    // Float payload.
+    LongPayload longPayload = 4;      // Long payload.
+    IntPayload intPayload = 5;        // Int payload.
+  }
+}
+
+message SetSvarDataRequest {
+  oneof array {
+    SvarHeader header = 1;  // SVAR name and domain ID.
+    Payload payload = 2;    // Payload.
+    Info payloadInfo = 3;   // Payload info.
+  }
+}
+
+message SvarHeader {
+  string name = 1;      // SVAR Name.
+  uint32 domainId = 2;  // Domain ID.
+}
+
+message SetSvarDataResponse {
+}
