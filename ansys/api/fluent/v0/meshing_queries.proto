@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v0;
 
-import "common_api.proto";
+"ansys/api/fluent/v0/common_api.proto";
 
 service MeshingQueries {
   rpc GetFaceZoneAtLocation(GetFaceZoneAtLocationRequest) returns (GetFaceZoneAtLocationResponse);
