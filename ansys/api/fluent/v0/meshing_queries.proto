@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v0;
 
-import "ansys/api/fluent/v0/common_api.proto";
+import "common_api.proto";
 
 service MeshingQueries {
   rpc GetFaceZoneAtLocation(GetFaceZoneAtLocationRequest) returns (GetFaceZoneAtLocationResponse);
@@ -76,6 +76,23 @@ service MeshingQueries {
   rpc GetRegionsOfFaceZones(GetRegionsOfFaceZonesRequest) returns (GetRegionsOfFaceZonesResponse);
   rpc GetRegionNameListOfFaceZones(GetRegionNameListOfFaceZonesRequest) returns (GetRegionNameListOfFaceZonesResponse);
   rpc FindJoinPairs(FindJoinPairsRequest) returns (FindJoinPairsResponse);
+  rpc AddLabelsOnFaceZones(AddLabelsOnFaceZonesRequest) returns (AddLabelsOnFaceZonesResponse);
+  rpc AddLabelsOnCellZones(AddLabelsOnCellZonesRequest) returns (AddLabelsOnCellZonesResponse);
+  rpc AddLabelsOnEdgeZones(AddLabelsOnEdgeZonesRequest) returns (AddLabelsOnEdgeZonesResponse);
+  rpc GetLabelsOnFaceZones(GetLabelsOnFaceZonesRequest) returns (GetLabelsOnFaceZonesResponse);
+  rpc GetLabelsOnCellZones(GetLabelsOnCellZonesRequest) returns (GetLabelsOnCellZonesResponse);
+  rpc GetLabelsOnEdgeZones(GetLabelsOnEdgeZonesRequest) returns (GetLabelsOnEdgeZonesResponse);
+  rpc GetLabelsOfObject(GetLabelsOfObjectRequest) returns (GetLabelsOfObjectResponse);
+  rpc GetAllLabelNameList(GetAllLabelNameListRequest) returns (GetAllLabelNameListResponse);
+  rpc GetLabelsOfFilter(GetLabelsOfFilterRequest) returns (GetLabelsOfFilterResponse);
+  rpc GetLabelNameListOfPattern(GetLabelNameListOfPatternRequest) returns (GetLabelNameListOfPatternResponse);
+  rpc GetLabelsOfFaceZones(GetLabelsOfFaceZonesRequest) returns (GetLabelsOfFaceZonesResponse);
+  rpc GetFaceZoneIdListWithLabels(GetFaceZoneIdListWithLabelsRequest) returns (GetFaceZoneIdListWithLabelsResponse);
+  rpc GetCellZoneIdListWithLabels(GetCellZoneIdListWithLabelsRequest) returns (GetCellZoneIdListWithLabelsResponse);
+  rpc GetEdgeZoneIdListWithLabels(GetEdgeZoneIdListWithLabelsRequest) returns (GetEdgeZoneIdListWithLabelsResponse);
+  rpc RemoveLabelsOnFaceZones(RemoveLabelsOnFaceZonesRequest) returns (RemoveLabelsOnFaceZonesResponse);
+  rpc RemoveLabelsOnCellZones(RemoveLabelsOnCellZonesRequest) returns (RemoveLabelsOnCellZonesResponse);
+  rpc RemoveLabelsOnEdgeZones(RemoveLabelsOnEdgeZonesRequest) returns (RemoveLabelsOnEdgeZonesResponse);
 }
 
 message Empty {
@@ -641,4 +658,175 @@ message FindJoinPairsRequest {
 
 message FindJoinPairsResponse {
   repeated OverlappingBoundingBox pairs = 1;
+}
+
+message AddLabelsOnFaceZonesRequest {
+  string face_zone_name_or_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
+  repeated string face_zone_labels = 4;
+}
+
+message AddLabelsOnFaceZonesResponse {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message AddLabelsOnCellZonesRequest {
+  string cell_zone_name_or_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
+  repeated string cell_zone_names = 3;
+  repeated string cell_zone_labels = 4;
+}
+
+message AddLabelsOnCellZonesResponse {
+  repeated sint64 cell_zone_ids = 1;
+}
+
+message AddLabelsOnEdgeZonesRequest {
+  string edge_zone_name_or_pattern = 1;
+  repeated sint64 edge_zone_ids = 2;
+  repeated string edge_zone_names = 3;
+  repeated string edge_zone_labels = 4;
+}
+
+message AddLabelsOnEdgeZonesResponse {
+  repeated sint64 edge_zone_ids = 1;
+}
+
+message GetLabelsOnFaceZonesRequest {
+  string face_zone_name_or_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
+}
+
+message GetLabelsOnFaceZonesResponse {
+  repeated string face_zone_labels = 1;
+}
+
+message GetLabelsOnCellZonesRequest {
+  string cell_zone_name_or_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
+  repeated string cell_zone_names = 3;
+}
+
+message GetLabelsOnCellZonesResponse {
+  repeated string cell_zone_labels = 1;
+}
+
+message GetLabelsOnEdgeZonesRequest {
+  string edge_zone_name_or_pattern = 1;
+  repeated sint64 edge_zone_ids = 2;
+  repeated string edge_zone_names = 3;
+}
+
+message GetLabelsOnEdgeZonesResponse {
+  repeated string edge_zone_labels = 1;
+}
+
+message GetLabelsOfObjectRequest {
+  string object = 1;
+}
+
+message GetLabelsOfObjectResponse {
+  repeated string face_zone_labels = 1;
+}
+
+message GetAllLabelNameListRequest {
+  string object = 1;
+}
+
+message GetAllLabelNameListResponse {
+  repeated string face_zone_labels = 1;
+}
+
+message GetLabelsOfFilterRequest {
+  string object = 1;
+  string filter = 2;
+}
+
+message GetLabelsOfFilterResponse {
+  repeated string face_zone_labels = 1;
+}
+
+message GetLabelNameListOfPatternRequest {
+  string object = 1;
+  string label_name_or_pattern = 2;
+}
+
+message GetLabelNameListOfPatternResponse {
+  repeated string face_zone_labels = 1;
+}
+
+message GetLabelsOfFaceZonesRequest {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetLabelsOfFaceZonesResponse {
+  repeated string face_zone_labels = 1;
+}
+
+message GetFaceZoneIdListWithLabelsRequest {
+  string face_zone_name_or_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
+  repeated string face_zone_labels = 4;
+}
+
+message GetFaceZoneIdListWithLabelsResponse {
+  repeated sint64 face_zone_ids = 1;
+}
+
+message GetCellZoneIdListWithLabelsRequest {
+  string cell_zone_name_or_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
+  repeated string cell_zone_names = 3;
+  repeated string cell_zone_labels = 4;
+}
+
+message GetCellZoneIdListWithLabelsResponse {
+  repeated sint64 cell_zone_ids = 1;
+}
+
+message GetEdgeZoneIdListWithLabelsRequest {
+  string edge_zone_name_or_pattern = 1;
+  repeated sint64 edge_zone_ids = 2;
+  repeated string edge_zone_names = 3;
+  repeated string edge_zone_labels = 4;
+}
+
+message GetEdgeZoneIdListWithLabelsResponse {
+  repeated sint64 edge_zone_ids = 1;
+}
+
+message RemoveLabelsOnFaceZonesRequest {
+  string face_zone_name_or_pattern = 1;
+  repeated sint64 face_zone_ids = 2;
+  repeated string face_zone_names = 3;
+  repeated string face_zone_labels = 4;
+}
+
+message RemoveLabelsOnFaceZonesResponse {
+  repeated sint64 face_zone_labels = 1;
+}
+
+message RemoveLabelsOnCellZonesRequest {
+  string cell_zone_name_or_pattern = 1;
+  repeated sint64 cell_zone_ids = 2;
+  repeated string cell_zone_names = 3;
+  repeated string cell_zone_labels = 4;
+}
+
+message RemoveLabelsOnCellZonesResponse {
+  repeated sint64 cell_zone_labels = 1;
+}
+
+message RemoveLabelsOnEdgeZonesRequest {
+  string edge_zone_name_or_pattern = 1;
+  repeated sint64 edge_zone_ids = 2;
+  repeated string edge_zone_names = 3;
+  repeated string edge_zone_labels = 4;
+}
+
+message RemoveLabelsOnEdgeZonesResponse {
+  repeated sint64 edge_zone_labels = 1;
 }
