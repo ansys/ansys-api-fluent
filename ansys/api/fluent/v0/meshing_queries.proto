@@ -9,6 +9,7 @@ package ansys.api.fluent.v0;
 import "ansys/api/fluent/v0/common_api.proto";
 
 service MeshingQueries {
+  rpc GetFaceZones(GetFaceZonesRequest) returns (GetFaceZonesResponse);
   rpc GetFaceZoneAtLocation(GetFaceZoneAtLocationRequest) returns (GetFaceZoneAtLocationResponse);
   rpc GetCellZoneAtLocation(GetCellZoneAtLocationRequest) returns (GetCellZoneAtLocationResponse);
   rpc GetZonesOfType(GetZonesOfTypeRequest) returns (GetZonesOfTypeResponse);
@@ -96,6 +97,26 @@ service MeshingQueries {
 }
 
 message Empty {
+}
+
+message GetFaceZonesRequest {
+  repeated double location_coordinates = 1;
+  string filter = 2;
+  string object = 3;
+  string region_type = 4;
+  string prism_control_name = 5;
+  repeated string regions = 6;
+  repeated string labels = 7;
+  repeated string objects = 8;
+  bool prisms_applied = 9;
+  sint64 maximum_entity_count = 10;
+  sint64 maximum_zone_area = 11;
+  sint64 minimum_zone_area = 12;
+}
+
+message GetFaceZonesResponse {
+  sint64 face_zone_id = 1;
+  repeated sint64 face_zone_ids = 2;
 }
 
 message GetFaceZoneAtLocationRequest {
