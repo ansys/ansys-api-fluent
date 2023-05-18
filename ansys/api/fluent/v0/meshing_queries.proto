@@ -109,9 +109,10 @@ message GetFaceZonesRequest {
   repeated string labels = 7;
   repeated string objects = 8;
   bool prisms_applied = 9;
-  sint64 maximum_entity_count = 10;
-  sint64 maximum_zone_area = 11;
-  sint64 minimum_zone_area = 12;
+  bool only_boundary = 10;
+  sint64 maximum_entity_count = 11;
+  sint64 maximum_zone_area = 12;
+  sint64 minimum_zone_area = 13;
 }
 
 message GetFaceZonesResponse {
