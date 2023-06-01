@@ -1,0 +1,25 @@
+//
+// Copyright 1987-2023 ANSYS, Inc. All Rights Reserved.
+//
+
+syntax = "proto3";
+
+package grpcRemoting;
+
+service OTelExporter {
+  rpc BeginStreaming(OTelExporterRequest) returns (stream OTelExporterResponse) {}
+}
+
+message OTelExporterRequest {
+}
+
+enum ExporterType {
+  OTEL_TRACE = 0;
+  OTEL_METRICS = 1;
+  OTEL_LOGS = 2;
+}
+
+message OTelExporterResponse {
+  ExporterType type = 1;
+  string output = 2;
+}
