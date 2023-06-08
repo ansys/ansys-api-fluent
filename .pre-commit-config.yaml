@@ -11,3 +11,8 @@ repos:
   rev: v2.1.0
   hooks:
   - id: codespell
+
+- repo: https://github.com/yoheimuta/protolint
+  rev: v0.44.0
+  hooks:
+  - id: protolint

@@ -3,9 +3,10 @@
 //
 
 syntax = "proto3";
-import "ansys/api/fluent/v0/field_data.proto";
 
 package grpcRemoting;
+
+import "ansys/api/fluent/v0/field_data.proto";
 
 service svar {
   rpc GetZonesInfo(GetZonesInfoRequest) returns (GetZonesInfoResponse);
