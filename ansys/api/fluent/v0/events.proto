@@ -75,6 +75,14 @@ message ProgressEvent {
   sint32 percentComplete = 2;  // Percent completed.
 }
 
+/*
+ * Event when fatal error encountered
+ */
+message ErrorEvent {
+  string message = 1;
+  sint32 errorCode = 2;
+}
+
 message BeginStreamingResponse {
   oneof as {
     AboutToReadCaseEvent abouttoreadcaseevent = 1;
@@ -86,5 +94,6 @@ message BeginStreamingResponse {
     CalculationsStartedEvent calculationsstartedevent = 11;
     CalculationsEndedEvent calculationsendedevent = 12;
     ProgressEvent progressevent = 20;
+    ErrorEvent progressevent = 21;
   }
 }
