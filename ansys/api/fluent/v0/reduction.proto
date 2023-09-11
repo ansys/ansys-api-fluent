@@ -29,6 +29,8 @@ service Reduction {
   rpc VolumeAve(VolumeAveRequest) returns (VolumeAveResponse) {}
   rpc VolumeInt(VolumeIntRequest) returns (VolumeIntResponse) {}
   rpc Moment(MomentRequest) returns (MomentResponse) {}
+  rpc Sum(SumRequest) returns (SumResponse) {}
+  rpc SumIf(SumIfRequest) returns (SumIfResponse) {}
 }
 
 message AreaRequest {
@@ -202,4 +204,25 @@ message MomentRequest {
 
 message MomentResponse {
   Point value = 1;
+}
+
+message SumRequest {
+  string expression = 1;
+  repeated string locations = 2;
+  string weight = 3;
+}
+
+message SumResponse {
+  double value = 1;
+}
+
+message SumIfRequest {
+  string expression = 1;
+  string condition = 2;
+  repeated string locations = 3;
+  string weight = 4;
+}
+
+message SumIfResponse {
+  double value = 1;
 }
