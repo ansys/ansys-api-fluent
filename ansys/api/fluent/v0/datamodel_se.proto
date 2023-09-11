@@ -133,7 +133,7 @@ message ExecuteQueryRequest {
   string rules = 1;
   string path = 2;
   string query = 3;
-  utils.Variant args = 5;
+  utils.Variant args = 4;
 }
 
 message ExecuteQueryResponse {
