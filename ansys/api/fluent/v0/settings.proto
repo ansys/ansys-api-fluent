@@ -1,5 +1,5 @@
 //
-// Copyright 1987-2022 ANSYS, Inc. All Rights Reserved.
+// Copyright 2024 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
 //
 
 syntax = "proto3";
@@ -206,9 +206,4 @@ message AttrInfoMap {
 message GetAttrsResponse {
   Value values = 1;
   repeated AttrInfoMap group_children = 2;
-  repeated AttrInfoMap named_object_children = 3;
-  repeated GetAttrsResponse list_object_children = 4;
-  repeated AttrInfoMap arguments = 5;
-  repeated AttrInfoMap commands = 6;
-  repeated AttrInfoMap queries = 7;
 }
