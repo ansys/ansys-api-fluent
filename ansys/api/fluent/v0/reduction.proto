@@ -8,6 +8,8 @@ package ansys.api.fluent.v0;
 
 import "ansys/api/fluent/v0/common_api.proto";
 
+import "ansys/api/fluent/v0/variant.proto";
+
 service Reduction {
   rpc Area(AreaRequest) returns (AreaResponse) {}
   rpc AreaAve(AreaAveRequest) returns (AreaAveResponse) {}
@@ -38,7 +40,7 @@ message AreaRequest {
 }
 
 message AreaResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message AreaAveRequest {
@@ -47,7 +49,7 @@ message AreaAveRequest {
 }
 
 message AreaAveResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message AreaIntRequest {
@@ -56,7 +58,7 @@ message AreaIntRequest {
 }
 
 message AreaIntResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message CentroidRequest {
@@ -72,7 +74,7 @@ message CountRequest {
 }
 
 message CountResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message CountIfRequest {
@@ -81,7 +83,7 @@ message CountIfRequest {
 }
 
 message CountIfResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message ForceRequest {
@@ -98,7 +100,7 @@ message MassAveRequest {
 }
 
 message MassAveResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message MassFlowAveRequest {
@@ -107,7 +109,7 @@ message MassFlowAveRequest {
 }
 
 message MassFlowAveResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message MassFlowAveAbsRequest {
@@ -116,7 +118,7 @@ message MassFlowAveAbsRequest {
 }
 
 message MassFlowAveAbsResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message MassFlowIntRequest {
@@ -125,7 +127,7 @@ message MassFlowIntRequest {
 }
 
 message MassFlowIntResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message MassIntRequest {
@@ -134,7 +136,7 @@ message MassIntRequest {
 }
 
 message MassIntResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message MaximumRequest {
@@ -143,7 +145,7 @@ message MaximumRequest {
 }
 
 message MaximumResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message MinimumRequest {
@@ -152,7 +154,7 @@ message MinimumRequest {
 }
 
 message MinimumResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message PressureForceRequest {
@@ -176,7 +178,7 @@ message VolumeRequest {
 }
 
 message VolumeResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message VolumeAveRequest {
@@ -185,7 +187,7 @@ message VolumeAveRequest {
 }
 
 message VolumeAveResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message VolumeIntRequest {
@@ -194,7 +196,7 @@ message VolumeIntRequest {
 }
 
 message VolumeIntResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message MomentRequest {
@@ -213,7 +215,7 @@ message SumRequest {
 }
 
 message SumResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
 
 message SumIfRequest {
@@ -224,5 +226,5 @@ message SumIfRequest {
 }
 
 message SumIfResponse {
-  double value = 1;
+  utils.Variant value = 1;
 }
