@@ -63,4 +63,9 @@ if __name__ == "__main__":
             ],
         },
         cmdclass={"build_py": build_py, "develop": DevelopCommand},
+        project_urls={
+            "Documentation": "https://github.com/ansys-internal/ansys-api-fluent/#readme",
+            "Source": "https://github.com/ansys-internal/ansys-api-fluent",
+            "Tracker": "https://github.com/ansys-internal/ansys-api-fluent/issues",
+        },
     )
