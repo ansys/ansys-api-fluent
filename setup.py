@@ -49,7 +49,6 @@ if __name__ == "__main__":
         description=description,
         long_description=long_description,
         long_description_content_type="text/markdown",
-        url=f"https://github.com/ansys/{package_name}",
         license="MIT",
         python_requires=">=3.7",
         install_requires=["grpcio~=1.30", "protobuf~=3.19"],
@@ -63,9 +62,4 @@ if __name__ == "__main__":
             ],
         },
         cmdclass={"build_py": build_py, "develop": DevelopCommand},
-        project_urls={
-            "Documentation": "https://github.com/ansys-internal/ansys-api-fluent/#readme",
-            "Source": "https://github.com/ansys-internal/ansys-api-fluent",
-            "Tracker": "https://github.com/ansys-internal/ansys-api-fluent/issues",
-        },
     )
