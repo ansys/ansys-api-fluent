@@ -23,6 +23,10 @@ service DataModel {
   rpc deleteCommandArguments(DeleteCommandArgumentsRequest) returns (DeleteCommandArgumentsResponse) {}
   rpc getSpecs(GetSpecsRequest) returns (GetSpecsResponse) {}
   rpc getStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse) {}
+  rpc rename(RenameRequest) returns (RenameResponse) {}
+  rpc fixState(FixStateRequest) returns (FixStateResponse) {}
+  rpc getObjectNames(GetObjectNamesRequest) returns (GetObjectNamesResponse) {}
+  rpc deleteChildObjects(DeleteChildObjectsRequest) returns (DeleteChildObjectsResponse) {}
 
   // Subscribe to datamodel events
   rpc subscribeEvents(SubscribeEventsRequest) returns (SubscribeEventsResponse) {}
@@ -413,4 +417,54 @@ message EventResponse {
     CommandAttributeChangedEventResponse commandAttributeChangedEventResponse = 8;
     CommandExecutedEventResponse commandExecutedEventResponse = 9;
   }
+}
+
+message RenameRequest {
+  string rules = 1;
+  string path = 2;
+  string new_name = 3;
+  bool wait = 4;
+}
+
+message RenameResponse {
+  utils.Variant state = 1;
+  repeated string deletedpaths = 2;
+}
+
+message GetObjectNamesRequest {
+  string rules = 1;
+  string path = 2;
+}
+
+message GetObjectNamesResponse {
+  repeated string names = 1;
+}
+
+message ChildNames {
+  repeated string names = 1;
+}
+
+message DeleteChildObjectsRequest {
+  string rules = 1;
+  string path = 2;
+  oneof var {
+    ChildNames child_names = 3;
+    bool delete_all = 4;
+  }
+  bool wait = 5;
+}
+
+message DeleteChildObjectsResponse {
+  utils.Variant state = 1;
+  repeated string deletedpaths = 2;
+}
+
+message FixStateRequest {
+  string rules = 1;
+  string path = 2;
+}
+
+message FixStateResponse {
+  utils.Variant state = 1;
+  repeated string deletedpaths = 2;
 }
