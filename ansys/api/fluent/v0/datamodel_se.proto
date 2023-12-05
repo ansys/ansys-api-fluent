@@ -261,6 +261,7 @@ message CommandArg {
   string type = 1;
   string name = 2;
   StaticInfo info = 3;
+  string helpstring = 4;
 }
 
 message CommandInfo {
@@ -277,6 +278,7 @@ message StaticInfo {
   CommandInfo commandinfo = 6;
   map<string, StaticInfo> queries = 7;
   CommandInfo queryinfo = 8;
+  string helpstring = 9;
 }
 
 message GetStaticInfoRequest {
