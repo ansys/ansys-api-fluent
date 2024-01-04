@@ -262,6 +262,7 @@ message CommandArg {
   string name = 2;
   StaticInfo info = 3;
   string helpstring = 4;
+  string filepurpose = 5;
 }
 
 message CommandInfo {
@@ -279,6 +280,7 @@ message StaticInfo {
   map<string, StaticInfo> queries = 7;
   CommandInfo queryinfo = 8;
   string helpstring = 9;
+  string filepurpose = 10;
 }
 
 message GetStaticInfoRequest {
