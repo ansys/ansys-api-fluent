@@ -6,6 +6,8 @@ syntax = "proto3";
 
 package ansys.api.fluent.v0.settings;
 
+import "ansys/api/fluent/v0/variant.proto";
+
 service Settings {
   /* Static info about objects (type, children, commands, arguments,
      object-type) in a recursive manner. */
@@ -98,7 +100,7 @@ message StaticInfo {
   // Boolean indicating if an instance can be created by the user for the current named-object.
   bool user_creatable = 10;
   // File purpose string for the current command object.
-  string file_purpose = 12;
+  utils.VariantMap attrs = 12;
 }
 
 message GetStaticInfoRequest {
