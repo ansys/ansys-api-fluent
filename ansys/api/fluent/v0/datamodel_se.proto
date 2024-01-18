@@ -262,7 +262,7 @@ message CommandArg {
   string name = 2;
   StaticInfo info = 3;
   string helpstring = 4;
-  utils.VariantMap attrs = 5;
+  map<string, utils.Variant> attrs = 5;
 }
 
 message CommandInfo {
@@ -280,7 +280,6 @@ message StaticInfo {
   map<string, StaticInfo> queries = 7;
   CommandInfo queryinfo = 8;
   string helpstring = 9;
-  utils.VariantMap attrs = 10;
 }
 
 message GetStaticInfoRequest {
