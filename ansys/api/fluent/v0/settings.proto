@@ -100,7 +100,7 @@ message StaticInfo {
   // Boolean indicating if an instance can be created by the user for the current named-object.
   bool user_creatable = 10;
   // File purpose string for the current command object.
-  map<string, utils.Variant> attrs = 12;
+  map<string, Value> attrs = 12;
 }
 
 message GetStaticInfoRequest {
