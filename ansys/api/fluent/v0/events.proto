@@ -5,95 +5,152 @@
 syntax = "proto3";
 
 package grpcRemoting;
+
+import "scheme_pointer.proto";
+
 service Events {
-  rpc BeginStreaming(BeginStreamingRequest)
-      returns (stream BeginStreamingResponse) {}
+  rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse) {}
+}
+
+message TimestepStartedEvent {
+  sint64 index = 1;
+  double size = 2;
+}
+
+message TimestepEndedEvent {
+  sint64 index = 1;
+  double size = 2;
+}
+
+message IterationStartedEvent {
+  sint64 index = 1;
+}
+message IterationEndedEvent {
+  sint64 index = 1;
+}
+
+message CalculationsStartedEvent {
+}
+message CalculationsEndedEvent {
+}
+
+message CalculationsPausedEvent {
+}
+message CalculationsResumedEvent {
+}
+
+message AboutToReadCaseEvent {
+  string casefilepath = 1;
+}
+message CaseReadEvent {
+  string casefilepath = 1;
+}
+
+message AboutToReadDataEvent {
+  string datafilepath = 1;
+}
+message DataReadEvent {
+  string datafilepath = 1;
+}
+
+message AboutToInitializeEvent {
+}
+
+message InitializedEvent {
+}
+
+message ReportDefinitionChangedEvent {
+  string reportdefinitionname = 1;
+}
+
+message PlotSetChangedEvent {
+  string plotsetname = 1;
+}
+
+message ResidualPlotChangedEvent {
+}
+
+message ClearSettingsDoneEvent {
+}
+
+message AutoPauseEvent {
+  sint32 level = 1;
+  sint64 index = 2;
+}
+
+message ProgressEvent {
+  string message = 1;
+  sint32 percentComplete = 2;
+}
+
+message SolverTimeEstimateEvent {
+  double hours = 1;
+  double minutes = 2;
+  double seconds = 3;
+}
+
+message ErrorEvent {
+  string message = 1;
+  sint32 errorCode = 2;
+}
+
+message CommandCompletedEvent {
 }
 
 message BeginStreamingRequest {
 }
 
-/**
- * Event at end of the time step.
- */
-message TimestepEndedEvent {
-  sint64 index = 1;  // Time step index.
-  double size = 2;   // Time step size.
+message DataModelChangedEvent {
+  repeated string paths = 1;
 }
 
-/**
- * Event at end of the iteration.
- */
-message IterationEndedEvent {
-  sint64 index = 1;  // Iteration index
-}
-
-/**
- * Event at start of calculation.
- */
-message CalculationsStartedEvent {
-}
-
-/**
- * Event at end of calculation.
- */
-message CalculationsEndedEvent {
-}
-
-/**
- * Event at start of case read.
- */
-message AboutToReadCaseEvent {
-  string casefilepath = 1;  // Case file path.
-}
-
-/**
- * Event after case is read.
- */
-message CaseReadEvent {
-  string casefilepath = 1;  // Case file path.
-}
-
-/**
- * Event at data read.
- */
-message DataReadEvent {
-  string datafilepath = 1;  // Data file path.
-}
-
-/**
- * Event at solution initialization.
- */
-message InitializedEvent {
-}
-
-/**
- * Event during solution progress.
- */
-message ProgressEvent {
-  string message = 1;          // Progress Message.
-  sint32 percentComplete = 2;  // Percent completed.
-}
-
-/*
- * Event when fatal error encountered
- */
-message ErrorEvent {
-  string message = 1;
-  sint32 errorCode = 2;
+message ExecuteInClientEvent {
+  string function = 1;
+  repeated SchemePointer arguments = 2;
 }
 
 message BeginStreamingResponse {
   oneof as {
     AboutToReadCaseEvent abouttoreadcaseevent = 1;
     CaseReadEvent casereadevent = 2;
+
+    AboutToInitializeEvent abouttoinitializeevent = 3;
     InitializedEvent initializedevent = 4;
+
+    AboutToReadDataEvent abouttoreaddataevent = 5;
     DataReadEvent datareadevent = 6;
+
+    IterationStartedEvent iterationstartedevent = 7;
     IterationEndedEvent iterationendedevent = 8;
+
+    TimestepStartedEvent timestepstartedevent = 9;
     TimestepEndedEvent timestependedevent = 10;
+
     CalculationsStartedEvent calculationsstartedevent = 11;
     CalculationsEndedEvent calculationsendedevent = 12;
+
+    ReportDefinitionChangedEvent reportdefinitionchangedevent = 13;
+    PlotSetChangedEvent plotsetchangedevent = 14;
+    ResidualPlotChangedEvent residualplotchangedevent = 15;
+
+    ClearSettingsDoneEvent clearsettingsdoneevent = 16;
+
+    AutoPauseEvent autopauseevent = 17;
+
+    CalculationsPausedEvent calculationspausedevent = 18;
+    CalculationsResumedEvent calculationsresumedevent = 19;
+
+    /* Fraction of operation completed */
     ProgressEvent progressevent = 20;
+
     ErrorEvent errorevent = 21;
+
+    CommandCompletedEvent commandcompletedevent = 22;
+
+    DataModelChangedEvent datamodelchangedevent = 23;
+
+    SolverTimeEstimateEvent solvertimeestimateevent = 24;
+
+    ExecuteInClientEvent executeinclientevent = 25;
   }
 }
