@@ -6,27 +6,27 @@ syntax = "proto3";
 
 package grpcRemoting;
 
-import "scheme_pointer.proto";
+import "ansys/api/fluent/v0/scheme_pointer.proto";
 
 service Events {
   rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse) {}
 }
 
 message TimestepStartedEvent {
-  sint64 index = 1;
-  double size = 2;
+  sint64 index = 1;  // Time step index
+  double size = 2;   // Time step size.
 }
 
 message TimestepEndedEvent {
-  sint64 index = 1;
-  double size = 2;
+  sint64 index = 1;  // Time step index
+  double size = 2;   // Time step size.
 }
 
 message IterationStartedEvent {
-  sint64 index = 1;
+  sint64 index = 1;  // Iteration index
 }
 message IterationEndedEvent {
-  sint64 index = 1;
+  sint64 index = 1;  // Iteration index
 }
 
 message CalculationsStartedEvent {
@@ -40,17 +40,17 @@ message CalculationsResumedEvent {
 }
 
 message AboutToReadCaseEvent {
-  string casefilepath = 1;
+  string casefilepath = 1;  // Case file path
 }
 message CaseReadEvent {
-  string casefilepath = 1;
+  string casefilepath = 1;  // Case file path
 }
 
 message AboutToReadDataEvent {
-  string datafilepath = 1;
+  string datafilepath = 1;  // Data file path
 }
 message DataReadEvent {
-  string datafilepath = 1;
+  string datafilepath = 1;  // Data file path
 }
 
 message AboutToInitializeEvent {
@@ -79,8 +79,8 @@ message AutoPauseEvent {
 }
 
 message ProgressEvent {
-  string message = 1;
-  sint32 percentComplete = 2;
+  string message = 1;          // Progress Message
+  sint32 percentComplete = 2;  // Percent completed
 }
 
 message SolverTimeEstimateEvent {
@@ -89,6 +89,9 @@ message SolverTimeEstimateEvent {
   double seconds = 3;
 }
 
+/*
+ * Event when fatal error encountered
+ */
 message ErrorEvent {
   string message = 1;
   sint32 errorCode = 2;
