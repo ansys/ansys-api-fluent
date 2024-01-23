@@ -107,8 +107,8 @@ message AutoPauseEvent {
  * Event during solution progress.
  */
 message ProgressEvent {
-  string message = 1;          // Progress Message
-  sint32 percentComplete = 2;  // Percent completed
+  string message = 1;          // Progress Message.
+  sint32 percentComplete = 2;  // Percent completed.
 }
 
 message SolverTimeEstimateEvent {
