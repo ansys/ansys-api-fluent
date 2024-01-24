@@ -6,8 +6,6 @@ syntax = "proto3";
 
 package ansys.api.fluent.v0.settings;
 
-import "ansys/api/fluent/v0/variant.proto";
-
 service Settings {
   /* Static info about objects (type, children, commands, arguments,
      object-type) in a recursive manner. */
