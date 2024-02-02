@@ -262,6 +262,7 @@ message CommandArg {
   string name = 2;
   StaticInfo info = 3;
   string helpstring = 4;
+  map<string, utils.Variant> attrs = 5;
 }
 
 message CommandInfo {

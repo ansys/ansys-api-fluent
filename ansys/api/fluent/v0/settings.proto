@@ -97,6 +97,8 @@ message StaticInfo {
   int32 list_size = 9;
   // Boolean indicating if an instance can be created by the user for the current named-object.
   bool user_creatable = 10;
+  // File purpose string for the current command object.
+  map<string, Value> attrs = 12;
 }
 
 message GetStaticInfoRequest {
