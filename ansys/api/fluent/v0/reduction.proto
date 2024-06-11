@@ -78,7 +78,7 @@ message CountResponse {
 }
 
 message CountIfRequest {
-  string condition = 1;
+  string expression = 1;
   repeated string locations = 2;
 }
 
