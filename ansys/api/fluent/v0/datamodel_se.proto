@@ -91,6 +91,7 @@ message UpdateDictRequest {
   string path = 2;
   utils.Variant dicttomerge = 3;
   bool wait = 4;
+  bool recursive = 5;
 }
 
 message UpdateDictResponse {
