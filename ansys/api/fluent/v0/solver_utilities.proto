@@ -1,26 +1,26 @@
-// Miscellaneous utilities for Fluent server which do not fit into any other category.
+// Miscellaneous utilities for solvers which do not fit into any other category.
 
 syntax = "proto3";
 
-package ansys.api.fluent.v0.fluent_utilities;
+package ansys.api.fluent.v0.solver_utilities;
 
 import "google/protobuf/timestamp.proto";
 
-service FluentUtilities {
-  /* Get Fluent product version */
+service SolverUtilities {
+  /* Get product version */
   rpc GetProductVersion(GetProductVersionRequest) returns (GetProductVersionResponse);
 
-  /* Get Fluent build information */
+  /* Get build information */
   rpc GetBuildInfo(GetBuildInfoRequest) returns (GetBuildInfoResponse);
 
-  /* Get Cortex process information */
-  rpc GetCortexInfo(GetCortexInfoRequest) returns (GetCortexInfoResponse);
+  /* Get Controller process information */
+  rpc GetControllerProcessInfo(GetControllerProcessInfoRequest) returns (GetControllerProcessInfoResponse);
 
-  /* Get Host process information */
-  rpc GetHostInfo(GetHostInfoRequest) returns (GetHostInfoResponse);
+  /* Get Solver process information */
+  rpc GetSolverProcessInfo(GetSolverProcessInfoRequest) returns (GetSolverProcessInfoResponse);
 
-  /* Get Fluent mode */
-  rpc GetFluentMode(GetFluentModeRequest) returns (GetFluentModeResponse);
+  /* Get Solver mode */
+  rpc GetSolverMode(GetSolverModeRequest) returns (GetSolverModeResponse);
 
   /* Start a Python journal */
   rpc StartPythonJournal(StartPythonJournalRequest) returns (StartPythonJournalResponse);
@@ -28,7 +28,7 @@ service FluentUtilities {
   /* Stop a Python journal */
   rpc StopPythonJournal(StopPythonJournalRequest) returns (StopPythonJournalResponse);
 
-  /* Is wildcard as per Fluent's syntax */
+  /* Is wildcard as per Solver's syntax */
   rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
 
   /* Is solution data available */
@@ -43,7 +43,7 @@ service FluentUtilities {
   /* Unregister to pause on solution events */
   rpc UnregisterPauseOnSolutionEvents(UnregisterPauseOnSolutionEventsRequest) returns (UnregisterPauseOnSolutionEventsResponse);
 
-  /* Exit Fluent */
+  /* Exit Solver */
   rpc Exit(ExitRequest) returns (ExitResponse);
 }
 
@@ -73,36 +73,36 @@ message GetBuildInfoResponse {
   string vcs_branch = 4;
 }
 
-message GetCortexInfoRequest {
+message GetControllerProcessInfoRequest {
 }
 
-message GetCortexInfoResponse {
-  /* Cortex hostname */
+message GetControllerProcessInfoResponse {
+  /* Controller hostname */
   string hostname = 1;
-  /* Cortex process id */
+  /* Controller process id */
   int64 process_id = 2;
-  /* Cortex working directory */
+  /* Controller working directory */
   string working_directory = 3;
 }
 
-message GetHostInfoRequest {
+message GetSolverProcessInfoRequest {
 }
 
-message GetHostInfoResponse {
-  /* Host hostname */
+message GetSolverProcessInfoResponse {
+  /* Solver hostname */
   string hostname = 1;
-  /* Host process id */
+  /* Solver process id */
   int64 process_id = 2;
-  /* Host working directory */
+  /* Solver working directory */
   string working_directory = 3;
 }
 
-message GetFluentModeRequest {
+message GetSolverModeRequest {
 }
 
-message GetFluentModeResponse {
-  /* Fluent mode */
-  FluentMode fluent_mode = 1;
+message GetSolverModeResponse {
+  /* Solver mode */
+  SolverMode solver_mode = 1;
 }
 
 message StartPythonJournalRequest {
@@ -176,17 +176,17 @@ message ExitRequest {
 message ExitResponse {
 }
 
-enum FluentMode {
-  /* Fluent mode unknown */
-  FLUENT_MODE_UNKNOWN = 0;
-  /* Fluent mode meshing */
-  FLUENT_MODE_MESHING = 1;
-  /* Fluent mode solver */
-  FLUENT_MODE_SOLVER = 2;
-  /* Fluent mode icing */
-  FLUENT_MODE_SOLVER_ICING = 3;
-  /* Fluent mode aero */
-  FLUENT_MODE_SOLVER_AERO = 4;
+enum SolverMode {
+  /* Solver mode unknown */
+  SOLVER_MODE_UNKNOWN = 0;
+  /* Solver mode meshing */
+  SOLVER_MODE_MESHING = 1;
+  /* Solver mode solver */
+  SOLVER_MODE_SOLVER = 2;
+  /* Solver mode icing */
+  SOLVER_MODE_SOLVER_ICING = 3;
+  /* Solver mode aero */
+  SOLVER_MODE_SOLVER_AERO = 4;
 }
 
 enum SolutionEvent {
