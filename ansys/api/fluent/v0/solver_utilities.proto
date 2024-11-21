@@ -13,7 +13,7 @@ service SolverUtilities {
   /* Get build information */
   rpc GetBuildInfo(GetBuildInfoRequest) returns (GetBuildInfoResponse);
 
-  /* Get Controller process information */
+  /* Get Controller process information if solver is running in client-server mode */
   rpc GetControllerProcessInfo(GetControllerProcessInfoRequest) returns (GetControllerProcessInfoResponse);
 
   /* Get Solver process information */
@@ -22,16 +22,16 @@ service SolverUtilities {
   /* Get Solver mode */
   rpc GetSolverMode(GetSolverModeRequest) returns (GetSolverModeResponse);
 
-  /* Start a Python journal */
+  /* Start Python journal */
   rpc StartPythonJournal(StartPythonJournalRequest) returns (StartPythonJournalResponse);
 
-  /* Stop a Python journal */
+  /* Stop Python journal */
   rpc StopPythonJournal(StopPythonJournalRequest) returns (StopPythonJournalResponse);
 
-  /* Is wildcard as per Solver's syntax */
+  /* Is wildcard as per Solver's syntax? */
   rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
 
-  /* Is solution data available */
+  /* Is solution data available? */
   rpc IsSolutionDataAvailable(IsSolutionDataAvailableRequest) returns (IsSolutionDataAvailableResponse);
 
   /* Register to pause on solution events */
