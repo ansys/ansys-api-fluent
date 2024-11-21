@@ -1,0 +1,199 @@
+// Miscellaneous utilities for Fluent server which do not fit into any other category.
+
+syntax = "proto3";
+
+package ansys.api.fluent.v0.fluent_utilities;
+
+import "google/protobuf/timestamp.proto";
+
+service FluentUtilities {
+  /* Get Fluent product version */
+  rpc GetProductVersion(GetProductVersionRequest) returns (GetProductVersionResponse);
+
+  /* Get Fluent build information */
+  rpc GetBuildInfo(GetBuildInfoRequest) returns (GetBuildInfoResponse);
+
+  /* Get Cortex process information */
+  rpc GetCortexInfo(GetCortexInfoRequest) returns (GetCortexInfoResponse);
+
+  /* Get Host process information */
+  rpc GetHostInfo(GetHostInfoRequest) returns (GetHostInfoResponse);
+
+  /* Get Fluent mode */
+  rpc GetFluentMode(GetFluentModeRequest) returns (GetFluentModeResponse);
+
+  /* Start a Python journal */
+  rpc StartPythonJournal(StartPythonJournalRequest) returns (StartPythonJournalResponse);
+
+  /* Stop a Python journal */
+  rpc StopPythonJournal(StopPythonJournalRequest) returns (StopPythonJournalResponse);
+
+  /* Is wildcard as per Fluent's syntax */
+  rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
+
+  /* Is solution data available */
+  rpc IsSolutionDataAvailable(IsSolutionDataAvailableRequest) returns (IsSolutionDataAvailableResponse);
+
+  /* Register to pause on solution events */
+  rpc RegisterPauseOnSolutionEvents(RegisterPauseOnSolutionEventsRequest) returns (RegisterPauseOnSolutionEventsResponse);
+
+  /* Resume from pause on a solution event */
+  rpc ResumeOnSolutionEvent(ResumeOnSolutionEventRequest) returns (ResumeOnSolutionEventResponse);
+
+  /* Unregister to pause on solution events */
+  rpc UnregisterPauseOnSolutionEvents(UnregisterPauseOnSolutionEventsRequest) returns (UnregisterPauseOnSolutionEventsResponse);
+
+  /* Exit Fluent */
+  rpc Exit(ExitRequest) returns (ExitResponse);
+}
+
+message GetProductVersionRequest {
+}
+
+message GetProductVersionResponse {
+  /* Major version */
+  int64 major = 1;
+  /* Minor version */
+  int64 minor = 2;
+  /* Patch version */
+  int64 patch = 3;
+}
+
+message GetBuildInfoRequest {
+}
+
+message GetBuildInfoResponse {
+  /* Build time */
+  google.protobuf.Timestamp build_time = 1;
+  /* Build id */
+  int64 build_id = 2;
+  /* VCS revision */
+  string vcs_revision = 3;
+  /* VCS branch */
+  string vcs_branch = 4;
+}
+
+message GetCortexInfoRequest {
+}
+
+message GetCortexInfoResponse {
+  /* Cortex hostname */
+  string hostname = 1;
+  /* Cortex process id */
+  int64 process_id = 2;
+  /* Cortex working directory */
+  string working_directory = 3;
+}
+
+message GetHostInfoRequest {
+}
+
+message GetHostInfoResponse {
+  /* Host hostname */
+  string hostname = 1;
+  /* Host process id */
+  int64 process_id = 2;
+  /* Host working directory */
+  string working_directory = 3;
+}
+
+message GetFluentModeRequest {
+}
+
+message GetFluentModeResponse {
+  /* Fluent mode */
+  FluentMode fluent_mode = 1;
+}
+
+message StartPythonJournalRequest {
+  /**
+   * Journal file name
+   * Journal is wrtten to a string port if journal_name is not provided
+   */
+  optional string journal_name = 1;
+}
+
+message StartPythonJournalResponse {
+  /* Port id when journal is written to a string port */
+  optional string port_id = 1;
+}
+
+message StopPythonJournalRequest {
+  /* Port id when journal is written to a string port */
+  optional string port_id = 1;
+}
+
+message StopPythonJournalResponse {
+}
+
+message IsWildcardRequest {
+  /* String to check if it is a wildcard */
+  string input = 1;
+}
+
+message IsWildcardResponse {
+  /* Is wildcard */
+  bool is_wildcard = 1;
+}
+
+message IsSolutionDataAvailableRequest {
+}
+
+message IsSolutionDataAvailableResponse {
+  /* Is solution data available */
+  bool is_solution_data_available = 1;
+}
+
+message RegisterPauseOnSolutionEventsRequest {
+  /* Solution event */
+  SolutionEvent solution_event = 1;
+}
+
+message RegisterPauseOnSolutionEventsResponse {
+  /* Registration id */
+  string registration_id = 1;
+}
+
+message ResumeOnSolutionEventRequest {
+  /* Registration id */
+  string registration_id = 1;
+}
+
+message ResumeOnSolutionEventResponse {
+}
+
+message UnregisterPauseOnSolutionEventsRequest {
+  /* Registration id */
+  string registration_id = 1;
+}
+
+message UnregisterPauseOnSolutionEventsResponse {
+}
+
+message ExitRequest {
+}
+
+message ExitResponse {
+}
+
+enum FluentMode {
+  /* Fluent mode unknown */
+  FLUENT_MODE_UNKNOWN = 0;
+  /* Fluent mode meshing */
+  FLUENT_MODE_MESHING = 1;
+  /* Fluent mode solver */
+  FLUENT_MODE_SOLVER = 2;
+  /* Fluent mode icing */
+  FLUENT_MODE_SOLVER_ICING = 3;
+  /* Fluent mode aero */
+  FLUENT_MODE_SOLVER_AERO = 4;
+}
+
+enum SolutionEvent {
+  /* Solution event unknown */
+  SOLUTION_EVENT_UNKNOWN = 0;
+  /* Solution event iteration */
+  SOLUTION_EVENT_ITERATION = 1;
+  /* Solution event time step */
+  SOLUTION_EVENT_TIME_STEP = 2;
+}
