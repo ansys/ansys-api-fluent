@@ -125,13 +125,9 @@ message StartPythonJournalRequest {
 }
 
 message StartPythonJournalResponse {
-  /* Port id when journal is written to a string port */
-  optional string port_id = 1;
 }
 
 message StopPythonJournalRequest {
-  /* Port id when journal is written to a string port */
-  optional string port_id = 1;
 }
 
 message StopPythonJournalResponse {
