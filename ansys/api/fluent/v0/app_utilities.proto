@@ -1,10 +1,12 @@
+//
+// Copyright 2025 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
 // Miscellaneous utilities for solver apps which do not fit into any other category.
 
 syntax = "proto3";
 
 package ansys.api.fluent.v0.app_utilities;
-
-import "google/protobuf/timestamp.proto";
 
 service AppUtilities {
   /* Get product version */
@@ -77,7 +79,7 @@ message GetBuildInfoRequest {
 
 message GetBuildInfoResponse {
   /* Build time */
-  google.protobuf.Timestamp build_time = 1;
+  string build_time = 1;
   /* Build id */
   int64 build_id = 2;
   /* VCS revision */
