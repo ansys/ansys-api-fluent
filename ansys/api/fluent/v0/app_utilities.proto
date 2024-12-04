@@ -1,7 +1,3 @@
-//
-// Copyright 2025 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
-//
-
 // Miscellaneous utilities for solver apps which do not fit into any other category.
 
 syntax = "proto3";
