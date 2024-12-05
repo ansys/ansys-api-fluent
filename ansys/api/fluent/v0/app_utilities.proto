@@ -166,12 +166,12 @@ message RegisterPauseOnSolutionEventsRequest {
 
 message RegisterPauseOnSolutionEventsResponse {
   /* Registration id */
-  string registration_id = 1;
+  int64 registration_id = 1;
 }
 
 message ResumeOnSolutionEventRequest {
   /* Registration id */
-  string registration_id = 1;
+  int64 registration_id = 1;
 }
 
 message ResumeOnSolutionEventResponse {
@@ -179,7 +179,7 @@ message ResumeOnSolutionEventResponse {
 
 message UnregisterPauseOnSolutionEventsRequest {
   /* Registration id */
-  string registration_id = 1;
+  int64 registration_id = 1;
 }
 
 message UnregisterPauseOnSolutionEventsResponse {
