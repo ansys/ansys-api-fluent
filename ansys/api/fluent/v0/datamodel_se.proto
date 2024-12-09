@@ -91,6 +91,7 @@ message UpdateDictRequest {
   string path = 2;
   utils.Variant dicttomerge = 3;
   bool wait = 4;
+  bool recursive = 5;
 }
 
 message UpdateDictResponse {
@@ -263,11 +264,13 @@ message CommandArg {
   StaticInfo info = 3;
   string helpstring = 4;
   map<string, utils.Variant> attrs = 5;
+  string docstring = 6;
 }
 
 message CommandInfo {
   string returntype = 1;
   repeated CommandArg args = 2;
+  string docstring = 3;
 }
 
 message StaticInfo {
