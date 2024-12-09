@@ -119,18 +119,33 @@ message GetAppModeResponse {
 message StartPythonJournalRequest {
   /**
    * Journal file name
-   * Journal is wrtten to a string port if journal_name is not provided
+   * If journal_name is not provided, StopPythonJournal should return the journal lines.
    */
   optional string journal_name = 1;
 }
 
 message StartPythonJournalResponse {
+  /**
+   * Journal id
+   * Journal id is returned if journal_name is not provided.
+   */
+  optional string journal_id = 1;
 }
 
 message StopPythonJournalRequest {
+  /**
+   * Journal id
+   * Journal id is required if journal_name is not provided in StartPythonJournal.
+   */
+  optional string journal_id = 1;
 }
 
 message StopPythonJournalResponse {
+  /**
+   * Journal lines
+   * Journal lines are returned if journal_name is not provided in StartPythonJournal.
+   */
+  repeated string journal_lines = 1;
 }
 
 message IsBetaEnabledRequest {
