@@ -145,7 +145,7 @@ message StopPythonJournalResponse {
    * Journal lines
    * Journal lines are returned if journal_name is not provided in StartPythonJournal.
    */
-  repeated string journal_lines = 1;
+  string journal_str = 1;
 }
 
 message IsBetaEnabledRequest {
