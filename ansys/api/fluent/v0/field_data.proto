@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package grpcRemoting;
 
-import "common.proto";
+import "ansys/api/fluent/v0/common.proto";
 
 service FieldData {
   /* Begin fields streaming.*/
