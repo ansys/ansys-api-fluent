@@ -149,15 +149,6 @@ message SurfaceRequest {
   bool provideFacesNormal = 6;    // Provide face normals.
 }
 
-message FieldRequestInfo {
-  oneof request {
-    SurfaceRequest surfaceRequest = 1;                // Surface request.
-    ScalarFieldRequest scalarFieldRequest = 2;        // Scalar field request.
-    VectorFieldRequest vectorFieldRequest = 3;        // Vector field request.
-    PathlinesFieldRequest pathlinesFieldRequest = 4;  // Pathlines field request.
-  }
-}
-
 enum DataLocation {
   Nodes = 0;
   Elements = 1;
