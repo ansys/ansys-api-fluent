@@ -1,3 +1,7 @@
+//
+// Copyright 1987-2022 ANSYS, Inc. All Rights Reserved.
+//
+
 syntax = "proto3";
 
 package grpcRemoting;
@@ -78,6 +82,18 @@ enum PayloadTag {
   ELEMENT_LOCATION = 1;  // This tag is set if dataLocation in ScalarFieldRequest is Elements.
   NODE_LOCATION = 2;     // This tag is set if dataLocation in ScalarFieldRequest is Nodes.
   BOUNDARY_VALUES = 3;   // This tag is set if provideBoundaryValues in ScalarFieldRequest is set to True.
+}
+
+/**
+ * Request information. It is passed along with PayloadInfo.
+ */
+message FieldRequestInfo {
+  oneof request {
+    SurfaceRequest surfaceRequest = 1;                // Surface request info.
+    ScalarFieldRequest scalarFieldRequest = 2;        // Scalar field request info.
+    VectorFieldRequest vectorFieldRequest = 3;        // Vector field request info.
+    PathlinesFieldRequest pathlinesFieldRequest = 4;  // Pathlines field request info.
+  }
 }
 
 /**
