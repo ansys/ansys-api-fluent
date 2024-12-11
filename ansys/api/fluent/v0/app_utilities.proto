@@ -142,8 +142,8 @@ message StopPythonJournalRequest {
 
 message StopPythonJournalResponse {
   /**
-   * Journal lines
-   * Journal lines are returned if journal_name is not provided in StartPythonJournal.
+   * Journal string
+   * Journal string is returned if journal_name is not provided in StartPythonJournal.
    */
   string journal_str = 1;
 }
