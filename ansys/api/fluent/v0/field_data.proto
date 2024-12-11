@@ -1,12 +1,8 @@
-//
-// Copyright 1987-2022 ANSYS, Inc. All Rights Reserved.
-//
-
 syntax = "proto3";
 
 package grpcRemoting;
 
-import "ansys/api/fluent/v0/common.proto";
+import "common.proto";
 
 service FieldData {
   /* Begin fields streaming.*/
@@ -85,18 +81,6 @@ enum PayloadTag {
 }
 
 /**
- * Request information. It is passed along with PayloadInfo.
- */
-message FieldRequestInfo {
-  oneof request {
-    SurfaceRequest surfaceRequest = 1;                // Surface request info.
-    ScalarFieldRequest scalarFieldRequest = 2;        // Scalar field request info.
-    VectorFieldRequest vectorFieldRequest = 3;        // Vector field request info.
-    PathlinesFieldRequest pathlinesFieldRequest = 4;  // Pathlines field request info.
-  }
-}
-
-/**
  * Information about payload
  */
 message PayloadInfo {
@@ -163,6 +147,15 @@ message SurfaceRequest {
   bool provideFaces = 4;          // Provide face to vertex connectivity.
   bool provideFacesCentroid = 5;  // Provide face centroids.
   bool provideFacesNormal = 6;    // Provide face normals.
+}
+
+message FieldRequestInfo {
+  oneof request {
+    SurfaceRequest surfaceRequest = 1;                // Surface request.
+    ScalarFieldRequest scalarFieldRequest = 2;        // Scalar field request.
+    VectorFieldRequest vectorFieldRequest = 3;        // Vector field request.
+    PathlinesFieldRequest pathlinesFieldRequest = 4;  // Pathlines field request.
+  }
 }
 
 enum DataLocation {
@@ -316,9 +309,11 @@ message FieldInfo {
   string solverName = 2;
   string section = 3;
   string domain = 4;
+  string units = 5;
 }
 
 message GetFieldsInfoRequest {
+  optional string field = 1;
 }
 
 message GetFieldsInfoResponse {
