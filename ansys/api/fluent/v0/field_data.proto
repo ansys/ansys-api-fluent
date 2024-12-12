@@ -317,10 +317,10 @@ message FieldInfo {
   string section = 3;
   string domain = 4;
   string units = 5;
+  string units_quantity = 6;
 }
 
 message GetFieldsInfoRequest {
-  optional string field = 1;
 }
 
 message GetFieldsInfoResponse {
