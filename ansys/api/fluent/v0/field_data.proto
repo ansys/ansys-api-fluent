@@ -316,8 +316,7 @@ message FieldInfo {
   string solverName = 2;
   string section = 3;
   string domain = 4;
-  string units = 5;
-  string units_quantity = 6;
+  string units_quantity = 5;
 }
 
 message GetFieldsInfoRequest {
