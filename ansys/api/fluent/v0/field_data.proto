@@ -607,8 +607,9 @@ enum CellElementType {
 
 message Element {
   uint64 id = 1;
-  CellElementType element_type = 2;  // TODO: Use an enum
-  repeated uint64 node_ids = 3;
+  CellElementType element_type = 2;
+  repeated uint64 node_ids = 3;  // for standard element types
+  repeated Facet facets = 4;     // for polyhedron element type
 }
 
 message GetSolverMeshElementsResponse {
