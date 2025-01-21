@@ -17,7 +17,7 @@ library = ""
 package_info = ["ansys", "api", product, library, "v0"]
 
 with open(
-    os.path.join(HERE, "src", "ansys", "api", product, library, "_version.py"),
+    os.path.join(HERE, "ansys", "api", product, library, "_version.py"),
     encoding="utf-8",
 ) as f:
     # Parse the version from the _version.py file
