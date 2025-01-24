@@ -6,7 +6,6 @@ from datetime import datetime
 import setuptools
 
 from ansys.tools.protoc_helper import BuildPyCommand, DevelopCommand
-from ansys.api.fluent._version import __version__ as version  # noqa: F401
 
 # Get the long description from the README file
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -16,6 +15,15 @@ with open(os.path.join(HERE, "README.md"), encoding="utf-8") as f:
 product = "fluent"
 library = ""
 package_info = ["ansys", "api", product, library, "v0"]
+
+with open(
+    os.path.join(HERE, "ansys", "api", product, library, "_version.py"),
+    encoding="utf-8",
+) as f:
+    # Parse the version from the _version.py file
+    version_file_vars = {}
+    exec(f.read(), version_file_vars)
+    version = version_file_vars["__version__"]
 
 package_name = "ansys-api-fluent"
 dot_package_name = ".".join(filter(None, package_info))
