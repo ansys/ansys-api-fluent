@@ -56,6 +56,9 @@ service AppUtilities {
 
   /* Exit the solver app */
   rpc Exit(ExitRequest) returns (ExitResponse);
+
+  /* Change cortex working directory */
+  rpc ChangeClientCortexWorkingDirectory(ChangeClientCortexWorkingDirectoryRequest) returns (ChangeClientCortexWorkingDirectoryResponse);
 }
 
 message GetProductVersionRequest {
@@ -204,6 +207,14 @@ message ExitRequest {
 }
 
 message ExitResponse {
+}
+
+message ChangeClientCortexWorkingDirectoryRequest {
+  /* New directory path */
+  string path = 1;
+}
+
+message ChangeClientCortexWorkingDirectoryResponse {
 }
 
 enum AppMode {
