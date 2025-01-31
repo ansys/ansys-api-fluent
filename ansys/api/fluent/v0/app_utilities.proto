@@ -58,7 +58,7 @@ service AppUtilities {
   rpc Exit(ExitRequest) returns (ExitResponse);
 
   /* Change cortex working directory */
-  rpc SetCortexWorkingDirectory(SetCortexWorkingDirectoryRequest) returns (SetCortexWorkingDirectoryResponse);
+  rpc SetWorkingDirectory(SetWorkingDirectoryRequest) returns (SetWorkingDirectoryResponse);
 }
 
 message GetProductVersionRequest {
@@ -209,12 +209,12 @@ message ExitRequest {
 message ExitResponse {
 }
 
-message SetCortexWorkingDirectoryRequest {
+message SetWorkingDirectoryRequest {
   /* New directory path */
   string path = 1;
 }
 
-message SetCortexWorkingDirectoryResponse {
+message SetWorkingDirectoryResponse {
 }
 
 enum AppMode {
