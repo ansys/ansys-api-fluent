@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package ansys.api.fluent.v0.file_transfer_service;
+
+service FileTransferService {
+  rpc Upload(stream FileUploadRequest) returns (FileUploadResponse);
+  rpc Download(FileDownloadRequest) returns (stream FileDownloadResponse);
+}
+
+message FileDownloadRequest {
+  string name = 1;
+}
+
+message FileDownloadResponse {
+  bytes chunk = 1;
+}
+
+message FileUploadRequest {
+  oneof type {
+    string name = 1;
+    bytes chunk = 2;
+  }
+}
+
+message FileUploadResponse {
+}
