@@ -103,6 +103,7 @@ message StaticInfo {
 
 message GetStaticInfoRequest {
   string root = 1;
+  repeated string optional_attrs = 2;  // Optional attributes to be returned in the static info.
 }
 
 message GetStaticInfoResponse {
