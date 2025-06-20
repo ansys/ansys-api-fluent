@@ -32,6 +32,9 @@ service AppUtilities {
   /* Is beta feature enabled? */
   rpc IsBetaEnabled(IsBetaEnabledRequest) returns (IsBetaEnabledResponse);
 
+  /* Enable beta features */
+  rpc EnableBeta(EnableBetaRequest) returns (EnableBetaResponse);
+
   /* Is wildcard as per the solver app's syntax? */
   rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
 
@@ -157,6 +160,12 @@ message IsBetaEnabledRequest {
 message IsBetaEnabledResponse {
   /* Is beta feature enabled */
   bool is_beta_enabled = 1;
+}
+
+message EnableBetaRequest {
+}
+
+message EnableBetaResponse {
 }
 
 message IsWildcardRequest {
