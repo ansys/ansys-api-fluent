@@ -294,37 +294,37 @@ message GetStaticInfoResponse {
 }
 
 message CreatedEventRequest {
-  string parent_path = 1; // parent-path of the created object
-  string child_type = 2; // type of the created object
+  string parent_path = 1;  // parent-path of the created object
+  string child_type = 2;   // type of the created object
 }
 
 message ModifiedEventRequest {
-  string path = 1; // path of the modified object
+  string path = 1;  // path of the modified object
 }
 
 message DeletedEventRequest {
-  string path = 1; // path of the deleted object
+  string path = 1;  // path of the deleted object
 }
 
 message AffectedEventRequest {
-  string path = 1; // path of the affected object
+  string path = 1;  // path of the affected object
   string subtype = 2;
 }
 
 message AttributeChangedEventRequest {
-  string path = 1; // path of the object whose attribute is changed
-  string attribute = 2; // name of the attribute
+  string path = 1;       // path of the object whose attribute is changed
+  string attribute = 2;  // name of the attribute
 }
 
 message CommandAttributeChangedEventRequest {
-  string path = 1; // path of the object whose command attribute is changed
-  string command = 2; // name of the command
-  string attribute = 3; // name of the attribute
+  string path = 1;       // path of the object whose command attribute is changed
+  string command = 2;    // name of the command
+  string attribute = 3;  // name of the attribute
 }
 
 message CommandExecutedEventRequest {
-  string path = 1; // path of the object with the command
-  string command = 2 [deprecated = true]; // name of the command, deprecated since Fluent 2025 R2
+  string path = 1;                         // path of the object with the command
+  string command = 2 [deprecated = true];  // name of the command, deprecated since Fluent 2025 R2
 }
 
 message DataModelEventRequest {
@@ -373,42 +373,42 @@ message BeginEventStreamingRequest {
 }
 
 message CreatedEventResponse {
-  string parent_path = 1; // parent-path of the created object
-  string child_type = 2; // type of the created object
-  string child_name = 3; // name of the created object
+  string parent_path = 1;  // parent-path of the created object
+  string child_type = 2;   // type of the created object
+  string child_name = 3;   // name of the created object
 }
 
 message ModifiedEventResponse {
-  string path = 1; // path of the modified object
-  utils.Variant value = 2; // value of the modified object
+  string path = 1;          // path of the modified object
+  utils.Variant value = 2;  // value of the modified object
 }
 
 message DeletedEventResponse {
-  string path = 1; // path of the deleted object
+  string path = 1;  // path of the deleted object
 }
 
 message AffectedEventResponse {
-  string path = 1; // path of the affected object
+  string path = 1;  // path of the affected object
   string subtype = 2;
 }
 
 message AttributeChangedEventResponse {
-  string path = 1; // path of the object whose attribute is changed
-  string attribute = 2; // name of the attribute
-  utils.Variant value = 3; // value of the attribute
+  string path = 1;          // path of the object whose attribute is changed
+  string attribute = 2;     // name of the attribute
+  utils.Variant value = 3;  // value of the attribute
 }
 
 message CommandAttributeChangedEventResponse {
-  string path = 1; // path of the object whose command attribute is changed
-  string command = 2; // name of the command
-  string attribute = 3; // name of the attribute
-  utils.Variant value = 4; // value of the attribute
+  string path = 1;          // path of the object whose command attribute is changed
+  string command = 2;       // name of the command
+  string attribute = 3;     // name of the attribute
+  utils.Variant value = 4;  // value of the attribute
 }
 
 message CommandExecutedEventResponse {
-  string path = 1; // path of the object with the command
-  string command = 2; // name of the command
-  utils.Variant args = 3; // command arguments
+  string path = 1;         // path of the object with the command
+  string command = 2;      // name of the command
+  utils.Variant args = 3;  // command arguments
 }
 
 message BeginEventStreamingResponse {
