@@ -1,0 +1,476 @@
+//
+// Copyright 1987-2022 ANSYS, Inc. All Rights Reserved.
+//
+
+syntax = "proto3";
+
+package grpc_remoting;
+
+import "ansys/api/fluent/v0/variant.proto";
+
+service DataModelService {
+  rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse) {}
+  rpc InitDatamodel(InitDatamodelRequest) returns (InitDatamodelResponse) {}
+  rpc GetState(GetStateRequest) returns (GetStateResponse) {}
+  rpc SetState(SetStateRequest) returns (SetStateResponse) {}
+  rpc UpdateDict(UpdateDictRequest) returns (UpdateDictResponse) {}
+  rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse) {}
+  rpc GetAttributeValue(GetAttributeValueRequest) returns (GetAttributeValueResponse) {}
+  rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse) {}
+  rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse) {}
+  rpc CreateCommandArguments(CreateCommandArgumentsRequest) returns (CreateCommandArgumentsResponse) {}
+  rpc DeleteCommandArguments(DeleteCommandArgumentsRequest) returns (DeleteCommandArgumentsResponse) {}
+  rpc GetSpecs(GetSpecsRequest) returns (GetSpecsResponse) {}
+  rpc GetStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse) {}
+  rpc Rename(RenameRequest) returns (RenameResponse) {}
+  rpc FixState(FixStateRequest) returns (FixStateResponse) {}
+  rpc GetObjectNames(GetObjectNamesRequest) returns (GetObjectNamesResponse) {}
+  rpc DeleteChildObjects(DeleteChildObjectsRequest) returns (DeleteChildObjectsResponse) {}
+
+  // Subscribe to datamodel events
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (SubscribeEventsResponse) {}
+
+  // Request streaming of previously subscribed events
+  rpc UnsubscribeEvents(UnsubscribeEventsRequest) returns (UnsubscribeEventsResponse) {}
+
+  // Unsubscribe previously subscribed events
+  rpc BeginEventStreaming(BeginEventStreamingRequest) returns (stream BeginEventStreamingResponse) {}
+}
+
+enum DiffState {
+  DIFF_STATE_UNSPECIFIED = 0;
+  DIFF_STATE_FULL = 1;
+  DIFF_STATE_NOCOMMANDS = 2;
+}
+
+message BeginStreamingRequest {
+  string rules = 1;
+  bool return_state_changes = 2;
+  DiffState diff_state = 3;
+}
+
+message BeginStreamingResponse {
+  utils.Variant state = 1;
+  repeated string deleted_paths = 2;
+  repeated string events = 3;
+}
+
+message InitDatamodelRequest {
+  string rules = 1;
+  bool return_state_changes = 2;
+}
+
+message InitDatamodelResponse {
+  utils.Variant state = 1;
+  repeated string deleted_paths = 2;
+}
+
+message GetStateRequest {
+  string rules = 1;
+  string path = 2;
+}
+
+message GetStateResponse {
+  utils.Variant state = 1;
+}
+
+message SetStateRequest {
+  string rules = 1;
+  string path = 2;
+  utils.Variant state = 3;
+  bool wait = 4;
+}
+
+message SetStateResponse {
+  utils.Variant state = 1;
+  repeated string deleted_paths = 2;
+}
+
+message UpdateDictRequest {
+  string rules = 1;
+  string path = 2;
+  utils.Variant dict_to_merge = 3;
+  bool wait = 4;
+  bool recursive = 5;
+}
+
+message UpdateDictResponse {
+  utils.Variant state = 1;
+  repeated string deleted_paths = 2;
+}
+
+message DeleteObjectRequest {
+  string rules = 1;
+  string path = 2;
+  bool wait = 3;
+}
+
+message DeleteObjectResponse {
+  utils.Variant state = 1;
+  repeated string deleted_paths = 2;
+}
+
+message GetAttributeValueRequest {
+  string rules = 1;
+  string path = 2;
+  string attribute = 3;
+}
+
+message GetAttributeValueResponse {
+  utils.Variant result = 1;
+}
+
+message ExecuteCommandRequest {
+  string rules = 1;
+  string path = 2;
+  string command = 3;
+  bool wait = 4;
+  utils.Variant args = 5;
+}
+
+message ExecuteCommandResponse {
+  utils.Variant result = 1;
+  utils.Variant state = 2;
+  repeated string deleted_paths = 3;
+}
+
+message ExecuteQueryRequest {
+  string rules = 1;
+  string path = 2;
+  string query = 3;
+  utils.Variant args = 4;
+}
+
+message ExecuteQueryResponse {
+  utils.Variant result = 1;
+}
+
+message CreateCommandArgumentsRequest {
+  string rules = 1;
+  string path = 2;
+  string command = 3;
+}
+
+message CreateCommandArgumentsResponse {
+  string command_id = 1;
+}
+
+message DeleteCommandArgumentsRequest {
+  string rules = 1;
+  string path = 2;
+  string command = 3;
+  string command_id = 4;
+}
+
+message DeleteCommandArgumentsResponse {
+}
+
+message GetSpecsRequest {
+  string rules = 1;
+  string path = 2;
+  bool include_children = 3;
+}
+
+message CommonSpecs {
+  bool readonly = 1;
+  utils.Variant default = 2;
+  string display_text = 3;
+  bool is_active = 4;
+  string reference_path = 5;
+  bool has_developer_exposure_level = 6;
+  string help_string = 7;
+}
+
+message BoolParameterSpecs {
+  CommonSpecs common = 1;
+}
+
+message IntParameterSpecs {
+  CommonSpecs common = 1;
+  oneof il {
+    int32 lower_bound = 2;
+  }
+  oneof iu {
+    int32 upper_bound = 3;
+  }
+}
+
+message RealParameterSpecs {
+  CommonSpecs common = 1;
+  oneof rl {
+    double lower_bound = 2;
+  }
+  oneof ru {
+    double upper_bound = 3;
+  }
+}
+
+message StringParameterSpecs {
+  CommonSpecs common = 1;
+  repeated string allowed_string_list = 2;
+}
+
+message IntListParameterSpecs {
+  CommonSpecs common = 1;
+}
+
+message StringListParameterSpecs {
+  CommonSpecs common = 1;
+  repeated string allowed_string_list = 2;
+}
+
+message CommandSpecs {
+  string name = 1;
+  bool is_active = 2;
+}
+
+message SingletonSpecs {
+  CommonSpecs common = 1;
+  repeated string members = 2;
+  repeated CommandSpecs commands = 3;
+  repeated string creatable_types = 4;
+}
+
+message NamedObjectSpecs {
+  CommonSpecs common = 1;
+  repeated string members = 2;
+  repeated CommandSpecs commands = 3;
+  repeated string creatable_types = 4;
+}
+
+message MemberSpecs {
+  string name = 1;
+  string type = 2;
+  oneof as {
+    BoolParameterSpecs bool = 3;
+    IntParameterSpecs int = 4;
+    RealParameterSpecs real = 5;
+    StringParameterSpecs string = 6;
+    IntListParameterSpecs intlist = 7;
+    StringListParameterSpecs stringlist = 8;
+    SingletonSpecs singleton = 9;
+    NamedObjectSpecs namedobject = 10;
+  }
+  repeated MemberSpecs children = 11;
+}
+
+message GetSpecsResponse {
+  MemberSpecs member = 1;
+}
+
+message CommandArg {
+  string type = 1;
+  string name = 2;
+  StaticInfo info = 3;
+  string help_string = 4;
+  map<string, utils.Variant> attrs = 5;
+  string doc_string = 6;
+}
+
+message CommandInfo {
+  string return_type = 1;
+  repeated CommandArg args = 2;
+  string doc_string = 3;
+}
+
+message StaticInfo {
+  map<string, StaticInfo> named_objects = 1;
+  map<string, StaticInfo> singletons = 2;
+  map<string, StaticInfo> parameters = 3;
+  map<string, StaticInfo> commands = 4;
+  string type = 5;
+  CommandInfo command_info = 6;
+  map<string, StaticInfo> queries = 7;
+  CommandInfo query_info = 8;
+  string help_string = 9;
+}
+
+message GetStaticInfoRequest {
+  string rules = 1;
+}
+
+message GetStaticInfoResponse {
+  StaticInfo info = 1;
+}
+
+message CreatedEventRequest {
+  string parent_path = 1; // parent-path of the created object
+  string child_type = 2; // type of the created object
+}
+
+message ModifiedEventRequest {
+  string path = 1; // path of the modified object
+}
+
+message DeletedEventRequest {
+  string path = 1; // path of the deleted object
+}
+
+message AffectedEventRequest {
+  string path = 1; // path of the affected object
+  string subtype = 2;
+}
+
+message AttributeChangedEventRequest {
+  string path = 1; // path of the object whose attribute is changed
+  string attribute = 2; // name of the attribute
+}
+
+message CommandAttributeChangedEventRequest {
+  string path = 1; // path of the object whose command attribute is changed
+  string command = 2; // name of the command
+  string attribute = 3; // name of the attribute
+}
+
+message CommandExecutedEventRequest {
+  string path = 1; // path of the object with the command
+  string command = 2 [deprecated = true]; // name of the command, deprecated since Fluent 2025 R2
+}
+
+message DataModelEventRequest {
+  string rules = 1;
+  oneof event_request {
+    CreatedEventRequest created_event_request = 2;
+    ModifiedEventRequest modified_event_request = 3;
+    DeletedEventRequest deleted_event_request = 4;
+    AffectedEventRequest affected_event_request = 5;
+    AttributeChangedEventRequest attribute_changed_event_request = 6;
+    CommandAttributeChangedEventRequest command_attribute_changed_event_request = 7;
+    CommandExecutedEventRequest command_executed_event_request = 8;
+  }
+}
+
+message SubscribeEventsRequest {
+  repeated DataModelEventRequest event_request = 1;
+}
+
+enum SubscriptionStatus {
+  SUBSCRIPTION_STATUS_UNSPECIFIED = 0;
+  SUBSCRIPTION_STATUS_SUBSCRIBED = 1;
+  SUBSCRIPTION_STATUS_UNSUBSCRIBED = 2;
+}
+
+message EventSubscription {
+  // tag is used to identify a subscribed event in server.
+  // A subscribed event can later be unsubscribed.
+  string tag = 1;
+  SubscriptionStatus status = 2;
+}
+
+message SubscribeEventsResponse {
+  repeated EventSubscription response = 1;
+}
+
+message UnsubscribeEventsRequest {
+  repeated string tag = 1;
+}
+
+message UnsubscribeEventsResponse {
+  repeated EventSubscription response = 1;
+}
+
+message BeginEventStreamingRequest {
+}
+
+message CreatedEventResponse {
+  string parent_path = 1; // parent-path of the created object
+  string child_type = 2; // type of the created object
+  string child_name = 3; // name of the created object
+}
+
+message ModifiedEventResponse {
+  string path = 1; // path of the modified object
+  utils.Variant value = 2; // value of the modified object
+}
+
+message DeletedEventResponse {
+  string path = 1; // path of the deleted object
+}
+
+message AffectedEventResponse {
+  string path = 1; // path of the affected object
+  string subtype = 2;
+}
+
+message AttributeChangedEventResponse {
+  string path = 1; // path of the object whose attribute is changed
+  string attribute = 2; // name of the attribute
+  utils.Variant value = 3; // value of the attribute
+}
+
+message CommandAttributeChangedEventResponse {
+  string path = 1; // path of the object whose command attribute is changed
+  string command = 2; // name of the command
+  string attribute = 3; // name of the attribute
+  utils.Variant value = 4; // value of the attribute
+}
+
+message CommandExecutedEventResponse {
+  string path = 1; // path of the object with the command
+  string command = 2; // name of the command
+  utils.Variant args = 3; // command arguments
+}
+
+message BeginEventStreamingResponse {
+  string tag = 1;
+  string rules = 2;
+  oneof event_response {
+    CreatedEventResponse created_event_response = 3;
+    ModifiedEventResponse modified_event_response = 4;
+    DeletedEventResponse deleted_event_response = 5;
+    AffectedEventResponse affected_event_response = 6;
+    AttributeChangedEventResponse attribute_changed_event_response = 7;
+    CommandAttributeChangedEventResponse command_attribute_changed_event_response = 8;
+    CommandExecutedEventResponse command_executed_event_response = 9;
+  }
+}
+
+message RenameRequest {
+  string rules = 1;
+  string path = 2;
+  string new_name = 3;
+  bool wait = 4;
+}
+
+message RenameResponse {
+  utils.Variant state = 1;
+  repeated string deleted_paths = 2;
+}
+
+message GetObjectNamesRequest {
+  string rules = 1;
+  string path = 2;
+}
+
+message GetObjectNamesResponse {
+  repeated string names = 1;
+}
+
+message ChildNames {
+  repeated string names = 1;
+}
+
+message DeleteChildObjectsRequest {
+  string rules = 1;
+  string path = 2;
+  oneof var {
+    ChildNames child_names = 3;
+    bool delete_all = 4;
+  }
+  bool wait = 5;
+}
+
+message DeleteChildObjectsResponse {
+  utils.Variant state = 1;
+  repeated string deleted_paths = 2;
+}
+
+message FixStateRequest {
+  string rules = 1;
+  string path = 2;
+}
+
+message FixStateResponse {
+  utils.Variant state = 1;
+  repeated string deleted_paths = 2;
+}
