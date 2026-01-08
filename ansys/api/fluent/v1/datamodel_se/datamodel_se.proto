@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.datamodel_se;
 
-import "ansys/api/fluent/v0/variant.proto";
+import "ansys/api/fluent/v1/variant.proto";
 
 service DataModelService {
   rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse) {}
@@ -50,7 +50,7 @@ message BeginStreamingRequest {
 }
 
 message BeginStreamingResponse {
-  utils.Variant state = 1;
+  utils.v1.Variant state = 1;
   repeated string deleted_paths = 2;
   repeated string events = 3;
 }
@@ -61,7 +61,7 @@ message InitDatamodelRequest {
 }
 
 message InitDatamodelResponse {
-  utils.Variant state = 1;
+  utils.v1.Variant state = 1;
   repeated string deleted_paths = 2;
 }
 
@@ -71,31 +71,31 @@ message GetStateRequest {
 }
 
 message GetStateResponse {
-  utils.Variant state = 1;
+  utils.v1.Variant state = 1;
 }
 
 message SetStateRequest {
   string rules = 1;
   string path = 2;
-  utils.Variant state = 3;
+  utils.v1.Variant state = 3;
   bool wait = 4;
 }
 
 message SetStateResponse {
-  utils.Variant state = 1;
+  utils.v1.Variant state = 1;
   repeated string deleted_paths = 2;
 }
 
 message UpdateDictRequest {
   string rules = 1;
   string path = 2;
-  utils.Variant dict_to_merge = 3;
+  utils.v1.Variant dict_to_merge = 3;
   bool wait = 4;
   bool recursive = 5;
 }
 
 message UpdateDictResponse {
-  utils.Variant state = 1;
+  utils.v1.Variant state = 1;
   repeated string deleted_paths = 2;
 }
 
@@ -106,7 +106,7 @@ message DeleteObjectRequest {
 }
 
 message DeleteObjectResponse {
-  utils.Variant state = 1;
+  utils.v1.Variant state = 1;
   repeated string deleted_paths = 2;
 }
 
@@ -117,7 +117,7 @@ message GetAttributeValueRequest {
 }
 
 message GetAttributeValueResponse {
-  utils.Variant result = 1;
+  utils.v1.Variant result = 1;
 }
 
 message ExecuteCommandRequest {
@@ -125,12 +125,12 @@ message ExecuteCommandRequest {
   string path = 2;
   string command = 3;
   bool wait = 4;
-  utils.Variant args = 5;
+  utils.v1.Variant args = 5;
 }
 
 message ExecuteCommandResponse {
-  utils.Variant result = 1;
-  utils.Variant state = 2;
+  utils.v1.Variant result = 1;
+  utils.v1.Variant state = 2;
   repeated string deleted_paths = 3;
 }
 
@@ -138,11 +138,11 @@ message ExecuteQueryRequest {
   string rules = 1;
   string path = 2;
   string query = 3;
-  utils.Variant args = 4;
+  utils.v1.Variant args = 4;
 }
 
 message ExecuteQueryResponse {
-  utils.Variant result = 1;
+  utils.v1.Variant result = 1;
 }
 
 message CreateCommandArgumentsRequest {
@@ -173,7 +173,7 @@ message GetSpecsRequest {
 
 message CommonSpecs {
   bool readonly = 1;
-  utils.Variant default = 2;
+  utils.v1.Variant default = 2;
   string display_text = 3;
   bool is_active = 4;
   string reference_path = 5;
@@ -263,7 +263,7 @@ message CommandArg {
   string name = 2;
   StaticInfo info = 3;
   string help_string = 4;
-  map<string, utils.Variant> attrs = 5;
+  map<string, utils.v1.Variant> attrs = 5;
   string doc_string = 6;
 }
 
@@ -379,8 +379,8 @@ message CreatedEventResponse {
 }
 
 message ModifiedEventResponse {
-  string path = 1;          // path of the modified object
-  utils.Variant value = 2;  // value of the modified object
+  string path = 1;             // path of the modified object
+  utils.v1.Variant value = 2;  // value of the modified object
 }
 
 message DeletedEventResponse {
@@ -393,22 +393,22 @@ message AffectedEventResponse {
 }
 
 message AttributeChangedEventResponse {
-  string path = 1;          // path of the object whose attribute is changed
-  string attribute = 2;     // name of the attribute
-  utils.Variant value = 3;  // value of the attribute
+  string path = 1;             // path of the object whose attribute is changed
+  string attribute = 2;        // name of the attribute
+  utils.v1.Variant value = 3;  // value of the attribute
 }
 
 message CommandAttributeChangedEventResponse {
-  string path = 1;          // path of the object whose command attribute is changed
-  string command = 2;       // name of the command
-  string attribute = 3;     // name of the attribute
-  utils.Variant value = 4;  // value of the attribute
+  string path = 1;             // path of the object whose command attribute is changed
+  string command = 2;          // name of the command
+  string attribute = 3;        // name of the attribute
+  utils.v1.Variant value = 4;  // value of the attribute
 }
 
 message CommandExecutedEventResponse {
-  string path = 1;         // path of the object with the command
-  string command = 2;      // name of the command
-  utils.Variant args = 3;  // command arguments
+  string path = 1;            // path of the object with the command
+  string command = 2;         // name of the command
+  utils.v1.Variant args = 3;  // command arguments
 }
 
 message BeginEventStreamingResponse {
@@ -433,7 +433,7 @@ message RenameRequest {
 }
 
 message RenameResponse {
-  utils.Variant state = 1;
+  utils.v1.Variant state = 1;
   repeated string deleted_paths = 2;
 }
 
@@ -461,7 +461,7 @@ message DeleteChildObjectsRequest {
 }
 
 message DeleteChildObjectsResponse {
-  utils.Variant state = 1;
+  utils.v1.Variant state = 1;
   repeated string deleted_paths = 2;
 }
 
@@ -471,6 +471,6 @@ message FixStateRequest {
 }
 
 message FixStateResponse {
-  utils.Variant state = 1;
+  utils.v1.Variant state = 1;
   repeated string deleted_paths = 2;
 }
