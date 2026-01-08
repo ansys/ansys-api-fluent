@@ -4,7 +4,7 @@
 
 syntax = "proto3";
 
-package grpc_remoting;
+package ansys.api.fluent.v1.datamodel_se;
 
 import "ansys/api/fluent/v0/variant.proto";
 
