@@ -1,4 +1,10 @@
 version: v1
+
 lint:
   use:
-    - GOOGLE
+    - STANDARD
+  except:
+    # These are stricter than Google's published guide
+    - RPC_REQUEST_RESPONSE_UNIQUE
+    - RPC_RESPONSE_STANDARD_NAME
+    - ENUM_VALUE_PREFIX
