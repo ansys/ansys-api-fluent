@@ -10,7 +10,7 @@ import "ansys/api/fluent/v1/variant.proto";
 
 service DataModelService {
   rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse) {}
-  rpc InitDatamodel(InitDatamodelRequest) returns (InitDatamodelResponse) {}
+  rpc initDatamodel(InitDatamodelRequest) returns (InitDatamodelResponse) {}
   rpc GetState(GetStateRequest) returns (GetStateResponse) {}
   rpc SetState(SetStateRequest) returns (SetStateResponse) {}
   rpc UpdateDict(UpdateDictRequest) returns (UpdateDictResponse) {}
