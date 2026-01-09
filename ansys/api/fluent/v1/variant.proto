@@ -6,47 +6,57 @@ syntax = "proto3";
 
 package utils.v1;
 
+// Empty represents an empty or null state
 message Empty {
 }
 
+// StringVector represents a vector (list) of string values
 message StringVector {
-  repeated string item = 1;
+  repeated string items = 1;  // The collection of string values
 }
 
+// DoubleVector represents a vector (list) of double-precision floating-point values
 message DoubleVector {
-  repeated double item = 1;
+  repeated double items = 1;  // The collection of double-precision floating-point values
 }
 
+// BoolVector represents a vector (list) of boolean values
 message BoolVector {
-  repeated bool item = 1;
+  repeated bool items = 1;  // The collection of boolean values
 }
 
+// Int64Vector represents a vector (list) of signed 64-bit integer values
 message Int64Vector {
-  repeated sint64 item = 1;
+  repeated sint64 items = 1;  // The collection of signed 64-bit integer values
 }
 
+// VariantMap represents a map (dictionary) with string keys and Variant values
 message VariantMap {
-  map<string, Variant> item = 1;
+  map<string, Variant> item = 1;  // The map entries with string keys and Variant values
 }
 
+// VariantVector represents a vector (list) of Variant values, allowing heterogeneous collections
 message VariantVector {
-  repeated Variant item = 1;
+  repeated Variant items = 1;  // The collection of Variant values
 }
 
+// Variant represents a dynamically-typed value that can hold various types including
+// primitives (bool, int64, double, string), vectors of these types, or nested structures
+// (VariantVector, VariantMap). Only one field will be set at a time via the oneof.
 message Variant {
   oneof as {
-    utils.v1.Empty empty_state = 1;
+    utils.v1.Empty empty_state = 1;  // Represents an empty or null value
 
-    bool bool_state = 2;
-    sint64 int64_state = 3;
-    double double_state = 5;
-    string string_state = 6;
+    bool bool_state = 2;      // Holds a boolean value
+    sint64 int64_state = 3;   // Holds a signed 64-bit integer value
+    double double_state = 5;  // Holds a double-precision floating-point value
+    string string_state = 6;  // Holds a string value
 
-    BoolVector bool_vector_state = 7;
-    Int64Vector int64_vector_state = 8;
-    DoubleVector double_vector_state = 9;
-    StringVector string_vector_state = 10;
-    VariantVector variant_vector_state = 11;
-    VariantMap variant_map_state = 12;
+    BoolVector bool_vector_state = 7;         // Holds a vector of boolean values
+    Int64Vector int64_vector_state = 8;       // Holds a vector of signed 64-bit integer values
+    DoubleVector double_vector_state = 9;     // Holds a vector of double-precision floating-point values
+    StringVector string_vector_state = 10;    // Holds a vector of string values
+    VariantVector variant_vector_state = 11;  // Holds a vector of Variant values (nested heterogeneous collection)
+    VariantMap variant_map_state = 12;        // Holds a map with string keys and Variant values
   }
 }

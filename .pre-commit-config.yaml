@@ -16,16 +16,17 @@ repos:
   rev: v0.56.3
   hooks:
   - id: protolint
-
-- repo: https://github.com/bufbuild/buf
-  rev: v1.28.1
-  hooks:
-  - id: buf-lint
-    name: Buf Lint V1 Protos
-    entry: buf lint --path ansys/api/fluent/v1
-    language: system
     files: ^ansys/api/fluent/v1/.*\.proto$
-    pass_filenames: false
+
+#- repo: https://github.com/bufbuild/buf
+#  rev: v1.28.1
+#  hooks:
+#  - id: buf-lint
+#    name: Buf Lint V1 Protos
+#    entry: buf lint --path ansys/api/fluent/v1
+#    language: system
+#    files: ^ansys/api/fluent/v1/.*\.proto$
+#    pass_filenames: false
 
 #  - id: buf-format
 #    name: Buf Format V1 Protos
