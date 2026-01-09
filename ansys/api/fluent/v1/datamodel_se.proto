@@ -10,31 +10,45 @@ import "ansys/api/fluent/v1/variant.proto";
 
 // DataModelService provides operations for managing Fluent datamodel state and events
 service DataModelService {
+  // BeginStreaming starts streaming datamodel state changes and events
   rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse) {}
-  rpc initDatamodel(InitDatamodelRequest) returns (InitDatamodelResponse) {}
+  // initDatamodel initializes the datamodel with specified rules
+  rpc InitDatamodel(InitDatamodelRequest) returns (InitDatamodelResponse) {}
+  // GetState retrieves the current state at a specified path
   rpc GetState(GetStateRequest) returns (GetStateResponse) {}
+  // SetState sets the state at a specified path
   rpc SetState(SetStateRequest) returns (SetStateResponse) {}
+  // UpdateDict merges a dictionary into the state at a specified path
   rpc UpdateDict(UpdateDictRequest) returns (UpdateDictResponse) {}
+  // DeleteObject deletes an object at a specified path
   rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse) {}
+  // GetAttributeValue retrieves the value of a specific attribute
   rpc GetAttributeValue(GetAttributeValueRequest) returns (GetAttributeValueResponse) {}
+  // ExecuteCommand executes a command on a datamodel object
   rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse) {}
+  // ExecuteQuery executes a query on a datamodel object
   rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse) {}
+  // CreateCommandArguments creates command arguments for a specific command
   rpc CreateCommandArguments(CreateCommandArgumentsRequest) returns (CreateCommandArgumentsResponse) {}
+  // DeleteCommandArguments deletes previously created command arguments
   rpc DeleteCommandArguments(DeleteCommandArgumentsRequest) returns (DeleteCommandArgumentsResponse) {}
+  // GetSpecs retrieves specifications for a datamodel object
   rpc GetSpecs(GetSpecsRequest) returns (GetSpecsResponse) {}
+  // GetStaticInfo retrieves static information about the datamodel structure
   rpc GetStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse) {}
+  // Rename renames a datamodel object
   rpc Rename(RenameRequest) returns (RenameResponse) {}
+  // FixState fixes the state of a datamodel object to ensure consistency
   rpc FixState(FixStateRequest) returns (FixStateResponse) {}
+  // GetObjectNames retrieves the names of objects at a specified path
   rpc GetObjectNames(GetObjectNamesRequest) returns (GetObjectNamesResponse) {}
+  // DeleteChildObjects deletes child objects from a parent object
   rpc DeleteChildObjects(DeleteChildObjectsRequest) returns (DeleteChildObjectsResponse) {}
-
-  // Subscribe to datamodel events
+  // SubscribeEvents subscribes to datamodel events
   rpc SubscribeEvents(SubscribeEventsRequest) returns (SubscribeEventsResponse) {}
-
-  // Request streaming of previously subscribed events
+  // UnsubscribeEvents unsubscribes from previously subscribed datamodel events
   rpc UnsubscribeEvents(UnsubscribeEventsRequest) returns (UnsubscribeEventsResponse) {}
-
-  // Unsubscribe previously subscribed events
+  // BeginEventStreaming starts streaming previously subscribed datamodel events
   rpc BeginEventStreaming(BeginEventStreamingRequest) returns (stream BeginEventStreamingResponse) {}
 }
 
@@ -236,8 +250,8 @@ message RealParameterSpecs {
 
 // StringParameterSpecs contains specifications for string parameters
 message StringParameterSpecs {
-  CommonSpecs common = 1;                   // Common specifications for this parameter
-  repeated string allowed_string_list = 2;  // List of allowed string values
+  CommonSpecs common = 1;                    // Common specifications for this parameter
+  repeated string allowed_string_lists = 2;  // List of allowed string values
 }
 
 // IntListParameterSpecs contains specifications for integer list parameters
@@ -247,8 +261,8 @@ message IntListParameterSpecs {
 
 // StringListParameterSpecs contains specifications for string list parameters
 message StringListParameterSpecs {
-  CommonSpecs common = 1;                   // Common specifications for this parameter
-  repeated string allowed_string_list = 2;  // List of allowed string values for list elements
+  CommonSpecs common = 1;                    // Common specifications for this parameter
+  repeated string allowed_string_lists = 2;  // List of allowed string values for list elements
 }
 
 // CommandSpecs contains specifications for a command
@@ -392,7 +406,7 @@ message DataModelEventRequest {
 
 // SubscribeEventsRequest is the request message for subscribing to events
 message SubscribeEventsRequest {
-  repeated DataModelEventRequest event_request = 1;  // The list of event subscriptions to register
+  repeated DataModelEventRequest event_requests = 1;  // The list of event subscriptions to register
 }
 
 // SubscriptionStatus indicates the status of an event subscription
@@ -412,17 +426,17 @@ message EventSubscription {
 
 // SubscribeEventsResponse is the response message containing subscription status
 message SubscribeEventsResponse {
-  repeated EventSubscription response = 1;  // The list of event subscriptions with their status
+  repeated EventSubscription responses = 1;  // The list of event subscriptions with their status
 }
 
 // UnsubscribeEventsRequest is the request message for unsubscribing from events
 message UnsubscribeEventsRequest {
-  repeated string tag = 1;  // The list of subscription tags to unsubscribe
+  repeated string tags = 1;  // The list of subscription tags to unsubscribe
 }
 
 // UnsubscribeEventsResponse is the response message containing unsubscription status
 message UnsubscribeEventsResponse {
-  repeated EventSubscription response = 1;  // The list of unsubscribed events with their status
+  repeated EventSubscription responses = 1;  // The list of unsubscribed events with their status
 }
 
 // BeginEventStreamingRequest is the request message for starting event streaming
