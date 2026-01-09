@@ -80,10 +80,11 @@ message LongPayload {
  * Field Type
  */
 enum FieldType {
-  INT_ARRAY = 0;     // Integer array.
-  LONG_ARRAY = 1;    // Long array.
-  FLOAT_ARRAY = 2;   // Float array.
-  DOUBLE_ARRAY = 3;  // Double array.
+  FIELD_TYPE_UNSPECIFIED = 0;   // Unspecified field type
+  FIELD_TYPE_INT_ARRAY = 1;     // Integer array
+  FIELD_TYPE_LONG_ARRAY = 2;    // Long array
+  FIELD_TYPE_FLOAT_ARRAY = 3;   // Float array
+  FIELD_TYPE_DOUBLE_ARRAY = 4;  // Double array
 }
 
 /**
@@ -92,10 +93,11 @@ enum FieldType {
  * or it contains boundary values etc.
  */
 enum PayloadTag {
-  OVERSET_MESH = 0;      // This tag is set if oversetMesh flag in SurfaceRequest is set to True.
-  ELEMENT_LOCATION = 1;  // This tag is set if dataLocation in ScalarFieldRequest is Elements.
-  NODE_LOCATION = 2;     // This tag is set if dataLocation in ScalarFieldRequest is Nodes.
-  BOUNDARY_VALUES = 3;   // This tag is set if provideBoundaryValues in ScalarFieldRequest is set to True.
+  PAYLOAD_TAG_UNSPECIFIED = 0;       // Unspecified payload tag
+  PAYLOAD_TAG_OVERSET_MESH = 1;      // This tag is set if oversetMesh flag in SurfaceRequest is set to True
+  PAYLOAD_TAG_ELEMENT_LOCATION = 2;  // This tag is set if dataLocation in ScalarFieldRequest is Elements
+  PAYLOAD_TAG_NODE_LOCATION = 3;     // This tag is set if dataLocation in ScalarFieldRequest is Nodes
+  PAYLOAD_TAG_BOUNDARY_VALUES = 4;   // This tag is set if provideBoundaryValues in ScalarFieldRequest is set to True
 }
 
 /**
@@ -182,8 +184,8 @@ message SurfaceRequest {
 // DataLocation specifies where data is located in the mesh
 enum DataLocation {
   DATA_LOCATION_UNSPECIFIED = 0;  // Unspecified location
-  NODES = 1;                      // Data is located at mesh nodes
-  ELEMENTS = 2;                   // Data is located at mesh elements (cells)
+  DATA_LOCATION_NODES = 1;        // Data is located at mesh nodes
+  DATA_LOCATION_ELEMENTS = 2;     // Data is located at mesh elements (cells)
 }
 
 /**
@@ -240,14 +242,14 @@ message GetFieldsRequest {
 
 // DataStampingType specifies the type of data stamping for solution data
 enum DataStampingType {
-  DATA_STAMPING_TYPE_UNSPECIFIED = 0;  // Unspecified stamping type
-  ITERATION_INDEX = 1;                 // Iteration index
-  TIME_STEP_INDEX = 2;                 // Time step index
-  FLOW_TIME = 3;                       // Flow time
-  SOLID_TIME = 4;                      // Solid time
-  CASE_ID = 5;                         // Case identifier
-  MESH_ID = 6;                         // Mesh identifier
-  DATA_ID = 7;                         // Data identifier
+  DATA_STAMPING_TYPE_UNSPECIFIED = 0;      // Unspecified stamping type
+  DATA_STAMPING_TYPE_ITERATION_INDEX = 1;  // Iteration index
+  DATA_STAMPING_TYPE_TIME_STEP_INDEX = 2;  // Time step index
+  DATA_STAMPING_TYPE_FLOW_TIME = 3;        // Flow time
+  DATA_STAMPING_TYPE_SOLID_TIME = 4;       // Solid time
+  DATA_STAMPING_TYPE_CASE_ID = 5;          // Case identifier
+  DATA_STAMPING_TYPE_MESH_ID = 6;          // Mesh identifier
+  DATA_STAMPING_TYPE_DATA_ID = 7;          // Data identifier
 }
 
 // DataStamping contains stamping information for solution data
@@ -661,19 +663,19 @@ message GetSolverMeshElementsRequest {
 
 // CellElementType defines the types of mesh elements (cells)
 enum CellElementType {
-  CELL_ELEMENT_TYPE_UNSPECIFIED = 0;  // Unspecified or unknown element type
-  TRIANGLE = 1;                       // Triangle: 3 nodes, 3 faces
-  TETRAHEDRON = 2;                    // Tetrahedron: 4 nodes, 4 faces
-  QUADRILATERAL = 3;                  // Quadrilateral: 4 nodes, 4 faces
-  HEXAHEDRON = 4;                     // Hexahedron: 8 nodes, 6 faces
-  PYRAMID = 5;                        // Pyramid: 5 nodes, 5 faces
-  WEDGE = 6;                          // Wedge (prism): 6 nodes, 5 faces
-  POLYHEDRON = 7;                     // Polyhedron: arbitrary number of nodes and faces
-  GHOST = 8;                          // Ghost cell: 2 nodes, 1 face (only in 2D)
-  QUADRATIC_TETRAHEDRON = 9;          // Quadratic tetrahedron: 10 nodes, 4 faces
-  QUADRATIC_HEXAHEDRON = 10;          // Quadratic hexahedron: 20 nodes, 6 faces
-  QUADRATIC_PYRAMID = 11;             // Quadratic pyramid: 13 nodes, 5 faces
-  QUADRATIC_WEDGE = 12;               // Quadratic wedge: 15 nodes, 5 faces
+  CELL_ELEMENT_TYPE_UNSPECIFIED = 0;            // Unspecified or unknown element type
+  CELL_ELEMENT_TYPE_TRIANGLE = 1;               // Triangle: 3 nodes, 3 faces
+  CELL_ELEMENT_TYPE_TETRAHEDRON = 2;            // Tetrahedron: 4 nodes, 4 faces
+  CELL_ELEMENT_TYPE_QUADRILATERAL = 3;          // Quadrilateral: 4 nodes, 4 faces
+  CELL_ELEMENT_TYPE_HEXAHEDRON = 4;             // Hexahedron: 8 nodes, 6 faces
+  CELL_ELEMENT_TYPE_PYRAMID = 5;                // Pyramid: 5 nodes, 5 faces
+  CELL_ELEMENT_TYPE_WEDGE = 6;                  // Wedge (prism): 6 nodes, 5 faces
+  CELL_ELEMENT_TYPE_POLYHEDRON = 7;             // Polyhedron: arbitrary number of nodes and faces
+  CELL_ELEMENT_TYPE_GHOST = 8;                  // Ghost cell: 2 nodes, 1 face (only in 2D)
+  CELL_ELEMENT_TYPE_QUADRATIC_TETRAHEDRON = 9;  // Quadratic tetrahedron: 10 nodes, 4 faces
+  CELL_ELEMENT_TYPE_QUADRATIC_HEXAHEDRON = 10;  // Quadratic hexahedron: 20 nodes, 6 faces
+  CELL_ELEMENT_TYPE_QUADRATIC_PYRAMID = 11;     // Quadratic pyramid: 13 nodes, 5 faces
+  CELL_ELEMENT_TYPE_QUADRATIC_WEDGE = 12;       // Quadratic wedge: 15 nodes, 5 faces
 }
 
 // Element represents a mesh element (cell)
