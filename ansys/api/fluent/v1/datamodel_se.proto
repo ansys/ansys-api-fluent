@@ -112,11 +112,11 @@ message SetStateResponse {
 
 // UpdateDictRequest is the request message for updating a dictionary
 message UpdateDictRequest {
-  string rules = 1;                    // The rules context for the update
-  string path = 2;                     // The path to the dictionary to update
-  utils.v1.Variant dict_to_merge = 3;  // The dictionary values to merge
-  bool wait = 4;                       // Whether to wait for the operation to complete
-  bool recursive = 5;                  // Whether to update recursively
+  string rules = 1;                 // The rules context for the update
+  string path = 2;                  // The path to the dictionary to update
+  utils.v1.Variant merge_dict = 3;  // The dictionary values to merge
+  bool wait = 4;                    // Whether to wait for the operation to complete
+  bool recursive = 5;               // Whether to update recursively
 }
 
 // UpdateDictResponse is the response message containing the updated state
