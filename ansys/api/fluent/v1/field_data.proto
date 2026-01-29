@@ -272,7 +272,7 @@ message UnitInfo {
 
 // DataStampingInfo contains a collection of data stamping entries
 message DataStampingInfo {
-  repeated DataStamping datastampings = 1;  // The list of data stamping entries
+  repeated DataStamping data_stampings = 1;  // The list of data stamping entries
 }
 
 // SurfaceId uniquely identifies a surface
