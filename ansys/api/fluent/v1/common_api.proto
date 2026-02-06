@@ -1,0 +1,19 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.common_api;
+
+// Point represents a 3D Cartesian coordinate.
+message Point {
+  // X-axis coordinate.
+  double x = 1;
+
+  // Y-axis coordinate.
+  double y = 2;
+
+  // Z-axis coordinate.
+  double z = 3;
+}
