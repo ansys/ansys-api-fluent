@@ -4,7 +4,7 @@
 
 syntax = "proto3";
 
-package utils.v1;
+package ansys.api.fluent.v1.variant;
 
 // Empty represents an empty or null state
 message Empty {
@@ -45,7 +45,7 @@ message VariantVector {
 // (VariantVector, VariantMap). Only one field will be set at a time via the oneof.
 message Variant {
   oneof as {
-    utils.v1.Empty empty_state = 1;  // Represents an empty or null value
+    ansys.api.fluent.v1.variant.Empty empty_state = 1;  // Represents an empty or null value
 
     bool bool_state = 2;      // Holds a boolean value
     sint64 int64_state = 3;   // Holds a signed 64-bit integer value

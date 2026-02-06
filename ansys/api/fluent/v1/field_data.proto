@@ -46,8 +46,10 @@ service FieldData {
 
   // GetSolverMeshNodesDouble retrieves solver mesh nodes with double precision coordinates
   rpc GetSolverMeshNodesDouble(GetSolverMeshNodesRequest) returns (stream GetSolverMeshNodesDoubleResponse) {}
+
   // GetSolverMeshNodesFloat retrieves solver mesh nodes with float precision coordinates
   rpc GetSolverMeshNodesFloat(GetSolverMeshNodesRequest) returns (stream GetSolverMeshNodesFloatResponse) {}
+
   // GetSolverMeshElements retrieves solver mesh elements (cells)
   rpc GetSolverMeshElements(GetSolverMeshElementsRequest) returns (stream GetSolverMeshElementsResponse) {}
 }
@@ -254,7 +256,7 @@ enum DataStampingType {
 
 // DataStamping contains stamping information for solution data
 message DataStamping {
-  DataStampingType datastampingtype = 1;  // The type of data stamping
+  DataStampingType data_stamping_type = 1;  // The type of data stamping
   oneof as {
     double doublevalue = 2;  // Double-precision value for stamping
     sint64 intvalue = 3;     // Integer value for stamping
@@ -333,7 +335,7 @@ message GetSurfacesResponse {
 
 // GetRangeRequest is the request message for retrieving field range
 message GetRangeRequest {
-  string field_ame = 1;                // The name of the field
+  string field_name = 1;               // The name of the field
   repeated SurfaceId surface_ids = 2;  // The surface IDs to query
   bool node_value = 3;                 // Whether to get node values (vs element values)
 }
