@@ -283,6 +283,7 @@ message StaticInfo {
   map<string, StaticInfo> queries = 7;
   CommandInfo queryinfo = 8;
   string helpstring = 9;
+  map<string, utils.Variant> attrs = 10;
 }
 
 message GetStaticInfoRequest {
