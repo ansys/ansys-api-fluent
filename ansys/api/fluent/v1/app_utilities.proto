@@ -1,0 +1,273 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.app_utilities;
+
+// AppUtilities provides miscellaneous utilities for solver apps which do not fit into any other category.
+service AppUtilities {
+  // GetProductVersion retrieves the product version information.
+  rpc GetProductVersion(GetProductVersionRequest) returns (GetProductVersionResponse);
+
+  // GetBuildInfo retrieves the build information.
+  rpc GetBuildInfo(GetBuildInfoRequest) returns (GetBuildInfoResponse);
+
+  // GetControllerProcessInfo retrieves Controller process information if the solver app is running
+  // in client-server mode, i.e., the Controller process commanding the Solver process.
+  rpc GetControllerProcessInfo(GetControllerProcessInfoRequest) returns (GetControllerProcessInfoResponse);
+
+  // GetSolverProcessInfo retrieves Solver process information.
+  rpc GetSolverProcessInfo(GetSolverProcessInfoRequest) returns (GetSolverProcessInfoResponse);
+
+  // GetAppMode retrieves the application mode.
+  rpc GetAppMode(GetAppModeRequest) returns (GetAppModeResponse);
+
+  // StartPythonJournal starts a Python journal recording session.
+  rpc StartPythonJournal(StartPythonJournalRequest) returns (StartPythonJournalResponse);
+
+  // StopPythonJournal stops a Python journal recording session.
+  rpc StopPythonJournal(StopPythonJournalRequest) returns (StopPythonJournalResponse);
+
+  // IsBetaEnabled checks if beta features are enabled.
+  rpc IsBetaEnabled(IsBetaEnabledRequest) returns (IsBetaEnabledResponse);
+
+  // EnableBeta enables beta features.
+  rpc EnableBeta(EnableBetaRequest) returns (EnableBetaResponse);
+
+  // IsWildcard checks if a string is a wildcard according to the solver app's syntax.
+  rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
+
+  // IsSolutionDataAvailable checks if solution data is available.
+  rpc IsSolutionDataAvailable(IsSolutionDataAvailableRequest) returns (IsSolutionDataAvailableResponse);
+
+  // RegisterPauseSolutionEvents registers the client to pause on solution events.
+  // The following 3 methods are useful to execute synchronous callbacks in gRPC client on solution
+  // events such as iteration or time-step advancement. An implementation of such mechanism will look like:
+  // 1. After each solution event, the solver will send a paused event to clients and pause itself.
+  // 2. The registered client will receive the paused event and execute the callback and then resume the solver.
+  rpc RegisterPauseSolutionEvents(RegisterPauseSolutionEventsRequest) returns (RegisterPauseSolutionEventsResponse);
+
+  // ResumeSolutionEvent resumes from pause on a solution event.
+  rpc ResumeSolutionEvent(ResumeSolutionEventRequest) returns (ResumeSolutionEventResponse);
+
+  // UnregisterPauseSolutionEvents unregisters the client from pause on solution events.
+  rpc UnregisterPauseSolutionEvents(UnregisterPauseSolutionEventsRequest) returns (UnregisterPauseSolutionEventsResponse);
+
+  // Exit terminates the solver app.
+  rpc Exit(ExitRequest) returns (ExitResponse);
+
+  // SetWorkingDirectory changes the application working directory.
+  rpc SetWorkingDirectory(SetWorkingDirectoryRequest) returns (SetWorkingDirectoryResponse);
+}
+
+// GetProductVersionRequest is the request to retrieve product version information.
+message GetProductVersionRequest {
+}
+
+// GetProductVersionResponse contains the product version information.
+message GetProductVersionResponse {
+  // major_version is the major version number.
+  int64 major = 1;
+  // minor_version is the minor version number.
+  int64 minor = 2;
+  // patch_version is the patch version number.
+  int64 patch = 3;
+}
+
+// GetBuildInfoRequest is the request to retrieve build information.
+message GetBuildInfoRequest {
+}
+
+// GetBuildInfoResponse contains the build information.
+message GetBuildInfoResponse {
+  // build_time is when the build was created.
+  string build_time = 1;
+  // build_id is the unique identifier for this build.
+  int64 build_id = 2;
+  // vcs_revision is the version control system revision.
+  string vcs_revision = 3;
+  // vcs_branch is the version control system branch.
+  string vcs_branch = 4;
+}
+
+// GetControllerProcessInfoRequest is the request to retrieve Controller process information.
+message GetControllerProcessInfoRequest {
+}
+
+// GetControllerProcessInfoResponse contains the Controller process information.
+message GetControllerProcessInfoResponse {
+  // hostname is the Controller process hostname.
+  string hostname = 1;
+  // process_id is the Controller process identifier.
+  int64 process_id = 2;
+  // working_directory is the Controller process working directory.
+  string working_directory = 3;
+}
+
+// GetSolverProcessInfoRequest is the request to retrieve Solver process information.
+message GetSolverProcessInfoRequest {
+}
+
+// GetSolverProcessInfoResponse contains the Solver process information.
+message GetSolverProcessInfoResponse {
+  // hostname is the Solver process hostname.
+  string hostname = 1;
+  // process_id is the Solver process identifier.
+  int64 process_id = 2;
+  // working_directory is the Solver process working directory.
+  string working_directory = 3;
+}
+
+// GetAppModeRequest is the request to retrieve the application mode.
+message GetAppModeRequest {
+}
+
+// GetAppModeResponse contains the application mode.
+message GetAppModeResponse {
+  // app_mode is the current application mode.
+  AppMode app_mode = 1;
+}
+
+// StartPythonJournalRequest initiates a Python journal recording session.
+message StartPythonJournalRequest {
+  // journal_name is the name of the journal file.
+  // If journal_name is not provided, StopPythonJournal should return the journal lines.
+  optional string journal_name = 1;
+}
+
+// StartPythonJournalResponse contains the result of starting a Python journal.
+message StartPythonJournalResponse {
+  // journal_id is the unique identifier for the journal.
+  // Journal id is returned if journal_name is not provided.
+  optional string journal_id = 1;
+}
+
+// StopPythonJournalRequest terminates a Python journal recording session.
+message StopPythonJournalRequest {
+  // journal_id is the identifier of the journal to stop.
+  // Journal id is required if journal_name is not provided in StartPythonJournal.
+  optional string journal_id = 1;
+}
+
+// StopPythonJournalResponse contains the result of stopping a Python journal.
+message StopPythonJournalResponse {
+  // journal_str contains the journal content.
+  // Journal string is returned if journal_name is not provided in StartPythonJournal.
+  string journal_str = 1;
+}
+
+// IsBetaEnabledRequest is the request to check if beta features are enabled.
+message IsBetaEnabledRequest {
+}
+
+// IsBetaEnabledResponse indicates whether beta features are enabled.
+message IsBetaEnabledResponse {
+  // is_beta_enabled indicates if beta features are enabled.
+  bool is_beta_enabled = 1;
+}
+
+// EnableBetaRequest requests to enable beta features.
+message EnableBetaRequest {
+}
+
+// EnableBetaResponse is the result of enabling beta features.
+message EnableBetaResponse {
+}
+
+// IsWildcardRequest checks if a string is a wildcard.
+message IsWildcardRequest {
+  // input is the string to check for wildcard status.
+  string input = 1;
+}
+
+// IsWildcardResponse indicates whether the input is a wildcard.
+message IsWildcardResponse {
+  // is_wildcard indicates if the input is a wildcard.
+  bool is_wildcard = 1;
+}
+
+// IsSolutionDataAvailableRequest is the request to check if solution data is available.
+message IsSolutionDataAvailableRequest {
+}
+
+// IsSolutionDataAvailableResponse indicates whether solution data is available.
+message IsSolutionDataAvailableResponse {
+  // is_solution_data_available indicates if solution data is available.
+  bool is_solution_data_available = 1;
+}
+
+// RegisterPauseSolutionEventsRequest registers a client to pause on solution events.
+message RegisterPauseSolutionEventsRequest {
+  // solution_event is the event to register for.
+  SolutionEvent solution_event = 1;
+}
+
+// RegisterPauseSolutionEventsResponse contains the registration identifier.
+message RegisterPauseSolutionEventsResponse {
+  // registration_id is the unique identifier for this registration.
+  int64 registration_id = 1;
+}
+
+// ResumeSolutionEventRequest resumes from a pause on solution event.
+message ResumeSolutionEventRequest {
+  // registration_id is the identifier of the registration to resume.
+  int64 registration_id = 1;
+}
+
+// ResumeSolutionEventResponse is the result of resuming.
+message ResumeSolutionEventResponse {
+}
+
+// UnregisterPauseSolutionEventsRequest unregisters from pause on solution events.
+message UnregisterPauseSolutionEventsRequest {
+  // registration_id is the identifier of the registration to unregister.
+  int64 registration_id = 1;
+}
+
+// UnregisterPauseSolutionEventsResponse is the result of unregistering.
+message UnregisterPauseSolutionEventsResponse {
+}
+
+// ExitRequest requests to exit the application.
+message ExitRequest {
+}
+
+// ExitResponse is the result of an exit request.
+message ExitResponse {
+}
+
+// SetWorkingDirectoryRequest changes the application working directory.
+message SetWorkingDirectoryRequest {
+  // path is the new directory path.
+  string path = 1;
+}
+
+// SetWorkingDirectoryResponse is the result of setting the working directory.
+message SetWorkingDirectoryResponse {
+}
+
+// AppMode defines the application operating mode.
+enum AppMode {
+  // APP_MODE_UNSPECIFIED indicates an unspecified application mode.
+  APP_MODE_UNSPECIFIED = 0;
+  // APP_MODE_MESHING indicates meshing mode.
+  APP_MODE_MESHING = 1;
+  // APP_MODE_SOLVER indicates solver mode.
+  APP_MODE_SOLVER = 2;
+  // APP_MODE_SOLVER_ICING indicates solver icing mode.
+  APP_MODE_SOLVER_ICING = 3;
+  // APP_MODE_SOLVER_AERO indicates solver aero mode.
+  APP_MODE_SOLVER_AERO = 4;
+}
+
+// SolutionEvent defines solution-related events.
+enum SolutionEvent {
+  // SOLUTION_EVENT_UNSPECIFIED indicates an unspecified solution event.
+  SOLUTION_EVENT_UNSPECIFIED = 0;
+  // SOLUTION_EVENT_ITERATION indicates an iteration completion event.
+  SOLUTION_EVENT_ITERATION = 1;
+  // SOLUTION_EVENT_TIME_STEP indicates a time-step completion event.
+  SOLUTION_EVENT_TIME_STEP = 2;
+}
