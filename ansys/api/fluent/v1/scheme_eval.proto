@@ -1,0 +1,63 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.scheme_eval;
+
+import "scheme_pointer.proto";
+
+// SchemeEval provides Scheme language evaluation capabilities.
+service SchemeEval {
+  // Eval evaluates a Scheme pointer and returns the result. (DEPRECATED: Use SchemeEval instead)
+  rpc Eval(SchemePointer) returns (SchemePointer) {
+    option deprecated = true;
+  }
+  // SchemeEval evaluates a Scheme expression and returns the result.
+  rpc SchemeEval(SchemeEvalRequest) returns (SchemeEvalResponse);
+  // Exec executes a command and returns the output.
+  rpc Exec(ExecRequest) returns (ExecResponse);
+  // StringEval evaluates a Scheme expression from a string and returns the result.
+  rpc StringEval(StringEvalRequest) returns (StringEvalResponse);
+}
+
+// ExecRequest is a request to execute a command.
+message ExecRequest {
+  // command is a repeated field containing command arguments or lines to execute.
+  repeated string commands = 1;
+  // wait indicates whether to wait for the command to complete.
+  bool wait = 2;
+  // silent indicates whether to suppress printing the input command.
+  bool silent = 3;
+}
+
+// ExecResponse contains the output from executing a command.
+message ExecResponse {
+  // output is the result or output of the executed command.
+  string output = 1;
+}
+
+// SchemeEvalRequest is a request to evaluate a Scheme expression.
+message SchemeEvalRequest {
+  // input is the Scheme pointer to evaluate.
+  SchemePointer input = 1;
+}
+
+// SchemeEvalResponse contains the result of evaluating a Scheme expression.
+message SchemeEvalResponse {
+  // output is the result of the evaluation.
+  SchemePointer output = 1;
+}
+
+// StringEvalRequest is a request to evaluate a Scheme expression from a string.
+message StringEvalRequest {
+  // input is the Scheme expression as a string to evaluate.
+  string input = 1;
+}
+
+// StringEvalResponse contains the result of evaluating a Scheme string expression.
+message StringEvalResponse {
+  // output is the result of the evaluation as a string.
+  string output = 1;
+}

@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.reduction;
 
-import "ansys/api/fluent/v0/common_api.proto";
+import "common_api.proto";
 
 import "variant.proto";
 
