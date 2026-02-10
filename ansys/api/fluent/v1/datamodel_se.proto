@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.datamodel_se;
 
-import "ansys/api/fluent/v1/variant.proto";
+import "variant.proto";
 
 // DataModelService provides operations for managing Fluent datamodel state and events
 service DataModelService {
