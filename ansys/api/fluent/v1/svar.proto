@@ -1,0 +1,135 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.svar;
+
+import "field_data.proto";
+
+// Svar provides RPCs for retrieving and setting SVAR data and metadata.
+service Svar {
+  // Retrieves domain and zone metadata.
+  rpc GetZonesInfo(GetZonesInfoRequest) returns (GetZonesInfoResponse);
+  // Retrieves SVAR metadata for a domain and zone.
+  rpc GetSvarsInfo(GetSvarsInfoRequest) returns (GetSvarsInfoResponse);
+  // Streams SVAR data chunks for the requested SVAR.
+  rpc GetSvarData(GetSvarDataRequest) returns (stream GetSvarDataResponse);
+  // Streams SVAR data to set values for a given SVAR.
+  rpc SetSvarData(stream SetSvarDataRequest) returns (SetSvarDataResponse);
+}
+
+// Request to retrieve domain and zone metadata.
+message GetZonesInfoRequest {
+}
+
+// Response containing domain and zone metadata.
+message GetZonesInfoResponse {
+  repeated DomainInfo domains_info = 1;  // Domains info.
+  repeated ZoneInfo zones_info = 2;      // Zones info.
+}
+
+// Domain metadata.
+message DomainInfo {
+  string name = 1;       // Domain name.
+  uint32 domain_id = 2;  // Domain ID.
+}
+
+// Zone metadata.
+message ZoneInfo {
+  string name = 1;                             // Zone name.
+  uint64 zone_id = 2;                          // Zone ID.
+  string zone_type = 3;                        // Zone type, e.g., velocity-inlet.
+  ThreadType thread_type = 4;                  // Zone thread type.
+  repeated PartitionInfo partitions_info = 5;  // Partitions info.
+}
+
+// Thread type of the zone.
+enum ThreadType {
+  // Default value. Thread type is unspecified.
+  THREAD_TYPE_UNSPECIFIED = 0;
+  // Zone uses cell threads.
+  THREAD_TYPE_CELL = 1;
+  // Zone uses face threads.
+  THREAD_TYPE_FACE = 2;
+}
+
+// Partition range metadata.
+message PartitionInfo {
+  uint64 count = 1;        // Count in partition
+  uint64 start_index = 2;  // Global start index
+  uint64 end_index = 3;    // Global end index
+}
+
+// Request to retrieve SVAR metadata for a given domain and zone.
+message GetSvarsInfoRequest {
+  uint32 domain_id = 1;  // Domain ID.
+  uint64 zone_id = 2;    // Zone ID.
+}
+
+// Response containing SVAR metadata.
+message GetSvarsInfoResponse {
+  repeated SvarInfo svars_info = 1;  // SVARs info.
+}
+
+// SVAR information.
+message SvarInfo {
+  string name = 1;                                          // SVAR name.
+  uint32 dimension = 2;                                     // Dimension e.g. for centroid it will be 3.
+  ansys.api.fluent.v1.field_data.FieldType field_type = 3;  // Data type defined in field_data.proto.
+}
+
+// Request to retrieve SVAR data, possibly streamed in chunks.
+message GetSvarDataRequest {
+  uint32 chunk_size = 1;          // Chunk size.
+  bool provide_bytes_stream = 2;  // Bytes are streamed if true.
+  string name = 3;                // SVAR Name.
+  uint32 domain_id = 4;           // Domain ID.
+  repeated uint64 zones = 5;      // List of zone IDs.
+}
+
+// Streamed response containing payload or payload info.
+message GetSvarDataResponse {
+  oneof array {
+    Payload payload = 1;    // Payload.
+    Info payload_info = 2;  // Payload info.
+  }
+}
+
+// Payload metadata.
+message Info {
+  ansys.api.fluent.v1.field_data.FieldType field_type = 1;  // Field type.
+  uint64 field_size = 2;                                    // Field size. For bytes it will be number of bytes otherwise array size.
+  uint64 zone = 3;                                          // Zone ID.
+}
+
+// Payload chunk union.
+message Payload {
+  oneof chunk {
+    bytes byte_payload = 1;                                           // Bytes payload.
+    ansys.api.fluent.v1.field_data.DoublePayload double_payload = 2;  // Double payload.
+    ansys.api.fluent.v1.field_data.FloatPayload float_payload = 3;    // Float payload.
+    ansys.api.fluent.v1.field_data.LongPayload long_payload = 4;      // Long payload.
+    ansys.api.fluent.v1.field_data.IntPayload int_payload = 5;        // Int payload.
+  }
+}
+
+// Request to set SVAR data via a streaming API.
+message SetSvarDataRequest {
+  oneof array {
+    SvarHeader header = 1;  // SVAR name and domain ID.
+    Payload payload = 2;    // Payload.
+    Info payload_info = 3;  // Payload info.
+  }
+}
+
+// SVAR header containing the name and domain ID.
+message SvarHeader {
+  string name = 1;       // SVAR Name.
+  uint32 domain_id = 2;  // Domain ID.
+}
+
+// Response to the SetSvarData request.
+message SetSvarDataResponse {
+}
