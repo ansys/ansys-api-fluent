@@ -1,0 +1,52 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.batch_ops;
+
+// BatchOps provides batched execution of unary RPCs.
+service BatchOps {
+  // Execute accepts a bidirectional stream of requests and responses.
+  // Each request specifies a target package/service/method and carries
+  // a serialized request body. The server replies with the corresponding
+  // status and serialized response body for each operation.
+  rpc Execute(stream ExecuteRequest) returns (stream ExecuteResponse);
+}
+
+// ExecuteRequest describes a single operation to execute.
+message ExecuteRequest {
+  // Target protobuf package of the service.
+  string package = 1;
+  // Target service name within the package.
+  string service = 2;
+  // RPC method name to invoke (must be unary).
+  string method = 3;
+  // Serialized request message bytes for the method.
+  bytes request_body = 4;
+}
+
+// ExecuteStatus indicates the outcome of an executed operation.
+enum ExecuteStatus {
+  // Default value. Status is unspecified.
+  EXECUTE_STATUS_UNSPECIFIED = 0;
+  // Package, service, or method is not known.
+  EXECUTE_STATUS_UNKNOWN = 1;
+  // Method is not a gRPC unary method.
+  EXECUTE_STATUS_UNSUPPORTED = 2;
+  // Operation completed successfully.
+  EXECUTE_STATUS_SUCCESSFUL = 3;
+  // Operation failed.
+  EXECUTE_STATUS_FAILED = 4;
+  // Cancelled due to a prior operation not being successful.
+  EXECUTE_STATUS_CANCELLED = 5;
+}
+
+// ExecuteResponse returns the status and serialized response for an operation.
+message ExecuteResponse {
+  // Result status of the executed operation.
+  ExecuteStatus status = 1;
+  // Serialized response message bytes from the method.
+  bytes response_body = 2;
+}
