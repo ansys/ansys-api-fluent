@@ -83,11 +83,11 @@ service MeshingQueries {
   // Lists unreferenced cell zone IDs.
   rpc GetUnreferencedCellZones(Empty) returns (GetUnreferencedCellZonesResponse);
   // Lists unreferenced edge zones matching a filter.
-  rpc GetUnreferencedEdgeZonesOfFilter(GetUnreferencedEdgeZonesOfFilterRequest) returns (GetUnreferencedEdgeZonesOfFilterResponse);
+  rpc GetUnreferencedEdgeZonesOfFilter(GetUnreferencedEdgeZonesFilterRequest) returns (GetUnreferencedEdgeZonesFilterResponse);
   // Lists unreferenced face zones matching a filter.
-  rpc GetUnreferencedFaceZonesOfFilter(GetUnreferencedFaceZonesOfFilterRequest) returns (GetUnreferencedFaceZonesOfFilterResponse);
+  rpc GetUnreferencedFaceZonesOfFilter(GetUnreferencedFaceZonesFilterRequest) returns (GetUnreferencedFaceZonesFilterResponse);
   // Lists unreferenced cell zones matching a filter.
-  rpc GetUnreferencedCellZonesOfFilter(GetUnreferencedCellZonesOfFilterRequest) returns (GetUnreferencedCellZonesOfFilterResponse);
+  rpc GetUnreferencedCellZonesOfFilter(GetUnreferencedCellZonesFilterRequest) returns (GetUnreferencedCellZonesFilterResponse);
   // Lists unreferenced edge zone IDs by pattern.
   rpc GetUnreferencedEdgeZoneIdListOfPattern(GetUnreferencedEdgeZoneIdListPatternRequest) returns (GetUnreferencedEdgeZoneIdListPatternResponse);
   // Lists unreferenced face zone IDs by pattern.
@@ -144,6 +144,10 @@ service MeshingQueries {
   rpc GetRegionNameListOfFaceZones(GetRegionNameListFaceZonesRequest) returns (GetRegionNameListFaceZonesResponse);
   // Finds join pairs between face zones based on overlap.
   rpc FindJoinPairs(FindJoinPairsRequest) returns (FindJoinPairsResponse);
+  // Returns the IDs of all cells in the current mesh.
+  rpc GetAllCellsIds(GetAllCellsIdsRequest) returns (GetAllCellsIdsResponse);
+  // Returns cell quality results for all cells in the current mesh.
+  rpc GetAllCellsQuality(GetAllCellsQualityRequest) returns (GetAllCellsQualityResponse);
 }
 
 // Empty message used for RPCs that do not require parameters.
@@ -839,4 +843,24 @@ message FindJoinPairsRequest {
 // Response containing overlapping bounding boxes as join pairs.
 message FindJoinPairsResponse {
   repeated OverlappingBoundingBox pairs = 1;  // Overlapping bounding boxes indicating join pairs.
+}
+
+// Request to retrieve cell quality results.
+message GetAllCellsQualityRequest {
+  bool as_string = 1;  // If true, include a human-readable summary string in the response.
+}
+
+// Response containing cell quality results.
+message GetAllCellsQualityResponse {
+  string cells_and_quality = 1;     // Human-readable mapping of cells to quality values.
+  repeated double cell_values = 2;  // Numeric cell quality values.
+}
+
+// Request to retrieve all cell IDs.
+message GetAllCellsIdsRequest {
+}
+
+// Response containing all cell IDs.
+message GetAllCellsIdsResponse {
+  repeated sint64 cell_ids = 1;  // Cell IDs.
 }
