@@ -337,6 +337,7 @@ message StaticInfo {
   map<string, StaticInfo> queries = 7;        // Queries available for this object
   CommandInfo query_info = 8;                 // Information about the query (if this is a query)
   string help_string = 9;                     // Help text for this object
+  map<string, utils.v1.Variant> attrs = 10;   // Additional attributes for this object
 }
 
 // GetStaticInfoRequest is the request message for retrieving static information
