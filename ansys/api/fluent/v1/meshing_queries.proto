@@ -11,43 +11,43 @@ import "common_api.proto";
 // MeshingQueries provides mesh and object query operations.
 service MeshingQueries {
   // Returns the face zone ID at the given location.
-  rpc GetFaceZoneAtLocation(GetFaceZoneAtLocationRequest) returns (GetFaceZoneAtLocationResponse);
+  rpc GetFaceZoneAtLocation(GetFaceZoneLocationRequest) returns (GetFaceZoneLocationResponse);
   // Returns the cell zone ID at the given location.
-  rpc GetCellZoneAtLocation(GetCellZoneAtLocationRequest) returns (GetCellZoneAtLocationResponse);
+  rpc GetCellZoneAtLocation(GetCellZoneLocationRequest) returns (GetCellZoneLocationResponse);
   // Lists zone IDs matching the given type.
-  rpc GetZonesOfType(GetZonesOfTypeRequest) returns (GetZonesOfTypeResponse);
+  rpc GetZonesOfType(GetZonesTypeRequest) returns (GetZonesTypeResponse);
   // Lists zone IDs belonging to the given group.
-  rpc GetZonesOfGroup(GetZonesOfGroupRequest) returns (GetZonesOfGroupResponse);
+  rpc GetZonesOfGroup(GetZonesGroupRequest) returns (GetZonesGroupResponse);
   // Lists face zone IDs matching the filter.
-  rpc GetFaceZonesOfFilter(GetFaceZonesOfFilterRequest) returns (GetFaceZonesOfFilterResponse);
+  rpc GetFaceZonesOfFilter(GetFaceZonesFilterRequest) returns (GetFaceZonesFilterResponse);
   // Lists cell zone IDs matching the filter.
-  rpc GetCellZonesOfFilter(GetCellZonesOfFilterRequest) returns (GetCellZonesOfFilterResponse);
+  rpc GetCellZonesOfFilter(GetCellZonesFilterRequest) returns (GetCellZonesFilterResponse);
   // Lists edge zone IDs matching the filter.
-  rpc GetEdgeZonesOfFilter(GetEdgeZonesOfFilterRequest) returns (GetEdgeZonesOfFilterResponse);
+  rpc GetEdgeZonesOfFilter(GetEdgeZonesFilterRequest) returns (GetEdgeZonesFilterResponse);
   // Lists node zone IDs matching the filter.
-  rpc GetNodeZonesOfFilter(GetNodeZonesOfFilterRequest) returns (GetNodeZonesOfFilterResponse);
+  rpc GetNodeZonesOfFilter(GetNodeZonesFilterRequest) returns (GetNodeZonesFilterResponse);
   // Lists object names of the given type.
-  rpc GetObjectsOfType(GetObjectsOfTypeRequest) returns (GetObjectsOfTypeResponse);
+  rpc GetObjectsOfType(GetObjectsTypeRequest) returns (GetObjectsTypeResponse);
   // Lists face zone IDs referenced by the object.
-  rpc GetFaceZoneIdListOfObject(GetFaceZoneIdListOfObjectRequest) returns (GetFaceZoneIdListOfObjectResponse);
+  rpc GetFaceZoneIdListOfObject(GetFaceZoneIdListObjectRequest) returns (GetFaceZoneIdListObjectResponse);
   // Lists edge zone IDs referenced by the object.
-  rpc GetEdgeZoneIdListOfObject(GetEdgeZoneIdListOfObjectRequest) returns (GetEdgeZoneIdListOfObjectResponse);
+  rpc GetEdgeZoneIdListOfObject(GetEdgeZoneIdListObjectRequest) returns (GetEdgeZoneIdListObjectResponse);
   // Lists cell zone IDs referenced by the object.
-  rpc GetCellZoneIdListOfObject(GetCellZoneIdListOfObjectRequest) returns (GetCellZoneIdListOfObjectResponse);
+  rpc GetCellZoneIdListOfObject(GetCellZoneIdListObjectRequest) returns (GetCellZoneIdListObjectResponse);
   // Lists face zones shared by regions of the given type.
-  rpc GetFaceZonesSharedByRegionsOfType(GetFaceZonesSharedByRegionsOfTypeRequest) returns (GetFaceZonesSharedByRegionsOfTypeResponse);
+  rpc GetFaceZonesSharedByRegionsOfType(GetFaceZonesSharedRegionsTypeRequest) returns (GetFaceZonesSharedRegionsTypeResponse);
   // Lists face zones for the specified regions.
-  rpc GetFaceZonesOfRegions(GetFaceZonesOfRegionsRequest) returns (GetFaceZonesOfRegionsResponse);
+  rpc GetFaceZonesOfRegions(GetFaceZonesRegionsRequest) returns (GetFaceZonesRegionsResponse);
   // Lists face zones for the specified labels.
-  rpc GetFaceZonesOfLabels(GetFaceZonesOfLabelsRequest) returns (GetFaceZonesOfLabelsResponse);
+  rpc GetFaceZonesOfLabels(GetFaceZonesLabelsRequest) returns (GetFaceZonesLabelsResponse);
   // Lists face zone IDs for the specified labels.
-  rpc GetFaceZoneIdListOfLabels(GetFaceZoneIdListOfLabelsRequest) returns (GetFaceZoneIdListOfLabelsResponse);
+  rpc GetFaceZoneIdListOfLabels(GetFaceZoneIdListLabelsRequest) returns (GetFaceZoneIdListLabelsResponse);
   // Lists face zones associated with the provided objects.
-  rpc GetFaceZonesOfObjects(GetFaceZonesOfObjectsRequest) returns (GetFaceZonesOfObjectsResponse);
+  rpc GetFaceZonesOfObjects(GetFaceZonesObjectsRequest) returns (GetFaceZonesObjectsResponse);
   // Lists edge zones associated with the provided objects.
-  rpc GetEdgeZonesOfObjects(GetEdgeZonesOfObjectsRequest) returns (GetEdgeZonesOfObjectsResponse);
+  rpc GetEdgeZonesOfObjects(GetEdgeZonesObjectsRequest) returns (GetEdgeZonesObjectsResponse);
   // Lists face zone IDs for the specified regions.
-  rpc GetFaceZoneIdListOfRegions(GetFaceZoneIdListOfRegionsRequest) returns (GetFaceZoneIdListOfRegionsResponse);
+  rpc GetFaceZoneIdListOfRegions(GetFaceZoneIdListRegionsRequest) returns (GetFaceZoneIdListRegionsResponse);
   // Lists prism cell zones matching the pattern or names.
   rpc GetPrismCellZones(GetPrismCellZonesRequest) returns (GetPrismCellZonesResponse);
   // Lists tetrahedral cell zones matching the pattern or names.
@@ -59,17 +59,17 @@ service MeshingQueries {
   // Lists adjacent interior and boundary face zones for the given cell zones.
   rpc GetAdjacentInteriorAndBoundaryFaceZones(GetAdjacentInteriorAndBoundaryFaceZonesRequest) returns (GetAdjacentInteriorAndBoundaryFaceZonesResponse);
   // Lists adjacent zones based on edge connectivity.
-  rpc GetAdjacentZonesByEdgeConnectivity(GetAdjacentZonesByEdgeConnectivityRequest) returns (GetAdjacentZonesByEdgeConnectivityResponse);
+  rpc GetAdjacentZonesByEdgeConnectivity(GetAdjacentZonesEdgeConnectivityRequest) returns (GetAdjacentZonesEdgeConnectivityResponse);
   // Lists adjacent zones based on node connectivity.
-  rpc GetAdjacentZonesByNodeConnectivity(GetAdjacentZonesByNodeConnectivityRequest) returns (GetAdjacentZonesByNodeConnectivityResponse);
+  rpc GetAdjacentZonesByNodeConnectivity(GetAdjacentZonesNodeConnectivityRequest) returns (GetAdjacentZonesNodeConnectivityResponse);
   // Lists shared boundary zones for the given cell zones.
   rpc GetSharedBoundaryZones(GetSharedBoundaryZonesRequest) returns (GetSharedBoundaryZonesResponse);
   // Lists interior zones connected to the given cell zones.
-  rpc GetInteriorZonesConnectedToCellZones(GetInteriorZonesConnectedToCellZonesRequest) returns (GetInteriorZonesConnectedToCellZonesResponse);
+  rpc GetInteriorZonesConnectedToCellZones(GetInteriorZonesConnectedCellZonesRequest) returns (GetInteriorZonesConnectedCellZonesResponse);
   // Lists face zones where zone-specific prisms are applied.
-  rpc GetFaceZonesWithZoneSpecificPrismsApplied(Empty) returns (GetFaceZonesWithZoneSpecificPrismsAppliedResponse);
+  rpc GetFaceZonesWithZoneSpecificPrismsApplied(Empty) returns (GetFaceZonesZoneSpecificPrismsAppliedResponse);
   // Lists face zones affected by prism controls.
-  rpc GetFaceZonesOfPrismControls(GetFaceZonesOfPrismControlsRequest) returns (GetFaceZonesOfPrismControlsResponse);
+  rpc GetFaceZonesOfPrismControls(GetFaceZonesPrismControlsRequest) returns (GetFaceZonesPrismControlsResponse);
   // Lists baffle zone IDs for the given face zones.
   rpc GetBaffles(GetBafflesRequest) returns (GetBafflesResponse);
   // Lists embedded baffle zone IDs.
@@ -89,59 +89,59 @@ service MeshingQueries {
   // Lists unreferenced cell zones matching a filter.
   rpc GetUnreferencedCellZonesOfFilter(GetUnreferencedCellZonesOfFilterRequest) returns (GetUnreferencedCellZonesOfFilterResponse);
   // Lists unreferenced edge zone IDs by pattern.
-  rpc GetUnreferencedEdgeZoneIdListOfPattern(GetUnreferencedEdgeZoneIdListOfPatternRequest) returns (GetUnreferencedEdgeZoneIdListOfPatternResponse);
+  rpc GetUnreferencedEdgeZoneIdListOfPattern(GetUnreferencedEdgeZoneIdListPatternRequest) returns (GetUnreferencedEdgeZoneIdListPatternResponse);
   // Lists unreferenced face zone IDs by pattern.
-  rpc GetUnreferencedFaceZoneIdListOfPattern(GetUnreferencedFaceZoneIdListOfPatternRequest) returns (GetUnreferencedFaceZoneIdListOfPatternResponse);
+  rpc GetUnreferencedFaceZoneIdListOfPattern(GetUnreferencedFaceZoneIdListPatternRequest) returns (GetUnreferencedFaceZoneIdListPatternResponse);
   // Lists unreferenced cell zone IDs by pattern.
-  rpc GetUnreferencedCellZoneIdListOfPattern(GetUnreferencedCellZoneIdListOfPatternRequest) returns (GetUnreferencedCellZoneIdListOfPatternResponse);
+  rpc GetUnreferencedCellZoneIdListOfPattern(GetUnreferencedCellZoneIdListPatternRequest) returns (GetUnreferencedCellZoneIdListPatternResponse);
   // Returns the cell zone ID with the maximum volume.
-  rpc GetMaxsizeCellZoneByVolume(GetMaxsizeCellZoneByVolumeRequest) returns (GetMaxsizeCellZoneByVolumeResponse);
+  rpc GetMaxsizeCellZoneByVolume(GetMaxsizeCellZoneVolumeRequest) returns (GetMaxsizeCellZoneVolumeResponse);
   // Returns the cell zone ID with the maximum entity count.
-  rpc GetMaxsizeCellZoneByCount(GetMaxsizeCellZoneByCountRequest) returns (GetMaxsizeCellZoneByCountResponse);
+  rpc GetMaxsizeCellZoneByCount(GetMaxsizeCellZoneCountRequest) returns (GetMaxsizeCellZoneCountResponse);
   // Returns the face zone ID with the minimum area.
-  rpc GetMinsizeFaceZoneByArea(GetMinsizeFaceZoneByAreaRequest) returns (GetMinsizeFaceZoneByAreaResponse);
+  rpc GetMinsizeFaceZoneByArea(GetMinsizeFaceZoneAreaRequest) returns (GetMinsizeFaceZoneAreaResponse);
   // Returns the face zone ID with the minimum entity count.
-  rpc GetMinsizeFaceZoneByCount(GetMinsizeFaceZoneByCountRequest) returns (GetMinsizeFaceZoneByCountResponse);
+  rpc GetMinsizeFaceZoneByCount(GetMinsizeFaceZoneCountRequest) returns (GetMinsizeFaceZoneCountResponse);
   // Lists face zone IDs by maximum entity count.
-  rpc GetFaceZoneListByMaximumEntityCount(GetFaceZoneListByMaximumEntityCountRequest) returns (GetFaceZoneListByMaximumEntityCountResponse);
+  rpc GetFaceZoneListByMaximumEntityCount(GetFaceZoneListMaximumEntityCountRequest) returns (GetFaceZoneListMaximumEntityCountResponse);
   // Lists edge zone IDs by maximum entity count.
-  rpc GetEdgeZoneListByMaximumEntityCount(GetEdgeZoneListByMaximumEntityCountRequest) returns (GetEdgeZoneListByMaximumEntityCountResponse);
+  rpc GetEdgeZoneListByMaximumEntityCount(GetEdgeZoneListMaximumEntityCountRequest) returns (GetEdgeZoneListMaximumEntityCountResponse);
   // Lists cell zone IDs by maximum entity count.
-  rpc GetCellZoneListByMaximumEntityCount(GetCellZoneListByMaximumEntityCountRequest) returns (GetCellZoneListByMaximumEntityCountResponse);
+  rpc GetCellZoneListByMaximumEntityCount(GetCellZoneListMaximumEntityCountRequest) returns (GetCellZoneListMaximumEntityCountResponse);
   // Lists face zone IDs by maximum zone area.
-  rpc GetFaceZoneListByMaximumZoneArea(GetFaceZoneListByMaximumZoneAreaRequest) returns (GetFaceZoneListByMaximumZoneAreaResponse);
+  rpc GetFaceZoneListByMaximumZoneArea(GetFaceZoneListMaximumZoneAreaRequest) returns (GetFaceZoneListMaximumZoneAreaResponse);
   // Lists face zone IDs by minimum zone area.
-  rpc GetFaceZoneListByMinimumZoneArea(GetFaceZoneListByMinimumZoneAreaRequest) returns (GetFaceZoneListByMinimumZoneAreaResponse);
+  rpc GetFaceZoneListByMinimumZoneArea(GetFaceZoneListMinimumZoneAreaRequest) returns (GetFaceZoneListMinimumZoneAreaResponse);
   // Lists zones with free faces.
-  rpc GetZonesWithFreeFaces(GetZonesWithFreeFacesRequest) returns (GetZonesWithFreeFacesResponse);
+  rpc GetZonesWithFreeFaces(GetZonesFreeFacesRequest) returns (GetZonesFreeFacesResponse);
   // Lists zones with multiple connected faces.
-  rpc GetZonesWithMultiFaces(GetZonesWithMultiFacesRequest) returns (GetZonesWithMultiFacesResponse);
+  rpc GetZonesWithMultiFaces(GetZonesMultiFacesRequest) returns (GetZonesMultiFacesResponse);
   // Lists overlapping face zone IDs with tolerances.
   rpc GetOverlappingFaceZones(GetOverlappingFaceZonesRequest) returns (GetOverlappingFaceZonesResponse);
   // Lists zones that have marked faces.
-  rpc GetZonesWithMarkedFaces(GetZonesWithMarkedFacesRequest) returns (GetZonesWithMarkedFacesResponse);
+  rpc GetZonesWithMarkedFaces(GetZonesMarkedFacesRequest) returns (GetZonesMarkedFacesResponse);
   // Lists all object names.
   rpc GetAllObjectNameList(Empty) returns (GetAllObjectNameListResponse);
   // Lists object names of the given type.
-  rpc GetObjectNameListOfType(GetObjectNameListOfTypeRequest) returns (GetObjectNameListOfTypeResponse);
+  rpc GetObjectNameListOfType(GetObjectNameListTypeRequest) returns (GetObjectNameListTypeResponse);
   // Lists objects matching the filter.
-  rpc GetObjectsOfFilter(GetObjectsOfFilterRequest) returns (GetObjectsOfFilterResponse);
+  rpc GetObjectsOfFilter(GetObjectsFilterRequest) returns (GetObjectsFilterResponse);
   // Lists regions belonging to an object.
-  rpc GetRegionsOfObject(GetRegionsOfObjectRequest) returns (GetRegionsOfObjectResponse);
+  rpc GetRegionsOfObject(GetRegionsObjectRequest) returns (GetRegionsObjectResponse);
   // Lists region names belonging to an object.
-  rpc GetRegionNameListOfObject(GetRegionNameListOfObjectRequest) returns (GetRegionNameListOfObjectResponse);
+  rpc GetRegionNameListOfObject(GetRegionNameListObjectRequest) returns (GetRegionNameListObjectResponse);
   // Sorts regions by volume.
-  rpc SortRegionsByVolume(SortRegionsByVolumeRequest) returns (SortRegionsByVolumeResponse);
+  rpc SortRegionsByVolume(SortRegionsVolumeRequest) returns (SortRegionsVolumeResponse);
   // Returns the volume of the specified region.
   rpc GetRegionVolume(GetRegionVolumeRequest) returns (GetRegionVolumeResponse);
   // Lists regions matching a filter.
-  rpc GetRegionsOfFilter(GetRegionsOfFilterRequest) returns (GetRegionsOfFilterResponse);
+  rpc GetRegionsOfFilter(GetRegionsFilterRequest) returns (GetRegionsFilterResponse);
   // Lists region names matching a pattern.
-  rpc GetRegionNameListOfPattern(GetRegionNameListOfPatternRequest) returns (GetRegionNameListOfPatternResponse);
+  rpc GetRegionNameListOfPattern(GetRegionNameListPatternRequest) returns (GetRegionNameListPatternResponse);
   // Lists regions associated with the given face zones.
-  rpc GetRegionsOfFaceZones(GetRegionsOfFaceZonesRequest) returns (GetRegionsOfFaceZonesResponse);
+  rpc GetRegionsOfFaceZones(GetRegionsFaceZonesRequest) returns (GetRegionsFaceZonesResponse);
   // Lists region names associated with the given face zones.
-  rpc GetRegionNameListOfFaceZones(GetRegionNameListOfFaceZonesRequest) returns (GetRegionNameListOfFaceZonesResponse);
+  rpc GetRegionNameListOfFaceZones(GetRegionNameListFaceZonesRequest) returns (GetRegionNameListFaceZonesResponse);
   // Finds join pairs between face zones based on overlap.
   rpc FindJoinPairs(FindJoinPairsRequest) returns (FindJoinPairsResponse);
 }
@@ -151,197 +151,197 @@ message Empty {
 }
 
 // Request for face zone at a spatial location.
-message GetFaceZoneAtLocationRequest {
+message GetFaceZoneLocationRequest {
   ansys.api.fluent.v1.common_api.Point location = 1;  // Query location as a 3D point.
 }
 
 // Response containing the face zone id at a location.
-message GetFaceZoneAtLocationResponse {
+message GetFaceZoneLocationResponse {
   sint64 face_zone_id = 1;  // Face zone ID at the location.
 }
 
 // Request for cell zone at a spatial location.
-message GetCellZoneAtLocationRequest {
+message GetCellZoneLocationRequest {
   ansys.api.fluent.v1.common_api.Point location = 1;  // Query location as a 3D point.
 }
 
 // Response containing the cell zone id at a location.
-message GetCellZoneAtLocationResponse {
+message GetCellZoneLocationResponse {
   sint64 cell_zone_id = 1;  // Cell zone ID at the location.
 }
 
 // Request to get zones of a given type.
-message GetZonesOfTypeRequest {
+message GetZonesTypeRequest {
   string type = 1;  // Zone type name.
 }
 
 // Response listing zone ids of the requested type.
-message GetZonesOfTypeResponse {
+message GetZonesTypeResponse {
   repeated sint64 zone_ids = 1;  // IDs of zones matching the type.
 }
 
 // Request to get zones belonging to a group.
-message GetZonesOfGroupRequest {
+message GetZonesGroupRequest {
   string group = 1;  // Group name.
 }
 
 // Response listing zone ids of the requested group.
-message GetZonesOfGroupResponse {
+message GetZonesGroupResponse {
   repeated sint64 zone_ids = 1;  // IDs of zones in the group.
 }
 
 // Request to get face zones matching a filter.
-message GetFaceZonesOfFilterRequest {
+message GetFaceZonesFilterRequest {
   string filter = 1;  // Filter expression.
 }
 
 // Response listing face zone ids matching a filter.
-message GetFaceZonesOfFilterResponse {
+message GetFaceZonesFilterResponse {
   repeated sint64 face_zone_ids = 1;  // IDs of face zones matching the filter.
 }
 
 // Request to get cell zones matching a filter.
-message GetCellZonesOfFilterRequest {
+message GetCellZonesFilterRequest {
   string filter = 1;  // Filter expression.
 }
 
 // Response listing cell zone ids matching a filter.
-message GetCellZonesOfFilterResponse {
+message GetCellZonesFilterResponse {
   repeated sint64 cell_zone_ids = 1;  // IDs of cell zones matching the filter.
 }
 
 // Request to get edge zones matching a filter.
-message GetEdgeZonesOfFilterRequest {
+message GetEdgeZonesFilterRequest {
   string filter = 1;  // Filter expression.
 }
 
 // Response listing edge zone ids matching a filter.
-message GetEdgeZonesOfFilterResponse {
+message GetEdgeZonesFilterResponse {
   repeated sint64 edge_zone_ids = 1;  // IDs of edge zones matching the filter.
 }
 
 // Request to get node zones matching a filter.
-message GetNodeZonesOfFilterRequest {
+message GetNodeZonesFilterRequest {
   string filter = 1;  // Filter expression.
 }
 
 // Response listing node zone ids matching a filter.
-message GetNodeZonesOfFilterResponse {
+message GetNodeZonesFilterResponse {
   repeated sint64 node_zone_ids = 1;  // IDs of node zones matching the filter.
 }
 
 // Request to get objects of a given type.
-message GetObjectsOfTypeRequest {
+message GetObjectsTypeRequest {
   string type = 1;  // Object type name.
 }
 
 // Response listing object names of a given type.
-message GetObjectsOfTypeResponse {
+message GetObjectsTypeResponse {
   repeated string objects = 1;  // Object names of the given type.
 }
 
 // Request to get face zone ids from an object.
-message GetFaceZoneIdListOfObjectRequest {
+message GetFaceZoneIdListObjectRequest {
   string object = 1;  // Object name.
 }
 
 // Response listing face zone ids for an object.
-message GetFaceZoneIdListOfObjectResponse {
+message GetFaceZoneIdListObjectResponse {
   repeated sint64 face_zone_ids = 1;  // Face zone IDs referenced by the object.
 }
 
 // Request to get edge zone ids from an object.
-message GetEdgeZoneIdListOfObjectRequest {
+message GetEdgeZoneIdListObjectRequest {
   string object = 1;  // Object name.
 }
 
 // Response listing edge zone ids for an object.
-message GetEdgeZoneIdListOfObjectResponse {
+message GetEdgeZoneIdListObjectResponse {
   repeated sint64 edge_zone_ids = 1;  // Edge zone IDs referenced by the object.
 }
 
 // Request to get cell zone ids from an object.
-message GetCellZoneIdListOfObjectRequest {
+message GetCellZoneIdListObjectRequest {
   string object = 1;  // Object name.
 }
 
 // Response listing cell zone ids for an object.
-message GetCellZoneIdListOfObjectResponse {
+message GetCellZoneIdListObjectResponse {
   repeated sint64 cell_zone_ids = 1;  // Cell zone IDs referenced by the object.
 }
 
 // Request to get face zones shared by regions of a given type.
-message GetFaceZonesSharedByRegionsOfTypeRequest {
+message GetFaceZonesSharedRegionsTypeRequest {
   string mesh_object = 1;  // Mesh object name.
   string region_type = 2;  // Region type name.
 }
 
 // Response listing shared face zone ids.
-message GetFaceZonesSharedByRegionsOfTypeResponse {
+message GetFaceZonesSharedRegionsTypeResponse {
   repeated sint64 shared_face_zone_ids = 1;  // Shared face zone IDs.
 }
 
 // Request to get face zones of regions.
-message GetFaceZonesOfRegionsRequest {
+message GetFaceZonesRegionsRequest {
   string object = 1;            // Object name.
   repeated string regions = 2;  // Region names.
 }
 
 // Response listing face zone ids of regions.
-message GetFaceZonesOfRegionsResponse {
+message GetFaceZonesRegionsResponse {
   repeated sint64 zone_ids = 1;  // Face zone IDs.
 }
 
 // Request to get face zones of labels.
-message GetFaceZonesOfLabelsRequest {
+message GetFaceZonesLabelsRequest {
   string object = 1;           // Object name.
   repeated string labels = 2;  // Label names.
 }
 
 // Response listing face zone ids of labels.
-message GetFaceZonesOfLabelsResponse {
+message GetFaceZonesLabelsResponse {
   repeated sint64 zone_ids = 1;  // Face zone IDs.
 }
 
 // Request to get face zone ids of labels.
-message GetFaceZoneIdListOfLabelsRequest {
+message GetFaceZoneIdListLabelsRequest {
   string object = 1;           // Object name.
   repeated string labels = 2;  // Label names.
 }
 
 // Response listing face zone ids of labels.
-message GetFaceZoneIdListOfLabelsResponse {
+message GetFaceZoneIdListLabelsResponse {
   repeated sint64 zone_ids = 1;  // Face zone IDs.
 }
 
 // Request to get face zones of objects.
-message GetFaceZonesOfObjectsRequest {
-  repeated string object_list = 1;  // Object names.
+message GetFaceZonesObjectsRequest {
+  repeated string object_lists = 1;  // Object names.
 }
 
 // Response listing face zone ids of objects.
-message GetFaceZonesOfObjectsResponse {
+message GetFaceZonesObjectsResponse {
   repeated sint64 face_zone_ids = 1;  // Face zone IDs.
 }
 
 // Request to get edge zones of objects.
-message GetEdgeZonesOfObjectsRequest {
-  repeated string object_list = 1;  // Object names.
+message GetEdgeZonesObjectsRequest {
+  repeated string object_lists = 1;  // Object names.
 }
 
 // Response listing edge zone ids of objects.
-message GetEdgeZonesOfObjectsResponse {
+message GetEdgeZonesObjectsResponse {
   repeated sint64 edge_zone_ids = 1;  // Edge zone IDs.
 }
 
 // Request to get face zone ids of regions.
-message GetFaceZoneIdListOfRegionsRequest {
+message GetFaceZoneIdListRegionsRequest {
   string object = 1;           // Object name.
   repeated string labels = 2;  // Region labels.
 }
 
 // Response listing face zone ids of regions.
-message GetFaceZoneIdListOfRegionsResponse {
+message GetFaceZoneIdListRegionsResponse {
   repeated sint64 zone_ids = 1;  // Face zone IDs.
 }
 
@@ -401,24 +401,24 @@ message GetAdjacentInteriorAndBoundaryFaceZonesResponse {
 }
 
 // Request to get adjacent zones by edge connectivity.
-message GetAdjacentZonesByEdgeConnectivityRequest {
+message GetAdjacentZonesEdgeConnectivityRequest {
   string zone_name_or_pattern = 1;  // Zone name or pattern.
   repeated sint64 zone_ids = 2;     // Zone IDs.
 }
 
 // Response listing adjacent zone ids by edge connectivity.
-message GetAdjacentZonesByEdgeConnectivityResponse {
+message GetAdjacentZonesEdgeConnectivityResponse {
   repeated sint64 adjacent_zone_ids = 1;  // Adjacent zone IDs by edge connectivity.
 }
 
 // Request to get adjacent zones by node connectivity.
-message GetAdjacentZonesByNodeConnectivityRequest {
+message GetAdjacentZonesNodeConnectivityRequest {
   string zone_name_or_pattern = 1;  // Zone name or pattern.
   repeated sint64 zone_ids = 2;     // Zone IDs.
 }
 
 // Response listing adjacent zone ids by node connectivity.
-message GetAdjacentZonesByNodeConnectivityResponse {
+message GetAdjacentZonesNodeConnectivityResponse {
   repeated sint64 adjacent_zone_ids = 1;  // Adjacent zone IDs by node connectivity.
 }
 
@@ -434,28 +434,28 @@ message GetSharedBoundaryZonesResponse {
 }
 
 // Request to get interior zones connected to cell zones.
-message GetInteriorZonesConnectedToCellZonesRequest {
+message GetInteriorZonesConnectedCellZonesRequest {
   string cell_zone_name_or_pattern = 1;  // Cell zone name or pattern.
   repeated sint64 face_zone_ids = 2;     // Face zone IDs.
 }
 
 // Response listing interior zone ids connected to cell zones.
-message GetInteriorZonesConnectedToCellZonesResponse {
+message GetInteriorZonesConnectedCellZonesResponse {
   repeated sint64 interior_zone_ids = 1;  // Interior zone IDs.
 }
 
 // Response listing face zones with zone-specific prisms applied.
-message GetFaceZonesWithZoneSpecificPrismsAppliedResponse {
+message GetFaceZonesZoneSpecificPrismsAppliedResponse {
   repeated sint64 face_zone_ids = 1;  // Face zone IDs with zone-specific prisms.
 }
 
 // Request to get face zones affected by prism controls.
-message GetFaceZonesOfPrismControlsRequest {
+message GetFaceZonesPrismControlsRequest {
   string control_name = 1;  // Prism control name.
 }
 
 // Response listing face zones affected by prism controls.
-message GetFaceZonesOfPrismControlsResponse {
+message GetFaceZonesPrismControlsResponse {
   repeated sint64 face_zone_ids = 1;  // Face zone IDs affected by prism controls.
 }
 
@@ -495,187 +495,187 @@ message GetUnreferencedCellZonesResponse {
 }
 
 // Request to get unreferenced edge zones of a filter.
-message GetUnreferencedEdgeZonesOfFilterRequest {
+message GetUnreferencedEdgeZonesFilterRequest {
   string filter = 1;  // Filter expression.
 }
 
 // Response listing unreferenced edge zone ids of a filter.
-message GetUnreferencedEdgeZonesOfFilterResponse {
+message GetUnreferencedEdgeZonesFilterResponse {
   repeated sint64 unreferenced_edge_zone_ids = 1;  // Unreferenced edge zone IDs matching the filter.
 }
 
 // Request to get unreferenced face zones of a filter.
-message GetUnreferencedFaceZonesOfFilterRequest {
+message GetUnreferencedFaceZonesFilterRequest {
   string filter = 1;  // Filter expression.
 }
 
 // Response listing unreferenced face zone ids of a filter.
-message GetUnreferencedFaceZonesOfFilterResponse {
+message GetUnreferencedFaceZonesFilterResponse {
   repeated sint64 unreferenced_face_zone_ids = 1;  // Unreferenced face zone IDs matching the filter.
 }
 
 // Request to get unreferenced cell zones of a filter.
-message GetUnreferencedCellZonesOfFilterRequest {
+message GetUnreferencedCellZonesFilterRequest {
   string filter = 1;  // Filter expression.
 }
 
 // Response listing unreferenced cell zone ids of a filter.
-message GetUnreferencedCellZonesOfFilterResponse {
+message GetUnreferencedCellZonesFilterResponse {
   repeated sint64 unreferenced_cell_zone_ids = 1;  // Unreferenced cell zone IDs matching the filter.
 }
 
 // Request to get unreferenced edge zone ids by pattern.
-message GetUnreferencedEdgeZoneIdListOfPatternRequest {
+message GetUnreferencedEdgeZoneIdListPatternRequest {
   string pattern = 1;  // Name pattern.
 }
 
 // Response listing unreferenced edge zone ids by pattern.
-message GetUnreferencedEdgeZoneIdListOfPatternResponse {
+message GetUnreferencedEdgeZoneIdListPatternResponse {
   repeated sint64 unreferenced_edge_zone_ids = 1;  // Unreferenced edge zone IDs matching the pattern.
 }
 
 // Request to get unreferenced face zone ids by pattern.
-message GetUnreferencedFaceZoneIdListOfPatternRequest {
+message GetUnreferencedFaceZoneIdListPatternRequest {
   string pattern = 1;  // Name pattern.
 }
 
 // Response listing unreferenced face zone ids by pattern.
-message GetUnreferencedFaceZoneIdListOfPatternResponse {
+message GetUnreferencedFaceZoneIdListPatternResponse {
   repeated sint64 unreferenced_face_zone_ids = 1;  // Unreferenced face zone IDs matching the pattern.
 }
 
 // Request to get unreferenced cell zone ids by pattern.
-message GetUnreferencedCellZoneIdListOfPatternRequest {
+message GetUnreferencedCellZoneIdListPatternRequest {
   string pattern = 1;  // Name pattern.
 }
 
 // Response listing unreferenced cell zone ids by pattern.
-message GetUnreferencedCellZoneIdListOfPatternResponse {
+message GetUnreferencedCellZoneIdListPatternResponse {
   repeated sint64 unreferenced_cell_zone_ids = 1;  // Unreferenced cell zone IDs matching the pattern.
 }
 
 // Request to get the cell zone with the maximum volume.
-message GetMaxsizeCellZoneByVolumeRequest {
+message GetMaxsizeCellZoneVolumeRequest {
   string cell_zone_pattern = 1;         // Cell zone name pattern.
   repeated sint64 cell_zone_ids = 2;    // Candidate cell zone IDs.
   repeated string cell_zone_names = 3;  // Candidate cell zone names.
 }
 
 // Response containing the cell zone id with the maximum volume.
-message GetMaxsizeCellZoneByVolumeResponse {
+message GetMaxsizeCellZoneVolumeResponse {
   sint64 cell_zone_id = 1;  // Cell zone ID with maximum volume.
 }
 
 // Request to get the cell zone with the maximum entity count.
-message GetMaxsizeCellZoneByCountRequest {
+message GetMaxsizeCellZoneCountRequest {
   string cell_zone_pattern = 1;         // Cell zone name pattern.
   repeated sint64 cell_zone_ids = 2;    // Candidate cell zone IDs.
   repeated string cell_zone_names = 3;  // Candidate cell zone names.
 }
 
 // Response containing the cell zone id with the maximum entity count.
-message GetMaxsizeCellZoneByCountResponse {
+message GetMaxsizeCellZoneCountResponse {
   sint64 cell_zone_id = 1;  // Cell zone ID with maximum entity count.
 }
 
 // Request to get the face zone with the minimum area.
-message GetMinsizeFaceZoneByAreaRequest {
+message GetMinsizeFaceZoneAreaRequest {
   string face_zone_pattern = 1;         // Face zone name pattern.
   repeated sint64 face_zone_ids = 2;    // Candidate face zone IDs.
   repeated string face_zone_names = 3;  // Candidate face zone names.
 }
 
 // Response containing the face zone id with the minimum area.
-message GetMinsizeFaceZoneByAreaResponse {
+message GetMinsizeFaceZoneAreaResponse {
   sint64 face_zone_id = 1;  // Face zone ID with minimum area.
 }
 
 // Request to get the face zone with the minimum entity count.
-message GetMinsizeFaceZoneByCountRequest {
+message GetMinsizeFaceZoneCountRequest {
   string face_zone_pattern = 1;         // Face zone name pattern.
   repeated sint64 face_zone_ids = 2;    // Candidate face zone IDs.
   repeated string face_zone_names = 3;  // Candidate face zone names.
 }
 
 // Response containing the face zone id with the minimum entity count.
-message GetMinsizeFaceZoneByCountResponse {
+message GetMinsizeFaceZoneCountResponse {
   sint64 face_zone_id = 1;  // Face zone ID with minimum entity count.
 }
 
 // Request to list face zones by maximum entity count.
-message GetFaceZoneListByMaximumEntityCountRequest {
+message GetFaceZoneListMaximumEntityCountRequest {
   sint64 maximum_entity_count = 1;  // Maximum allowed entity count.
   bool only_boundary = 2;           // If true, only include boundary zones.
 }
 
 // Response listing face zone ids by maximum entity count.
-message GetFaceZoneListByMaximumEntityCountResponse {
+message GetFaceZoneListMaximumEntityCountResponse {
   repeated sint64 face_zone_ids = 1;  // Face zone IDs.
 }
 
 // Request to list edge zones by maximum entity count.
-message GetEdgeZoneListByMaximumEntityCountRequest {
+message GetEdgeZoneListMaximumEntityCountRequest {
   sint64 maximum_entity_count = 1;  // Maximum allowed entity count.
   bool only_boundary = 2;           // If true, only include boundary zones.
 }
 
 // Response listing edge zone ids by maximum entity count.
-message GetEdgeZoneListByMaximumEntityCountResponse {
+message GetEdgeZoneListMaximumEntityCountResponse {
   repeated sint64 edge_zone_ids = 1;  // Edge zone IDs.
 }
 
 // Request to list cell zones by maximum entity count.
-message GetCellZoneListByMaximumEntityCountRequest {
+message GetCellZoneListMaximumEntityCountRequest {
   sint64 maximum_entity_count = 1;  // Maximum allowed entity count.
 }
 
 // Response listing cell zone ids by maximum entity count.
-message GetCellZoneListByMaximumEntityCountResponse {
+message GetCellZoneListMaximumEntityCountResponse {
   repeated sint64 cell_zone_ids = 1;  // Cell zone IDs.
 }
 
 // Request to list face zones by maximum zone area.
-message GetFaceZoneListByMaximumZoneAreaRequest {
+message GetFaceZoneListMaximumZoneAreaRequest {
   sint64 maximum_zone_area = 1;  // Maximum zone area.
 }
 
 // Response listing face zone ids by maximum zone area.
-message GetFaceZoneListByMaximumZoneAreaResponse {
+message GetFaceZoneListMaximumZoneAreaResponse {
   repeated sint64 face_zone_ids = 1;  // Face zone IDs.
 }
 
 // Request to list face zones by minimum zone area.
-message GetFaceZoneListByMinimumZoneAreaRequest {
+message GetFaceZoneListMinimumZoneAreaRequest {
   sint64 minimum_zone_area = 1;  // Minimum zone area.
 }
 
 // Response listing face zone ids by minimum zone area.
-message GetFaceZoneListByMinimumZoneAreaResponse {
+message GetFaceZoneListMinimumZoneAreaResponse {
   repeated sint64 face_zone_ids = 1;  // Face zone IDs.
 }
 
 // Request to get zones with free faces.
-message GetZonesWithFreeFacesRequest {
+message GetZonesFreeFacesRequest {
   string face_zone_pattern = 1;         // Face zone name pattern.
   repeated sint64 face_zone_ids = 2;    // Candidate face zone IDs.
   repeated string face_zone_names = 3;  // Candidate face zone names.
 }
 
 // Response listing zones with free faces.
-message GetZonesWithFreeFacesResponse {
-  repeated sint64 zones_with_free_faces = 1;  // Zones with free faces.
+message GetZonesFreeFacesResponse {
+  repeated sint64 free_face_zone_ids = 1;  // Zones containing free faces.
 }
 
 // Request to get zones with multiple connected faces.
-message GetZonesWithMultiFacesRequest {
+message GetZonesMultiFacesRequest {
   string face_zone_pattern = 1;         // Face zone name pattern.
   repeated sint64 face_zone_ids = 2;    // Candidate face zone IDs.
   repeated string face_zone_names = 3;  // Candidate face zone names.
 }
 
 // Response listing zones with multiple connected faces.
-message GetZonesWithMultiFacesResponse {
-  repeated sint64 zones_with_multi_connected_faces = 1;  // Zones with multiple connected faces.
+message GetZonesMultiFacesResponse {
+  repeated sint64 multi_connected_face_zone_ids = 1;  // Zones with multiple connected faces.
 }
 
 // Request to get overlapping face zones.
@@ -691,15 +691,15 @@ message GetOverlappingFaceZonesResponse {
 }
 
 // Request to get zones with marked faces.
-message GetZonesWithMarkedFacesRequest {
+message GetZonesMarkedFacesRequest {
   string face_zone_pattern = 1;         // Face zone name pattern.
   repeated sint64 face_zone_ids = 2;    // Candidate face zone IDs.
   repeated string face_zone_names = 3;  // Candidate face zone names.
 }
 
 // Response listing zones with marked faces.
-message GetZonesWithMarkedFacesResponse {
-  repeated sint64 zones_with_marked_faces = 1;  // Zones with marked faces.
+message GetZonesMarkedFacesResponse {
+  repeated sint64 marked_face_zone_ids = 1;  // Zones with marked faces.
 }
 
 // Response listing all object names.
@@ -708,42 +708,42 @@ message GetAllObjectNameListResponse {
 }
 
 // Request to get object names of a given type.
-message GetObjectNameListOfTypeRequest {
+message GetObjectNameListTypeRequest {
   string type = 1;  // Object type name.
 }
 
 // Response listing object names of a given type.
-message GetObjectNameListOfTypeResponse {
+message GetObjectNameListTypeResponse {
   repeated string objects = 1;  // Object names of the given type.
 }
 
 // Request to get objects by filter.
-message GetObjectsOfFilterRequest {
+message GetObjectsFilterRequest {
   string filter = 1;  // Filter expression.
 }
 
 // Response listing objects by filter.
-message GetObjectsOfFilterResponse {
+message GetObjectsFilterResponse {
   repeated string objects = 1;  // Object names matching the filter.
 }
 
 // Request to get regions of an object.
-message GetRegionsOfObjectRequest {
+message GetRegionsObjectRequest {
   string object = 1;  // Object name.
 }
 
 // Response listing regions of an object.
-message GetRegionsOfObjectResponse {
+message GetRegionsObjectResponse {
   repeated string regions = 1;  // Region names of the object.
 }
 
 // Request to get region names of an object.
-message GetRegionNameListOfObjectRequest {
+message GetRegionNameListObjectRequest {
   string object = 1;  // Object name.
 }
 
 // Response listing region names of an object.
-message GetRegionNameListOfObjectResponse {
+message GetRegionNameListObjectResponse {
   repeated string regions = 1;  // Region names of the object.
 }
 
@@ -754,13 +754,13 @@ message CustomDoubleAndString {
 }
 
 // Request to sort regions by volume.
-message SortRegionsByVolumeRequest {
+message SortRegionsVolumeRequest {
   string object_name = 1;  // Object name.
   string order = 2;        // Sort order (asc|desc).
 }
 
 // Response listing regions sorted by volume.
-message SortRegionsByVolumeResponse {
+message SortRegionsVolumeResponse {
   repeated CustomDoubleAndString regions = 1;  // Regions sorted by volume.
 }
 
@@ -776,54 +776,54 @@ message GetRegionVolumeResponse {
 }
 
 // Request to get regions by filter.
-message GetRegionsOfFilterRequest {
+message GetRegionsFilterRequest {
   string object = 1;  // Object name.
   string filter = 2;  // Filter expression.
 }
 
 // Response listing regions by filter.
-message GetRegionsOfFilterResponse {
+message GetRegionsFilterResponse {
   repeated string regions = 1;  // Region names matching the filter.
 }
 
 // Request to get region names by pattern.
-message GetRegionNameListOfPatternRequest {
+message GetRegionNameListPatternRequest {
   string object = 1;                  // Object name.
   string region_name_or_pattern = 2;  // Region name or pattern.
 }
 
 // Response listing region names by pattern.
-message GetRegionNameListOfPatternResponse {
+message GetRegionNameListPatternResponse {
   repeated string regions = 1;  // Region names matching the pattern.
 }
 
 // Request to get regions of face zones.
-message GetRegionsOfFaceZonesRequest {
+message GetRegionsFaceZonesRequest {
   repeated sint64 face_zone_ids = 1;  // Face zone IDs.
 }
 
 // Response listing regions of face zones.
-message GetRegionsOfFaceZonesResponse {
+message GetRegionsFaceZonesResponse {
   repeated string regions = 1;  // Region names of the given face zones.
 }
 
 // Request to get region names of face zones.
-message GetRegionNameListOfFaceZonesRequest {
+message GetRegionNameListFaceZonesRequest {
   string face_zone_name_or_pattern = 1;  // Face zone name or pattern.
   repeated sint64 face_zone_ids = 2;     // Face zone IDs.
 }
 
 // Response listing region names of face zones.
-message GetRegionNameListOfFaceZonesResponse {
+message GetRegionNameListFaceZonesResponse {
   repeated string regions = 1;  // Region names of the given face zones.
 }
 
 // Bounding box pair indicating overlapping zones.
 message OverlappingBoundingBox {
-  int64 zone_id_1 = 1;                   // First zone ID.
-  int64 zone_id_2 = 2;                   // Second zone ID.
-  repeated double bounding_box_min = 3;  // Minimum bounding coordinates.
-  repeated double bounding_box_max = 4;  // Maximum bounding coordinates.
+  int64 zone_id_1 = 1;                     // First zone ID.
+  int64 zone_id_2 = 2;                     // Second zone ID.
+  repeated double bounding_box_mins = 3;   // Minimum bounding coordinates.
+  repeated double bounding_box_maxes = 4;  // Maximum bounding coordinates.
 }
 
 // Request to find join pairs between face zones.
