@@ -1,0 +1,26 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.transcript;
+
+option objc_class_prefix = "HLW";
+
+// Transcript provides streaming of solver transcript output to clients.
+service Transcript {
+  // Begins streaming of transcript messages; the server sends a stream of
+  // `TranscriptResponse` messages until the stream is closed.
+  rpc BeginStreaming(TranscriptRequest) returns (stream TranscriptResponse);
+}
+
+// Request to begin streaming transcript output.
+message TranscriptRequest {
+}
+
+// Response message containing a transcript line or chunk.
+message TranscriptResponse {
+  // Transcript text content.
+  string transcript = 1;
+}
