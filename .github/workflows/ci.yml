@@ -26,14 +26,14 @@ jobs:
 
       - name: Install build requirements
         run: |
-          pip install -U pip
-          pip install build
+          python -m pip install -U pip
+          python -m pip install build
 
       - name: Build
         run: python -m build
 
       - name: Install
-        run: pip install dist/*.whl
+        run: python -m pip install dist/*.whl
 
       - name: Test import
         run: |
@@ -113,10 +113,15 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
 
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
       - name: Upload to Private PyPi
         run: |
           python -m pip install --upgrade pip
-          pip install twine setuptools wheel
+          python -m pip install twine setuptools wheel
           python -m twine check ./**/*.whl
           # python -m twine upload ./**/*.whl
         env:
