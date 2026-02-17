@@ -1,0 +1,233 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.datamodel_tui;
+
+import "google/protobuf/struct.proto";
+
+// gRPC API for interacting with the Fluent TUI datamodel.
+//
+// Notes:
+// - Paths are expressed as strings (TUI-style path).
+// - Arguments and payloads use google.protobuf.Value/Struct for flexibility.
+service DataModel {
+  // Subscribe to changes for one or more paths.
+  // The server streams notifications as changes occur.
+  rpc NotifyChanges(NotifyChangesRequest) returns (stream NotifyChangesResponse);
+
+  // Get a specific attribute value for an object identified by path.
+  rpc GetAttributeValue(GetAttributeValueRequest)
+      returns (GetAttributeValueResponse);
+
+  // Get the current state at the specified path.
+  rpc GetState(GetStateRequest) returns (GetStateResponse);
+
+  // Set the state at the specified path.
+  rpc SetState(SetStateRequest) returns (SetStateResponse);
+
+  // Execute a command under the specified path.
+  rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse);
+
+  // Execute a query under the specified path.
+  rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse);
+
+  // Batch multiple getters into a single request.
+  rpc CompositeGet(CompositeGetRequest) returns (CompositeGetResponse);
+
+  // Retrieve static (schema-like) information under the specified path.
+  rpc GetStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse);
+}
+
+// Request to subscribe to change notifications for one or more paths.
+message NotifyChangesRequest {
+  // One or more paths to subscribe to.
+  // Typically an array value; the precise structure is server-defined.
+  google.protobuf.Value paths = 1;
+
+  // Optional subscription arguments (server-defined).
+  google.protobuf.Struct args = 2;
+}
+
+// Streamed change notification message produced by NotifyChanges.
+message NotifyChangesResponse {
+  // Paths that changed since the last notification.
+  google.protobuf.Value changed_paths = 1;
+
+  // Difference payload describing the updates (server-defined structure).
+  google.protobuf.Value state_difference = 2;
+}
+
+// Common attributes that can be queried for a given datamodel node.
+enum Attribute {
+  // Default value. Do not use.
+  ATTRIBUTE_UNSPECIFIED = 0;
+
+  // Static attributes
+  // Names of direct child nodes.
+  ATTRIBUTE_CHILD_NAMES = 1;
+  // Datamodel value type for this node.
+  ATTRIBUTE_DATA_TYPE = 2;
+  // Exposure/visibility level for this node.
+  ATTRIBUTE_EXPOSURE_LEVEL = 3;
+  // Human-readable display label.
+  ATTRIBUTE_DISPLAY_TEXT = 4;
+  // Quantity/units semantic type.
+  ATTRIBUTE_QUANTITY_TYPE = 5;
+  // Help text describing this node.
+  ATTRIBUTE_HELP_STRING = 6;
+
+  // Dynamic attributes
+  // Default value.
+  ATTRIBUTE_DEFAULT = 100;
+  // Allowed values or value set.
+  ATTRIBUTE_ALLOWED_VALUES = 101;
+  // Minimum allowed numeric value.
+  ATTRIBUTE_MINIMUM = 102;
+  // Maximum allowed numeric value.
+  ATTRIBUTE_MAXIMUM = 103;
+  // Whether the node is currently active.
+  ATTRIBUTE_IS_ACTIVE = 104;
+  // Whether the node is currently read-only.
+  ATTRIBUTE_IS_READ_ONLY = 105;
+  // Names of objects represented under this node.
+  ATTRIBUTE_OBJECT_NAMES = 106;
+
+  // Composite attributes
+  // Constraints metadata.
+  ATTRIBUTE_CONSTRAINTS = 200;
+  // Collection of static attributes.
+  ATTRIBUTE_STATIC_ATTRIBUTES = 201;
+  // UI-related attributes.
+  ATTRIBUTE_UI_ATTRIBUTES = 202;
+
+  // Custom attribute
+  // Server-defined/custom attribute payload.
+  ATTRIBUTE_CUSTOM = 300;
+}
+
+// Request to retrieve a specific attribute value for a node.
+message GetAttributeValueRequest {
+  // Datamodel node path.
+  string path = 1;
+
+  // Attribute to retrieve.
+  Attribute attribute = 2;
+
+  // Optional arguments for the attribute evaluation (server-defined).
+  google.protobuf.Struct args = 3;
+}
+
+// Response containing the requested attribute value.
+message GetAttributeValueResponse {
+  // Retrieved attribute value.
+  google.protobuf.Value value = 1;
+}
+
+// Request to retrieve current state at a node.
+message GetStateRequest {
+  // Datamodel node path.
+  string path = 1;
+}
+
+// Response containing current state.
+message GetStateResponse {
+  // Current state at the path.
+  google.protobuf.Value state = 1;
+}
+
+// Request to set state at a node.
+message SetStateRequest {
+  // Datamodel node path.
+  string path = 1;
+
+  // State to apply.
+  google.protobuf.Value state = 2;
+}
+
+// Response containing state after setting.
+message SetStateResponse {
+  // State after applying the update (may reflect server-side normalization).
+  google.protobuf.Value state = 1;
+}
+
+// Request to execute a command under a node.
+message ExecuteCommandRequest {
+  // Datamodel node path.
+  string path = 1;
+
+  // Command name to execute.
+  string command = 2;
+
+  // Optional command arguments (server-defined).
+  google.protobuf.Struct args = 3;
+}
+
+// Response containing the command result.
+message ExecuteCommandResponse {
+  // Command execution result.
+  google.protobuf.Value result = 1;
+}
+
+// Request to execute a query under a node.
+message ExecuteQueryRequest {
+  // Datamodel node path.
+  string path = 1;
+}
+
+// Response containing the query result.
+message ExecuteQueryResponse {
+  // Query result.
+  google.protobuf.Value result = 1;
+}
+
+// Request to execute multiple getter operations in one call.
+message CompositeGetRequest {
+  // Getter requests to execute.
+  repeated DataModelGetter getters = 1;
+}
+
+// A single getter operation used by CompositeGet.
+message DataModelGetter {
+  // Exactly one getter request.
+  oneof request {
+    // Attribute value getter request.
+    GetAttributeValueRequest get_attribute_value_request = 1;
+    // State getter request.
+    GetStateRequest get_state_request = 2;
+  }
+}
+
+// Response for CompositeGet.
+message CompositeGetResponse {
+  // Composite response payload corresponding to the getters.
+  // The structure is server-defined.
+  google.protobuf.Value response = 1;
+}
+
+// Request to retrieve static (schema-like) info for a node.
+message GetStaticInfoRequest {
+  // Datamodel node path.
+  string path = 1;
+}
+
+// Static (schema-like) information for a datamodel node.
+message StaticInfo {
+  // Child menus available under this node.
+  map<string, StaticInfo> menus = 1;
+
+  // Commands available under this node.
+  map<string, StaticInfo> commands = 2;
+
+  // Human-readable help for this node.
+  // Field number 5 is preserved for backward compatibility.
+  string help = 5;
+}
+
+// Response containing the static info for the requested path.
+message GetStaticInfoResponse {
+  // Static information for the requested path.
+  StaticInfo info = 1;
+}
