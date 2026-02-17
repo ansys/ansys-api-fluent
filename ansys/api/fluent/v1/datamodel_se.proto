@@ -68,9 +68,9 @@ message BeginStreamingRequest {
 
 // BeginStreamingResponse is the streaming response containing state updates
 message BeginStreamingResponse {
-  utils.v1.Variant state = 1;         // The current state or state changes
-  repeated string deleted_paths = 2;  // Paths of deleted objects
-  repeated string events = 3;         // Events that occurred
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The current state or state changes
+  repeated string deleted_paths = 2;              // Paths of deleted objects
+  repeated string events = 3;                     // Events that occurred
 }
 
 // InitDatamodelRequest is the request message for initializing the datamodel
@@ -81,8 +81,8 @@ message InitDatamodelRequest {
 
 // InitDatamodelResponse is the response message containing the initialized datamodel state
 message InitDatamodelResponse {
-  utils.v1.Variant state = 1;         // The initialized state
-  repeated string deleted_paths = 2;  // Paths of deleted objects during initialization
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The initialized state
+  repeated string deleted_paths = 2;              // Paths of deleted objects during initialization
 }
 
 // GetStateRequest is the request message for retrieving state
@@ -93,36 +93,36 @@ message GetStateRequest {
 
 // GetStateResponse is the response message containing the requested state
 message GetStateResponse {
-  utils.v1.Variant state = 1;  // The state at the requested path
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The state at the requested path
 }
 
 // SetStateRequest is the request message for setting state
 message SetStateRequest {
-  string rules = 1;            // The rules context for the state update
-  string path = 2;             // The path where state should be set
-  utils.v1.Variant state = 3;  // The new state to set
-  bool wait = 4;               // Whether to wait for the operation to complete
+  string rules = 1;                               // The rules context for the state update
+  string path = 2;                                // The path where state should be set
+  ansys.api.fluent.v1.variant.Variant state = 3;  // The new state to set
+  bool wait = 4;                                  // Whether to wait for the operation to complete
 }
 
 // SetStateResponse is the response message containing the updated state
 message SetStateResponse {
-  utils.v1.Variant state = 1;         // The updated state after the operation
-  repeated string deleted_paths = 2;  // Paths of deleted objects
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after the operation
+  repeated string deleted_paths = 2;              // Paths of deleted objects
 }
 
 // UpdateDictRequest is the request message for updating a dictionary
 message UpdateDictRequest {
-  string rules = 1;                 // The rules context for the update
-  string path = 2;                  // The path to the dictionary to update
-  utils.v1.Variant merge_dict = 3;  // The dictionary values to merge
-  bool wait = 4;                    // Whether to wait for the operation to complete
-  bool recursive = 5;               // Whether to update recursively
+  string rules = 1;                                    // The rules context for the update
+  string path = 2;                                     // The path to the dictionary to update
+  ansys.api.fluent.v1.variant.Variant merge_dict = 3;  // The dictionary values to merge
+  bool wait = 4;                                       // Whether to wait for the operation to complete
+  bool recursive = 5;                                  // Whether to update recursively
 }
 
 // UpdateDictResponse is the response message containing the updated state
 message UpdateDictResponse {
-  utils.v1.Variant state = 1;         // The updated state after the dictionary merge
-  repeated string deleted_paths = 2;  // Paths of deleted objects
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after the dictionary merge
+  repeated string deleted_paths = 2;              // Paths of deleted objects
 }
 
 // DeleteObjectRequest is the request message for deleting an object
@@ -134,8 +134,8 @@ message DeleteObjectRequest {
 
 // DeleteObjectResponse is the response message after deleting an object
 message DeleteObjectResponse {
-  utils.v1.Variant state = 1;         // The updated state after deletion
-  repeated string deleted_paths = 2;  // Paths of deleted objects
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after deletion
+  repeated string deleted_paths = 2;              // Paths of deleted objects
 }
 
 // GetAttributeValueRequest is the request message for retrieving an attribute value
@@ -147,36 +147,36 @@ message GetAttributeValueRequest {
 
 // GetAttributeValueResponse is the response message containing the attribute value
 message GetAttributeValueResponse {
-  utils.v1.Variant result = 1;  // The value of the requested attribute
+  ansys.api.fluent.v1.variant.Variant result = 1;  // The value of the requested attribute
 }
 
 // ExecuteCommandRequest is the request message for executing a command
 message ExecuteCommandRequest {
-  string rules = 1;           // The rules context for command execution
-  string path = 2;            // The path to the object with the command
-  string command = 3;         // The name of the command to execute
-  bool wait = 4;              // Whether to wait for the command to complete
-  utils.v1.Variant args = 5;  // Arguments to pass to the command
+  string rules = 1;                              // The rules context for command execution
+  string path = 2;                               // The path to the object with the command
+  string command = 3;                            // The name of the command to execute
+  bool wait = 4;                                 // Whether to wait for the command to complete
+  ansys.api.fluent.v1.variant.Variant args = 5;  // Arguments to pass to the command
 }
 
 // ExecuteCommandResponse is the response message containing command execution results
 message ExecuteCommandResponse {
-  utils.v1.Variant result = 1;        // The return value from the command
-  utils.v1.Variant state = 2;         // The updated state after command execution
-  repeated string deleted_paths = 3;  // Paths of deleted objects
+  ansys.api.fluent.v1.variant.Variant result = 1;  // The return value from the command
+  ansys.api.fluent.v1.variant.Variant state = 2;   // The updated state after command execution
+  repeated string deleted_paths = 3;               // Paths of deleted objects
 }
 
 // ExecuteQueryRequest is the request message for executing a query
 message ExecuteQueryRequest {
-  string rules = 1;           // The rules context for query execution
-  string path = 2;            // The path to the object with the query
-  string query = 3;           // The name of the query to execute
-  utils.v1.Variant args = 4;  // Arguments to pass to the query
+  string rules = 1;                              // The rules context for query execution
+  string path = 2;                               // The path to the object with the query
+  string query = 3;                              // The name of the query to execute
+  ansys.api.fluent.v1.variant.Variant args = 4;  // Arguments to pass to the query
 }
 
 // ExecuteQueryResponse is the response message containing query execution results
 message ExecuteQueryResponse {
-  utils.v1.Variant result = 1;  // The return value from the query
+  ansys.api.fluent.v1.variant.Variant result = 1;  // The return value from the query
 }
 
 // CreateCommandArgumentsRequest is the request message for creating command arguments
@@ -212,13 +212,13 @@ message GetSpecsRequest {
 
 // CommonSpecs contains common specification fields shared across different parameter types
 message CommonSpecs {
-  bool readonly = 1;                      // Whether the parameter is read-only
-  utils.v1.Variant default = 2;           // The default value
-  string display_text = 3;                // Text to display in the UI
-  bool is_active = 4;                     // Whether the parameter is currently active
-  string reference_path = 5;              // Reference path for the parameter
-  bool has_developer_exposure_level = 6;  // Whether this has developer-only exposure
-  string help_string = 7;                 // Help text for the parameter
+  bool readonly = 1;                                // Whether the parameter is read-only
+  ansys.api.fluent.v1.variant.Variant default = 2;  // The default value
+  string display_text = 3;                          // Text to display in the UI
+  bool is_active = 4;                               // Whether the parameter is currently active
+  string reference_path = 5;                        // Reference path for the parameter
+  bool has_developer_exposure_level = 6;            // Whether this has developer-only exposure
+  string help_string = 7;                           // Help text for the parameter
 }
 
 // BoolParameterSpecs contains specifications for boolean parameters
@@ -311,12 +311,12 @@ message GetSpecsResponse {
 
 // CommandArg contains information about a command argument
 message CommandArg {
-  string type = 1;                          // The type of the argument
-  string name = 2;                          // The name of the argument
-  StaticInfo info = 3;                      // Static information about the argument
-  string help_string = 4;                   // Help text for the argument
-  map<string, utils.v1.Variant> attrs = 5;  // Additional attributes for the argument
-  string doc_string = 6;                    // Documentation string for the argument
+  string type = 1;                                             // The type of the argument
+  string name = 2;                                             // The name of the argument
+  StaticInfo info = 3;                                         // Static information about the argument
+  string help_string = 4;                                      // Help text for the argument
+  map<string, ansys.api.fluent.v1.variant.Variant> attrs = 5;  // Additional attributes for the argument
+  string doc_string = 6;                                       // Documentation string for the argument
 }
 
 // CommandInfo contains information about a command or query
@@ -328,16 +328,16 @@ message CommandInfo {
 
 // StaticInfo contains comprehensive static information about datamodel objects
 message StaticInfo {
-  map<string, StaticInfo> named_objects = 1;  // Named objects within this object
-  map<string, StaticInfo> singletons = 2;     // Singleton objects within this object
-  map<string, StaticInfo> parameters = 3;     // Parameters within this object
-  map<string, StaticInfo> commands = 4;       // Commands available for this object
-  string type = 5;                            // The type of this object
-  CommandInfo command_info = 6;               // Information about the command (if this is a command)
-  map<string, StaticInfo> queries = 7;        // Queries available for this object
-  CommandInfo query_info = 8;                 // Information about the query (if this is a query)
-  string help_string = 9;                     // Help text for this object
-  map<string, utils.v1.Variant> attrs = 10;   // Additional attributes for this object
+  map<string, StaticInfo> named_objects = 1;                    // Named objects within this object
+  map<string, StaticInfo> singletons = 2;                       // Singleton objects within this object
+  map<string, StaticInfo> parameters = 3;                       // Parameters within this object
+  map<string, StaticInfo> commands = 4;                         // Commands available for this object
+  string type = 5;                                              // The type of this object
+  CommandInfo command_info = 6;                                 // Information about the command (if this is a command)
+  map<string, StaticInfo> queries = 7;                          // Queries available for this object
+  CommandInfo query_info = 8;                                   // Information about the query (if this is a query)
+  string help_string = 9;                                       // Help text for this object
+  map<string, ansys.api.fluent.v1.variant.Variant> attrs = 10;  // Additional attributes for this object
 }
 
 // GetStaticInfoRequest is the request message for retrieving static information
@@ -453,8 +453,8 @@ message CreatedEventResponse {
 
 // ModifiedEventResponse is the response message for object modification events
 message ModifiedEventResponse {
-  string path = 1;             // path of the modified object
-  utils.v1.Variant value = 2;  // value of the modified object
+  string path = 1;                                // path of the modified object
+  ansys.api.fluent.v1.variant.Variant value = 2;  // value of the modified object
 }
 
 // DeletedEventResponse is the response message for object deletion events
@@ -470,24 +470,24 @@ message AffectedEventResponse {
 
 // AttributeChangedEventResponse is the response message for attribute change events
 message AttributeChangedEventResponse {
-  string path = 1;             // path of the object whose attribute is changed
-  string attribute = 2;        // name of the attribute
-  utils.v1.Variant value = 3;  // value of the attribute
+  string path = 1;                                // path of the object whose attribute is changed
+  string attribute = 2;                           // name of the attribute
+  ansys.api.fluent.v1.variant.Variant value = 3;  // value of the attribute
 }
 
 // CommandAttributeChangedEventResponse is the response message for command attribute change events
 message CommandAttributeChangedEventResponse {
-  string path = 1;             // path of the object whose command attribute is changed
-  string command = 2;          // name of the command
-  string attribute = 3;        // name of the attribute
-  utils.v1.Variant value = 4;  // value of the attribute
+  string path = 1;                                // path of the object whose command attribute is changed
+  string command = 2;                             // name of the command
+  string attribute = 3;                           // name of the attribute
+  ansys.api.fluent.v1.variant.Variant value = 4;  // value of the attribute
 }
 
 // CommandExecutedEventResponse is the response message for command execution events
 message CommandExecutedEventResponse {
-  string path = 1;            // path of the object with the command
-  string command = 2;         // name of the command
-  utils.v1.Variant args = 3;  // command arguments
+  string path = 1;                               // path of the object with the command
+  string command = 2;                            // name of the command
+  ansys.api.fluent.v1.variant.Variant args = 3;  // command arguments
 }
 
 // BeginEventStreamingResponse is the streaming response containing events
@@ -515,8 +515,8 @@ message RenameRequest {
 
 // RenameResponse is the response message after renaming an object
 message RenameResponse {
-  utils.v1.Variant state = 1;         // The updated state after the rename
-  repeated string deleted_paths = 2;  // Paths of deleted objects
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after the rename
+  repeated string deleted_paths = 2;              // Paths of deleted objects
 }
 
 // GetObjectNamesRequest is the request message for retrieving object names
@@ -548,8 +548,8 @@ message DeleteChildObjectsRequest {
 
 // DeleteChildObjectsResponse is the response message after deleting child objects
 message DeleteChildObjectsResponse {
-  utils.v1.Variant state = 1;         // The updated state after deletion
-  repeated string deleted_paths = 2;  // Paths of deleted objects
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after deletion
+  repeated string deleted_paths = 2;              // Paths of deleted objects
 }
 
 // FixStateRequest is the request message for fixing the state of an object
@@ -560,6 +560,6 @@ message FixStateRequest {
 
 // FixStateResponse is the response message after fixing state
 message FixStateResponse {
-  utils.v1.Variant state = 1;         // The fixed state
-  repeated string deleted_paths = 2;  // Paths of deleted objects during fix
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The fixed state
+  repeated string deleted_paths = 2;              // Paths of deleted objects during fix
 }
