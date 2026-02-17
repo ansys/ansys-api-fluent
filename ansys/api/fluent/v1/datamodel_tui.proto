@@ -9,10 +9,6 @@ package ansys.api.fluent.v1.datamodel_tui;
 import "google/protobuf/struct.proto";
 
 // gRPC API for interacting with the Fluent TUI datamodel.
-//
-// Notes:
-// - Paths are expressed as strings (TUI-style path).
-// - Arguments and payloads use google.protobuf.Value/Struct for flexibility.
 service DataModel {
   // Subscribe to changes for one or more paths.
   // The server streams notifications as changes occur.
