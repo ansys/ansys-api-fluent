@@ -65,7 +65,7 @@ message AreaRequest {
 
 // AreaResponse contains the computed area value
 message AreaResponse {
-  utils.Variant value = 1;  // The total area of the specified surfaces
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The total area of the specified surfaces
 }
 
 // AreaAveRequest is the request message for computing area-weighted average
@@ -76,7 +76,7 @@ message AreaAveRequest {
 
 // AreaAveResponse contains the computed area-weighted average
 message AreaAveResponse {
-  utils.Variant value = 1;  // The area-weighted average value
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The area-weighted average value
 }
 
 // AreaIntRequest is the request message for computing area integral
@@ -87,7 +87,7 @@ message AreaIntRequest {
 
 // AreaIntResponse contains the computed area integral
 message AreaIntResponse {
-  utils.Variant value = 1;  // The area integral value
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The area integral value
 }
 
 // CentroidRequest is the request message for computing geometric centroid
@@ -97,7 +97,7 @@ message CentroidRequest {
 
 // CentroidResponse contains the computed centroid coordinates
 message CentroidResponse {
-  Point value = 1;  // The centroid coordinates (x, y, z)
+  ansys.api.fluent.v1.common_api.Point value = 1;  // The centroid coordinates (x, y, z)
 }
 
 // CountRequest is the request message for counting cells or faces
@@ -107,7 +107,7 @@ message CountRequest {
 
 // CountResponse contains the count of cells or faces
 message CountResponse {
-  utils.Variant value = 1;  // The number of cells or faces
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The number of cells or faces
 }
 
 // CountIfRequest is the request message for conditional counting
@@ -118,7 +118,7 @@ message CountIfRequest {
 
 // CountIfResponse contains the conditional count
 message CountIfResponse {
-  utils.Variant value = 1;  // The number of cells/faces where condition is true
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The number of cells/faces where condition is true
 }
 
 // ForceRequest is the request message for computing total force (pressure + viscous)
@@ -128,7 +128,7 @@ message ForceRequest {
 
 // ForceResponse contains the computed force vector
 message ForceResponse {
-  Point value = 1;  // The force vector components (Fx, Fy, Fz)
+  ansys.api.fluent.v1.common_api.Point value = 1;  // The force vector components (Fx, Fy, Fz)
 }
 
 // MassAveRequest is the request message for computing mass-weighted average
@@ -139,7 +139,7 @@ message MassAveRequest {
 
 // MassAveResponse contains the computed mass-weighted average
 message MassAveResponse {
-  utils.Variant value = 1;  // The mass-weighted average value
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The mass-weighted average value
 }
 
 // MassFlowAveRequest is the request message for computing mass-flow-weighted average
@@ -150,7 +150,7 @@ message MassFlowAveRequest {
 
 // MassFlowAveResponse contains the computed mass-flow-weighted average
 message MassFlowAveResponse {
-  utils.Variant value = 1;  // The mass-flow-weighted average value
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The mass-flow-weighted average value
 }
 
 // MassFlowAveAbsRequest is the request message for computing mass-flow-weighted average using absolute mass flow
@@ -161,7 +161,7 @@ message MassFlowAveAbsRequest {
 
 // MassFlowAveAbsResponse contains the computed average using absolute mass flow
 message MassFlowAveAbsResponse {
-  utils.Variant value = 1;  // The mass-flow-weighted average (absolute) value
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The mass-flow-weighted average (absolute) value
 }
 
 // MassFlowIntRequest is the request message for computing mass flow integral
@@ -172,7 +172,7 @@ message MassFlowIntRequest {
 
 // MassFlowIntResponse contains the computed mass flow integral
 message MassFlowIntResponse {
-  utils.Variant value = 1;  // The mass flow integral value
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The mass flow integral value
 }
 
 // MassIntRequest is the request message for computing mass integral
@@ -183,7 +183,7 @@ message MassIntRequest {
 
 // MassIntResponse contains the computed mass integral
 message MassIntResponse {
-  utils.Variant value = 1;  // The mass integral value
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The mass integral value
 }
 
 // MaximumRequest is the request message for computing maximum value
@@ -194,7 +194,7 @@ message MaximumRequest {
 
 // MaximumResponse contains the maximum value
 message MaximumResponse {
-  utils.Variant value = 1;  // The maximum value of the expression
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The maximum value of the expression
 }
 
 // MinimumRequest is the request message for computing minimum value
@@ -205,7 +205,7 @@ message MinimumRequest {
 
 // MinimumResponse contains the minimum value
 message MinimumResponse {
-  utils.Variant value = 1;  // The minimum value of the expression
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The minimum value of the expression
 }
 
 // PressureForceRequest is the request message for computing pressure force
@@ -215,7 +215,7 @@ message PressureForceRequest {
 
 // PressureForceResponse contains the computed pressure force vector
 message PressureForceResponse {
-  Point value = 1;  // The pressure force vector components (Fx, Fy, Fz)
+  ansys.api.fluent.v1.common_api.Point value = 1;  // The pressure force vector components (Fx, Fy, Fz)
 }
 
 // ViscousForceRequest is the request message for computing viscous force
@@ -225,7 +225,7 @@ message ViscousForceRequest {
 
 // ViscousForceResponse contains the computed viscous force vector
 message ViscousForceResponse {
-  Point value = 1;  // The viscous force vector components (Fx, Fy, Fz)
+  ansys.api.fluent.v1.common_api.Point value = 1;  // The viscous force vector components (Fx, Fy, Fz)
 }
 
 // VolumeRequest is the request message for computing total volume
@@ -235,7 +235,7 @@ message VolumeRequest {
 
 // VolumeResponse contains the computed volume
 message VolumeResponse {
-  utils.Variant value = 1;  // The total volume of the specified cell zones
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The total volume of the specified cell zones
 }
 
 // VolumeAveRequest is the request message for computing volume-weighted average
@@ -246,7 +246,7 @@ message VolumeAveRequest {
 
 // VolumeAveResponse contains the computed volume-weighted average
 message VolumeAveResponse {
-  utils.Variant value = 1;  // The volume-weighted average value
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The volume-weighted average value
 }
 
 // VolumeIntRequest is the request message for computing volume integral
@@ -257,7 +257,7 @@ message VolumeIntRequest {
 
 // VolumeIntResponse contains the computed volume integral
 message VolumeIntResponse {
-  utils.Variant value = 1;  // The volume integral value
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The volume integral value
 }
 
 // MomentRequest is the request message for computing moment about the origin
@@ -268,7 +268,7 @@ message MomentRequest {
 
 // MomentResponse contains the computed moment vector
 message MomentResponse {
-  Point value = 1;  // The moment vector components (Mx, My, Mz)
+  ansys.api.fluent.v1.common_api.Point value = 1;  // The moment vector components (Mx, My, Mz)
 }
 
 // SumRequest is the request message for computing weighted sum
@@ -280,7 +280,7 @@ message SumRequest {
 
 // SumResponse contains the computed weighted sum
 message SumResponse {
-  utils.Variant value = 1;  // The weighted sum value
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The weighted sum value
 }
 
 // SumIfRequest is the request message for computing conditional weighted sum
@@ -293,5 +293,5 @@ message SumIfRequest {
 
 // SumIfResponse contains the computed conditional weighted sum
 message SumIfResponse {
-  utils.Variant value = 1;  // The weighted sum value where condition is true
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The weighted sum value where condition is true
 }
