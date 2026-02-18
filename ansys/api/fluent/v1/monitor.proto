@@ -112,8 +112,22 @@ message GetMonitorsResponse {
   repeated MonitorSet monitor_sets = 1;
 }
 
+// Filter criteria applied when streaming monitor data.
+message MonitorFilter {
+  // Restrict results to samples with the specified x-axis type.
+  XAxisType x_axis_type = 1;
+
+  // Restrict results to the specified monitor names.
+  repeated string monitor_names = 2;
+
+  // Restrict results to the specified sampling frequency.
+  sint32 frequency = 3;
+}
+
 // Request message for BeginStreaming.
 message StreamingRequest {
+  // Optional filters for the monitor stream.
+  repeated MonitorFilter filters = 1;
 }
 
 // Response streamed by BeginStreaming.

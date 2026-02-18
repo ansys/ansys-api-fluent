@@ -84,10 +84,17 @@ message GetMonitorsResponse {
   repeated MonitorSet monitorset = 1;
 }
 
+message MonitorFilter {
+  XAxisType xaxistype = 1;
+  repeated string name = 2;
+  sint32 frequency = 3;
+}
+
 /**
  * Streaming Request.
  */
 message StreamingRequest {
+  repeated MonitorFilter filter = 2;
 }
 
 /**
