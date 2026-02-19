@@ -6,9 +6,9 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.app_utilities;
 
-// AppUtilities provides small, generally useful operations that do not belong to a more specific service.
-// Typical uses include retrieving version/build metadata, toggling feature flags, and controlling the app
-// lifecycle (for example, exiting or changing the working directory).
+// AppUtilities provides operations that span the Fluent application lifecycle but do not belong
+// to a domain-specific service. Typical uses include retrieving version and build metadata, managing
+// feature flags, and controlling application startup and shutdown.
 service AppUtilities {
   // Returns the product version of the running application.
   rpc GetProductVersion(GetProductVersionRequest) returns (GetProductVersionResponse);
@@ -56,13 +56,13 @@ service AppUtilities {
   // This mechanism is useful when a client must perform an action at deterministic points in the solve.
 
   // Registers the client so the solver pauses when a selected solution event occurs.
-  rpc RegisterPauseOnSolutionEvents(RegisterPauseSolutionEventsRequest) returns (RegisterPauseSolutionEventsResponse);
+  rpc RegisterSolutionEventsPause(RegisterSolutionEventsPauseRequest) returns (RegisterSolutionEventsPauseResponse);
 
   // Resumes solver execution after a pause triggered by a solution event.
-  rpc ResumeOnSolutionEvent(ResumeSolutionEventRequest) returns (ResumeSolutionEventResponse);
+  rpc ResumeSolutionEvent(ResumeSolutionEventRequest) returns (ResumeSolutionEventResponse);
 
   // Unregisters a prior pause-on-solution-event registration.
-  rpc UnregisterPauseOnSolutionEvents(UnregisterPauseSolutionEventsRequest) returns (UnregisterPauseSolutionEventsResponse);
+  rpc UnregisterSolutionEventsPause(UnregisterSolutionEventsPauseRequest) returns (UnregisterSolutionEventsPauseResponse);
 
   // Terminates the application.
   rpc Exit(ExitRequest) returns (ExitResponse);
@@ -216,13 +216,13 @@ message IsSolutionDataAvailableResponse {
 
 // Registers interest in a specific solution event. When the event occurs, the solver pauses and waits
 // until the client explicitly resumes it.
-message RegisterPauseSolutionEventsRequest {
+message RegisterSolutionEventsPauseRequest {
   // Solution event that triggers a pause.
   SolutionEvent solution_event = 1;
 }
 
 // Contains the registration identifier.
-message RegisterPauseSolutionEventsResponse {
+message RegisterSolutionEventsPauseResponse {
   // Registration id used to resume and/or unregister this pause registration.
   int64 registration_id = 1;
 }
@@ -238,13 +238,13 @@ message ResumeSolutionEventResponse {
 }
 
 // Unregisters from pause on solution events.
-message UnregisterPauseSolutionEventsRequest {
+message UnregisterSolutionEventsPauseRequest {
   // Identifier of the registration to unregister.
   int64 registration_id = 1;
 }
 
 // Result of unregistering.
-message UnregisterPauseSolutionEventsResponse {
+message UnregisterSolutionEventsPauseResponse {
 }
 
 // Requests to exit the application.
