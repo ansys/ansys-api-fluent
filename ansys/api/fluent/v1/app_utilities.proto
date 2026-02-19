@@ -42,18 +42,19 @@ service AppUtilities {
   // IsSolutionDataAvailable checks if solution data is available.
   rpc IsSolutionDataAvailable(IsSolutionDataAvailableRequest) returns (IsSolutionDataAvailableResponse);
 
-  // RegisterPauseSolutionEvents registers the client to pause on solution events.
   // The following 3 methods are useful to execute synchronous callbacks in gRPC client on solution
   // events such as iteration or time-step advancement. An implementation of such mechanism will look like:
   // 1. After each solution event, the solver will send a paused event to clients and pause itself.
   // 2. The registered client will receive the paused event and execute the callback and then resume the solver.
-  rpc RegisterPauseSolutionEvents(RegisterPauseSolutionEventsRequest) returns (RegisterPauseSolutionEventsResponse);
+
+  // RegisterPauseSolutionEvents registers the client to pause on solution events.
+  rpc RegisterPauseOnSolutionEvents(RegisterPauseSolutionEventsRequest) returns (RegisterPauseSolutionEventsResponse);
 
   // ResumeSolutionEvent resumes from pause on a solution event.
-  rpc ResumeSolutionEvent(ResumeSolutionEventRequest) returns (ResumeSolutionEventResponse);
+  rpc ResumeOnSolutionEvent(ResumeSolutionEventRequest) returns (ResumeSolutionEventResponse);
 
   // UnregisterPauseSolutionEvents unregisters the client from pause on solution events.
-  rpc UnregisterPauseSolutionEvents(UnregisterPauseSolutionEventsRequest) returns (UnregisterPauseSolutionEventsResponse);
+  rpc UnregisterPauseOnSolutionEvents(UnregisterPauseSolutionEventsRequest) returns (UnregisterPauseSolutionEventsResponse);
 
   // Exit terminates the solver app.
   rpc Exit(ExitRequest) returns (ExitResponse);
