@@ -47,8 +47,8 @@ service AppUtilities {
   // 1. After each solution event, the solver will send a paused event to clients and pause itself.
   // 2. The registered client will receive the paused event and execute the callback and then resume the solver.
 
-  // RegisterPauseSolutionEvents registers the client to pause on solution events.
-  rpc RegisterPauseOnSolutionEvents(RegisterPauseOnSolutionEventsRequest) returns (RegisterPauseSolutionEventsResponse);
+  // RegisterPauseOnSolutionEvents registers the client so the solver pauses after each selected solution event.
+  rpc RegisterPauseOnSolutionEvents(RegisterPauseSolutionEventsRequest) returns (RegisterPauseSolutionEventsResponse);
 
   // ResumeSolutionEvent resumes from pause on a solution event.
   rpc ResumeOnSolutionEvent(ResumeSolutionEventRequest) returns (ResumeSolutionEventResponse);
@@ -199,7 +199,7 @@ message IsSolutionDataAvailableResponse {
   bool is_solution_data_available = 1;
 }
 
-// RegisterPauseSolutionEventsRequest registers a client to pause on solution events.
+// RegisterPauseSolutionEventsRequest registers the client so the solver pauses when the specified solution event occurs.
 message RegisterPauseSolutionEventsRequest {
   // solution_event is the event to register for.
   SolutionEvent solution_event = 1;
