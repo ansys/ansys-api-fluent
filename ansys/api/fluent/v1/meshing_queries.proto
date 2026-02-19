@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.meshing_queries;
 
-import "common_api.proto";
+import "ansys/api/fluent/v1/common_api.proto";
 
 // MeshingQueries provides mesh and object query operations.
 service MeshingQueries {

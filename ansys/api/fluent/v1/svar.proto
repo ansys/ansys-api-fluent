@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.svar;
 
-import "field_data.proto";
+import "ansys/api/fluent/v1/field_data.proto";
 
 // Svar provides RPCs for retrieving and setting SVAR data and metadata.
 service Svar {

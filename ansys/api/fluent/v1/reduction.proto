@@ -6,9 +6,9 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.reduction;
 
-import "common_api.proto";
+import "ansys/api/fluent/v1/common_api.proto";
 
-import "variant.proto";
+import "ansys/api/fluent/v1/variant.proto";
 
 // Reduction service provides operations for computing reduction operations on field data
 service Reduction {

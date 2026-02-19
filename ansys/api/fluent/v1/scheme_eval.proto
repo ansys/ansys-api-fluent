@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.scheme_eval;
 
-import "scheme_pointer.proto";
+import "ansys/api/fluent/v1/scheme_pointer.proto";
 
 // SchemeEval provides Scheme language evaluation capabilities.
 service SchemeEval {

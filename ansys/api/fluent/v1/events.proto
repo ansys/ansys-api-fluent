@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.events;
 
-import "scheme_pointer.proto";
+import "ansys/api/fluent/v1/scheme_pointer.proto";
 
 // Events provides streaming of solver and workflow events to clients.
 service Events {
