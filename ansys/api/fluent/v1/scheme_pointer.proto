@@ -1,0 +1,52 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.scheme_pointer;
+
+// Empty represents an empty or null state.
+message Empty {
+}
+
+// SchemePointer represents a Scheme language data structure that can hold various types of values.
+// It uses a oneof field to represent different Scheme data types including symbols, pairs, lists,
+// numbers, characters, strings, and booleans.
+message SchemePointer {
+  // SchemePair represents a cons pair structure (car and cdr) from Scheme.
+  message SchemePair {
+    // car is the first element of the pair.
+    SchemePointer car = 1;
+    // cdr is the rest of the pair.
+    SchemePointer cdr = 2;
+  }
+
+  // SchemeList represents a list of Scheme pointers.
+  message SchemeList {
+    // item is a repeated field of Scheme pointers.
+    repeated SchemePointer items = 1;
+  }
+
+  // val is the value stored in this SchemePointer, which can be one of several types.
+  oneof val {
+    // empty indicates an empty or null value.
+    Empty empty = 1;
+    // sym is a Scheme symbol value.
+    string sym = 2;
+    // pair is a cons pair (car-cdr) value.
+    SchemePair pair = 3;
+    // list is a Scheme list value.
+    SchemeList list = 9;
+    // flonum is a Scheme floating-point number value.
+    double flonum = 4;
+    // fixednum is a Scheme fixed-point (integer) number value.
+    sint64 fixednum = 5;
+    // c is a Scheme character value.
+    string c = 6;
+    // str is a Scheme string value.
+    string str = 7;
+    // b is a Scheme boolean value.
+    bool b = 8;
+  }
+}

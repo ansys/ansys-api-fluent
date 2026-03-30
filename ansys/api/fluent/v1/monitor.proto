@@ -1,0 +1,140 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.monitor;
+
+// Monitor service for querying monitor metadata and streaming monitor data.
+service Monitor {
+  // Get monitor set definitions (names and properties such as labels and title).
+  rpc GetMonitors(GetMonitorsRequest) returns (GetMonitorsResponse);
+
+  // Begin streaming monitor data (x-values and corresponding y-values).
+  rpc BeginStreaming(StreamingRequest) returns (stream StreamingResponse);
+}
+
+// Monitor category.
+enum MonitorType {
+  // Default value. Do not use.
+  MONITOR_TYPE_UNSPECIFIED = 0;
+
+  // Solver residual monitors.
+  MONITOR_TYPE_RESIDUAL = 1;
+
+  // Solution monitors.
+  MONITOR_TYPE_SOLUTION = 2;
+}
+
+// X-axis type.
+enum XAxisType {
+  // Default value. Do not use.
+  XAXIS_TYPE_UNSPECIFIED = 0;
+
+  // Iteration axis.
+  XAXIS_TYPE_ITERATION = 1;
+
+  // Time axis.
+  XAXIS_TYPE_TIME = 2;
+}
+
+// Unit conversion information.
+message UnitData {
+  // Unit name.
+  string name = 1;
+
+  // Unit label (for example, "Fahrenheit").
+  string unit = 2;
+
+  // Unit factor (for example, for Fahrenheit it may be 0.5555556).
+  double factor = 3;
+
+  // Unit offset (for example, for Fahrenheit it may be 459.67).
+  double offset = 4;
+}
+
+// Monitor set definition returned by GetMonitors.
+message MonitorSet {
+  // Monitor set name.
+  string name = 1;
+
+  // Monitor set title.
+  string title = 2;
+
+  // X-axis label.
+  string x_label = 3;
+
+  // Y-axis label.
+  string y_label = 4;
+
+  // Sampling frequency.
+  sint64 frequency = 5;
+
+  // Monitor set type.
+  MonitorType type = 6;
+
+  // Unit conversion info.
+  UnitData unit_info = 7;
+
+  // X-axis type.
+  XAxisType axis = 8;
+
+  // Monitor names included in this set.
+  repeated string monitors = 9;
+}
+
+// X-axis data emitted in the monitor data stream.
+message XAxisData {
+  // X-axis type.
+  XAxisType x_axis_type = 1;
+
+  // X-axis index.
+  sint64 x_axis_index = 2;
+}
+
+// Y-axis (monitor) sample emitted in the monitor data stream.
+message MonitorData {
+  // Monitor name.
+  string name = 1;
+
+  // Monitor value.
+  double value = 2;
+}
+
+// Request message for GetMonitors.
+message GetMonitorsRequest {
+}
+
+// Response message for GetMonitors.
+message GetMonitorsResponse {
+  // Monitor set definitions.
+  repeated MonitorSet monitor_sets = 1;
+}
+
+// Filter criteria applied when streaming monitor data.
+message MonitorFilter {
+  // Restrict results to samples with the specified x-axis type.
+  XAxisType x_axis_type = 1;
+
+  // Restrict results to the specified monitor names.
+  repeated string monitor_names = 2;
+
+  // Restrict results to the specified sampling frequency.
+  sint32 frequency = 3;
+}
+
+// Request message for BeginStreaming.
+message StreamingRequest {
+  // Optional filters for the monitor stream.
+  repeated MonitorFilter filters = 1;
+}
+
+// Response streamed by BeginStreaming.
+message StreamingResponse {
+  // X-axis data for this sample.
+  XAxisData x_axis_data = 1;
+
+  // Y-axis values (one per monitor).
+  repeated MonitorData y_axis_values = 2;
+}

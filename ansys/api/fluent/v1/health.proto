@@ -1,0 +1,55 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.health;
+
+// HealthCheckRequest specifies the target service to check.
+message HealthCheckRequest {
+  // Service name to check. If empty, the server may return
+  // the overall process status depending on implementation.
+  string service = 1;
+}
+
+// HealthCheckResponse returns the serving status for the requested service.
+message HealthCheckResponse {
+  // ServingStatus indicates whether a service is able to serve requests.
+  enum ServingStatus {
+    // Default value. Serving status is unspecified.
+    SERVING_STATUS_UNSPECIFIED = 0;
+    // The service is currently serving requests.
+    SERVING_STATUS_SERVING = 1;
+    // The service is not currently serving requests.
+    SERVING_STATUS_NOT_SERVING = 2;
+    // Used only by the Watch method when the requested service is unknown.
+    SERVING_STATUS_SERVICE_UNKNOWN = 3;  // Used only by the Watch method.
+  }
+  // The serving status of the requested service.
+  ServingStatus status = 1;
+}
+
+// Health provides RPCs to query and watch service health.
+service Health {
+  // If the requested service is unknown, the call will fail with status
+  // NOT_FOUND.
+  rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
+
+  // Performs a watch for the serving status of the requested service.
+  // The server will immediately send back a message indicating the current
+  // serving status.  It will then subsequently send a new message whenever
+  // the service's serving status changes.
+  //
+  // If the requested service is unknown when the call is received, the
+  // server will send a message setting the serving status to
+  // SERVICE_UNKNOWN but will *not* terminate the call.  If at some
+  // future point, the serving status of the service becomes known, the
+  // server will send a new message with the service's serving status.
+  //
+  // If the call terminates with status UNIMPLEMENTED, then clients
+  // should assume this method is not supported and should not retry the
+  // call.  If the call terminates with any other status (including OK),
+  // clients should retry the call with appropriate exponential backoff.
+  rpc Watch(HealthCheckRequest) returns (stream HealthCheckResponse);
+}

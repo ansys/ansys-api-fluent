@@ -1,0 +1,243 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.settings;
+
+// SettingsService provides operations for managing and querying Fluent settings objects
+service SettingsService {
+  /* Static info about objects (type, children, commands, arguments,
+     object-type) in a recursive manner. */
+  rpc GetStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse);
+
+  /* Get the value of a path */
+  rpc GetVar(GetVarRequest) returns (GetVarResponse);
+
+  /* Set the value of a path */
+  rpc SetVar(SetVarRequest) returns (SetVarResponse);
+
+  /* Rename an object */
+  rpc Rename(RenameRequest) returns (RenameResponse);
+
+  /* Create a new object */
+  rpc Create(CreateRequest) returns (CreateResponse);
+
+  /* Delete an object */
+  rpc Delete(DeleteRequest) returns (DeleteResponse);
+
+  /* Get the current list of object names */
+  rpc GetObjectNames(GetObjectNamesRequest) returns (GetObjectNamesResponse);
+
+  /* Get the number of elements in a list object */
+  rpc GetListSize(GetListSizeRequest) returns (GetListSizeResponse);
+
+  /* Resize a list object */
+  rpc ResizeListObject(ResizeListObjectRequest) returns (ResizeListObjectResponse);
+
+  /* Execute a command */
+  rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse);
+
+  /* Execute a query */
+  rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse);
+
+  /* Attribute access */
+  rpc GetAttrs(GetAttrsRequest) returns (GetAttrsResponse);
+}
+
+// Value represents the value of an object -- return value of GetVar
+message Value {
+  // ValueList represents a list of Value objects
+  message ValueList {
+    repeated Value lsts = 1;  // The list of values
+  };
+  // ValueMap represents a map with string keys and Value values
+  message ValueMap {
+    map<string, Value> m = 1;  // The map entries
+  };
+  oneof value {
+    bool boolean = 2;           // Boolean value
+    int64 integer = 3;          // Integer value
+    double real = 4;            // Real (double-precision floating-point) value
+    string string = 5;          // String value
+    ValueList value_list = 10;  // List of values
+    ValueMap value_map = 11;    // Map of values
+  };
+}
+
+// PathInfo represents the location of an object in the settings hierarchy
+message PathInfo {
+  string root = 1;  // The root of the settings tree
+  string path = 2;  // The path to the object from the root
+}
+
+// StaticInfoMap represents a named entry in static information maps
+message StaticInfoMap {
+  string name = 1;       // The name of the entry
+  StaticInfo value = 2;  // The static information associated with this entry
+}
+
+// StaticInfo contains comprehensive static information about a settings object
+message StaticInfo {
+  // Type of the current object e.g. group, named-object.
+  string type = 1;
+  // Children of current object.
+  repeated StaticInfoMap children = 2;
+  // Commands available for current object.
+  repeated StaticInfoMap commands = 3;
+  // Arguments associated with the current command/query object.
+  repeated StaticInfoMap arguments = 4;
+  // Class template for named object instance.
+  StaticInfo object_type = 5;
+  // Help string for the current object.
+  string help = 6;
+  // Boolean indicating if the current object has list of allowed values.
+  bool has_allowed_values = 7;
+  // Boolean indicating if the named object instances of the children of the current object
+  // can be exposed as the named object instances of current object itself. E.g. boundary_conditions.
+  bool include_child_named_objects = 8;
+  // Size of the list objects with fixed size.
+  int32 list_size = 9;
+  // Boolean indicating if an instance can be created by the user for the current named-object.
+  bool user_creatable = 10;
+  // Queries available for current object.
+  repeated StaticInfoMap queries = 11;
+  // File purpose string for the current command object.
+  map<string, Value> attrs = 12;
+}
+
+// GetStaticInfoRequest is the request message for retrieving static information
+message GetStaticInfoRequest {
+  string root = 1;                     // The root path to retrieve static information from
+  repeated string optional_attrs = 2;  // Optional attributes to be returned in the static info.
+}
+
+// GetStaticInfoResponse is the response message containing static information
+message GetStaticInfoResponse {
+  StaticInfo info = 1;  // The static information for the requested object
+}
+
+// GetVarRequest is the request message for retrieving a variable value
+message GetVarRequest {
+  PathInfo path_info = 1;  // The path to the variable to retrieve
+}
+
+// GetVarResponse is the response message containing the variable value
+message GetVarResponse {
+  Value value = 1;  // The value of the requested variable
+}
+
+// SetVarRequest is the request message for setting a variable value
+message SetVarRequest {
+  PathInfo path_info = 1;  // The path to the variable to set
+  Value value = 2;         // The new value to set
+}
+
+// SetVarResponse is the response message for a set variable operation
+message SetVarResponse {
+}
+
+// CreateRequest is the request message for creating a new object
+message CreateRequest {
+  PathInfo path_info = 1;  // The path where the new object should be created
+  string name = 2;         // The name of the new object to create
+}
+
+// CreateResponse is the response message for a create object operation
+message CreateResponse {
+}
+
+// RenameRequest is the request message for renaming an object
+message RenameRequest {
+  PathInfo path_info = 1;  // The path containing the object to rename
+  string old_name = 2;     // The current name of the object
+  string new_name = 3;     // The new name for the object
+}
+
+// RenameResponse is the response message for a rename object operation
+message RenameResponse {
+}
+
+// DeleteRequest is the request message for deleting an object
+message DeleteRequest {
+  PathInfo path_info = 1;  // The path containing the object to delete
+  string name = 2;         // The name of the object to delete
+}
+
+// DeleteResponse is the response message for a delete object operation
+message DeleteResponse {
+}
+
+// GetObjectNamesRequest is the request message for retrieving object names
+message GetObjectNamesRequest {
+  PathInfo path_info = 1;  // The path to retrieve object names from
+}
+
+// GetObjectNamesResponse is the response message containing object names
+message GetObjectNamesResponse {
+  repeated string names = 1;  // The list of object names at the specified path
+}
+
+// GetListSizeRequest is the request message for retrieving the size of a list object
+message GetListSizeRequest {
+  PathInfo path_info = 1;  // The path to the list object
+}
+
+// GetListSizeResponse is the response message containing the list size
+message GetListSizeResponse {
+  int32 size = 1;  // The number of elements in the list
+}
+
+// ResizeListObjectRequest is the request message for resizing a list object
+message ResizeListObjectRequest {
+  PathInfo path_info = 1;  // The path to the list object to resize
+  int32 size = 2;          // The new size for the list
+}
+
+// ResizeListObjectResponse is the response message for a resize list object operation
+message ResizeListObjectResponse {
+}
+
+// ExecuteCommandRequest is the request message for executing a command
+message ExecuteCommandRequest {
+  PathInfo path_info = 1;  // The path to the object on which to execute the command
+  string command = 2;      // The name of the command to execute
+  Value args = 3;          // Arguments to pass to the command
+}
+
+// ExecuteCommandResponse is the response message containing command execution results
+message ExecuteCommandResponse {
+  Value reply = 1;  // The return value from the executed command
+}
+
+// ExecuteQueryRequest is the request message for executing a query
+message ExecuteQueryRequest {
+  PathInfo path_info = 1;  // The path to the object on which to execute the query
+  string query = 2;        // The name of the query to execute
+  Value args = 3;          // Arguments to pass to the query
+}
+
+// ExecuteQueryResponse is the response message containing query execution results
+message ExecuteQueryResponse {
+  Value reply = 1;  // The return value from the executed query
+}
+
+// GetAttrsRequest is the request message for retrieving attributes
+message GetAttrsRequest {
+  PathInfo path_info = 1;     // The path to the object to retrieve attributes from
+  repeated string attrs = 2;  // The list of attribute names to retrieve
+  bool recursive = 3;         // Whether to retrieve attributes recursively from child objects
+}
+
+// AttrInfoMap represents a named entry in attribute information maps
+message AttrInfoMap {
+  string name = 1;             // The name of the child object
+  GetAttrsResponse value = 2;  // The attribute information for this child object
+}
+
+// GetAttrsResponse is the response message containing attribute values
+message GetAttrsResponse {
+  Value values = 1;                         // The attribute values for the requested object
+  repeated AttrInfoMap group_children = 2;  // Attribute information for child objects (when recursive is true)
+}

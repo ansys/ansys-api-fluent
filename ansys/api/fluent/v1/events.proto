@@ -1,0 +1,177 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.events;
+
+import "ansys/api/fluent/v1/scheme_pointer.proto";
+
+// Events provides streaming of solver and workflow events to clients.
+service Events {
+  // Begins streaming of events; the server sends a stream of
+  // `BeginStreamingResponse` messages until the stream is closed.
+  rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse);
+}
+
+// Event at start of the time step.
+message TimestepStartedEvent {
+  sint64 index = 1;  // Time step index.
+  double size = 2;   // Time step size.
+}
+
+// Event at end of the time step.
+message TimestepEndedEvent {
+  sint64 index = 1;  // Time step index.
+  double size = 2;   // Time step size.
+}
+
+// Event at start of the iteration.
+message IterationStartedEvent {
+  sint64 index = 1;  // Iteration index.
+}
+
+// Event at end of the iteration.
+message IterationEndedEvent {
+  sint64 index = 1;  // Iteration index.
+}
+
+// Event at start of calculation.
+message CalculationsStartedEvent {
+}
+
+// Event at end of calculation.
+message CalculationsEndedEvent {
+}
+
+// Event when calculations are paused.
+message CalculationsPausedEvent {
+}
+// Event when calculations are resumed.
+message CalculationsResumedEvent {
+}
+
+// Event before a case file is read.
+message PreReadCaseEvent {
+  string case_file_path = 1;  // Case file path.
+}
+
+// Event after a case file is read.
+message CaseReadEvent {
+  string case_file_path = 1;  // Case file path.
+}
+
+// Event before a data file is read.
+message PreReadDataEvent {
+  string data_file_path = 1;  // Data file path.
+}
+
+// Event after a data file is read.
+message DataReadEvent {
+  string data_file_path = 1;  // Data file path.
+}
+
+// Event before solution initialization.
+message PreInitializeEvent {
+}
+
+// Event after solution initialization.
+message InitializedEvent {
+}
+
+// Event when a report definition changes.
+message ReportDefinitionChangedEvent {
+  string report_definition_name = 1;  // Name of the report definition that changed.
+}
+
+// Event when a plot set changes.
+message PlotSetChangedEvent {
+  string plot_set_name = 1;  // Name of the plot set that changed.
+}
+
+// Event when residual plot settings change.
+message ResidualPlotChangedEvent {
+}
+
+// Event after settings are cleared.
+message ClearSettingsDoneEvent {
+}
+
+// Event when auto-pause occurs.
+message AutoPauseEvent {
+  sint32 level = 1;  // Auto-pause level.
+  sint64 index = 2;  // Associated iteration or time-step index.
+}
+
+// Event during solution progress.
+message ProgressEvent {
+  string message = 1;           // Progress Message.
+  sint32 percent_complete = 2;  // Percent completed.
+}
+
+// Event estimating remaining solver time.
+message SolverTimeEstimateEvent {
+  double hours = 1;    // Estimated hours remaining.
+  double minutes = 2;  // Estimated minutes remaining.
+  double seconds = 3;  // Estimated seconds remaining.
+}
+
+// Event when a fatal error is encountered.
+message ErrorEvent {
+  string message = 1;     // Error message.
+  sint32 error_code = 2;  // Error code.
+}
+
+// Event when a command completes.
+message CommandCompletedEvent {
+}
+
+// Request to begin streaming events.
+message BeginStreamingRequest {
+}
+
+// Event when the data model changes.
+message DataModelChangedEvent {
+  repeated string paths = 1;  // Data model paths that changed.
+}
+
+// Event to execute a function call in the client.
+message ClientExecuteEvent {
+  string function = 1;                                                      // Client-side function to invoke.
+  repeated ansys.api.fluent.v1.scheme_pointer.SchemePointer arguments = 2;  // Arguments passed to the function.
+}
+
+// BeginStreamingResponse contains the server-streamed event union.
+message BeginStreamingResponse {
+  // Union of all possible events streamed by the server.
+  oneof as {
+    PreReadCaseEvent pre_read_case_event = 1;                           // Before reading a case file.
+    CaseReadEvent case_read_event = 2;                                  // After reading a case file.
+    PreInitializeEvent pre_initialize_event = 3;                        // Before solution initialization.
+    InitializedEvent initialized_event = 4;                             // After solution initialization.
+    PreReadDataEvent pre_read_data_event = 5;                           // Before reading a data file.
+    DataReadEvent data_read_event = 6;                                  // After reading a data file.
+    IterationStartedEvent iteration_started_event = 7;                  // Iteration start.
+    IterationEndedEvent iteration_ended_event = 8;                      // Iteration end.
+    TimestepStartedEvent timestep_started_event = 9;                    // Time step start.
+    TimestepEndedEvent timestep_ended_event = 10;                       // Time step end.
+    CalculationsStartedEvent calculations_started_event = 11;           // Calculations start.
+    CalculationsEndedEvent calculations_ended_event = 12;               // Calculations end.
+    ReportDefinitionChangedEvent report_definition_changed_event = 13;  // Report definition changed.
+    PlotSetChangedEvent plot_set_changed_event = 14;                    // Plot set changed.
+    ResidualPlotChangedEvent residual_plot_changed_event = 15;          // Residual plot changed.
+    ClearSettingsDoneEvent clear_settings_done_event = 16;              // Settings cleared.
+    AutoPauseEvent auto_pause_event = 17;                               // Auto-pause occurred.
+    CalculationsPausedEvent calculations_paused_event = 18;             // Calculations paused.
+    CalculationsResumedEvent calculations_resumed_event = 19;           // Calculations resumed.
+
+    // Fraction of operation completed.
+    ProgressEvent progress_event = 20;                        // Progress update.
+    ErrorEvent error_event = 21;                              // Fatal error encountered.
+    CommandCompletedEvent command_completed_event = 22;       // Command completed.
+    DataModelChangedEvent data_model_changed_event = 23;      // Data model changed.
+    SolverTimeEstimateEvent solver_time_estimate_event = 24;  // Remaining time estimate.
+    ClientExecuteEvent client_execute_event = 25;             // Client-side function execution.
+  }
+}

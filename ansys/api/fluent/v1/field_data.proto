@@ -1,0 +1,694 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.field_data;
+
+// FieldData service provides operations for retrieving field data from Fluent simulations
+service FieldData {
+  // BeginFieldsStreaming initiates streaming of field data
+  rpc BeginFieldsStreaming(BeginFieldsStreamingRequest) returns (stream BeginFieldsStreamingResponse) {}
+
+  // GetFields retrieves multiple types of fields (scalar, vector, surfaces) in a single request
+  rpc GetFields(GetFieldsRequest) returns (stream GetFieldsResponse);
+
+  // GetRange retrieves the scalar field range (min/max values)
+  rpc GetRange(GetRangeRequest) returns (GetRangeResponse) {}
+
+  // GetSurfacesInfo retrieves information about available surfaces
+  rpc GetSurfacesInfo(GetSurfacesInfoRequest) returns (GetSurfacesInfoResponse) {}
+
+  // GetVectorFieldsInfo retrieves information about available vector fields
+  rpc GetVectorFieldsInfo(GetVectorFieldsInfoRequest) returns (GetVectorFieldsInfoResponse) {}
+
+  // GetFieldsInfo retrieves information about available scalar fields
+  rpc GetFieldsInfo(GetFieldsInfoRequest) returns (GetFieldsInfoResponse) {}
+
+  // GetSurfaces retrieves surface geometry data
+  rpc GetSurfaces(GetSurfacesRequest) returns (stream GetSurfacesResponse) {}
+
+  // GetScalarField retrieves scalar field data on surfaces
+  rpc GetScalarField(GetScalarFieldRequest) returns (stream GetScalarFieldResponse) {}
+
+  // GetVectorField retrieves vector field data on surfaces
+  rpc GetVectorField(GetVectorFieldRequest) returns (stream GetVectorFieldResponse) {}
+
+  // GetPathlinesField retrieves pathlines field data for particle tracking visualization
+  rpc GetPathlinesField(GetPathlinesFieldRequest) returns (stream GetPathlinesFieldResponse) {}
+
+  // GetParticleTracksField retrieves particle tracks field data
+  rpc GetParticleTracksField(GetParticleTracksFieldRequest) returns (stream GetParticleTracksFieldResponse) {}
+
+  // IsBoundaryValuesEnabled checks if boundary values are enabled
+  rpc IsBoundaryValuesEnabled(IsBoundaryValuesEnabledRequest) returns (IsBoundaryValuesEnabledResponse) {}
+
+  // GetSolverMeshNodesDouble retrieves solver mesh nodes with double precision coordinates
+  rpc GetSolverMeshNodesDouble(GetSolverMeshNodesRequest) returns (stream GetSolverMeshNodesDoubleResponse) {}
+
+  // GetSolverMeshNodesFloat retrieves solver mesh nodes with float precision coordinates
+  rpc GetSolverMeshNodesFloat(GetSolverMeshNodesRequest) returns (stream GetSolverMeshNodesFloatResponse) {}
+
+  // GetSolverMeshElements retrieves solver mesh elements (cells)
+  rpc GetSolverMeshElements(GetSolverMeshElementsRequest) returns (stream GetSolverMeshElementsResponse) {}
+}
+
+// Empty represents an empty or null state
+message Empty {
+}
+
+// DoublePayload contains an array of double-precision floating-point values
+message DoublePayload {
+  repeated double payloads = 1;  // The array of double values
+}
+
+// FloatPayload contains an array of single-precision floating-point values
+message FloatPayload {
+  repeated float payloads = 1;  // The array of float values
+}
+
+// IntPayload contains an array of 32-bit signed integer values
+message IntPayload {
+  repeated sint32 payloads = 1;  // The array of integer values
+}
+
+// LongPayload contains an array of 64-bit signed integer values
+message LongPayload {
+  repeated sint64 payloads = 1;  // The array of long integer values
+}
+
+/**
+ * Field Type
+ */
+enum FieldType {
+  FIELD_TYPE_UNSPECIFIED = 0;   // Unspecified field type
+  FIELD_TYPE_INT_ARRAY = 1;     // Integer array
+  FIELD_TYPE_LONG_ARRAY = 2;    // Long array
+  FIELD_TYPE_FLOAT_ARRAY = 3;   // Float array
+  FIELD_TYPE_DOUBLE_ARRAY = 4;  // Double array
+}
+
+/**
+ * Payload tag, provides extra information about payload.
+ * For example it tells if payload data corresponds to cell or node location
+ * or it contains boundary values etc.
+ */
+enum PayloadTag {
+  PAYLOAD_TAG_UNSPECIFIED = 0;       // Unspecified payload tag
+  PAYLOAD_TAG_OVERSET_MESH = 1;      // This tag is set if oversetMesh flag in SurfaceRequest is set to True
+  PAYLOAD_TAG_ELEMENT_LOCATION = 2;  // This tag is set if dataLocation in ScalarFieldRequest is Elements
+  PAYLOAD_TAG_NODE_LOCATION = 3;     // This tag is set if dataLocation in ScalarFieldRequest is Nodes
+  PAYLOAD_TAG_BOUNDARY_VALUES = 4;   // This tag is set if provideBoundaryValues in ScalarFieldRequest is set to True
+}
+
+/**
+ * Request information. It is passed along with PayloadInfo.
+ */
+message FieldRequestInfo {
+  oneof request {
+    SurfaceRequest surface_request = 1;                 // Surface request info.
+    ScalarFieldRequest scalar_field_request = 2;        // Scalar field request info.
+    VectorFieldRequest vector_field_request = 3;        // Vector field request info.
+    PathlinesFieldRequest pathlines_field_request = 4;  // Pathlines field request info.
+  }
+}
+
+/**
+ * Information about payload
+ */
+message PayloadInfo {
+  uint64 surface_id = 1;                                     // Surface id corresponding to field data.
+  string field_name = 2;                                     // Field name e.g. vertices, faces, temperature, vector etc.
+  FieldType field_type = 3;                                  // Field type.
+  uint64 field_size = 4;                                     // Field size. For bytes it will be number of bytes otherwise array size.
+  repeated PayloadTag payload_tags = 5 [deprecated = true];  // PayloadTag to provide extra information about payload.
+  FieldRequestInfo field_request_info = 6;                   // Request info for the payload.
+}
+
+/**
+ * GetFieldsResponse can be either bytePayload or one of double/float/long/int payload.
+ * Whether data is sent as bytes or as arrays of double/float/long/int depends upon value
+ * of provideBytesStream in GetFieldsRequest. During streaming first payloadInfo is
+ * streamed and then corresponding data is streamed.
+ */
+message GetFieldsResponse {
+  oneof chunk {
+    bytes byte_payload = 1;            // Bytes payload.
+    DoublePayload double_payload = 2;  // Double payload.
+    FloatPayload float_payload = 3;    // Float payload.
+    LongPayload long_payload = 4;      // Long payload.
+    IntPayload int_payload = 5;        // Int payload.
+    PayloadInfo payload_info = 6;      // Payload info.
+  }
+}
+
+/**
+ * Request to stream fields.
+ * - Default chunk size is 256KB. Minimum chunk size is 8B and Maximum is 4MB.
+ * - If true chunks of bytes will be streamed. Otherwise chunks of int/long/float or double array will be streamed.
+ */
+message BeginFieldsStreamingRequest {
+  uint32 chunk_size = 1;          // Chunk size in bytes.
+  bool provide_bytes_stream = 2;  // Bytes are streamed if true
+}
+
+/**
+ * BeginFieldsStreamingResponse can be either bytePayload or one of double/float/long/int payload.
+ * Whether data is sent as bytes or as arrays of double/float/long/int depends upon value
+ * of provideBytesStream in BeginFieldsStreamingRequest. During streaming first payloadInfo is
+ * streamed and then corresponding data is streamed.
+ */
+message BeginFieldsStreamingResponse {
+  oneof chunk {
+    bytes byte_payload = 1;            // Bytes payload.
+    DoublePayload double_payload = 2;  // Double payload.
+    FloatPayload float_payload = 3;    // Float payload.
+    LongPayload long_payload = 4;      // Long payload.
+    IntPayload int_payload = 5;        // Int payload.
+    PayloadInfo payload_info = 6;      // Payload info.
+  }
+}
+
+/**
+ * Request for surface data.
+ * Surface data consists of information about vertices and faces.
+ */
+message SurfaceRequest {
+  uint64 surface_id = 1;            // Surface id.
+  bool overset_mesh = 2;            // Provide overset mesh.
+  bool provide_vertices = 3;        // Provide vectices.
+  bool provide_faces = 4;           // Provide face to vertex connectivity.
+  bool provide_faces_centroid = 5;  // Provide face centroids.
+  bool provide_faces_normal = 6;    // Provide face normals.
+}
+
+// DataLocation specifies where data is located in the mesh
+enum DataLocation {
+  DATA_LOCATION_UNSPECIFIED = 0;  // Unspecified location
+  DATA_LOCATION_NODES = 1;        // Data is located at mesh nodes
+  DATA_LOCATION_ELEMENTS = 2;     // Data is located at mesh elements (cells)
+}
+
+/**
+ * Request for scalar field data
+ */
+message ScalarFieldRequest {
+  uint64 surface_id = 1;             // Surface id for scalar field.
+  string scalar_field_name = 2;      // Scalar field name.
+  DataLocation data_location = 3;    // Scalar Field location (Nodes/Elements).
+  bool provide_boundary_values = 4;  // Provide boundary values.
+}
+
+/**
+ * Request for vector field data.
+ */
+message VectorFieldRequest {
+  uint64 surface_id = 1;         // Surface id for vector field.
+  string vector_field_name = 2;  // Vector field name.
+}
+
+/**
+ * Request for pathlines field data.
+ */
+message PathlinesFieldRequest {
+  uint64 surface_id = 1;                 // Surface id for pathlines.
+  string field = 2;                      // Scalar Field name.
+  string additional_field = 3;           // Any additional scalar field if required for pathlines.
+  bool provide_particle_time_field = 4;  // Provide particle time field.
+  DataLocation data_location = 5;        // Scalar Field location (Nodes/Elements).
+  sint32 steps = 6;                      // Pathlines step count.
+  double step_size = 7;                  // Pathlines step size.
+  sint32 skip = 8;                       // Pathlines skip count.
+  bool reverse = 9;                      // Flag to plot pathlines in reverse direction.
+  bool accuracy_control_enabled = 10;    // Pathlines accuracy control flag.
+  double tolerance = 11;                 // Pathlines tolerance.
+  sint32 coarsen = 12;                   // Pathlines coarsen value.
+  string velocity_domain = 13;           // Pathlines velocity domain.
+  repeated string zones = 14;            // Pathlines zones.
+}
+
+/**
+ * Request for fields.
+ * - Default chunk size is 256KB. Minimum chunk size is 8B and Maximum is 4MB.
+ * - If true chunks of bytes will be streamed. Otherwise chunks of int/long/float or double array will be streamed.
+ */
+message GetFieldsRequest {
+  uint32 chunk_size = 1;                                        // Chunk size in bytes.
+  bool provide_bytes_stream = 2;                                // Bytes are streamed if true
+  repeated SurfaceRequest surface_requests = 3;                 // Surface request.
+  repeated ScalarFieldRequest scalar_field_requests = 4;        // Scalar field request.
+  repeated VectorFieldRequest vector_field_requests = 5;        // Vector field request.
+  repeated PathlinesFieldRequest pathlines_field_requests = 6;  // Pathlines field request.
+}
+
+// DataStampingType specifies the type of data stamping for solution data
+enum DataStampingType {
+  DATA_STAMPING_TYPE_UNSPECIFIED = 0;      // Unspecified stamping type
+  DATA_STAMPING_TYPE_ITERATION_INDEX = 1;  // Iteration index
+  DATA_STAMPING_TYPE_TIME_STEP_INDEX = 2;  // Time step index
+  DATA_STAMPING_TYPE_FLOW_TIME = 3;        // Flow time
+  DATA_STAMPING_TYPE_SOLID_TIME = 4;       // Solid time
+  DATA_STAMPING_TYPE_CASE_ID = 5;          // Case identifier
+  DATA_STAMPING_TYPE_MESH_ID = 6;          // Mesh identifier
+  DATA_STAMPING_TYPE_DATA_ID = 7;          // Data identifier
+}
+
+// DataStamping contains stamping information for solution data
+message DataStamping {
+  DataStampingType data_stamping_type = 1;  // The type of data stamping
+  oneof as {
+    double doublevalue = 2;  // Double-precision value for stamping
+    sint64 intvalue = 3;     // Integer value for stamping
+  }
+}
+
+// UnitInfo contains unit system information for field data
+message UnitInfo {
+  string name = 1;    // The name of the quantity
+  string unit = 2;    // The unit string
+  double factor = 3;  // Unit conversion factor
+  double offset = 4;  // Unit conversion offset
+  string label = 5;   // Display label for the unit
+}
+
+// DataStampingInfo contains a collection of data stamping entries
+message DataStampingInfo {
+  repeated DataStamping data_stampings = 1;  // The list of data stamping entries
+}
+
+// SurfaceId uniquely identifies a surface
+message SurfaceId {
+  sint64 id = 1;  // The surface identifier
+}
+
+// GetSurfacesRequest is the request message for retrieving surface geometry
+message GetSurfacesRequest {
+  repeated SurfaceId surface_ids = 1;         // The surface IDs to retrieve
+  bool overset_mesh = 2;                      // Whether to include overset mesh data
+  DataStampingInfo data_stamping_info = 3;    // Data stamping information
+  repeated SurfaceId available_surfaces = 4;  // Available surfaces for validation
+}
+
+// SurfaceMetaData contains metadata for surface data
+message SurfaceMetaData {
+  DataStampingInfo data_stamping_info = 1;  // Data stamping information
+  UnitInfo length_unit = 2;                 // Length unit information
+}
+
+// Coordinate represents a 3D point in space
+message Coordinate {
+  double x = 1;  // X coordinate
+  double y = 2;  // Y coordinate
+  double z = 3;  // Z coordinate
+}
+
+// Facet represents a face defined by node indices
+message Facet {
+  repeated sint32 nodes = 1;  // Node indices defining the facet
+}
+
+// SurfaceInfo contains information about a surface
+message SurfaceInfo {
+  repeated SurfaceId surface_ids = 1;  // The surface identifiers
+  SurfaceId zone_id = 2;               // The zone identifier
+  string surface_name = 3;             // The name of the surface
+  string zone_type = 4;                // The type of zone
+  string type = 5;                     // The surface type
+}
+
+// SurfaceData contains geometry data for a surface
+message SurfaceData {
+  SurfaceId surface_id = 1;        // The surface identifier
+  repeated Coordinate points = 2;  // The vertex coordinates
+  repeated Facet facets = 3;       // The face connectivity
+  oneof as {
+    Empty empty_state = 5;                 // Empty state indicator
+    SurfaceMetaData surface_metadata = 6;  // Surface metadata
+  }
+}
+
+// GetSurfacesResponse is the streaming response containing surface data
+message GetSurfacesResponse {
+  SurfaceData surface_data = 1;  // The surface data
+}
+
+// GetRangeRequest is the request message for retrieving field range
+message GetRangeRequest {
+  string field_name = 1;               // The name of the field
+  repeated SurfaceId surface_ids = 2;  // The surface IDs to query
+  bool node_value = 3;                 // Whether to get node values (vs element values)
+}
+
+// GetRangeResponse contains the minimum and maximum values of a field
+message GetRangeResponse {
+  double minimum = 1;  // The minimum field value
+  double maximum = 2;  // The maximum field value
+}
+
+// FieldInfo contains metadata about a scalar field
+message FieldInfo {
+  string display_name = 1;   // Display name for UI
+  string solver_name = 2;    // Internal solver name
+  string section = 3;        // Section or category
+  string domain = 4;         // Domain information
+  string quantity_name = 5;  // Physical quantity name
+}
+
+// GetFieldsInfoRequest is the request message for retrieving available fields
+message GetFieldsInfoRequest {
+}
+
+// GetFieldsInfoResponse contains information about available scalar fields
+message GetFieldsInfoResponse {
+  repeated FieldInfo field_info = 1;  // The list of available fields
+}
+
+// GetVectorFieldsInfoRequest is the request message for retrieving available vector fields
+message GetVectorFieldsInfoRequest {
+}
+
+// VectorFieldInfo contains metadata about a vector field
+message VectorFieldInfo {
+  string display_name = 1;  // Display name for UI
+  string x_component = 2;   // X component field name
+  string y_component = 3;   // Y component field name
+  string z_component = 4;   // Z component field name
+}
+
+// GetVectorFieldsInfoResponse contains information about available vector fields
+message GetVectorFieldsInfoResponse {
+  repeated VectorFieldInfo vector_field_info = 1;  // The list of available vector fields
+}
+
+// GetSurfacesInfoRequest is the request message for retrieving surface information
+message GetSurfacesInfoRequest {
+}
+
+// GetSurfacesInfoResponse contains information about available surfaces
+message GetSurfacesInfoResponse {
+  repeated SurfaceInfo surface_info = 1;  // The list of available surfaces
+}
+
+// GetScalarFieldRequest is the request message for retrieving scalar field data
+message GetScalarFieldRequest {
+  repeated SurfaceId surface_ids = 1;              // The surface IDs to retrieve data for
+  string scalar_field = 2;                         // The scalar field name
+  bool node_value = 3;                             // Whether to get node values (vs element values)
+  DataStampingInfo data_stamping_info = 4;         // Data stamping information
+  repeated SurfaceId available_surfaces = 5;       // Available surfaces for validation
+  repeated SurfaceId available_scalar_fields = 6;  // Available scalar fields for validation
+  bool boundary_values = 7;                        // Whether to include boundary values
+}
+
+// GlobalRange contains the global minimum and maximum values
+message GlobalRange {
+  double global_min = 1;  // Global minimum value
+  double global_max = 2;  // Global maximum value
+}
+
+// ScalarFieldMetaData contains metadata for scalar field data
+message ScalarFieldMetaData {
+  DataStampingInfo data_stamping_info = 1;  // Data stamping information
+  UnitInfo length_unit = 2;                 // Length unit information
+  GlobalRange scalar_field_range = 3;       // Scalar field value range
+  UnitInfo scalar_field_unit = 4;           // Scalar field unit information
+}
+
+// VectorComponents represents a 3D vector
+message VectorComponents {
+  double x = 1;  // X component
+  double y = 2;  // Y component
+  double z = 3;  // Z component
+}
+
+// ScalarField contains scalar field data values
+message ScalarField {
+  repeated double data = 1;  // The scalar field values
+}
+
+// VectorField contains vector field data
+message VectorField {
+  repeated VectorComponents vector_components = 1;  // The vector components at each point
+}
+
+// ActiveField indicates which elements are active
+message ActiveField {
+  repeated sint64 actives = 1;  // Active element flags
+}
+
+// ScalarFieldData contains scalar field data on a surface
+message ScalarFieldData {
+  SurfaceId surface_id = 1;      // The surface identifier
+  SurfaceData surface_data = 2;  // The surface geometry data
+  ScalarField scalar_field = 3;  // The scalar field values
+  ActiveField active_field = 4;  // Active element indicators
+
+  oneof as {
+    Empty empty_state = 5;                          // Empty state indicator
+    ScalarFieldMetaData scalar_field_metadata = 6;  // Scalar field metadata
+  }
+}
+
+// GetScalarFieldResponse is the streaming response containing scalar field data
+message GetScalarFieldResponse {
+  ScalarFieldData scalar_field_data = 1;  // The scalar field data
+}
+
+// GetVectorFieldRequest is the request message for retrieving vector field data
+message GetVectorFieldRequest {
+  repeated SurfaceId surface_ids = 1;  // The surface IDs to retrieve data for
+  string scalar_field = 2;             // The scalar field name for coloring
+  bool node_value = 3;                 // Whether to get node values (vs element values)
+  string vector_field = 4;             // The vector field name
+
+  DataStampingInfo data_stamping_info = 6;         // Data stamping information
+  repeated SurfaceId available_surfaces = 7;       // Available surfaces for validation
+  repeated SurfaceId available_scalar_fields = 8;  // Available scalar fields for validation
+  repeated SurfaceId available_vector_fields = 9;  // Available vector fields for validation
+}
+
+// VectorFieldMetaData contains metadata for vector field data
+message VectorFieldMetaData {
+  DataStampingInfo data_stamping_info = 1;  // Data stamping information
+  UnitInfo length_unit = 2;                 // Length unit information
+  GlobalRange scalar_field_range = 3;       // Scalar field value range (for coloring)
+  UnitInfo scalar_field_unit = 4;           // Scalar field unit information
+}
+
+// VectorScale contains the scale factor for vector visualization
+message VectorScale {
+  double data = 1;  // The scale factor
+}
+
+// VectorFieldData contains vector field data on a surface
+message VectorFieldData {
+  SurfaceId surface_id = 1;      // The surface identifier
+  SurfaceData surface_data = 2;  // The surface geometry data
+  ScalarField scalar_field = 3;  // The scalar field values for coloring
+  ActiveField active_field = 4;  // Active element indicators
+  oneof as {
+    Empty empty_state = 5;                          // Empty state indicator
+    VectorFieldMetaData vector_field_metadata = 6;  // Vector field metadata
+  }
+  VectorField base = 7;           // Base position vectors
+  VectorField vector = 8;         // The vector field values
+  VectorField normal = 9;         // Surface normal vectors
+  VectorScale vector_scale = 10;  // Vector scale factor
+}
+
+// GetVectorFieldResponse is the streaming response containing vector field data
+message GetVectorFieldResponse {
+  VectorFieldData vector_field_data = 1;  // The vector field data
+}
+
+// GetPathlinesFieldRequest is the request message for retrieving pathlines data
+message GetPathlinesFieldRequest {
+  repeated SurfaceId release_froms = 1;      // Surface IDs to release particles from
+  string field1 = 2;                         // Primary scalar field for visualization
+  string field2 = 3;                         // Secondary scalar field for visualization
+  bool node_value = 4;                       // Whether to use node values
+  sint32 steps = 5;                          // Number of pathline steps
+  double step_size = 6;                      // Step size for pathline integration
+  sint32 skip = 8;                           // Number of particles to skip
+  bool reverse = 9;                          // Whether to trace pathlines in reverse
+  bool accuracy_control_enabled = 10;        // Whether accuracy control is enabled
+  double tolerance = 11;                     // Tolerance for accuracy control
+  sint32 coarsen = 12;                       // Coarsening factor for pathlines
+  string zone = 13 [deprecated = true];      // Deprecated: use zones instead
+  string velocity_domain = 14;               // Velocity domain for pathline calculation
+  DataStampingInfo data_stamping_info = 15;  // Data stamping information
+  repeated string zones = 16;                // Zones for pathline calculation
+}
+
+// PathlineMetaData contains metadata for pathline data
+message PathlineMetaData {
+  DataStampingInfo data_stamping_info = 1;  // Data stamping information
+  UnitInfo length_unit = 2;                 // Length unit information
+  GlobalRange scalar_field_range = 3;       // Scalar field value range
+  UnitInfo scalar_field_unit = 4;           // Scalar field unit information
+  GlobalRange twist_range = 5;              // Twist range for ribbon visualization
+  UnitInfo time_unit = 6;                   // Time unit information
+}
+
+// PathlineFieldData contains data for a single pathline
+message PathlineFieldData {
+  sint64 particle_id = 1;                  // Unique identifier for the particle
+  repeated double particle_positions = 2;  // Particle positions along the pathline (x,y,z triplets)
+  repeated double particle_times = 3;      // Time values along the pathline
+  repeated double field1s = 4;             // Primary field values along the pathline
+  repeated double field2s = 5;             // Secondary field values along the pathline
+  sint64 begin_step = 6;                   // Starting step index
+  sint64 end_step = 7;                     // Ending step index
+}
+
+// PathlineData contains either pathline field data or metadata
+message PathlineData {
+  oneof as {
+    PathlineFieldData pathline_field_data = 1;  // Pathline field data
+    PathlineMetaData pathline_metadata = 2;     // Pathline metadata
+  }
+}
+
+// GetPathlinesFieldResponse is the streaming response containing pathline data
+message GetPathlinesFieldResponse {
+  PathlineData pathline_data = 1;  // The pathline data
+}
+
+// ParticleTracksFilter defines filtering criteria for particle tracks
+message ParticleTracksFilter {
+  string field = 1;              // Field name to filter on
+  GlobalRange filter_range = 2;  // Range of values to filter
+  bool inside_range = 3;         // Whether to include particles inside (true) or outside (false) the range
+}
+
+// GetParticleTracksFieldRequest is the request message for retrieving particle track data
+message GetParticleTracksFieldRequest {
+  repeated string release_froms = 1;         // Names of surfaces to release particles from
+  string field1 = 2;                         // Scalar field for coloring particles
+  string field2 = 3;                         // Scalar field for sphere size or ribbon twist
+  string field3 = 4;                         // Vector field for visualization
+  string vector_field = 5;                   // Vector field name
+  bool node_value = 6;                       // Whether to use node values
+  sint32 skip = 7;                           // Number of particles to skip
+  sint32 single_stream_id = 8;               // If >= 0, track only this stream ID; if < 0, track all streams
+  sint32 coarsen = 9;                        // Coarsening factor for particle tracks
+  bool free_stream_particles = 10;           // Whether to include free stream particles
+  bool wall_film_particles = 11;             // Whether to include wall film particles
+  bool pdf_particles = 12;                   // Whether to include PDF particles
+  ParticleTracksFilter filter = 13;          // Filter for particle tracks
+  DataStampingInfo data_stamping_info = 14;  // Data stamping information
+}
+
+// ParticleTrackMetaData contains metadata for particle track data
+message ParticleTrackMetaData {
+  DataStampingInfo data_stamping_info = 1;  // Data stamping information
+  UnitInfo length_unit = 2;                 // Length unit information
+  GlobalRange scalar_field_range = 3;       // Scalar field value range
+  UnitInfo scalar_field_unit = 4;           // Scalar field unit information
+  GlobalRange twist_range = 5;              // Twist range for ribbon visualization
+  UnitInfo time_unit = 6;                   // Time unit information
+}
+
+// ParticleTrackFieldData contains data for a single particle track
+message ParticleTrackFieldData {
+  sint64 particle_id = 1;             // Unique identifier for the particle
+  ScalarField particle_position = 2;  // Particle positions along the track (x,y,z triplets)
+  ScalarField particle_time = 3;      // Time values along the track
+  ScalarField field1 = 4;             // Primary field values along the track
+  ScalarField field2 = 5;             // Secondary field values along the track
+  ScalarField field3 = 6;             // Tertiary field values along the track
+  VectorField particle_velocity = 7;  // Velocity vectors along the track
+  double particle_start_time = 8;     // Particle start time
+  double particle_end_time = 9;       // Particle end time
+}
+
+// ParticleTrackData contains either particle track field data or metadata
+message ParticleTrackData {
+  oneof as {
+    ParticleTrackFieldData particle_track_field_data = 1;  // Particle track field data
+    ParticleTrackMetaData particle_track_meta_data = 2;    // Particle track metadata
+  }
+}
+
+// GetParticleTracksFieldResponse is the streaming response containing particle track data
+message GetParticleTracksFieldResponse {
+  ParticleTrackData particle_track_data = 1;  // The particle track data
+}
+
+// IsBoundaryValuesEnabledRequest is the request message for checking boundary values status
+message IsBoundaryValuesEnabledRequest {
+}
+
+// IsBoundaryValuesEnabledResponse indicates whether boundary values are enabled
+message IsBoundaryValuesEnabledResponse {
+  bool is_boundary_values_enabled = 1;  // True if boundary values are enabled
+}
+
+// GetSolverMeshNodesRequest is the request message for retrieving mesh nodes
+message GetSolverMeshNodesRequest {
+  uint64 domain_id = 1;  // Domain identifier
+  uint64 thread_id = 2;  // Thread (zone) identifier
+}
+
+// NodeDouble represents a mesh node with double precision coordinates
+message NodeDouble {
+  uint64 id = 1;  // Node identifier
+  double x = 2;   // X coordinate
+  double y = 3;   // Y coordinate
+  double z = 4;   // Z coordinate
+}
+
+// NodeFloat represents a mesh node with single precision coordinates
+message NodeFloat {
+  uint64 id = 1;  // Node identifier
+  float x = 2;    // X coordinate
+  float y = 3;    // Y coordinate
+  float z = 4;    // Z coordinate
+}
+
+// GetSolverMeshNodesDoubleResponse is the streaming response containing double precision nodes
+message GetSolverMeshNodesDoubleResponse {
+  repeated NodeDouble nodes = 1;  // The mesh nodes
+}
+
+// GetSolverMeshNodesFloatResponse is the streaming response containing single precision nodes
+message GetSolverMeshNodesFloatResponse {
+  repeated NodeFloat nodes = 1;  // The mesh nodes
+}
+
+// GetSolverMeshElementsRequest is the request message for retrieving mesh elements
+message GetSolverMeshElementsRequest {
+  uint64 domain_id = 1;  // Domain identifier
+  uint64 thread_id = 2;  // Thread (zone) identifier
+}
+
+// CellElementType defines the types of mesh elements (cells)
+enum CellElementType {
+  CELL_ELEMENT_TYPE_UNSPECIFIED = 0;            // Unspecified or unknown element type
+  CELL_ELEMENT_TYPE_TRIANGLE = 1;               // Triangle: 3 nodes, 3 faces
+  CELL_ELEMENT_TYPE_TETRAHEDRON = 2;            // Tetrahedron: 4 nodes, 4 faces
+  CELL_ELEMENT_TYPE_QUADRILATERAL = 3;          // Quadrilateral: 4 nodes, 4 faces
+  CELL_ELEMENT_TYPE_HEXAHEDRON = 4;             // Hexahedron: 8 nodes, 6 faces
+  CELL_ELEMENT_TYPE_PYRAMID = 5;                // Pyramid: 5 nodes, 5 faces
+  CELL_ELEMENT_TYPE_WEDGE = 6;                  // Wedge (prism): 6 nodes, 5 faces
+  CELL_ELEMENT_TYPE_POLYHEDRON = 7;             // Polyhedron: arbitrary number of nodes and faces
+  CELL_ELEMENT_TYPE_GHOST = 8;                  // Ghost cell: 2 nodes, 1 face (only in 2D)
+  CELL_ELEMENT_TYPE_QUADRATIC_TETRAHEDRON = 9;  // Quadratic tetrahedron: 10 nodes, 4 faces
+  CELL_ELEMENT_TYPE_QUADRATIC_HEXAHEDRON = 10;  // Quadratic hexahedron: 20 nodes, 6 faces
+  CELL_ELEMENT_TYPE_QUADRATIC_PYRAMID = 11;     // Quadratic pyramid: 13 nodes, 5 faces
+  CELL_ELEMENT_TYPE_QUADRATIC_WEDGE = 12;       // Quadratic wedge: 15 nodes, 5 faces
+}
+
+// Element represents a mesh element (cell)
+message Element {
+  uint64 id = 1;                     // Element identifier
+  CellElementType element_type = 2;  // Element type
+  repeated uint64 node_ids = 3;      // Node IDs for standard element types
+  repeated Facet facets = 4;         // Face definitions for polyhedron element type
+}
+
+// GetSolverMeshElementsResponse is the streaming response containing mesh elements
+message GetSolverMeshElementsResponse {
+  repeated Element elements = 1;  // The mesh elements
+}

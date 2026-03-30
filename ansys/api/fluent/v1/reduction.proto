@@ -1,0 +1,297 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.reduction;
+
+import "ansys/api/fluent/v1/common_api.proto";
+
+import "ansys/api/fluent/v1/variant.proto";
+
+// Reduction service provides operations for computing reduction operations on field data
+service Reduction {
+  // Area computes the total area of specified surfaces
+  rpc Area(AreaRequest) returns (AreaResponse) {}
+  // AreaAve computes the area-weighted average of an expression over specified surfaces
+  rpc AreaAve(AreaAveRequest) returns (AreaAveResponse) {}
+  // AreaInt computes the area integral of an expression over specified surfaces
+  rpc AreaInt(AreaIntRequest) returns (AreaIntResponse) {}
+  // Centroid computes the geometric centroid of specified surfaces
+  rpc Centroid(CentroidRequest) returns (CentroidResponse) {}
+  // Count computes the number of cells/faces in specified locations
+  rpc Count(CountRequest) returns (CountResponse) {}
+  // CountIf computes the number of cells/faces where a condition is true
+  rpc CountIf(CountIfRequest) returns (CountIfResponse) {}
+  // Force computes the total force (pressure + viscous) on specified surfaces
+  rpc Force(ForceRequest) returns (ForceResponse) {}
+  // MassAve computes the mass-weighted average of an expression
+  rpc MassAve(MassAveRequest) returns (MassAveResponse) {}
+  // MassFlowAve computes the mass-flow-weighted average of an expression
+  rpc MassFlowAve(MassFlowAveRequest) returns (MassFlowAveResponse) {}
+  // MassFlowAveAbs computes the mass-flow-weighted average using absolute mass flow
+  rpc MassFlowAveAbs(MassFlowAveAbsRequest) returns (MassFlowAveAbsResponse) {}
+  // MassFlowInt computes the mass flow integral of an expression
+  rpc MassFlowInt(MassFlowIntRequest) returns (MassFlowIntResponse) {}
+  // MassInt computes the mass integral of an expression
+  rpc MassInt(MassIntRequest) returns (MassIntResponse) {}
+  // Maximum computes the maximum value of an expression over specified locations
+  rpc Maximum(MaximumRequest) returns (MaximumResponse) {}
+  // Minimum computes the minimum value of an expression over specified locations
+  rpc Minimum(MinimumRequest) returns (MinimumResponse) {}
+  // PressureForce computes the pressure force on specified surfaces
+  rpc PressureForce(PressureForceRequest) returns (PressureForceResponse) {}
+  // ViscousForce computes the viscous force on specified surfaces
+  rpc ViscousForce(ViscousForceRequest) returns (ViscousForceResponse) {}
+  // Volume computes the total volume of specified cell zones
+  rpc Volume(VolumeRequest) returns (VolumeResponse) {}
+  // VolumeAve computes the volume-weighted average of an expression
+  rpc VolumeAve(VolumeAveRequest) returns (VolumeAveResponse) {}
+  // VolumeInt computes the volume integral of an expression
+  rpc VolumeInt(VolumeIntRequest) returns (VolumeIntResponse) {}
+  // Moment computes the moment about the origin for specified surfaces
+  rpc Moment(MomentRequest) returns (MomentResponse) {}
+  // Sum computes the weighted sum of an expression over specified locations
+  rpc Sum(SumRequest) returns (SumResponse) {}
+  // SumIf computes the conditional weighted sum of an expression
+  rpc SumIf(SumIfRequest) returns (SumIfResponse) {}
+}
+
+// AreaRequest is the request message for computing surface area
+message AreaRequest {
+  repeated string locations = 1;  // Surface names or zone IDs where area is computed
+}
+
+// AreaResponse contains the computed area value
+message AreaResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The total area of the specified surfaces
+}
+
+// AreaAveRequest is the request message for computing area-weighted average
+message AreaAveRequest {
+  string expression = 1;          // Field expression to average (e.g., "temperature", "pressure")
+  repeated string locations = 2;  // Surface names or zone IDs where average is computed
+}
+
+// AreaAveResponse contains the computed area-weighted average
+message AreaAveResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The area-weighted average value
+}
+
+// AreaIntRequest is the request message for computing area integral
+message AreaIntRequest {
+  string expression = 1;          // Field expression to integrate
+  repeated string locations = 2;  // Surface names or zone IDs where integral is computed
+}
+
+// AreaIntResponse contains the computed area integral
+message AreaIntResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The area integral value
+}
+
+// CentroidRequest is the request message for computing geometric centroid
+message CentroidRequest {
+  repeated string locations = 1;  // Surface names or zone IDs
+}
+
+// CentroidResponse contains the computed centroid coordinates
+message CentroidResponse {
+  ansys.api.fluent.v1.common_api.Point value = 1;  // The centroid coordinates (x, y, z)
+}
+
+// CountRequest is the request message for counting cells or faces
+message CountRequest {
+  repeated string locations = 1;  // Surface or cell zone names/IDs to count
+}
+
+// CountResponse contains the count of cells or faces
+message CountResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The number of cells or faces
+}
+
+// CountIfRequest is the request message for conditional counting
+message CountIfRequest {
+  string expression = 1;          // Conditional expression (e.g., "temperature > 300")
+  repeated string locations = 2;  // Surface or cell zone names/IDs to count
+}
+
+// CountIfResponse contains the conditional count
+message CountIfResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The number of cells/faces where condition is true
+}
+
+// ForceRequest is the request message for computing total force (pressure + viscous)
+message ForceRequest {
+  repeated string locations = 1;  // Surface names or zone IDs
+}
+
+// ForceResponse contains the computed force vector
+message ForceResponse {
+  ansys.api.fluent.v1.common_api.Point value = 1;  // The force vector components (Fx, Fy, Fz)
+}
+
+// MassAveRequest is the request message for computing mass-weighted average
+message MassAveRequest {
+  string expression = 1;          // Field expression to average
+  repeated string locations = 2;  // Cell zone names or IDs
+}
+
+// MassAveResponse contains the computed mass-weighted average
+message MassAveResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The mass-weighted average value
+}
+
+// MassFlowAveRequest is the request message for computing mass-flow-weighted average
+message MassFlowAveRequest {
+  string expression = 1;          // Field expression to average
+  repeated string locations = 2;  // Surface names or zone IDs
+}
+
+// MassFlowAveResponse contains the computed mass-flow-weighted average
+message MassFlowAveResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The mass-flow-weighted average value
+}
+
+// MassFlowAveAbsRequest is the request message for computing mass-flow-weighted average using absolute mass flow
+message MassFlowAveAbsRequest {
+  string expression = 1;          // Field expression to average
+  repeated string locations = 2;  // Surface names or zone IDs
+}
+
+// MassFlowAveAbsResponse contains the computed average using absolute mass flow
+message MassFlowAveAbsResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The mass-flow-weighted average (absolute) value
+}
+
+// MassFlowIntRequest is the request message for computing mass flow integral
+message MassFlowIntRequest {
+  string expression = 1;          // Field expression to integrate
+  repeated string locations = 2;  // Surface names or zone IDs
+}
+
+// MassFlowIntResponse contains the computed mass flow integral
+message MassFlowIntResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The mass flow integral value
+}
+
+// MassIntRequest is the request message for computing mass integral
+message MassIntRequest {
+  string expression = 1;          // Field expression to integrate
+  repeated string locations = 2;  // Cell zone names or IDs
+}
+
+// MassIntResponse contains the computed mass integral
+message MassIntResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The mass integral value
+}
+
+// MaximumRequest is the request message for computing maximum value
+message MaximumRequest {
+  string expression = 1;          // Field expression to evaluate
+  repeated string locations = 2;  // Surface or cell zone names/IDs
+}
+
+// MaximumResponse contains the maximum value
+message MaximumResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The maximum value of the expression
+}
+
+// MinimumRequest is the request message for computing minimum value
+message MinimumRequest {
+  string expression = 1;          // Field expression to evaluate
+  repeated string locations = 2;  // Surface or cell zone names/IDs
+}
+
+// MinimumResponse contains the minimum value
+message MinimumResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The minimum value of the expression
+}
+
+// PressureForceRequest is the request message for computing pressure force
+message PressureForceRequest {
+  repeated string locations = 1;  // Surface names or zone IDs
+}
+
+// PressureForceResponse contains the computed pressure force vector
+message PressureForceResponse {
+  ansys.api.fluent.v1.common_api.Point value = 1;  // The pressure force vector components (Fx, Fy, Fz)
+}
+
+// ViscousForceRequest is the request message for computing viscous force
+message ViscousForceRequest {
+  repeated string locations = 1;  // Surface names or zone IDs
+}
+
+// ViscousForceResponse contains the computed viscous force vector
+message ViscousForceResponse {
+  ansys.api.fluent.v1.common_api.Point value = 1;  // The viscous force vector components (Fx, Fy, Fz)
+}
+
+// VolumeRequest is the request message for computing total volume
+message VolumeRequest {
+  repeated string locations = 1;  // Cell zone names or IDs
+}
+
+// VolumeResponse contains the computed volume
+message VolumeResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The total volume of the specified cell zones
+}
+
+// VolumeAveRequest is the request message for computing volume-weighted average
+message VolumeAveRequest {
+  string expression = 1;          // Field expression to average
+  repeated string locations = 2;  // Cell zone names or IDs
+}
+
+// VolumeAveResponse contains the computed volume-weighted average
+message VolumeAveResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The volume-weighted average value
+}
+
+// VolumeIntRequest is the request message for computing volume integral
+message VolumeIntRequest {
+  string expression = 1;          // Field expression to integrate
+  repeated string locations = 2;  // Cell zone names or IDs
+}
+
+// VolumeIntResponse contains the computed volume integral
+message VolumeIntResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The volume integral value
+}
+
+// MomentRequest is the request message for computing moment about the origin
+message MomentRequest {
+  string expression = 1;          // Field expression for moment calculation
+  repeated string locations = 2;  // Surface names or zone IDs
+}
+
+// MomentResponse contains the computed moment vector
+message MomentResponse {
+  ansys.api.fluent.v1.common_api.Point value = 1;  // The moment vector components (Mx, My, Mz)
+}
+
+// SumRequest is the request message for computing weighted sum
+message SumRequest {
+  string expression = 1;          // Field expression to sum
+  repeated string locations = 2;  // Surface or cell zone names/IDs
+  string weight = 3;              // Weight expression (e.g., "area", "volume")
+}
+
+// SumResponse contains the computed weighted sum
+message SumResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The weighted sum value
+}
+
+// SumIfRequest is the request message for computing conditional weighted sum
+message SumIfRequest {
+  string expression = 1;          // Field expression to sum
+  string condition = 2;           // Conditional expression for filtering
+  repeated string locations = 3;  // Surface or cell zone names/IDs
+  string weight = 4;              // Weight expression (e.g., "area", "volume")
+}
+
+// SumIfResponse contains the computed conditional weighted sum
+message SumIfResponse {
+  ansys.api.fluent.v1.variant.Variant value = 1;  // The weighted sum value where condition is true
+}

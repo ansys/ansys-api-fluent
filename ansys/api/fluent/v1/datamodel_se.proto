@@ -1,0 +1,565 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.datamodel_se;
+
+import "ansys/api/fluent/v1/variant.proto";
+
+// DataModelService provides operations for managing Fluent datamodel state and events
+service DataModelService {
+  // BeginStreaming starts streaming datamodel state changes and events
+  rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse) {}
+  // initDatamodel initializes the datamodel with specified rules
+  rpc InitDatamodel(InitDatamodelRequest) returns (InitDatamodelResponse) {}
+  // GetState retrieves the current state at a specified path
+  rpc GetState(GetStateRequest) returns (GetStateResponse) {}
+  // SetState sets the state at a specified path
+  rpc SetState(SetStateRequest) returns (SetStateResponse) {}
+  // UpdateDict merges a dictionary into the state at a specified path
+  rpc UpdateDict(UpdateDictRequest) returns (UpdateDictResponse) {}
+  // DeleteObject deletes an object at a specified path
+  rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse) {}
+  // GetAttributeValue retrieves the value of a specific attribute
+  rpc GetAttributeValue(GetAttributeValueRequest) returns (GetAttributeValueResponse) {}
+  // ExecuteCommand executes a command on a datamodel object
+  rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse) {}
+  // ExecuteQuery executes a query on a datamodel object
+  rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse) {}
+  // CreateCommandArguments creates command arguments for a specific command
+  rpc CreateCommandArguments(CreateCommandArgumentsRequest) returns (CreateCommandArgumentsResponse) {}
+  // DeleteCommandArguments deletes previously created command arguments
+  rpc DeleteCommandArguments(DeleteCommandArgumentsRequest) returns (DeleteCommandArgumentsResponse) {}
+  // GetSpecs retrieves specifications for a datamodel object
+  rpc GetSpecs(GetSpecsRequest) returns (GetSpecsResponse) {}
+  // GetStaticInfo retrieves static information about the datamodel structure
+  rpc GetStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse) {}
+  // Rename renames a datamodel object
+  rpc Rename(RenameRequest) returns (RenameResponse) {}
+  // FixState fixes the state of a datamodel object to ensure consistency
+  rpc FixState(FixStateRequest) returns (FixStateResponse) {}
+  // GetObjectNames retrieves the names of objects at a specified path
+  rpc GetObjectNames(GetObjectNamesRequest) returns (GetObjectNamesResponse) {}
+  // DeleteChildObjects deletes child objects from a parent object
+  rpc DeleteChildObjects(DeleteChildObjectsRequest) returns (DeleteChildObjectsResponse) {}
+  // SubscribeEvents subscribes to datamodel events
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (SubscribeEventsResponse) {}
+  // UnsubscribeEvents unsubscribes from previously subscribed datamodel events
+  rpc UnsubscribeEvents(UnsubscribeEventsRequest) returns (UnsubscribeEventsResponse) {}
+  // BeginEventStreaming starts streaming previously subscribed datamodel events
+  rpc BeginEventStreaming(BeginEventStreamingRequest) returns (stream BeginEventStreamingResponse) {}
+}
+
+// DiffState specifies the level of detail for state differences
+enum DiffState {
+  DIFF_STATE_UNSPECIFIED = 0;  // Unspecified diff state
+  DIFF_STATE_FULL = 1;         // Full state including commands
+  DIFF_STATE_NOCOMMANDS = 2;   // State without commands
+}
+
+// BeginStreamingRequest is the request message for initiating state streaming
+message BeginStreamingRequest {
+  string rules = 1;               // The rules context for the streaming operation
+  bool return_state_changes = 2;  // Whether to return state changes in the stream
+  DiffState diff_state = 3;       // The level of detail for state differences
+}
+
+// BeginStreamingResponse is the streaming response containing state updates
+message BeginStreamingResponse {
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The current state or state changes
+  repeated string deleted_paths = 2;              // Paths of deleted objects
+  repeated string events = 3;                     // Events that occurred
+}
+
+// InitDatamodelRequest is the request message for initializing the datamodel
+message InitDatamodelRequest {
+  string rules = 1;               // The rules context for initialization
+  bool return_state_changes = 2;  // Whether to return state changes
+}
+
+// InitDatamodelResponse is the response message containing the initialized datamodel state
+message InitDatamodelResponse {
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The initialized state
+  repeated string deleted_paths = 2;              // Paths of deleted objects during initialization
+}
+
+// GetStateRequest is the request message for retrieving state
+message GetStateRequest {
+  string rules = 1;  // The rules context for the state query
+  string path = 2;   // The path to retrieve state from
+}
+
+// GetStateResponse is the response message containing the requested state
+message GetStateResponse {
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The state at the requested path
+}
+
+// SetStateRequest is the request message for setting state
+message SetStateRequest {
+  string rules = 1;                               // The rules context for the state update
+  string path = 2;                                // The path where state should be set
+  ansys.api.fluent.v1.variant.Variant state = 3;  // The new state to set
+  bool wait = 4;                                  // Whether to wait for the operation to complete
+}
+
+// SetStateResponse is the response message containing the updated state
+message SetStateResponse {
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after the operation
+  repeated string deleted_paths = 2;              // Paths of deleted objects
+}
+
+// UpdateDictRequest is the request message for updating a dictionary
+message UpdateDictRequest {
+  string rules = 1;                                    // The rules context for the update
+  string path = 2;                                     // The path to the dictionary to update
+  ansys.api.fluent.v1.variant.Variant merge_dict = 3;  // The dictionary values to merge
+  bool wait = 4;                                       // Whether to wait for the operation to complete
+  bool recursive = 5;                                  // Whether to update recursively
+}
+
+// UpdateDictResponse is the response message containing the updated state
+message UpdateDictResponse {
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after the dictionary merge
+  repeated string deleted_paths = 2;              // Paths of deleted objects
+}
+
+// DeleteObjectRequest is the request message for deleting an object
+message DeleteObjectRequest {
+  string rules = 1;  // The rules context for the deletion
+  string path = 2;   // The path to the object to delete
+  bool wait = 3;     // Whether to wait for the operation to complete
+}
+
+// DeleteObjectResponse is the response message after deleting an object
+message DeleteObjectResponse {
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after deletion
+  repeated string deleted_paths = 2;              // Paths of deleted objects
+}
+
+// GetAttributeValueRequest is the request message for retrieving an attribute value
+message GetAttributeValueRequest {
+  string rules = 1;      // The rules context for the attribute query
+  string path = 2;       // The path to the object
+  string attribute = 3;  // The name of the attribute to retrieve
+}
+
+// GetAttributeValueResponse is the response message containing the attribute value
+message GetAttributeValueResponse {
+  ansys.api.fluent.v1.variant.Variant result = 1;  // The value of the requested attribute
+}
+
+// ExecuteCommandRequest is the request message for executing a command
+message ExecuteCommandRequest {
+  string rules = 1;                              // The rules context for command execution
+  string path = 2;                               // The path to the object with the command
+  string command = 3;                            // The name of the command to execute
+  bool wait = 4;                                 // Whether to wait for the command to complete
+  ansys.api.fluent.v1.variant.Variant args = 5;  // Arguments to pass to the command
+}
+
+// ExecuteCommandResponse is the response message containing command execution results
+message ExecuteCommandResponse {
+  ansys.api.fluent.v1.variant.Variant result = 1;  // The return value from the command
+  ansys.api.fluent.v1.variant.Variant state = 2;   // The updated state after command execution
+  repeated string deleted_paths = 3;               // Paths of deleted objects
+}
+
+// ExecuteQueryRequest is the request message for executing a query
+message ExecuteQueryRequest {
+  string rules = 1;                              // The rules context for query execution
+  string path = 2;                               // The path to the object with the query
+  string query = 3;                              // The name of the query to execute
+  ansys.api.fluent.v1.variant.Variant args = 4;  // Arguments to pass to the query
+}
+
+// ExecuteQueryResponse is the response message containing query execution results
+message ExecuteQueryResponse {
+  ansys.api.fluent.v1.variant.Variant result = 1;  // The return value from the query
+}
+
+// CreateCommandArgumentsRequest is the request message for creating command arguments
+message CreateCommandArgumentsRequest {
+  string rules = 1;    // The rules context for the operation
+  string path = 2;     // The path to the object with the command
+  string command = 3;  // The name of the command
+}
+
+// CreateCommandArgumentsResponse is the response message containing the command ID
+message CreateCommandArgumentsResponse {
+  string command_id = 1;  // The unique identifier for the created command arguments
+}
+
+// DeleteCommandArgumentsRequest is the request message for deleting command arguments
+message DeleteCommandArgumentsRequest {
+  string rules = 1;       // The rules context for the operation
+  string path = 2;        // The path to the object with the command
+  string command = 3;     // The name of the command
+  string command_id = 4;  // The unique identifier of the command arguments to delete
+}
+
+// DeleteCommandArgumentsResponse is the response message for a delete command arguments operation
+message DeleteCommandArgumentsResponse {
+}
+
+// GetSpecsRequest is the request message for retrieving specifications
+message GetSpecsRequest {
+  string rules = 1;           // The rules context for the specs query
+  string path = 2;            // The path to the object
+  bool include_children = 3;  // Whether to include specifications for child objects
+}
+
+// CommonSpecs contains common specification fields shared across different parameter types
+message CommonSpecs {
+  bool readonly = 1;                                // Whether the parameter is read-only
+  ansys.api.fluent.v1.variant.Variant default = 2;  // The default value
+  string display_text = 3;                          // Text to display in the UI
+  bool is_active = 4;                               // Whether the parameter is currently active
+  string reference_path = 5;                        // Reference path for the parameter
+  bool has_developer_exposure_level = 6;            // Whether this has developer-only exposure
+  string help_string = 7;                           // Help text for the parameter
+}
+
+// BoolParameterSpecs contains specifications for boolean parameters
+message BoolParameterSpecs {
+  CommonSpecs common = 1;  // Common specifications for this parameter
+}
+
+// IntParameterSpecs contains specifications for integer parameters
+message IntParameterSpecs {
+  CommonSpecs common = 1;  // Common specifications for this parameter
+  oneof il {
+    int32 lower_bound = 2;  // The lower bound for valid values
+  }
+  oneof iu {
+    int32 upper_bound = 3;  // The upper bound for valid values
+  }
+}
+
+// RealParameterSpecs contains specifications for real (double) parameters
+message RealParameterSpecs {
+  CommonSpecs common = 1;  // Common specifications for this parameter
+  oneof rl {
+    double lower_bound = 2;  // The lower bound for valid values
+  }
+  oneof ru {
+    double upper_bound = 3;  // The upper bound for valid values
+  }
+}
+
+// StringParameterSpecs contains specifications for string parameters
+message StringParameterSpecs {
+  CommonSpecs common = 1;                    // Common specifications for this parameter
+  repeated string allowed_string_lists = 2;  // List of allowed string values
+}
+
+// IntListParameterSpecs contains specifications for integer list parameters
+message IntListParameterSpecs {
+  CommonSpecs common = 1;  // Common specifications for this parameter
+}
+
+// StringListParameterSpecs contains specifications for string list parameters
+message StringListParameterSpecs {
+  CommonSpecs common = 1;                    // Common specifications for this parameter
+  repeated string allowed_string_lists = 2;  // List of allowed string values for list elements
+}
+
+// CommandSpecs contains specifications for a command
+message CommandSpecs {
+  string name = 1;     // The name of the command
+  bool is_active = 2;  // Whether the command is currently active
+}
+
+// SingletonSpecs contains specifications for singleton objects
+message SingletonSpecs {
+  CommonSpecs common = 1;               // Common specifications for this singleton
+  repeated string members = 2;          // Member names within the singleton
+  repeated CommandSpecs commands = 3;   // Available commands for the singleton
+  repeated string creatable_types = 4;  // Types that can be created within this singleton
+}
+
+// NamedObjectSpecs contains specifications for named objects
+message NamedObjectSpecs {
+  CommonSpecs common = 1;               // Common specifications for this named object
+  repeated string members = 2;          // Member names within the named object
+  repeated CommandSpecs commands = 3;   // Available commands for the named object
+  repeated string creatable_types = 4;  // Types that can be created within this named object
+}
+
+// MemberSpecs contains specifications for a member, which can be various parameter or object types
+message MemberSpecs {
+  string name = 1;  // The name of the member
+  string type = 2;  // The type of the member
+  oneof as {
+    BoolParameterSpecs bool = 3;              // Specifications if this is a boolean parameter
+    IntParameterSpecs int = 4;                // Specifications if this is an integer parameter
+    RealParameterSpecs real = 5;              // Specifications if this is a real parameter
+    StringParameterSpecs string = 6;          // Specifications if this is a string parameter
+    IntListParameterSpecs intlist = 7;        // Specifications if this is an integer list parameter
+    StringListParameterSpecs stringlist = 8;  // Specifications if this is a string list parameter
+    SingletonSpecs singleton = 9;             // Specifications if this is a singleton object
+    NamedObjectSpecs namedobject = 10;        // Specifications if this is a named object
+  }
+  repeated MemberSpecs children = 11;  // Child member specifications
+}
+
+// GetSpecsResponse is the response message containing member specifications
+message GetSpecsResponse {
+  MemberSpecs member = 1;  // The specifications for the requested member
+}
+
+// CommandArg contains information about a command argument
+message CommandArg {
+  string type = 1;                                             // The type of the argument
+  string name = 2;                                             // The name of the argument
+  StaticInfo info = 3;                                         // Static information about the argument
+  string help_string = 4;                                      // Help text for the argument
+  map<string, ansys.api.fluent.v1.variant.Variant> attrs = 5;  // Additional attributes for the argument
+  string doc_string = 6;                                       // Documentation string for the argument
+}
+
+// CommandInfo contains information about a command or query
+message CommandInfo {
+  string return_type = 1;        // The return type of the command
+  repeated CommandArg args = 2;  // The arguments for the command
+  string doc_string = 3;         // Documentation string for the command
+}
+
+// StaticInfo contains comprehensive static information about datamodel objects
+message StaticInfo {
+  map<string, StaticInfo> named_objects = 1;                    // Named objects within this object
+  map<string, StaticInfo> singletons = 2;                       // Singleton objects within this object
+  map<string, StaticInfo> parameters = 3;                       // Parameters within this object
+  map<string, StaticInfo> commands = 4;                         // Commands available for this object
+  string type = 5;                                              // The type of this object
+  CommandInfo command_info = 6;                                 // Information about the command (if this is a command)
+  map<string, StaticInfo> queries = 7;                          // Queries available for this object
+  CommandInfo query_info = 8;                                   // Information about the query (if this is a query)
+  string help_string = 9;                                       // Help text for this object
+  map<string, ansys.api.fluent.v1.variant.Variant> attrs = 10;  // Additional attributes for this object
+}
+
+// GetStaticInfoRequest is the request message for retrieving static information
+message GetStaticInfoRequest {
+  string rules = 1;  // The rules context for the static info query
+}
+
+// GetStaticInfoResponse is the response message containing static information
+message GetStaticInfoResponse {
+  StaticInfo info = 1;  // The static information for the datamodel
+}
+
+// CreatedEventRequest is used to subscribe to object creation events
+message CreatedEventRequest {
+  string parent_path = 1;  // parent-path of the created object
+  string child_type = 2;   // type of the created object
+}
+
+// ModifiedEventRequest is used to subscribe to object modification events
+message ModifiedEventRequest {
+  string path = 1;  // path of the modified object
+}
+
+// DeletedEventRequest is used to subscribe to object deletion events
+message DeletedEventRequest {
+  string path = 1;  // path of the deleted object
+}
+
+// AffectedEventRequest is used to subscribe to object affected events
+message AffectedEventRequest {
+  string path = 1;     // path of the affected object
+  string subtype = 2;  // subtype of the affected event
+}
+
+// AttributeChangedEventRequest is used to subscribe to attribute change events
+message AttributeChangedEventRequest {
+  string path = 1;       // path of the object whose attribute is changed
+  string attribute = 2;  // name of the attribute
+}
+
+// CommandAttributeChangedEventRequest is used to subscribe to command attribute change events
+message CommandAttributeChangedEventRequest {
+  string path = 1;       // path of the object whose command attribute is changed
+  string command = 2;    // name of the command
+  string attribute = 3;  // name of the attribute
+}
+
+// CommandExecutedEventRequest is used to subscribe to command execution events
+message CommandExecutedEventRequest {
+  string path = 1;                         // path of the object with the command
+  string command = 2 [deprecated = true];  // name of the command, deprecated since Fluent 2025 R2
+}
+
+// DataModelEventRequest is a request to subscribe to specific datamodel events
+message DataModelEventRequest {
+  string rules = 1;  // The rules context for the event subscription
+  oneof event_request {
+    CreatedEventRequest created_event_request = 2;                                    // Subscribe to creation events
+    ModifiedEventRequest modified_event_request = 3;                                  // Subscribe to modification events
+    DeletedEventRequest deleted_event_request = 4;                                    // Subscribe to deletion events
+    AffectedEventRequest affected_event_request = 5;                                  // Subscribe to affected events
+    AttributeChangedEventRequest attribute_changed_event_request = 6;                 // Subscribe to attribute change events
+    CommandAttributeChangedEventRequest command_attribute_changed_event_request = 7;  // Subscribe to command attribute change events
+    CommandExecutedEventRequest command_executed_event_request = 8;                   // Subscribe to command execution events
+  }
+}
+
+// SubscribeEventsRequest is the request message for subscribing to events
+message SubscribeEventsRequest {
+  repeated DataModelEventRequest event_requests = 1;  // The list of event subscriptions to register
+}
+
+// SubscriptionStatus indicates the status of an event subscription
+enum SubscriptionStatus {
+  SUBSCRIPTION_STATUS_UNSPECIFIED = 0;   // Unspecified subscription status
+  SUBSCRIPTION_STATUS_SUBSCRIBED = 1;    // Successfully subscribed
+  SUBSCRIPTION_STATUS_UNSUBSCRIBED = 2;  // Successfully unsubscribed
+}
+
+// EventSubscription contains information about a subscribed event
+message EventSubscription {
+  // tag is used to identify a subscribed event in server.
+  // A subscribed event can later be unsubscribed.
+  string tag = 1;                 // Unique identifier for the subscription
+  SubscriptionStatus status = 2;  // The status of the subscription
+}
+
+// SubscribeEventsResponse is the response message containing subscription status
+message SubscribeEventsResponse {
+  repeated EventSubscription responses = 1;  // The list of event subscriptions with their status
+}
+
+// UnsubscribeEventsRequest is the request message for unsubscribing from events
+message UnsubscribeEventsRequest {
+  repeated string tags = 1;  // The list of subscription tags to unsubscribe
+}
+
+// UnsubscribeEventsResponse is the response message containing unsubscription status
+message UnsubscribeEventsResponse {
+  repeated EventSubscription responses = 1;  // The list of unsubscribed events with their status
+}
+
+// BeginEventStreamingRequest is the request message for starting event streaming
+message BeginEventStreamingRequest {
+}
+
+// CreatedEventResponse is the response message for object creation events
+message CreatedEventResponse {
+  string parent_path = 1;  // parent-path of the created object
+  string child_type = 2;   // type of the created object
+  string child_name = 3;   // name of the created object
+}
+
+// ModifiedEventResponse is the response message for object modification events
+message ModifiedEventResponse {
+  string path = 1;                                // path of the modified object
+  ansys.api.fluent.v1.variant.Variant value = 2;  // value of the modified object
+}
+
+// DeletedEventResponse is the response message for object deletion events
+message DeletedEventResponse {
+  string path = 1;  // path of the deleted object
+}
+
+// AffectedEventResponse is the response message for object affected events
+message AffectedEventResponse {
+  string path = 1;     // path of the affected object
+  string subtype = 2;  // subtype of the affected event
+}
+
+// AttributeChangedEventResponse is the response message for attribute change events
+message AttributeChangedEventResponse {
+  string path = 1;                                // path of the object whose attribute is changed
+  string attribute = 2;                           // name of the attribute
+  ansys.api.fluent.v1.variant.Variant value = 3;  // value of the attribute
+}
+
+// CommandAttributeChangedEventResponse is the response message for command attribute change events
+message CommandAttributeChangedEventResponse {
+  string path = 1;                                // path of the object whose command attribute is changed
+  string command = 2;                             // name of the command
+  string attribute = 3;                           // name of the attribute
+  ansys.api.fluent.v1.variant.Variant value = 4;  // value of the attribute
+}
+
+// CommandExecutedEventResponse is the response message for command execution events
+message CommandExecutedEventResponse {
+  string path = 1;                               // path of the object with the command
+  string command = 2;                            // name of the command
+  ansys.api.fluent.v1.variant.Variant args = 3;  // command arguments
+}
+
+// BeginEventStreamingResponse is the streaming response containing events
+message BeginEventStreamingResponse {
+  string tag = 1;    // The tag identifying the subscription that generated this event
+  string rules = 2;  // The rules context for the event
+  oneof event_response {
+    CreatedEventResponse created_event_response = 3;                                    // Object creation event
+    ModifiedEventResponse modified_event_response = 4;                                  // Object modification event
+    DeletedEventResponse deleted_event_response = 5;                                    // Object deletion event
+    AffectedEventResponse affected_event_response = 6;                                  // Object affected event
+    AttributeChangedEventResponse attribute_changed_event_response = 7;                 // Attribute change event
+    CommandAttributeChangedEventResponse command_attribute_changed_event_response = 8;  // Command attribute change event
+    CommandExecutedEventResponse command_executed_event_response = 9;                   // Command execution event
+  }
+}
+
+// RenameRequest is the request message for renaming an object
+message RenameRequest {
+  string rules = 1;     // The rules context for the rename operation
+  string path = 2;      // The path to the object to rename
+  string new_name = 3;  // The new name for the object
+  bool wait = 4;        // Whether to wait for the operation to complete
+}
+
+// RenameResponse is the response message after renaming an object
+message RenameResponse {
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after the rename
+  repeated string deleted_paths = 2;              // Paths of deleted objects
+}
+
+// GetObjectNamesRequest is the request message for retrieving object names
+message GetObjectNamesRequest {
+  string rules = 1;  // The rules context for the query
+  string path = 2;   // The path to retrieve object names from
+}
+
+// GetObjectNamesResponse is the response message containing object names
+message GetObjectNamesResponse {
+  repeated string names = 1;  // The list of object names at the specified path
+}
+
+// ChildNames contains a list of child object names
+message ChildNames {
+  repeated string names = 1;  // The list of child names
+}
+
+// DeleteChildObjectsRequest is the request message for deleting child objects
+message DeleteChildObjectsRequest {
+  string rules = 1;  // The rules context for the deletion
+  string path = 2;   // The path to the parent object
+  oneof var {
+    ChildNames child_names = 3;  // Specific child names to delete
+    bool delete_all = 4;         // Whether to delete all child objects
+  }
+  bool wait = 5;  // Whether to wait for the operation to complete
+}
+
+// DeleteChildObjectsResponse is the response message after deleting child objects
+message DeleteChildObjectsResponse {
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after deletion
+  repeated string deleted_paths = 2;              // Paths of deleted objects
+}
+
+// FixStateRequest is the request message for fixing the state of an object
+message FixStateRequest {
+  string rules = 1;  // The rules context for the fix operation
+  string path = 2;   // The path to the object to fix
+}
+
+// FixStateResponse is the response message after fixing state
+message FixStateResponse {
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The fixed state
+  repeated string deleted_paths = 2;              // Paths of deleted objects during fix
+}

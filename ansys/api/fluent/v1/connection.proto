@@ -1,0 +1,67 @@
+//
+// Copyright 2026 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+syntax = "proto3";
+
+package ansys.api.fluent.v1.connection;
+
+// Connection service used to establish and control a client session.
+service Connection {
+  // Connect to the server and receive streamed status responses.
+  rpc Connect(ConnectRequest) returns (stream ConnectResponse);
+}
+
+// Connection-level error codes returned by the server.
+enum ConnectionError {
+  // Default value. Do not use.
+  CONNECTION_ERROR_UNSPECIFIED = 0;
+
+  // The request succeeded with no error.
+  CONNECTION_ERROR_NONE = 1;
+
+  // The supplied password is incorrect.
+  CONNECTION_ERROR_PASSWORD_MISMATCH = 2;
+
+  // The maximum number of concurrent connections has been exceeded.
+  CONNECTION_ERROR_MAX_CONNECTIONS_COUNT_EXCEEDED = 3;
+
+  // An unknown or unclassified error occurred.
+  CONNECTION_ERROR_UNKNOWN = 4;
+
+  // The client/server versions are incompatible.
+  CONNECTION_ERROR_VERSION_MISMATCH = 5;
+
+  // The server wait time expired before completing the request.
+  CONNECTION_ERROR_WAIT_TIME_EXPIRED = 6;
+}
+
+// Request sent on the Connection.Connect bidirectional stream.
+message ConnectRequest {
+  // Type of request being sent on the stream.
+  enum RequestType {
+    // Default value. Do not use.
+    REQUEST_TYPE_UNSPECIFIED = 0;
+
+    // Initiate a connection.
+    REQUEST_TYPE_CONNECT = 1;
+
+    // Pause the connection.
+    REQUEST_TYPE_PAUSE = 2;
+  }
+
+  // Requested operation.
+  RequestType request_type = 1;
+
+  // Optional password for authentication.
+  string password = 2;
+
+  // Client version string.
+  string version = 3;
+}
+
+// Response streamed from the server on Connection.Connect.
+message ConnectResponse {
+  // Status code for the latest request or current session state.
+  ConnectionError error_code = 1;
+}
