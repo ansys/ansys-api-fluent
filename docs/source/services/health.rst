@@ -32,29 +32,12 @@ Queries the serving status of a service.
 
    # Check overall server status
    response = health_stub.Check(
-       health_pb2.HealthCheckRequest(service=""),
+       health_pb2.HealthCheckRequest(),
        metadata=metadata,
        timeout=5.0
    )
    status = response.status
    # Returns: SERVING_STATUS_SERVING (1) if healthy
-
-Watch
------
-
-Establishes a stream that watches for serving status changes.
-
-.. code-block:: python
-
-   # Stream health status updates
-   stream = health_stub.Watch(
-       health_pb2.HealthCheckRequest(service=""),
-       metadata=metadata,
-       timeout=30.0
-   )
-   
-   for response in stream:
-       print(f"Status: {response.status}")
 
 Complete Example
 ~~~~~~~~~~~~~~~~
