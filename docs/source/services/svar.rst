@@ -1,7 +1,7 @@
-Solver Variables Service
-=========================
+Solution Variables Service
+==========================
 
-The Solver Variables service provides access to solver state variables and data.
+The Solution Variables service provides access to solver state variables and data.
 
 Overview
 ~~~~~~~~

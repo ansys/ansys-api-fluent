@@ -75,7 +75,7 @@ Example:
    metadata = [("password", "your-server-password")]
    
    stub = health_pb2_grpc.HealthStub(channel)
-   request = health_pb2.HealthCheckRequest(service="")
+   request = health_pb2.HealthCheckRequest()
    response = stub.Check(request, metadata=metadata, timeout=5.0)
    
    print(f"Server health status: {response.status}")
@@ -118,7 +118,7 @@ Here is a complete script that demonstrates connecting to a server and using mul
            # Health check
            print(f"Connecting to {HOST}:{PORT}...")
            health_response = health_stub.Check(
-               health_pb2.HealthCheckRequest(service=""),
+               health_pb2.HealthCheckRequest(),
                metadata=metadata,
                timeout=5.0,
            )
