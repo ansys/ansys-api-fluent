@@ -459,4 +459,4 @@ See Also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup
-- :doc:`datamodel_se` - Data Model service for mesh and field-related settings
+- :doc:`datamodel_se` - Datamodel service for mesh and field-related settings
