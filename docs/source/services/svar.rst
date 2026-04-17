@@ -7,6 +7,8 @@ solution variables for domains and zones.
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The Solution Variables service allows you to:
 
 - Discover available domains and zones

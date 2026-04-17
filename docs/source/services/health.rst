@@ -6,6 +6,8 @@ The Health service provides RPCs to query the serving status of the server.
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The ``Health`` service is used to verify that your server is running and ready to serve requests. 
 Use this as the first check when connecting to a server.
 

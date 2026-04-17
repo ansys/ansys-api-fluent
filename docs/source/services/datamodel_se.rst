@@ -8,6 +8,8 @@ inspect metadata, execute commands and queries, and subscribe to datamodel event
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The ``DataModelService`` (SE) allows you to:
 
 - Initialize and stream datamodel state

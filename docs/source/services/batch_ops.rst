@@ -6,6 +6,8 @@ The Batch Operations service provides batch execution capabilities for command s
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The ``BatchOps`` service allows you to:
 
 - Execute batch commands

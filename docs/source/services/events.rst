@@ -7,6 +7,8 @@ file I/O, progress, and data-model activity.
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The ``Events`` service allows you to:
 
 - Start a persistent event stream from Fluent

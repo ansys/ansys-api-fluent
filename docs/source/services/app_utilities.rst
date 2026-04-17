@@ -6,6 +6,8 @@ The App Utilities service provides access to Fluent application-level operations
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The ``AppUtilities`` service gives you access to:
 
 - Product version and build information

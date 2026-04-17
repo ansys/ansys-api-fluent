@@ -6,6 +6,8 @@ The Transcript service provides access to Fluent's command transcript and loggin
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The ``Transcript`` service allows you to:
 
 - Retrieve command history

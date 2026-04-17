@@ -7,6 +7,8 @@ surfaces and cell zones.
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The ``Reduction`` service allows you to:
 
 - Compute geometric reductions (area, volume, centroid)

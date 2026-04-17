@@ -7,6 +7,8 @@ including problem setup, solver parameters, boundary conditions, and case settin
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The ``Settings`` service allows you to:
 
 - Query the settings hierarchy structure and metadata

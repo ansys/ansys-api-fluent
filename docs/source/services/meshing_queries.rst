@@ -7,6 +7,8 @@ object, adjacency, and diagnostics queries.
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The ``MeshingQueries`` service allows you to:
 
 - Query zones and objects by type, group, name pattern, or filter

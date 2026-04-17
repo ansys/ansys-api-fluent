@@ -6,6 +6,8 @@ The Field Data service provides access to simulation field data including surfac
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The ``FieldData`` service allows you to:
 
 - Discover available surfaces and mesh information

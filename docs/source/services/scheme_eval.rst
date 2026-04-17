@@ -7,6 +7,8 @@ evaluation capabilities.
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The ``SchemeEval`` service allows you to:
 
 - Execute Scheme commands through ``Exec``

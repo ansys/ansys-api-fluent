@@ -7,6 +7,8 @@ You can use it to query the command hierarchy, retrieve documentation, and execu
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 The ``DataModel`` service (TUI) allows you to:
 
 - Retrieve child node names at a path
