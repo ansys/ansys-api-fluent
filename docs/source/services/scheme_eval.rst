@@ -259,4 +259,4 @@ See Also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup
-- :doc:`scheme_pointer` - Scheme pointer service
+- :doc:`../helpers/scheme_pointer` - Scheme pointer helper types

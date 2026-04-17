@@ -7,6 +7,8 @@ exchange Scheme data with Fluent.
 Overview
 ~~~~~~~~
 
+.. include:: ../shared_example_assumptions.rst
+
 ``SchemePointer`` is a protobuf message, not a standalone gRPC service. It is
 used primarily by the Scheme evaluation API to represent Scheme values such as:
 
@@ -27,6 +29,14 @@ Service Definition
 - ``SchemePointer.SchemePair``: Pair structure with ``car`` and ``cdr``
 - ``SchemePointer.SchemeList``: Repeated ``SchemePointer`` items
 - ``Empty``: Represents a null or empty Scheme value
+
+Used By Proto Files
+~~~~~~~~~~~~~~~~~~~
+
+The ``scheme_pointer.proto`` helper types are used by:
+
+- ``scheme_eval.proto`` (typed Scheme request/response payloads)
+- ``events.proto`` (event callback argument payloads)
 
 Common Value Shapes
 ~~~~~~~~~~~~~~~~~~~
@@ -155,4 +165,5 @@ See Also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup
-- :doc:`scheme_eval` - Scheme evaluation service
+- :doc:`../services/scheme_eval` - Scheme evaluation service
+- :doc:`../services/events` - Events service

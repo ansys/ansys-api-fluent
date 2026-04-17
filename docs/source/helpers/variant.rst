@@ -1,16 +1,21 @@
-Variant Service
-===============
+Variant Types
+=============
 
-The Variant service provides support for variant data types and polymorphic values.
+The Variant helper module provides polymorphic value containers used across Fluent service protos.
 
 Overview
 ~~~~~~~~
 
-The ``Variant`` service allows you to:
+.. include:: ../shared_example_assumptions.rst
+
+The ``Variant`` helper types allow you to:
 
 - Handle polymorphic data
 - Convert between types
 - Manage variant values
+
+``variant.proto`` is not a standalone gRPC service. It is a shared type module
+used by other service protos.
 
 Service Definition
 ~~~~~~~~~~~~~~~~~~
@@ -19,8 +24,15 @@ Service Definition
 
 **Main Classes:**
 
-- ``VariantStub``: Client stub for variant operations
 - ``Variant``: Message type for polymorphic values
+
+Used By Proto Files
+~~~~~~~~~~~~~~~~~~~
+
+The ``variant.proto`` helper types are used by:
+
+- ``datamodel_se.proto`` (state, args, attrs, and command/query payloads)
+- ``reduction.proto`` (typed reduction results)
 
 Variant Types
 ~~~~~~~~~~~~~
@@ -55,3 +67,5 @@ See Also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup
+- :doc:`../services/datamodel_se` - Data model (state engine) service
+- :doc:`../services/reduction` - Reduction service
