@@ -66,7 +66,6 @@ Example: get child names
            args=struct_pb2.Struct(),
        ),
        metadata=metadata,
-       timeout=10.0,
    )
    print("Child names kind:", resp.value.WhichOneof("kind"))
 
@@ -89,7 +88,6 @@ Example: get documentation string
            args=struct_pb2.Struct(),
        ),
        metadata=metadata,
-       timeout=10.0,
    )
    print("Help text kind:", doc_resp.value.WhichOneof("kind"))
 
@@ -113,7 +111,6 @@ Example: execute a command with structured args
            command="check-verbosity",
        ),
        metadata=metadata,
-       timeout=30.0,
    )
    print("Command result kind:", cmd_resp.result.WhichOneof("kind"))
 
@@ -126,7 +123,6 @@ Example: execute a query
            path="/mesh/quality"
        ),
        metadata=metadata,
-       timeout=10.0,
    )
    print("Query result kind:", query_resp.result.WhichOneof("kind"))
 
@@ -145,7 +141,6 @@ Example: retrieve static info for a subtree
    static_resp = stub.GetStaticInfo(
        datamodel_tui_pb2.GetStaticInfoRequest(path="/mesh"),
        metadata=metadata,
-       timeout=20.0,
    )
    print("Available menus:", list(static_resp.info.menus.keys()))
    print("Available commands:", list(static_resp.info.commands.keys()))
@@ -274,7 +269,6 @@ This example demonstrates an end-to-end TUI datamodel workflow using the core me
                    args=struct_pb2.Struct(),
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print("Child names:", value_to_python(children_resp.value))
 
@@ -286,7 +280,6 @@ This example demonstrates an end-to-end TUI datamodel workflow using the core me
                    args=struct_pb2.Struct(),
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print("Documentation:", value_to_python(doc_resp.value))
 
@@ -297,7 +290,6 @@ This example demonstrates an end-to-end TUI datamodel workflow using the core me
                    command="check-verbosity",
                ),
                metadata=metadata,
-               timeout=30.0,
            )
            print("Command result:", value_to_python(cmd_resp.result))
 
@@ -307,7 +299,6 @@ This example demonstrates an end-to-end TUI datamodel workflow using the core me
                    path="/mesh/check",
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print("Query result:", value_to_python(query_resp.result))
 
@@ -315,7 +306,6 @@ This example demonstrates an end-to-end TUI datamodel workflow using the core me
            static_resp = stub.GetStaticInfo(
                datamodel_tui_pb2.GetStaticInfoRequest(path="/mesh"),
                metadata=metadata,
-               timeout=20.0,
            )
            print("Available menus:", list(static_resp.info.menus.keys()))
            print("Available commands:", list(static_resp.info.commands.keys()))

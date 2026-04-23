@@ -43,7 +43,6 @@ Retrieves domain and zone metadata.
    response = svar_stub.GetZonesInfo(
 	   svar_pb2.GetZonesInfoRequest(),
 	   metadata=metadata,
-	   timeout=10.0,
    )
 
    for domain in response.domains_info:
@@ -62,7 +61,6 @@ Retrieves solution variable metadata for a given domain and zone.
    response = svar_stub.GetSvarsInfo(
 	   svar_pb2.GetSvarsInfoRequest(domain_id=1, zone_id=12),
 	   metadata=metadata,
-	   timeout=10.0,
    )
 
    for variable in response.svars_info:
@@ -88,7 +86,7 @@ Streams solution variable data as:
 	   zones=[12],
    )
 
-   for msg in svar_stub.GetSvarData(request, metadata=metadata, timeout=120.0):
+   for msg in svar_stub.GetSvarData(request, metadata=metadata):
 	   msg_type = msg.WhichOneof("array")
 	   if msg_type == "payload_info":
 		   info = msg.payload_info
@@ -180,7 +178,6 @@ Correct request ordering:
    svar_stub.SetSvarData(
 	   build_set_stream(name="SV_P", domain_id=1, zone_id_to_values=zone_data),
 	   metadata=metadata,
-	   timeout=120.0,
    )
 
 Small usage examples
@@ -194,7 +191,6 @@ Example 1: find the first cell zone
    zones = svar_stub.GetZonesInfo(
 	   svar_pb2.GetZonesInfoRequest(),
 	   metadata=metadata,
-	   timeout=10.0,
    ).zones_info
 
    first_cell_zone = next(
@@ -214,7 +210,6 @@ Example 2: find a specific variable
    info = svar_stub.GetSvarsInfo(
 	   svar_pb2.GetSvarsInfoRequest(domain_id=1, zone_id=12),
 	   metadata=metadata,
-	   timeout=10.0,
    )
 
    has_pressure = any(v.name == "SV_P" for v in info.svars_info)
@@ -296,7 +291,7 @@ The following script performs a robust read and optional write workflow.
 
 	   payload_info = None
 	   payloads = []
-	   for msg in stub.GetSvarData(request, metadata=metadata, timeout=120.0):
+	   for msg in stub.GetSvarData(request, metadata=metadata):
 		   part = msg.WhichOneof("array")
 		   if part == "payload_info":
 			   payload_info = msg.payload_info
@@ -381,7 +376,6 @@ The following script performs a robust read and optional write workflow.
 		   zones_response = stub.GetZonesInfo(
 			   svar_pb2.GetZonesInfoRequest(),
 			   metadata=metadata,
-			   timeout=10.0,
 		   )
 		   if not zones_response.domains_info:
 			   raise RuntimeError("No domains available")
@@ -404,7 +398,6 @@ The following script performs a robust read and optional write workflow.
 			   stub.SetSvarData(
 				   build_set_stream("SV_P", domain_id, zone_data),
 				   metadata=metadata,
-				   timeout=120.0,
 			   )
 			   print("SetSvarData completed")
 
@@ -445,7 +438,6 @@ Best practices
 3. **Chunk by item size** - Compute values per chunk using ``chunk_size // dtype.itemsize``.
 4. **Preserve type consistency** - Keep payload type aligned with variable field type.
 5. **Validate expected field size** - Ensure reconstructed data length matches ``payload_info.field_size``.
-6. **Set practical timeouts** - Large meshes and multi-zone writes can require longer timeouts.
 
 See also
 ~~~~~~~~

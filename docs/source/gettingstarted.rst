@@ -76,7 +76,7 @@ Example:
    
    stub = health_pb2_grpc.HealthStub(channel)
    request = health_pb2.HealthCheckRequest()
-   response = stub.Check(request, metadata=metadata, timeout=5.0)
+   response = stub.Check(request, metadata=metadata)
    
    print(f"Server health status: {response.status}")
    channel.close()
@@ -120,7 +120,6 @@ Here is a complete script that demonstrates connecting to a server and using mul
            health_response = health_stub.Check(
                health_pb2.HealthCheckRequest(),
                metadata=metadata,
-               timeout=5.0,
            )
            print(f"Health status: {health_response.status}")
 
@@ -128,7 +127,6 @@ Here is a complete script that demonstrates connecting to a server and using mul
            surfaces_response = field_stub.GetSurfacesInfo(
                field_data_pb2.GetSurfacesInfoRequest(),
                metadata=metadata,
-               timeout=10.0,
            )
            
            surfaces = []
@@ -144,7 +142,6 @@ Here is a complete script that demonstrates connecting to a server and using mul
            fields_response = field_stub.GetFieldsInfo(
                field_data_pb2.GetFieldsInfoRequest(),
                metadata=metadata,
-               timeout=10.0,
            )
 
            print(f"Available scalar fields ({len(fields_response.field_info)} total):")

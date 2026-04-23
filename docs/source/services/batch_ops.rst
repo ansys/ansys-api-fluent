@@ -1,4 +1,4 @@
-Batch operations
+﻿Batch operations
 ================
 
 The Batch Operations service provides batch execution capabilities for command sequences.
@@ -40,7 +40,6 @@ Execute a batch of operations.
    response = batch_stub.Execute(
        request,
        metadata=metadata,
-       timeout=30.0
    )
 
 Complete example
@@ -67,7 +66,6 @@ Complete example
            response = stub.Execute(
                request,
                metadata=metadata,
-               timeout=30.0
            )
            
            print(f"Batch execution completed")

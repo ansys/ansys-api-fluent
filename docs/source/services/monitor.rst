@@ -142,7 +142,6 @@ Call this before ``BeginStreaming`` to discover available monitor names and thei
    response = monitor_stub.GetMonitors(
        monitor_pb2.GetMonitorsRequest(),
        metadata=metadata,
-       timeout=10.0
    )
 
    for ms in response.monitor_sets:
@@ -163,7 +162,6 @@ produces new monitor samples. Each response contains one ``XAxisData`` point and
    for sample in monitor_stub.BeginStreaming(
        request,
        metadata=metadata,
-       timeout=300.0
    ):
        x = sample.x_axis_data
        for y in sample.y_axis_values:
@@ -194,7 +192,6 @@ Discover every monitor set registered with the running solver:
        response = stub.GetMonitors(
            monitor_pb2.GetMonitorsRequest(),
            metadata=metadata,
-           timeout=10.0
        )
 
        type_names = {
@@ -234,7 +231,6 @@ Read the unit conversion metadata attached to each monitor set:
        response = stub.GetMonitors(
            monitor_pb2.GetMonitorsRequest(),
            metadata=metadata,
-           timeout=10.0
        )
 
        for ms in response.monitor_sets:
@@ -263,7 +259,6 @@ Receive every sample emitted by the solver until the stream ends:
        for sample in stub.BeginStreaming(
            monitor_pb2.StreamingRequest(),
            metadata=metadata,
-           timeout=600.0
        ):
            x = sample.x_axis_data
            for y in sample.y_axis_values:
@@ -297,7 +292,6 @@ Use ``MonitorFilter`` to receive only iteration-based residual samples:
        for sample in stub.BeginStreaming(
            request,
            metadata=metadata,
-           timeout=600.0
        ):
            x = sample.x_axis_data
            for y in sample.y_axis_values:
@@ -331,7 +325,6 @@ Filter the stream to a named subset of monitors:
        for sample in stub.BeginStreaming(
            request,
            metadata=metadata,
-           timeout=600.0
        ):
            x = sample.x_axis_data
            for y in sample.y_axis_values:
@@ -372,7 +365,6 @@ convergence data until the solver finishes:
            health_resp = health_stub.Check(
                health_pb2.HealthCheckRequest(),
                metadata=metadata,
-               timeout=5.0,
            )
            if health_resp.status != 1:  # 1 == SERVING
                raise RuntimeError("Server is not ready")
@@ -383,7 +375,6 @@ convergence data until the solver finishes:
            monitors_resp = monitor_stub.GetMonitors(
                monitor_pb2.GetMonitorsRequest(),
                metadata=metadata,
-               timeout=10.0,
            )
 
            type_label = {
@@ -416,7 +407,6 @@ convergence data until the solver finishes:
                for sample in monitor_stub.BeginStreaming(
                    request,
                    metadata=metadata,
-                   timeout=1800.0,   # 30-minute ceiling
                ):
                    x = sample.x_axis_data
                    axis_label = (
@@ -467,19 +457,16 @@ Best practices
 1. **Call GetMonitors before BeginStreaming** — use the returned monitor names to build
    targeted ``MonitorFilter`` objects rather than receiving every signal.
 
-2. **Set a realistic stream timeout** — ``BeginStreaming`` blocks until the solver finishes
-   or an error occurs; choose a ceiling that covers your longest expected run.
-
-3. **Handle** ``OUT_OF_RANGE`` **gracefully** — Fluent signals end-of-stream with this
+2. **Handle** ``OUT_OF_RANGE`` **gracefully** — Fluent signals end-of-stream with this
    gRPC status code; treat it as a normal exit, not an error.
 
-4. **Distinguish residual from solution monitors** — residuals typically decrease monotonically
+3. **Distinguish residual from solution monitors** — residuals typically decrease monotonically
    and are useful for convergence checks; solution monitors track physical quantities.
 
-5. **Apply filters for large cases** — streaming all monitors in a case with many solution
+4. **Apply filters for large cases** — streaming all monitors in a case with many solution
    monitors can produce high message rates; filter by name or frequency to reduce load.
 
-6. **Close the channel in a** ``finally`` **block** — always release gRPC resources even
+5. **Close the channel in a** ``finally`` **block** — always release gRPC resources even
    when the stream is interrupted.
 
 See also

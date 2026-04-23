@@ -43,7 +43,6 @@ Starts the event stream and yields a sequence of
     stream = events_stub.BeginStreaming(
           events_pb2.BeginStreamingRequest(),
           metadata=metadata,
-          timeout=3600.0,
     )
 
     for response in stream:
@@ -229,7 +228,6 @@ prints key payload fields, and handles stream failures.
                 stream = stub.BeginStreaming(
                       events_pb2.BeginStreamingRequest(),
                       metadata=metadata,
-                      timeout=3600.0,
                 )
 
                 print("Listening for Fluent events...")
@@ -253,13 +251,12 @@ prints key payload fields, and handles stream failures.
 Best practices
 ~~~~~~~~~~~~~~
 
-1. **Use long stream timeouts** - Event streams are long-lived; use large timeout values.
-2. **Dispatch via ``WhichOneof``** - Always detect the active ``oneof`` field before reading payload data.
-3. **Handle ``RpcError`` robustly** - Network interruptions and server restarts can terminate streams.
-4. **Design for reconnect** - Production listeners should reconnect with backoff after failures.
-5. **Keep handlers lightweight** - Avoid expensive work in the stream loop; offload to worker queues when needed.
-6. **Treat ``error_event`` specially** - Log and surface fatal errors immediately.
-7. **Limit demo streams** - In examples/tests, stop after N events to avoid endless runs.
+1. **Dispatch via ``WhichOneof``** - Always detect the active ``oneof`` field before reading payload data.
+2. **Handle ``RpcError`` robustly** - Network interruptions and server restarts can terminate streams.
+3. **Design for reconnect** - Production listeners should reconnect with backoff after failures.
+4. **Keep handlers lightweight** - Avoid expensive work in the stream loop; offload to worker queues when needed.
+5. **Treat ``error_event`` specially** - Log and surface fatal errors immediately.
+6. **Limit demo streams** - In examples/tests, stop after N events to avoid endless runs.
 
 See also
 ~~~~~~~~

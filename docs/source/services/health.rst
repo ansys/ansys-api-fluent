@@ -1,4 +1,4 @@
-Health
+﻿Health
 ======
 
 The Health service provides RPCs to query the serving status of the server.
@@ -36,7 +36,6 @@ Queries the serving status of a service.
    response = health_stub.Check(
        health_pb2.HealthCheckRequest(),
        metadata=metadata,
-       timeout=5.0
    )
    status = response.status
    # Returns: SERVING_STATUS_SERVING (1) if healthy
@@ -62,7 +61,6 @@ Complete example
            response = stub.Check(
                health_pb2.HealthCheckRequest(service=""),
                metadata=metadata,
-               timeout=5.0
            )
            
            status_map = {
@@ -115,9 +113,8 @@ Best practices
 ~~~~~~~~~~~~~~
 
 1. **Always check health first** - Before using other services, verify the server is healthy
-2. **Use reasonable timeouts** - Health checks should be fast (5-10 seconds)
-3. **Handle errors gracefully** - Network issues or wrong credentials will raise RpcError
-4. **Implement retry logic** - For transient failures, retry with exponential backoff
+2. **Handle errors gracefully** - Network issues or wrong credentials will raise RpcError
+3. **Implement retry logic** - For transient failures, retry with exponential backoff
 
 See also
 ~~~~~~~~

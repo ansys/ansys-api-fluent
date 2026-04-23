@@ -39,7 +39,6 @@ Retrieve the Fluent product version information.
    response = app_stub.GetProductVersion(
        app_utilities_pb2.GetProductVersionRequest(),
        metadata=metadata,
-       timeout=5.0
    )
    print(f"Version: {response.major}.{response.minor}.{response.patch}")
 
@@ -53,7 +52,6 @@ Get detailed build information.
    response = app_stub.GetBuildInfo(
        app_utilities_pb2.GetBuildInfoRequest(),
        metadata=metadata,
-       timeout=5.0
    )
    print(f"Build Time: {response.build_time}")
    print(f"Build ID: {response.build_id}")
@@ -70,7 +68,6 @@ Check the current application mode (meshing, solver, etc.).
    response = app_stub.GetAppMode(
        app_utilities_pb2.GetAppModeRequest(),
        metadata=metadata,
-       timeout=5.0
    )
    print(f"Mode: {response.app_mode}")
 
@@ -117,7 +114,6 @@ Example usage with the map:
    response = app_stub.GetAppMode(
        app_utilities_pb2.GetAppModeRequest(),
        metadata=metadata,
-       timeout=5.0,
    )
    print(f"Mode: {APP_MODE_MAP.get(response.app_mode, 'Unknown')}")
 
@@ -134,7 +130,6 @@ Set the working directory for Fluent operations.
    response = app_stub.SetWorkingDirectory(
        request,
        metadata=metadata,
-       timeout=10.0
    )
 
 Complete example
@@ -167,7 +162,6 @@ Complete example
            version_response = stub.GetProductVersion(
                app_utilities_pb2.GetProductVersionRequest(),
                metadata=metadata,
-               timeout=5.0,
            )
            print(f"Fluent Version: {version_response.major}.{version_response.minor}.{version_response.patch}")
 
@@ -175,7 +169,6 @@ Complete example
            build_response = stub.GetBuildInfo(
                app_utilities_pb2.GetBuildInfoRequest(),
                metadata=metadata,
-               timeout=5.0,
            )
            print(f"Build Time: {build_response.build_time}")
            print(f"Build ID: {build_response.build_id}")
@@ -186,7 +179,6 @@ Complete example
            mode_response = stub.GetAppMode(
                app_utilities_pb2.GetAppModeRequest(),
                metadata=metadata,
-               timeout=5.0,
            )
            print(f"Application Mode: {APP_MODE_MAP.get(mode_response.app_mode, 'Unknown')}")
 

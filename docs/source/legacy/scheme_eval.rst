@@ -49,7 +49,6 @@ Execute one or more Scheme commands and return the console output.
            silent=True,
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
    print(response.output)
@@ -64,7 +63,6 @@ Evaluate a Scheme expression provided as a string and return the result as a str
    response = stub.StringEval(
        scheme_eval_pb2.StringEvalRequest(input="(+ 1 2)"),
        metadata=metadata,
-       timeout=10.0,
    )
 
    print(f"Result: {response.output}")
@@ -89,7 +87,6 @@ Evaluate a typed Scheme expression represented as a ``SchemePointer``.
    response = stub.SchemeEval(
        scheme_eval_pb2.SchemeEvalRequest(input=expression),
        metadata=metadata,
-       timeout=10.0,
    )
 
    print(response.output.fixednum)
@@ -105,7 +102,6 @@ deprecated in favor of ``SchemeEval``.
    response = stub.Eval(
        scheme_pointer_pb2.SchemePointer(fixednum=5),
        metadata=metadata,
-       timeout=10.0,
    )
 
    print(response.fixednum)
@@ -203,7 +199,6 @@ expression, and evaluates a typed ``SchemePointer`` expression.
                    silent=True,
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print("=== Exec Output ===")
            print(exec_response.output)
@@ -212,7 +207,6 @@ expression, and evaluates a typed ``SchemePointer`` expression.
            string_eval_response = stub.StringEval(
                scheme_eval_pb2.StringEvalRequest(input="(+ answer 8)"),
                metadata=metadata,
-               timeout=10.0,
            )
            print("=== StringEval Result ===")
            print(string_eval_response.output)
@@ -231,7 +225,6 @@ expression, and evaluates a typed ``SchemePointer`` expression.
            typed_response = stub.SchemeEval(
                scheme_eval_pb2.SchemeEvalRequest(input=typed_expression),
                metadata=metadata,
-               timeout=10.0,
            )
            print("=== SchemeEval Result ===")
            print(scheme_pointer_to_python(typed_response.output))

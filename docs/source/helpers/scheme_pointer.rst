@@ -148,7 +148,6 @@ evaluation API.
    response = stub.SchemeEval(
        scheme_eval_pb2.SchemeEvalRequest(input=expression),
        metadata=metadata,
-       timeout=10.0,
    )
 
    print(response.output.fixednum)

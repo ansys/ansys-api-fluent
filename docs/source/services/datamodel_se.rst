@@ -70,7 +70,6 @@ Example: initialize and consume a few state streaming updates
            return_state_changes=False,
        ),
        metadata=metadata,
-       timeout=20.0,
    )
    print("Datamodel initialized")
 
@@ -81,7 +80,6 @@ Example: initialize and consume a few state streaming updates
            diff_state=datamodel_se_pb2.DIFF_STATE_FULL,
        ),
        metadata=metadata,
-       timeout=120.0,
    )
 
    for i, update in enumerate(stream):
@@ -116,7 +114,6 @@ Example: get a value, then update Struct-backed paths with ``SetState``
            path="GlobalSettings/EnableCleanCAD",
        ),
        metadata=metadata,
-       timeout=10.0,
    )
    print("Current value kind:", get_resp.state.WhichOneof("as"))
 
@@ -128,7 +125,6 @@ Example: get a value, then update Struct-backed paths with ``SetState``
            wait=True,
        ),
        metadata=metadata,
-       timeout=20.0,
    )
 
    # Access and update values under Graphics/Bounds from the same tree
@@ -138,7 +134,6 @@ Example: get a value, then update Struct-backed paths with ``SetState``
            path="Graphics/Bounds/Selection",
        ),
        metadata=metadata,
-       timeout=10.0,
    )
    print("Bounds selection:", selection_resp.state)
 
@@ -150,7 +145,6 @@ Example: get a value, then update Struct-backed paths with ``SetState``
            wait=True,
        ),
        metadata=metadata,
-       timeout=20.0,
    )
 
    _ = stub.SetState(
@@ -161,7 +155,6 @@ Example: get a value, then update Struct-backed paths with ``SetState``
            wait=True,
        ),
        metadata=metadata,
-       timeout=20.0,
    )
 
    _ = stub.SetState(
@@ -172,7 +165,6 @@ Example: get a value, then update Struct-backed paths with ``SetState``
            wait=True,
        ),
        metadata=metadata,
-       timeout=20.0,
    )
 
    _ = stub.SetState(
@@ -183,7 +175,6 @@ Example: get a value, then update Struct-backed paths with ``SetState``
            wait=True,
        ),
        metadata=metadata,
-       timeout=20.0,
    )
 
 Example: use ``UpdateDict`` only on Dict parameters
@@ -213,7 +204,6 @@ Example: use ``UpdateDict`` only on Dict parameters
            recursive=True,
        ),
        metadata=metadata,
-       timeout=20.0,
    )
 
 Object lifecycle operations
@@ -243,7 +233,6 @@ Example: enumerate object names and rename one object
            path="Case/Results/Graphics/Contour",
        ),
        metadata=metadata,
-       timeout=10.0,
    )
    print("FTM region entries:", list(names_resp.names))
 
@@ -257,7 +246,6 @@ Example: enumerate object names and rename one object
                wait=True,
            ),
            metadata=metadata,
-           timeout=20.0,
        )
        print("Renamed object:", old_name)
 
@@ -275,7 +263,6 @@ Example: delete selected child objects
            wait=True,
        ),
        metadata=metadata,
-       timeout=20.0,
    )
 
 Attribute and metadata retrieval
@@ -301,7 +288,6 @@ Example: retrieve a single attribute value
            attribute="default",
        ),
        metadata=metadata,
-       timeout=10.0,
    )
    print("Default value kind:", attr_resp.result.WhichOneof("as"))
 
@@ -312,7 +298,6 @@ Example: inspect static info
    static_resp = stub.GetStaticInfo(
        datamodel_se_pb2.GetStaticInfoRequest(rules="meshing"),
        metadata=metadata,
-       timeout=20.0,
    )
    print("Top-level named object count:", len(static_resp.info.singletons))
 
@@ -351,7 +336,6 @@ Example: execute a command with argument map
            args=cmd_args,
        ),
        metadata=metadata,
-       timeout=60.0,
    )
    print("Command result kind:", cmd_resp.result.WhichOneof("as"))
 
@@ -376,7 +360,6 @@ Example: create and clean up command argument instance
            command="ImportGeometry",
        ),
        metadata=metadata,
-       timeout=10.0,
    )
    command_id = create_args_resp.command_id
    print("Created command_id:", command_id)
@@ -389,7 +372,6 @@ Example: create and clean up command argument instance
            command_id=command_id,
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
 Event subscription and event streaming
@@ -417,7 +399,6 @@ Example: subscribe to modification events and read event stream
            ]
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
    tags = [r.tag for r in sub_resp.responses]
@@ -426,7 +407,6 @@ Example: subscribe to modification events and read event stream
    event_stream = stub.BeginEventStreaming(
        datamodel_se_pb2.BeginEventStreamingRequest(),
        metadata=metadata,
-       timeout=120.0,
    )
 
    for i, event in enumerate(event_stream):
@@ -438,7 +418,6 @@ Example: subscribe to modification events and read event stream
    _ = stub.UnsubscribeEvents(
        datamodel_se_pb2.UnsubscribeEventsRequest(tags=tags),
        metadata=metadata,
-       timeout=10.0,
    )
 
 Working with variant values
@@ -590,7 +569,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    return_state_changes=False,
                ),
                metadata=metadata,
-               timeout=20.0,
            )
            print("Datamodel initialized")
 
@@ -601,7 +579,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    path="GlobalSettings/EnableCleanCAD",
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print("EnableCleanCAD (before):", variant_to_python(get_state_resp.state))
 
@@ -613,7 +590,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    wait=True,
                ),
                metadata=metadata,
-               timeout=20.0,
            )
 
            # Also read and update Graphics/Bounds values from the provided state tree
@@ -623,7 +599,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    path="Graphics/Bounds/Selection",
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print("Bounds selection:", variant_to_python(selection_resp.state))
 
@@ -635,7 +610,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    wait=True,
                ),
                metadata=metadata,
-               timeout=20.0,
            )
 
            _ = stub.SetState(
@@ -646,7 +620,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    wait=True,
                ),
                metadata=metadata,
-               timeout=20.0,
            )
 
            _ = stub.SetState(
@@ -657,7 +630,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    wait=True,
                ),
                metadata=metadata,
-               timeout=20.0,
            )
 
            _ = stub.SetState(
@@ -668,7 +640,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    wait=True,
                ),
                metadata=metadata,
-               timeout=20.0,
            )
 
            _ = stub.SetState(
@@ -679,7 +650,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    wait=True,
                ),
                metadata=metadata,
-               timeout=20.0,
            )
 
            # 3) Attribute retrieval
@@ -690,7 +660,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    attribute="default",
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print("EnableCleanCAD default:", variant_to_python(attr_resp.result))
 
@@ -714,7 +683,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    args=cmd_args,
                ),
                metadata=metadata,
-               timeout=60.0,
            )
 
            # 5) Subscribe and stream events
@@ -730,7 +698,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    ]
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            tags = [r.tag for r in sub_resp.responses]
 
@@ -743,13 +710,11 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    wait=True,
                ),
                metadata=metadata,
-               timeout=20.0,
            )
 
            events = stub.BeginEventStreaming(
                datamodel_se_pb2.BeginEventStreamingRequest(),
                metadata=metadata,
-               timeout=30.0,
            )
            for i, event in enumerate(events):
                event_kind = event.WhichOneof("event_response")
@@ -760,7 +725,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
            _ = stub.UnsubscribeEvents(
                datamodel_se_pb2.UnsubscribeEventsRequest(tags=tags),
                metadata=metadata,
-               timeout=10.0,
            )
 
            # 6) List, rename, and delete objects
@@ -770,7 +734,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                    path="Case/Results/Graphics/Contour",
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            names = list(names_resp.names)
            print("Contour entries:", names)
@@ -785,7 +748,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                        wait=True,
                    ),
                    metadata=metadata,
-                   timeout=20.0,
                )
 
                _ = stub.DeleteChildObjects(
@@ -798,7 +760,6 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                        wait=True,
                    ),
                    metadata=metadata,
-                   timeout=20.0,
                )
 
        finally:

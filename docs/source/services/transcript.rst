@@ -39,7 +39,6 @@ Stream transcript messages and solver output.
    for transcript_msg in stub.GetTranscript(
        request,
        metadata=metadata,
-       timeout=300.0  # Long timeout for streaming
    ):
        if transcript_msg.type == transcript_pb2.TranscriptMessage.STDOUT:
            print(f"Output: {transcript_msg.message}")
@@ -70,7 +69,6 @@ Complete example
            for transcript_msg in stub.GetTranscript(
                request,
                metadata=metadata,
-               timeout=300.0
            ):
                message = transcript_msg.message
                if message:

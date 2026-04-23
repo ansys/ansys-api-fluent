@@ -207,7 +207,7 @@ Handle various connection error scenarios:
        )
 
        try:
-           responses = stub.Connect(request, timeout=10.0)
+           responses = stub.Connect(request)
            
            for response in responses:
                error_msg = error_messages.get(
@@ -275,8 +275,7 @@ A comprehensive workflow connecting to a Fluent server and performing operations
            
            try:
                self.response_stream = self.connection_stub.Connect(
-                   request_gen(),
-                   timeout=10.0
+                   request_gen()
                )
                
                # Get first response to verify connection
@@ -306,8 +305,7 @@ A comprehensive workflow connecting to a Fluent server and performing operations
            
            try:
                response = health_stub.Check(
-                   health_pb2.HealthCheckRequest(service=""),
-                   timeout=5.0
+                   health_pb2.HealthCheckRequest(service="")
                )
                
                if response.status == 1:  # SERVING
@@ -333,8 +331,7 @@ A comprehensive workflow connecting to a Fluent server and performing operations
            
            try:
                response = field_data_stub.GetSurfacesInfo(
-                   field_data_pb2.GetSurfacesInfoRequest(),
-                   timeout=10.0
+                   field_data_pb2.GetSurfacesInfoRequest()
                )
                
                surfaces = []
@@ -414,21 +411,18 @@ Best practices
 1. **Always establish connection first**: The Connection service must be successfully connected
    before attempting to use other services (Health, Field Data, etc.).
 
-2. **Use appropriate timeouts**: Set reasonable timeout values on all RPC calls to prevent
-   indefinite hangs.
-
-3. **Handle authentication errors**: Always check for CONNECTION_ERROR_PASSWORD_MISMATCH
+2. **Handle authentication errors**: Always check for CONNECTION_ERROR_PASSWORD_MISMATCH
    and guide users to verify credentials.
 
-4. **Version compatibility**: Include a client version string to allow the server to detect
+3. **Version compatibility**: Include a client version string to allow the server to detect
    and report version mismatches early.
 
-5. **Clean up resources**: Always close the gRPC channel in a finally block to avoid
+4. **Clean up resources**: Always close the gRPC channel in a finally block to avoid
    resource leaks.
 
-6. **Implement retry logic**: For transient errors, implement exponential backoff retry logic.
+5. **Implement retry logic**: For transient errors, implement exponential backoff retry logic.
 
-7. **Monitor connection status**: In long-running applications, periodically check server
+6. **Monitor connection status**: In long-running applications, periodically check server
    health to detect connection drops.
 
 See also

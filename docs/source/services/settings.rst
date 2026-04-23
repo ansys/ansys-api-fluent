@@ -64,7 +64,6 @@ Example: retrieve and modify operating pressure setting
            )
        ),
        metadata=metadata,
-       timeout=10.0,
    )
    
    # Extract the value (could be bool, int, string, or nested)
@@ -82,7 +81,6 @@ Example: retrieve and modify operating pressure setting
            value=settings_pb2.Value(integer=101329)
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
 Object creation, deletion, and renaming
@@ -111,7 +109,6 @@ Example: create a new contour, rename it, and then delete it
            name="contour-1"
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
    # Rename the contour to "contour-renamed"
@@ -125,7 +122,6 @@ Example: create a new contour, rename it, and then delete it
            new_name="contour-renamed"
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
    # Delete the contour
@@ -138,7 +134,6 @@ Example: create a new contour, rename it, and then delete it
            name="contour-renamed"
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
 Object and list queries
@@ -166,7 +161,6 @@ Example: enumerate boundary conditions and check list sizes
            )
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
    print(f"Wall BCs: {names_resp.names}")
@@ -180,7 +174,6 @@ Example: enumerate boundary conditions and check list sizes
            )
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
    print(f"Lights list size: {size_resp.size}")
@@ -195,7 +188,6 @@ Example: enumerate boundary conditions and check list sizes
            size=10
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
 Commands and queries
@@ -222,7 +214,6 @@ Example: execute a command and query
            command="iterate",
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
    # Execute a query (e.g., validate settings)
@@ -235,7 +226,6 @@ Example: execute a command and query
            query="get-tensor-type",
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
    # Check query result
@@ -264,7 +254,6 @@ Example: retrieve object attributes
            recursive=False
        ),
        metadata=metadata,
-       timeout=10.0,
    )
 
    # response.values contains the attribute data
@@ -344,7 +333,6 @@ object management, and command execution.
                    )
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print(f"Dimension: {value_to_python(dim_resp.value)}")
 
@@ -359,7 +347,6 @@ object management, and command execution.
                    value=settings_pb2.Value(integer=101325)
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print("Operating pressure set to 101325 Pa")
 
@@ -373,7 +360,6 @@ object management, and command execution.
                    )
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print(f"Existing walls: {names_resp.names}")
 
@@ -389,7 +375,6 @@ object management, and command execution.
                    args=settings_pb2.Value()
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print("Iteration command executed")
 
@@ -403,7 +388,6 @@ object management, and command execution.
                    name="contour-1"
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print("Created contour: contour-1")
 
@@ -418,7 +402,6 @@ object management, and command execution.
                    new_name="contour-renamed"
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print("Renamed to: contour-renamed")
 
@@ -432,7 +415,6 @@ object management, and command execution.
                    name="contour-renamed"
                ),
                metadata=metadata,
-               timeout=10.0,
            )
            print("Deleted contour: contour-renamed")
 
@@ -455,7 +437,6 @@ Best practices
 3. **Decode Value types defensively** - Always check ``WhichOneof("value")`` before accessing a Value field to handle bool, int, float, string, list, or map types correctly.
 4. **Use GetObjectNames to list children** - When managing named objects (e.g., boundary conditions), use GetObjectNames to enumerate existing names before creating new ones.
 5. **Batch related modifications** - Group related SetVar calls to reduce round trips when configuring related settings.
-6. **Set practical timeouts** - Complex hierarchy queries or large object operations may need longer RPC timeouts (15+ seconds).
 
 See also
 ~~~~~~~~

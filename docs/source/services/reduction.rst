@@ -1,4 +1,4 @@
-Reduction
+﻿Reduction
 =========
 
 The Reduction service provides scalar and vector reduction operations over
@@ -47,13 +47,11 @@ Example: area and centroid on selected surfaces
    area_resp = reduction_stub.Area(
       reduction_pb2.AreaRequest(locations=["wall-inlet", "wall-outlet"]),
       metadata=metadata,
-      timeout=10.0,
    )
 
    centroid_resp = reduction_stub.Centroid(
       reduction_pb2.CentroidRequest(locations=["wall-inlet", "wall-outlet"]),
       metadata=metadata,
-      timeout=10.0,
    )
 
    c = centroid_resp.value
@@ -82,7 +80,6 @@ Example: volume-weighted average absolute pressure
          locations=["fluid"],
       ),
       metadata=metadata,
-      timeout=10.0,
    )
 
 Force and moment
@@ -100,12 +97,10 @@ Example: pressure and viscous force decomposition
    pressure = reduction_stub.PressureForce(
       reduction_pb2.PressureForceRequest(locations=["car-body"]),
       metadata=metadata,
-      timeout=15.0,
    )
    viscous = reduction_stub.ViscousForce(
       reduction_pb2.ViscousForceRequest(locations=["car-body"]),
       metadata=metadata,
-      timeout=15.0,
    )
 
    fp = pressure.value
@@ -132,7 +127,6 @@ Example: conditional count and weighted sum
          locations=["inlet1"],
       ),
       metadata=metadata,
-      timeout=10.0,
    )
 
    sum_if_resp = reduction_stub.SumIf(
@@ -143,7 +137,6 @@ Example: conditional count and weighted sum
          weight="Area",
       ),
       metadata=metadata,
-      timeout=10.0,
    )
 
 Working with variant results
@@ -228,17 +221,14 @@ force-related metrics using proto-accurate request/response types.
          area_resp = stub.Area(
             reduction_pb2.AreaRequest(locations=["wall-inlet", "wall-outlet"]),
             metadata=metadata,
-            timeout=10.0,
          )
          volume_resp = stub.Volume(
             reduction_pb2.VolumeRequest(locations=["fluid"]),
             metadata=metadata,
-            timeout=10.0,
          )
          centroid_resp = stub.Centroid(
             reduction_pb2.CentroidRequest(locations=["wall-inlet", "wall-outlet"]),
             metadata=metadata,
-            timeout=10.0,
          )
 
          print(f"Area: {variant_to_python(area_resp.value)}")
@@ -253,7 +243,6 @@ force-related metrics using proto-accurate request/response types.
                locations=["fluid"],
             ),
             metadata=metadata,
-            timeout=10.0,
          )
          min_t_resp = stub.Minimum(
             reduction_pb2.MinimumRequest(
@@ -261,7 +250,6 @@ force-related metrics using proto-accurate request/response types.
                locations=["fluid"],
             ),
             metadata=metadata,
-            timeout=10.0,
          )
          vol_ave_resp = stub.VolumeAve(
             reduction_pb2.VolumeAveRequest(
@@ -269,7 +257,6 @@ force-related metrics using proto-accurate request/response types.
                locations=["fluid"],
             ),
             metadata=metadata,
-            timeout=10.0,
          )
 
          print(f"Pressure min: {variant_to_python(min_t_resp.value)}")
@@ -280,17 +267,14 @@ force-related metrics using proto-accurate request/response types.
          pressure_force_resp = stub.PressureForce(
             reduction_pb2.PressureForceRequest(locations=["car-body"]),
             metadata=metadata,
-            timeout=15.0,
          )
          viscous_force_resp = stub.ViscousForce(
             reduction_pb2.ViscousForceRequest(locations=["car-body"]),
             metadata=metadata,
-            timeout=15.0,
          )
          total_force_resp = stub.Force(
             reduction_pb2.ForceRequest(locations=["car-body"]),
             metadata=metadata,
-            timeout=15.0,
          )
 
          fp = pressure_force_resp.value
@@ -307,7 +291,6 @@ force-related metrics using proto-accurate request/response types.
                locations=["inlet1"],
             ),
             metadata=metadata,
-            timeout=10.0,
          )
          weighted_sum_resp = stub.SumIf(
             reduction_pb2.SumIfRequest(
@@ -317,7 +300,6 @@ force-related metrics using proto-accurate request/response types.
                weight="Area",
             ),
             metadata=metadata,
-            timeout=10.0,
          )
 
          print(f"Hot cells/faces count: {variant_to_python(hot_count_resp.value)}")
@@ -363,8 +345,7 @@ Best practices
 2. **Validate expression syntax early** - Test expressions with simple queries before large batch runs.
 3. **Handle Variant types defensively** - Always inspect ``WhichOneof('as')`` before using values.
 4. **Separate pressure and viscous force** - Use ``PressureForce`` and ``ViscousForce`` for diagnostics, ``Force`` for total.
-5. **Set practical timeouts** - Complex reductions over large meshes may need longer RPC timeouts.
-6. **Keep condition expressions clear** - Prefer simple threshold logic for ``CountIf`` and ``SumIf``.
+5. **Keep condition expressions clear** - Prefer simple threshold logic for ``CountIf`` and ``SumIf``.
 
 See also
 ~~~~~~~~

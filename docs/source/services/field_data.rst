@@ -41,7 +41,6 @@ Retrieve information about available surfaces in the simulation.
    response = field_stub.GetSurfacesInfo(
        field_data_pb2.GetSurfacesInfoRequest(),
        metadata=metadata,
-       timeout=10.0
    )
    
    for surface_info in response.surface_info:
@@ -59,7 +58,6 @@ Discover available scalar fields that can be requested.
    response = field_stub.GetFieldsInfo(
        field_data_pb2.GetFieldsInfoRequest(),
        metadata=metadata,
-       timeout=10.0
    )
    
    for field in response.field_info:
@@ -82,7 +80,6 @@ Get the minimum and maximum values of a field on a surface.
    response = field_stub.GetRange(
        request,
        metadata=metadata,
-       timeout=20.0
    )
    
    print(f"Range: {response.minimum} to {response.maximum}")
@@ -114,7 +111,6 @@ Stream scalar field values. This is the main way to retrieve field data.
    for chunk in field_stub.GetFields(
        request,
        metadata=metadata,
-       timeout=120.0
    ):
        chunk_type = chunk.WhichOneof("chunk")
        
@@ -166,7 +162,6 @@ A complete workflow that discovers and streams field data:
            surf_response = stub.GetSurfacesInfo(
                field_data_pb2.GetSurfacesInfoRequest(),
                metadata=metadata,
-               timeout=10.0
            )
            
            surface_ids = {}
@@ -186,7 +181,6 @@ A complete workflow that discovers and streams field data:
            field_response = stub.GetFieldsInfo(
                field_data_pb2.GetFieldsInfoRequest(),
                metadata=metadata,
-               timeout=10.0
            )
            
            if not field_response.field_info:
@@ -208,7 +202,6 @@ A complete workflow that discovers and streams field data:
            range_response = stub.GetRange(
                range_request,
                metadata=metadata,
-               timeout=20.0
            )
            
            print(f"Min: {range_response.minimum:.6g}")
@@ -235,7 +228,6 @@ A complete workflow that discovers and streams field data:
            for chunk in stub.GetFields(
                stream_request,
                metadata=metadata,
-               timeout=120.0
            ):
                chunk_type = chunk.WhichOneof("chunk")
                
@@ -304,7 +296,6 @@ Best practices
 2. **Check field range** - Use ``GetRange`` to understand data before streaming
 3. **Use appropriate chunk size** - Larger chunks (256-512 KB) for faster streaming
 4. **Handle large streams** - Process chunks incrementally, don't load all in memory
-5. **Set reasonable timeouts** - Stream operations may take longer (60-300 seconds)
 
 See also
 ~~~~~~~~
