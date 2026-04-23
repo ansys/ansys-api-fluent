@@ -44,28 +44,46 @@ Query the settings structure and object metadata.
 Using GetStaticInfo for client discovery
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use ``GetStaticInfo`` once during bootstrap to build a local model of the
-settings tree. This allows you to validate paths and infer capabilities before
-making mutating calls.
+**What is static info?**
 
-Useful fields in ``StaticInfo`` for client logic:
+``GetStaticInfo`` returns a complete description of the Fluent settings hierarchy
+structure. Think of it as a schema: it tells you what settings exist, what 
+operations (commands/queries) are available, and what each operation expects.
 
-- ``type``: node kind (for example, group, named-object, command/query node)
-- ``children``: available navigation paths
-- ``commands`` and ``queries``: operations available at a path
-- ``arguments``: argument names for command/query invocation
-- ``user_creatable`` and ``object_type``: named-object lifecycle support
-- ``include_child_named_objects``: named-object propagation behavior
-- ``list_size``: fixed-size list constraints
-- ``has_allowed_values`` and ``attrs``: input constraints and UI hints
+**Why query it?**
 
-Typical flow:
+Instead of hardcoding paths and operations in your client, you can ask the server
+once: "What settings exist?" The server responds with the full tree. Your client 
+can then use this information to:
 
-1. Request static info for ``root="fluent"``.
-2. Traverse recursively and index by full path.
-3. Use these indexes to validate path existence, operation availability, and argument names.
+- Validate that a path exists before trying to read/write it
+- Check which commands and queries are available at a location
+- Understand what arguments each operation expects
+- Build a robust client that adapts if the settings schema changes
 
-Example: fetch, index, and inspect capabilities
+**Key information in the response**
+
+Each node in the static info tree contains:
+
+- ``type``: What kind of object this is (for example, a group, a named-object container, or a command/query node)
+- ``children``: The settings or objects you can access under this node
+- ``commands`` and ``queries``: What operations you can perform here
+- ``arguments``: What parameters those operations require
+- ``user_creatable`` and ``object_type``: Whether you can create/delete objects at this location
+- ``include_child_named_objects``: How child objects are organized
+- ``list_size``: Size constraints for list-type settings
+- ``has_allowed_values`` and ``attrs``: Metadata about constraints and options
+
+**Building your client with static info**
+
+A typical client workflow looks like this:
+
+1. At startup, call ``GetStaticInfo`` with ``root="fluent"`` to fetch the schema.
+2. Recursively walk through the response and build indexes of all available paths and operations.
+3. When the user asks to read/write/execute something, check your indexes first.
+4. Only send the RPC call if the operation is valid according to what you learned from static info.
+
+**Example: fetch, index, and inspect capabilities**
 
 .. code-block:: python
 
@@ -115,8 +133,9 @@ Example: fetch, index, and inspect capabilities
 
    channel.close()
 
-This pattern keeps client behavior driven by server metadata instead of
-hardcoded path catalogs, which helps when the settings schema evolves.
+This pattern lets your client discover the server's capabilities automatically, 
+instead of relying on hardcoded assumptions. If the settings structure changes, 
+your client can adapt by re-querying static info.
 
 Getting and setting values
 --------------------------

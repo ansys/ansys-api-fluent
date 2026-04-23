@@ -304,34 +304,52 @@ Example: inspect static info
 Using GetStaticInfo for complete client discovery
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use ``GetStaticInfo`` at startup to build a client-side model of the datamodel
-tree for a rules context (for example, ``meshing`` or ``flserver``). This lets
-the client validate paths, infer callable commands/queries, and derive argument
-contracts before sending execution RPCs.
+**What is static info?**
 
-Important ``StaticInfo`` fields for client inference:
+``GetStaticInfo`` returns a complete description of the server's data structure
+for a given rules context (such as ``meshing`` or ``flserver``, which tell the
+server which simulation mode to describe). Think of it as a schema: it tells you
+what data exists, what operations are available, and what arguments each operation
+expects.
 
-- ``type``: node type/category
-- ``named_objects``, ``singletons``, ``parameters``: hierarchical children
-- ``commands`` and ``queries``: callable operations at a node
-- ``command_info`` and ``query_info``: operation signatures and return type
-- ``help_string`` and ``attrs``: descriptive and constraint metadata
+**Why query it?**
 
-For command/query signature extraction, each operation may expose:
+Instead of hardcoding paths and operations in your client, you can ask the server
+once: "What can I access?" The server responds with the full tree. Your client can
+then use this information to:
 
-- ``return_type`` from ``CommandInfo``
-- ``args`` list of ``CommandArg`` entries
-- per-argument metadata: ``name``, ``type``, ``help_string``, ``doc_string``, ``attrs``, ``info``
+- Validate that a path exists before trying to read/write it
+- Check which commands are available at a given location
+- Understand what arguments each command expects
+- Build a robust client that adapts if the server's structure changes
 
-Typical client bootstrap flow:
+**Key information in the response**
 
-1. Call ``GetStaticInfo`` once per active rules context.
-2. Traverse recursively and index full paths.
-3. Build capability tables (commands, queries, parameter paths, object paths).
-4. Build argument schemas from ``command_info.args`` and ``query_info.args``.
-5. Use these indexes to validate requests before ``GetState``/``SetState``/``Execute*`` calls.
+Each node in the static info tree contains:
 
-Example: build path and operation indexes from static info
+- ``type``: What kind of object this is (for example, a parameter, a command, or a container)
+- ``named_objects``, ``singletons``, ``parameters``: The children under this node
+- ``commands`` and ``queries``: What operations you can perform here
+- ``command_info`` and ``query_info``: Details about each operation, including argument names and return types
+- ``help_string`` and ``attrs``: Documentation and metadata
+
+**Building your client with static info**
+
+A typical client workflow looks like this:
+
+1. At startup, call ``GetStaticInfo`` once to fetch the schema.
+2. Recursively walk through the response and build indexes of all available paths and operations.
+3. When the user asks to read/write/execute something, check your indexes first.
+4. Only send the RPC call if the operation is valid according to what you learned from static info.
+
+For operations with arguments, extract the argument details from ``command_info.args`` 
+or ``query_info.args``. Each argument tells you its name and type, so you can validate 
+or prompt the user before sending the request.
+
+**Example: exploring the structure**
+
+Here's a practical example that fetches the schema, explores it, and then inspects 
+what operations are available at a specific location:
 
 .. code-block:: python
 
@@ -401,8 +419,9 @@ Example: build path and operation indexes from static info
    print("Commands:", list(operations[target]["commands"].keys()))
    print("Queries:", list(operations[target]["queries"].keys()))
 
-This approach keeps the client metadata-driven and resilient to schema changes,
-because the model is inferred from server static info instead of hardcoded trees.
+This approach lets your client discover the server's capabilities automatically, instead 
+of relying on hardcoded assumptions. If the server's structure changes, your client can 
+adapt by re-querying static info.
 
 Command and query execution
 ---------------------------
