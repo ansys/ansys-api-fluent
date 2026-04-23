@@ -10,8 +10,10 @@ project = "ansys-api-fluent"
 copyright = "2026 ANSYS, Inc."
 author = "ANSYS, Inc."
 
-release = "0.5.0"
-version = "0.5"
+from ansys.api.fluent._version import __version__
+
+release = __version__
+version = ".".join(__version__.split(".")[:2])
 
 extensions = [
     "sphinx.ext.autodoc",
