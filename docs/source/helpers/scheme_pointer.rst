@@ -1,4 +1,4 @@
-Scheme Pointer Types
+Scheme pointer types
 ====================
 
 The Scheme Pointer definitions provide the typed value container used to
@@ -18,7 +18,7 @@ used primarily by the Scheme evaluation API to represent Scheme values such as:
 - Booleans and characters
 - Pairs and lists
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.scheme_pointer``
@@ -30,7 +30,7 @@ Service Definition
 - ``SchemePointer.SchemeList``: Repeated ``SchemePointer`` items
 - ``Empty``: Represents a null or empty Scheme value
 
-Used By Proto Files
+Used by proto files
 ~~~~~~~~~~~~~~~~~~~
 
 The ``scheme_pointer.proto`` helper types are used by:
@@ -38,7 +38,7 @@ The ``scheme_pointer.proto`` helper types are used by:
 - ``scheme_eval.proto`` (typed Scheme request/response payloads)
 - ``events.proto`` (event callback argument payloads)
 
-Common Value Shapes
+Common value shapes
 ~~~~~~~~~~~~~~~~~~~
 
 ``SchemePointer`` uses the ``val`` oneof to hold exactly one active value.
@@ -66,7 +66,7 @@ Example: create simple scalar values
    string_ptr = scheme_pointer_pb2.SchemePointer(str="hello")
    bool_ptr = scheme_pointer_pb2.SchemePointer(b=True)
 
-Example: build a Scheme list
+Example: build a scheme list
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This example builds the Scheme expression ``(+ 1 2)`` as a typed list.
@@ -117,7 +117,7 @@ Use ``WhichOneof("val")`` to determine which field is populated.
            )
        return None
 
-Usage with Scheme Evaluation
+Usage with scheme evaluation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``SchemePointer`` values are commonly passed to and returned from the Scheme
@@ -153,7 +153,7 @@ evaluation API.
 
    print(response.output.fixednum)
 
-Best Practices
+Best practices
 ~~~~~~~~~~~~~~
 
 1. **Check the active oneof field** before reading a value.
@@ -161,7 +161,7 @@ Best Practices
 3. **Prefer strings for simple expressions** and typed pointers when preserving structure matters.
 4. **Treat ``pair`` and ``list`` separately** because they represent different Scheme constructs.
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

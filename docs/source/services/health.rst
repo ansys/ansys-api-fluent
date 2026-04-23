@@ -11,7 +11,7 @@ Overview
 The ``Health`` service is used to verify that your server is running and ready to serve requests. 
 Use this as the first check when connecting to a server.
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.health``
@@ -22,7 +22,7 @@ Service Definition
 - ``HealthCheckResponse``: Response with serving status
 - ``HealthStub``: Client stub for making requests
 
-RPC Operations
+RPC operations
 ~~~~~~~~~~~~~~
 
 Check
@@ -41,7 +41,7 @@ Queries the serving status of a service.
    status = response.status
    # Returns: SERVING_STATUS_SERVING (1) if healthy
 
-Complete Example
+Complete example
 ~~~~~~~~~~~~~~~~
 
 .. code-block:: python
@@ -89,7 +89,7 @@ Complete Example
        is_healthy = check_server_health()
        print(f"Server is {'ready' if is_healthy else 'not ready'}")
 
-Serving Status Values
+Serving status values
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -111,7 +111,7 @@ Serving Status Values
      - 3
      - Requested service is unknown
 
-Best Practices
+Best practices
 ~~~~~~~~~~~~~~
 
 1. **Always check health first** - Before using other services, verify the server is healthy
@@ -119,7 +119,7 @@ Best Practices
 3. **Handle errors gracefully** - Network issues or wrong credentials will raise RpcError
 4. **Implement retry logic** - For transient failures, retry with exponential backoff
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`gettingstarted` - Basic client setup

@@ -1,4 +1,4 @@
-Batch Operations
+Batch operations
 ================
 
 The Batch Operations service provides batch execution capabilities for command sequences.
@@ -14,7 +14,7 @@ The ``BatchOps`` service allows you to:
 - Chain multiple operations
 - Manage batch execution state
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.batch_ops``
@@ -23,7 +23,7 @@ Service Definition
 
 - ``BatchOpsStub``: Client stub for batch operations
 
-Core RPC Operations
+Core RPC operations
 ~~~~~~~~~~~~~~~~~~~
 
 Execute
@@ -43,7 +43,7 @@ Execute a batch of operations.
        timeout=30.0
    )
 
-Complete Example
+Complete example
 ~~~~~~~~~~~~~~~~
 
 .. code-block:: python
@@ -81,7 +81,7 @@ Complete Example
    if __name__ == "__main__":
        execute_batch()
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

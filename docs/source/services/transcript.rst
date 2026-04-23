@@ -1,4 +1,4 @@
-Transcript
+﻿Transcript
 ==========
 
 The Transcript service provides access to Fluent's command transcript and logging.
@@ -15,7 +15,7 @@ The ``Transcript`` service allows you to:
 - Monitor transcript stream
 - Query execution results
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.transcript``
@@ -24,11 +24,11 @@ Service Definition
 
 - ``TranscriptStub``: Client stub for transcript operations
 
-Core RPC Operations
+Core RPC operations
 ~~~~~~~~~~~~~~~~~~~
 
-GetTranscript (Stream)
-----------------------
+Get transcript (stream)
+-----------------------
 
 Stream transcript messages and solver output.
 
@@ -46,7 +46,7 @@ Stream transcript messages and solver output.
        elif transcript_msg.type == transcript_pb2.TranscriptMessage.STDERR:
            print(f"Error: {transcript_msg.message}")
 
-Complete Example
+Complete example
 ~~~~~~~~~~~~~~~~
 
 .. code-block:: python
@@ -88,7 +88,7 @@ Complete Example
    if __name__ == "__main__":
        stream_transcript()
 
-Message Types
+Message types
 ~~~~~~~~~~~~~
 
 .. list-table::
@@ -103,7 +103,7 @@ Message Types
    * - INFO
      - Informational messages
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

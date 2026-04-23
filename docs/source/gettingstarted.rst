@@ -1,4 +1,4 @@
-Getting Started
+Getting started
 ===============
 
 This guide shows how to use the packaged Python gRPC interface in ``ansys-api-fluent`` 
@@ -24,8 +24,8 @@ Or use a virtual environment:
    source .venv/bin/activate
    pip install ansys-api-fluent
 
-What This Package Provides
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+What this package provides
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``ansys-api-fluent`` package contains generated Python files for the Fluent gRPC APIs:
 
@@ -53,7 +53,7 @@ Before writing a client, you need:
 - The server port
 - The server password
 
-Basic Pattern
+Basic pattern
 ~~~~~~~~~~~~~
 
 Every v1 gRPC client follows the same steps:
@@ -81,7 +81,7 @@ Example:
    print(f"Server health status: {response.status}")
    channel.close()
 
-Complete Example
+Complete example
 ~~~~~~~~~~~~~~~~
 
 Here is a complete script that demonstrates connecting to a server and using multiple services:
@@ -160,7 +160,7 @@ Here is a complete script that demonstrates connecting to a server and using mul
    if __name__ == "__main__":
        main()
 
-Next Steps
+Next steps
 ~~~~~~~~~~
 
 Now that you understand the basic pattern, explore the :doc:`services` to learn about:
@@ -170,7 +170,7 @@ Now that you understand the basic pattern, explore the :doc:`services` to learn 
 - **App Utilities** (:doc:`services/app_utilities`): Access Fluent application settings
 - Other specialized services for your use case
 
-Common Errors and Solutions
+Common errors and solutions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **ImportError**

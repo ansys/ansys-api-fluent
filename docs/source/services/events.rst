@@ -1,4 +1,4 @@
-Events
+﻿Events
 ======
 
 The Events service provides server-streamed notifications for solver lifecycle,
@@ -18,7 +18,7 @@ The ``Events`` service allows you to:
 - React to pause/resume, auto-pause, and command completion signals
 - Monitor data-model and report/plot changes
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.events``
@@ -29,10 +29,10 @@ Service Definition
 - ``BeginStreamingRequest``: Request message to start the stream
 - ``BeginStreamingResponse``: Streamed response carrying one event in ``oneof as``
 
-Core RPC Operations
+Core RPC operations
 ~~~~~~~~~~~~~~~~~~~
 
-BeginStreaming (Server Stream)
+BeginStreaming (server stream)
 ------------------------------
 
 Starts the event stream and yields a sequence of
@@ -50,7 +50,7 @@ Starts the event stream and yields a sequence of
           event_type = response.WhichOneof("as")
           print(f"Received event: {event_type}")
 
-Working with ``oneof`` Events
+Working with ``oneof`` events
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Each streamed ``BeginStreamingResponse`` has exactly one populated event in the
@@ -69,7 +69,7 @@ access the matching field.
     elif event_type == "error_event":
           print(response.error_event.message)
 
-Event Types in ``BeginStreamingResponse``
+Event types in ``BeginStreamingResponse``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table:: Event union fields
@@ -155,7 +155,7 @@ Event Types in ``BeginStreamingResponse``
        - ``ClientExecuteEvent``
        - Request to execute a client-side function
 
-Complete Example
+Complete example
 ~~~~~~~~~~~~~~~~
 
 An end-to-end event listener that streams events, decodes event types,
@@ -250,7 +250,7 @@ prints key payload fields, and handles stream failures.
     if __name__ == "__main__":
           stream_events(max_events=200)
 
-Best Practices
+Best practices
 ~~~~~~~~~~~~~~
 
 1. **Use long stream timeouts** - Event streams are long-lived; use large timeout values.
@@ -261,7 +261,7 @@ Best Practices
 6. **Treat ``error_event`` specially** - Log and surface fatal errors immediately.
 7. **Limit demo streams** - In examples/tests, stop after N events to avoid endless runs.
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

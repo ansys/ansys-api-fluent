@@ -1,4 +1,4 @@
-Monitor
+﻿Monitor
 =======
 
 The Monitor service provides RPCs to query monitor metadata and stream live monitor data during a Fluent simulation.
@@ -19,7 +19,7 @@ Monitors are grouped into *monitor sets*. A monitor set contains one or more nam
 (e.g. ``residual-continuity``, ``mass-flow-outlet``) that share the same x-axis (iteration or time),
 y-axis label, and unit information.
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.monitor``
@@ -35,7 +35,7 @@ Service Definition
 - ``XAxisData``: Single x-axis sample (type + index)
 - ``UnitData``: Unit conversion metadata attached to a monitor set
 
-Key Types
+Key types
 ~~~~~~~~~
 
 **MonitorType Enum**
@@ -128,7 +128,7 @@ Key Types
      - sint32
      - Limit stream to a specific sampling frequency
 
-RPC Operations
+RPC operations
 ~~~~~~~~~~~~~~
 
 GetMonitors
@@ -169,10 +169,10 @@ produces new monitor samples. Each response contains one ``XAxisData`` point and
        for y in sample.y_axis_values:
            print(f"  iter={x.x_axis_index}  {y.name}={y.value:.6g}")
 
-Individual Examples
+Individual examples
 ~~~~~~~~~~~~~~~~~~~
 
-List All Monitor Sets
+List all monitor sets
 ---------------------
 
 Discover every monitor set registered with the running solver:
@@ -216,7 +216,7 @@ Discover every monitor set registered with the running solver:
    finally:
        channel.close()
 
-Inspect Unit Information
+Inspect unit information
 ------------------------
 
 Read the unit conversion metadata attached to each monitor set:
@@ -245,7 +245,7 @@ Read the unit conversion metadata attached to each monitor set:
    finally:
        channel.close()
 
-Stream All Monitor Data
+Stream all monitor data
 -----------------------
 
 Receive every sample emitted by the solver until the stream ends:
@@ -273,8 +273,8 @@ Receive every sample emitted by the solver until the stream ends:
    finally:
        channel.close()
 
-Stream Only Residuals (Filtered)
----------------------------------
+Stream only residuals (filtered)
+--------------------------------
 
 Use ``MonitorFilter`` to receive only iteration-based residual samples:
 
@@ -307,8 +307,8 @@ Use ``MonitorFilter`` to receive only iteration-based residual samples:
    finally:
        channel.close()
 
-Stream Specific Monitors by Name
----------------------------------
+Stream specific monitors by name
+--------------------------------
 
 Filter the stream to a named subset of monitors:
 
@@ -341,7 +341,7 @@ Filter the stream to a named subset of monitors:
    finally:
        channel.close()
 
-Complete End-to-End Example
+Complete end-to-end example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A full workflow that connects to Fluent, discovers all monitors, then streams and summarises
@@ -461,7 +461,7 @@ convergence data until the solver finishes:
    if __name__ == "__main__":
        run()
 
-Best Practices
+Best practices
 ~~~~~~~~~~~~~~
 
 1. **Call GetMonitors before BeginStreaming** — use the returned monitor names to build
@@ -482,7 +482,7 @@ Best Practices
 6. **Close the channel in a** ``finally`` **block** — always release gRPC resources even
    when the stream is interrupted.
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

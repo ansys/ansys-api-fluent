@@ -1,4 +1,4 @@
-App Utilities
+﻿App utilities
 =============
 
 The App Utilities service provides access to Fluent application-level operations and information.
@@ -17,7 +17,7 @@ The ``AppUtilities`` service gives you access to:
 - Solution data availability checks
 - Working directory management
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.app_utilities``
@@ -26,11 +26,11 @@ Service Definition
 
 - ``AppUtilitiesStub``: Client stub for application operations
 
-Core RPC Operations
+Core RPC operations
 ~~~~~~~~~~~~~~~~~~~
 
-GetProductVersion
-------------------
+Get product version
+-------------------
 
 Retrieve the Fluent product version information.
 
@@ -43,8 +43,8 @@ Retrieve the Fluent product version information.
    )
    print(f"Version: {response.major}.{response.minor}.{response.patch}")
 
-GetBuildInfo
-------------
+Get build info
+--------------
 
 Get detailed build information.
 
@@ -60,8 +60,8 @@ Get detailed build information.
    print(f"VCS Revision: {response.vcs_revision}")
    print(f"VCS Branch: {response.vcs_branch}")
 
-GetAppMode
-----------
+Get app mode
+------------
 
 Check the current application mode (meshing, solver, etc.).
 
@@ -121,8 +121,8 @@ Example usage with the map:
    )
    print(f"Mode: {APP_MODE_MAP.get(response.app_mode, 'Unknown')}")
 
-SetWorkingDirectory
--------------------
+Set working directory
+---------------------
 
 Set the working directory for Fluent operations.
 
@@ -137,7 +137,7 @@ Set the working directory for Fluent operations.
        timeout=10.0
    )
 
-Complete Example
+Complete example
 ~~~~~~~~~~~~~~~~
 
 .. code-block:: python
@@ -199,7 +199,7 @@ Complete Example
    if __name__ == "__main__":
        get_app_info()
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

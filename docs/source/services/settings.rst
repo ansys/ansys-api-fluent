@@ -1,4 +1,4 @@
-Settings
+﻿Settings
 ========
 
 The Settings service provides hierarchical access to Fluent simulation configuration,
@@ -18,7 +18,7 @@ The ``Settings`` service allows you to:
 - Execute commands and queries on settings objects
 - Access object attributes with optional recursive retrieval
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.settings``
@@ -30,19 +30,19 @@ Service Definition
 - ``Value``: Container for typed settings values (oneof: bool, int64, double, string, list, map)
 - ``StaticInfo``: Metadata about settings objects (type, children, commands, queries, help)
 
-Core RPC Operations
+Core RPC operations
 ~~~~~~~~~~~~~~~~~~~
 
-Hierarchy and Metadata Discovery
----------------------------------
+Hierarchy and metadata discovery
+--------------------------------
 
 Query the settings structure and object metadata.
 
 - ``GetStaticInfo(GetStaticInfoRequest)`` → ``StaticInfo``
   Request fields: ``root: string``, ``optional_attrs: repeated string``
 
-Getting and Setting Values
----------------------------
+Getting and setting values
+--------------------------
 
 Retrieve and modify typed configuration values.
 
@@ -85,8 +85,8 @@ Example: retrieve and modify operating pressure setting
        timeout=10.0,
    )
 
-Object Creation, Deletion, and Renaming
-----------------------------------------
+Object creation, deletion, and renaming
+---------------------------------------
 
 Manage named objects in the settings hierarchy.
 
@@ -141,7 +141,7 @@ Example: create a new contour, rename it, and then delete it
        timeout=10.0,
    )
 
-Object and List Queries
+Object and list queries
 -----------------------
 
 Query object names and list sizes.
@@ -198,7 +198,7 @@ Example: enumerate boundary conditions and check list sizes
        timeout=10.0,
    )
 
-Commands and Queries
+Commands and queries
 --------------------
 
 Execute commands and queries on settings objects.
@@ -242,7 +242,7 @@ Example: execute a command and query
    if query_resp.reply.WhichOneof("value") == "string":
        print(f"Tensor type: {query_resp.reply.string}")
 
-Attribute Access
+Attribute access
 ----------------
 
 Retrieve attributes from settings objects.
@@ -273,7 +273,7 @@ Example: retrieve object attributes
        for key, val in attrs_value.value_map.m.items():
            print(f"{key}: {val}")
 
-Working with Value Results
+Working with value results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Settings RPCs return ``Value`` objects which use a ``oneof`` to hold one active type.
@@ -297,7 +297,7 @@ Use this helper to convert ``Value`` to native Python types.
            return {key: value_to_python(val) for key, val in v.value_map.m.items()}
        return None
 
-Complete Example
+Complete example
 ~~~~~~~~~~~~~~~~
 
 An end-to-end workflow demonstrating hierarchy discovery, value retrieval/modification,
@@ -447,7 +447,7 @@ object management, and command execution.
    if __name__ == "__main__":
        run_settings_workflow()
 
-Best Practices
+Best practices
 ~~~~~~~~~~~~~~
 
 1. **Always use root="fluent"** - The root is always the literal string ``"fluent"``, not a path like ``/setup``.
@@ -457,7 +457,7 @@ Best Practices
 5. **Batch related modifications** - Group related SetVar calls to reduce round trips when configuring related settings.
 6. **Set practical timeouts** - Complex hierarchy queries or large object operations may need longer RPC timeouts (15+ seconds).
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

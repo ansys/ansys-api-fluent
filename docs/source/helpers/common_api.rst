@@ -17,19 +17,19 @@ The ``CommonAPI`` module defines common data types including:
 This is a helper module (not a standalone service) and is primarily referenced by
 other service proto definitions.
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.common_api``
 
-Used By Proto Files
+Used by proto files
 ~~~~~~~~~~~~~~~~~~~
 
 The ``common_api.proto`` helper types are used by:
 
 - ``reduction.proto`` (for vector-like point values such as centroid, force, and moment)
 
-Common Message Types
+Common message types
 ~~~~~~~~~~~~~~~~~~~~
 
 Point
@@ -41,7 +41,7 @@ Represents a 3D Cartesian coordinate.
 
    point = common_api_pb2.Point(x=0.0, y=0.0, z=0.0)
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

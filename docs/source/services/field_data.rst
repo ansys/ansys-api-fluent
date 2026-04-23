@@ -1,4 +1,4 @@
-Field Data
+﻿Field data
 ==========
 
 The Field Data service provides access to simulation field data including surfaces, scalar fields, vector fields, and spatial information.
@@ -16,7 +16,7 @@ The ``FieldData`` service allows you to:
 - Retrieve mesh node and element data
 - Access specialized field data like pathlines and particle tracks
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.field_data``
@@ -28,11 +28,11 @@ Service Definition
 - Response messages: Corresponding response types
 - Payload types: ``DoublePayload``, ``FloatPayload``, ``IntPayload``, ``LongPayload``
 
-Core RPC Operations
+Core RPC operations
 ~~~~~~~~~~~~~~~~~~~
 
-GetSurfacesInfo
----------------
+Get surfaces information
+------------------------
 
 Retrieve information about available surfaces in the simulation.
 
@@ -49,8 +49,8 @@ Retrieve information about available surfaces in the simulation.
        for surface_id in surface_info.surface_ids:
            print(f"  ID: {surface_id.id}")
 
-GetFieldsInfo
--------------
+Get fields information
+----------------------
 
 Discover available scalar fields that can be requested.
 
@@ -66,8 +66,8 @@ Discover available scalar fields that can be requested.
        print(f"{field.solver_name}: {field.display_name}")
        print(f"  Section: {field.section}, Domain: {field.domain}")
 
-GetRange
---------
+Get range
+---------
 
 Get the minimum and maximum values of a field on a surface.
 
@@ -87,8 +87,8 @@ Get the minimum and maximum values of a field on a surface.
    
    print(f"Range: {response.minimum} to {response.maximum}")
 
-GetFields (Stream)
-------------------
+Get fields (stream)
+-------------------
 
 Stream scalar field values. This is the main way to retrieve field data.
 
@@ -141,7 +141,7 @@ Stream scalar field values. This is the main way to retrieve field data.
    
    print(f"Streamed {value_count} values, range: {values_min} to {values_max}")
 
-Complete Example
+Complete example
 ~~~~~~~~~~~~~~~~
 
 A complete workflow that discovers and streams field data:
@@ -257,7 +257,7 @@ A complete workflow that discovers and streams field data:
    if __name__ == "__main__":
        list_field_data()
 
-Data Location Options
+Data location options
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -273,7 +273,7 @@ Data Location Options
      - Values at cell centers
      - Averaged to cell centers
 
-Payload Types
+Payload types
 ~~~~~~~~~~~~~
 
 Field data is returned in different numeric formats:
@@ -297,7 +297,7 @@ Field data is returned in different numeric formats:
      - ``sint64``
      - Large integer values
 
-Best Practices
+Best practices
 ~~~~~~~~~~~~~~
 
 1. **Always discover first** - Call ``GetSurfacesInfo`` and ``GetFieldsInfo`` before requests
@@ -306,7 +306,7 @@ Best Practices
 4. **Handle large streams** - Process chunks incrementally, don't load all in memory
 5. **Set reasonable timeouts** - Stream operations may take longer (60-300 seconds)
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

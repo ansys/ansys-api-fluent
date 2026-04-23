@@ -1,4 +1,4 @@
-Connection
+﻿Connection
 ==========
 
 The Connection service manages client connections to Fluent servers.
@@ -20,7 +20,7 @@ It provides:
 The Connection service is typically the first service you interact with when connecting to a Fluent server.
 It must be successfully established before accessing other services like Health or Field Data.
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.connection``
@@ -32,7 +32,7 @@ Service Definition
 - ``ConnectResponse``: Response message with connection status and error codes
 - ``ConnectionError``: Enum defining error conditions
 
-Key Message Types
+Key message types
 ~~~~~~~~~~~~~~~~~
 
 **ConnectRequest**
@@ -83,10 +83,10 @@ Key Message Types
      - 6
      - Server wait time expired before completion
 
-RPC Operations
+RPC operations
 ~~~~~~~~~~~~~~
 
-Connect (Bidirectional Stream)
+Connect (bidirectional stream)
 ------------------------------
 
 Establishes a bidirectional connection stream with the server. The client sends connection requests
@@ -102,10 +102,10 @@ and receives streamed status responses. This RPC must complete successfully befo
        version="1.0.0"
    )
 
-Individual Examples
+Individual examples
 ~~~~~~~~~~~~~~~~~~~
 
-Basic Connection
+Basic connection
 ----------------
 
 Establish a connection without authentication:
@@ -141,7 +141,7 @@ Establish a connection without authentication:
    finally:
        channel.close()
 
-Authenticated Connection
+Authenticated connection
 ------------------------
 
 Connect with a password-protected server:
@@ -176,8 +176,8 @@ Connect with a password-protected server:
    finally:
        channel.close()
 
-Connection with Error Handling
--------------------------------
+Connection with error handling
+------------------------------
 
 Handle various connection error scenarios:
 
@@ -226,8 +226,8 @@ Handle various connection error scenarios:
            print(f"RPC error: {err.details()}")
            return False, None, None
 
-Complete End-to-End Example
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Complete end-to-end example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A comprehensive workflow connecting to a Fluent server and performing operations across multiple services:
 
@@ -408,7 +408,7 @@ A comprehensive workflow connecting to a Fluent server and performing operations
        finally:
            client.disconnect()
 
-Best Practices
+Best practices
 ~~~~~~~~~~~~~~
 
 1. **Always establish connection first**: The Connection service must be successfully connected
@@ -431,7 +431,7 @@ Best Practices
 7. **Monitor connection status**: In long-running applications, periodically check server
    health to detect connection drops.
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

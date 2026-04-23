@@ -1,5 +1,5 @@
-ansys-api-fluent Documentation
-===============================
+﻿ansys-api-fluent documentation
+==============================
 
 Welcome to the **ansys-api-fluent** documentation. This package provides the auto-generated Python gRPC interface for Fluent v1 services.
 

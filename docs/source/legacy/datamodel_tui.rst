@@ -16,7 +16,7 @@ The ``TUI`` service allows you to:
 - Execute TUI commands and queries
 - Retrieve schema-like static information for menus and commands
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.datamodel_tui``
@@ -28,7 +28,7 @@ Service Definition
 - ``google.protobuf.Struct``: Dynamic key/value container for command arguments
 - ``StaticInfo``: Menu/command metadata tree
 
-Key Concepts
+Key concepts
 ~~~~~~~~~~~~
 
 - ``path``: TUI datamodel path (for example, ``/mesh/auto-mesh-controls``).
@@ -36,10 +36,10 @@ Key Concepts
 - ``Struct``: Named argument map used in command args.
 - ``Attribute``: Enum used by ``GetAttributeValue`` to request specific metadata.
 
-Core RPC Operations
+Core RPC operations
 ~~~~~~~~~~~~~~~~~~~
 
-Get Child Names
+Get child names
 ---------------
 
 Retrieve the names of direct child nodes at a path.
@@ -70,8 +70,8 @@ Example: get child names
    )
    print("Child names kind:", resp.value.WhichOneof("kind"))
 
-Get Doc String
----------------
+Get doc string
+--------------
 
 Retrieve documentation/help text for a node.
 
@@ -93,8 +93,8 @@ Example: get documentation string
    )
    print("Help text kind:", doc_resp.value.WhichOneof("kind"))
 
-Execute Commands and Queries
------------------------------
+Execute commands and queries
+----------------------------
 
 Execute commands and query endpoints on TUI nodes.
 
@@ -130,7 +130,7 @@ Example: execute a query
    )
    print("Query result kind:", query_resp.result.WhichOneof("kind"))
 
-Get Static Info
+Get static info
 ---------------
 
 Retrieve schema-like static information for menus and commands at a path.
@@ -198,7 +198,7 @@ The TUI datamodel API uses ``google.protobuf.Value`` for response payloads.
            return {k: value_to_python(val) for k, val in v.struct_value.fields.items()}
        return None
 
-Complete End-to-End Example
+Complete end-to-end example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This example demonstrates an end-to-end TUI datamodel workflow using the core methods:
@@ -326,7 +326,7 @@ This example demonstrates an end-to-end TUI datamodel workflow using the core me
    if __name__ == "__main__":
        run_tui_datamodel_workflow()
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup and connection pattern

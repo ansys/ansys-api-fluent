@@ -17,7 +17,7 @@ The ``Reduction`` service allows you to:
 - Compute extrema and conditional counts/sums from expressions
 - Work with dynamically typed scalar results using ``Variant``
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.reduction``
@@ -29,10 +29,10 @@ Service Definition
 - ``Variant``-based scalar responses (``response.value``)
 - ``Point``-based vector responses for geometric/force outputs
 
-Core RPC Operations
+Core RPC operations
 ~~~~~~~~~~~~~~~~~~~
 
-Geometry and Basic Totals
+Geometry and basic totals
 -------------------------
 
 - ``Area``
@@ -59,7 +59,7 @@ Example: area and centroid on selected surfaces
    c = centroid_resp.value
    print(f"Centroid: ({c.x}, {c.y}, {c.z})")
 
-Weighted Averages and Integrals
+Weighted averages and integrals
 -------------------------------
 
 - ``AreaAve``
@@ -85,7 +85,7 @@ Example: volume-weighted average absolute pressure
       timeout=10.0,
    )
 
-Force and Moment
+Force and moment
 ----------------
 
 - ``Force``
@@ -113,7 +113,7 @@ Example: pressure and viscous force decomposition
    print(f"Pressure force: ({fp.x}, {fp.y}, {fp.z})")
    print(f"Viscous force: ({fv.x}, {fv.y}, {fv.z})")
 
-Extrema and Conditional Reductions
+Extrema and conditional reductions
 ----------------------------------
 
 - ``Maximum``
@@ -146,7 +146,7 @@ Example: conditional count and weighted sum
       timeout=10.0,
    )
 
-Working with Variant Results
+Working with variant results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Many Reduction responses use ``ansys.api.fluent.v1.variant.Variant`` in
@@ -181,7 +181,7 @@ Many Reduction responses use ``ansys.api.fluent.v1.variant.Variant`` in
          }
       return None
 
-Complete Example
+Complete example
 ~~~~~~~~~~~~~~~~
 
 An end-to-end reduction workflow that computes geometric, statistical, and
@@ -333,7 +333,7 @@ force-related metrics using proto-accurate request/response types.
    if __name__ == "__main__":
       run_reductions()
 
-Reduction Request Patterns
+Reduction request patterns
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -356,7 +356,7 @@ Reduction Request Patterns
        - ``expression``, ``condition``, ``locations``, ``weight``
        - Used by ``SumIf``.
 
-Best Practices
+Best practices
 ~~~~~~~~~~~~~~
 
 1. **Use explicit locations** - Restrict reductions to relevant surfaces/zones for predictable results.
@@ -366,7 +366,7 @@ Best Practices
 5. **Set practical timeouts** - Complex reductions over large meshes may need longer RPC timeouts.
 6. **Keep condition expressions clear** - Prefer simple threshold logic for ``CountIf`` and ``SumIf``.
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

@@ -1,4 +1,4 @@
-Helper Modules
+Helper modules
 ==============
 
 This section documents shared protobuf helper types that are referenced by multiple

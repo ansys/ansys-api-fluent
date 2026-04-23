@@ -1,4 +1,4 @@
-Scheme Interpreter
+Scheme interpreter
 ==================
 
 The Scheme Interpreter service provides access to Fluent's Scheme execution and
@@ -16,7 +16,7 @@ The ``SchemeEval`` service allows you to:
 - Evaluate typed Scheme values through ``SchemeEval``
 - Exchange typed Scheme values using ``SchemePointer`` messages
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.scheme_eval``
@@ -29,7 +29,7 @@ Service Definition
 - ``SchemeEvalRequest`` / ``SchemeEvalResponse``: Evaluate a typed ``SchemePointer`` expression
 - ``SchemePointer``: Typed Scheme value container used by ``SchemeEval`` and deprecated ``Eval``
 
-Core RPC Operations
+Core RPC operations
 ~~~~~~~~~~~~~~~~~~~
 
 Exec
@@ -94,7 +94,7 @@ Evaluate a typed Scheme expression represented as a ``SchemePointer``.
 
    print(response.output.fixednum)
 
-Eval (Deprecated)
+Eval (deprecated)
 -----------------
 
 The ``Eval`` RPC accepts and returns a ``SchemePointer`` directly, but it is
@@ -110,7 +110,7 @@ deprecated in favor of ``SchemeEval``.
 
    print(response.fixednum)
 
-Working with SchemePointer Results
+Working with SchemePointer results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``SchemeEval`` and deprecated ``Eval`` return a ``SchemePointer`` value. Use
@@ -143,7 +143,7 @@ Working with SchemePointer Results
            )
        return None
 
-Complete Example
+Complete example
 ~~~~~~~~~~~~~~~~
 
 An end-to-end workflow that executes Scheme commands, evaluates a string
@@ -246,7 +246,7 @@ expression, and evaluates a typed ``SchemePointer`` expression.
    if __name__ == "__main__":
        run_scheme_examples()
 
-Best Practices
+Best practices
 ~~~~~~~~~~~~~~
 
 1. **Prefer ``StringEval`` for simple expressions** - It is easier to author and inspect than a typed ``SchemePointer`` tree.
@@ -255,7 +255,7 @@ Best Practices
 4. **Set ``wait=True`` for synchronous command execution** - This makes ``Exec`` easier to use in request-response workflows.
 5. **Decode ``SchemePointer`` defensively** - Always check ``WhichOneof("val")`` before reading a field.
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

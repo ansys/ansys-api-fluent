@@ -1,4 +1,4 @@
-Solution Variables
+﻿Solution variables
 ==================
 
 The Solution Variables service provides metadata and streaming access to Fluent
@@ -16,7 +16,7 @@ The Solution Variables service allows you to:
 - Stream solution variable values efficiently in typed chunks
 - Upload solution variable values through a client-streaming API
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.svar``
@@ -30,11 +30,11 @@ Service Definition
   ``GetSvarDataResponse``, ``SetSvarDataResponse``
 - Data containers: ``Info``, ``Payload``, ``SvarHeader``
 
-Core RPC Operations
+Core RPC operations
 ~~~~~~~~~~~~~~~~~~~
 
-GetZonesInfo
-------------
+Get zones information
+---------------------
 
 Retrieves domain and zone metadata.
 
@@ -52,8 +52,8 @@ Retrieves domain and zone metadata.
    for zone in response.zones_info:
 	   print(f"Zone {zone.zone_id}: {zone.name} ({zone.zone_type})")
 
-GetSvarsInfo
-------------
+Get solution variables information
+----------------------------------
 
 Retrieves solution variable metadata for a given domain and zone.
 
@@ -70,8 +70,8 @@ Retrieves solution variable metadata for a given domain and zone.
 		   f"{variable.name}: dimension={variable.dimension}, field_type={variable.field_type}"
 	   )
 
-GetSvarData (Server Stream)
----------------------------
+Get solution variables data (server stream)
+-------------------------------------------
 
 Streams solution variable data as:
 
@@ -97,8 +97,8 @@ Streams solution variable data as:
 		   payload_type = msg.payload.WhichOneof("chunk")
 		   print(f"payload chunk type: {payload_type}")
 
-SetSvarData (Client Stream)
----------------------------
+Set solution variable data (client stream)
+------------------------------------------
 
 Writes solution variable data with a client-streamed request iterator.
 
@@ -183,10 +183,10 @@ Correct request ordering:
 	   timeout=120.0,
    )
 
-Small Usage Examples
+Small usage examples
 ~~~~~~~~~~~~~~~~~~~~
 
-Example 1: Find the first cell zone
+Example 1: find the first cell zone
 -----------------------------------
 
 .. code-block:: python
@@ -206,7 +206,7 @@ Example 1: Find the first cell zone
 
    print(first_cell_zone.name, first_cell_zone.zone_id)
 
-Example 2: Find a specific variable
+Example 2: find a specific variable
 -----------------------------------
 
 .. code-block:: python
@@ -220,7 +220,7 @@ Example 2: Find a specific variable
    has_pressure = any(v.name == "SV_P" for v in info.svars_info)
    print(f"SV_P available: {has_pressure}")
 
-Example 3: Decode payload chunks
+Example 3: decode payload chunks
 --------------------------------
 
 .. code-block:: python
@@ -239,7 +239,7 @@ Example 3: Decode payload chunks
 		   return list(payload.byte_payload)
 	   return []
 
-End-to-End Example Script
+End-to-end example script
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following script performs a robust read and optional write workflow.
@@ -418,7 +418,7 @@ The following script performs a robust read and optional write workflow.
    if __name__ == "__main__":
 	   run_workflow()
 
-ThreadType Values
+ThreadType values
 ~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -437,7 +437,7 @@ ThreadType Values
 	 - 2
 	 - Zone is represented as a face thread
 
-Best Practices
+Best practices
 ~~~~~~~~~~~~~~
 
 1. **Discover before requesting** - Use ``GetZonesInfo`` and ``GetSvarsInfo`` before ``GetSvarData``.
@@ -447,7 +447,7 @@ Best Practices
 5. **Validate expected field size** - Ensure reconstructed data length matches ``payload_info.field_size``.
 6. **Set practical timeouts** - Large meshes and multi-zone writes can require longer timeouts.
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

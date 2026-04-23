@@ -1,4 +1,4 @@
-Variant Types
+Variant types
 =============
 
 The Variant helper module provides polymorphic value containers used across Fluent service protos.
@@ -17,7 +17,7 @@ The ``Variant`` helper types allow you to:
 ``variant.proto`` is not a standalone gRPC service. It is a shared type module
 used by other service protos.
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.variant``
@@ -26,7 +26,7 @@ Service Definition
 
 - ``Variant``: Message type for polymorphic values
 
-Used By Proto Files
+Used by proto files
 ~~~~~~~~~~~~~~~~~~~
 
 The ``variant.proto`` helper types are used by:
@@ -34,7 +34,7 @@ The ``variant.proto`` helper types are used by:
 - ``datamodel_se.proto`` (state, args, attrs, and command/query payloads)
 - ``reduction.proto`` (typed reduction results)
 
-Variant Types
+Variant types
 ~~~~~~~~~~~~~
 
 The Variant message supports:
@@ -45,7 +45,7 @@ The Variant message supports:
 - Lists and nested variants
 - Custom objects
 
-Example Usage
+Example usage
 ~~~~~~~~~~~~~
 
 .. code-block:: python
@@ -63,7 +63,7 @@ Example Usage
        )
    )
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup

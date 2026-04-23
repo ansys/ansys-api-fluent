@@ -1,4 +1,4 @@
-Datamodel
+﻿DataModel
 =========
 
 The Datamodel service provides structured access to Fluent's
@@ -19,7 +19,7 @@ The ``DataModelService`` (SE) allows you to:
 - Rename and delete objects, including selective child deletion
 - Subscribe to creation/modification/deletion and command-related events
 
-Service Definition
+Service definition
 ~~~~~~~~~~~~~~~~~~
 
 **Package:** ``ansys.api.fluent.v1.datamodel_se``
@@ -30,7 +30,7 @@ Service Definition
 - ``Variant``: Generic typed value container used in most state/argument/result payloads
 - ``StaticInfo`` and ``MemberSpecs``: Structural and specification metadata objects
 
-Key Concepts
+Key concepts
 ~~~~~~~~~~~~
 
 - ``rules``: Datamodel rules context. Use the rules string associated with your active
@@ -40,10 +40,10 @@ Key Concepts
 - ``Variant``: Flexible value message supporting scalars, vectors, nested vectors,
   and dictionaries.
 
-Core RPC Operations
+Core RPC operations
 ~~~~~~~~~~~~~~~~~~~
 
-Initialization and State Streaming
+Initialization and state streaming
 ----------------------------------
 
 Initialize and consume datamodel state deltas or snapshots.
@@ -89,7 +89,7 @@ Example: initialize and consume a few state streaming updates
        if i >= 2:
            break
 
-State Read and Write
+State read and write
 --------------------
 
 Read and modify state at a given datamodel path.
@@ -216,7 +216,7 @@ Example: use ``UpdateDict`` only on Dict parameters
        timeout=20.0,
    )
 
-Object Lifecycle Operations
+Object lifecycle operations
 ---------------------------
 
 Manage named objects and child objects in the datamodel tree.
@@ -278,7 +278,7 @@ Example: delete selected child objects
        timeout=20.0,
    )
 
-Attribute and Metadata Retrieval
+Attribute and metadata retrieval
 --------------------------------
 
 Get attributes and structural metadata for dynamic clients and tooling.
@@ -316,7 +316,7 @@ Example: inspect static info
    )
    print("Top-level named object count:", len(static_resp.info.singletons))
 
-Command and Query Execution
+Command and query execution
 ---------------------------
 
 Execute actions and ask computed questions at a target path.
@@ -355,7 +355,7 @@ Example: execute a command with argument map
    )
    print("Command result kind:", cmd_resp.result.WhichOneof("as"))
 
-Command Argument Lifecycle
+Command argument lifecycle
 --------------------------
 
 Some command workflows support explicit command-argument instance lifecycle.
@@ -392,7 +392,7 @@ Example: create and clean up command argument instance
        timeout=10.0,
    )
 
-Event Subscription and Event Streaming
+Event subscription and event streaming
 --------------------------------------
 
 Subscribe to specific event types, then consume event stream updates.
@@ -441,7 +441,7 @@ Example: subscribe to modification events and read event stream
        timeout=10.0,
    )
 
-Working with Variant Values
+Working with variant values
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Most datamodel request and response payloads rely on ``Variant``. The helper functions
@@ -502,7 +502,7 @@ below convert between Python objects and ``Variant`` messages.
            return {k: variant_to_python(val) for k, val in v.variant_map_state.item.items()}
        return None
 
-Complete End-to-End Example
+Complete end-to-end example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This example demonstrates an end-to-end solver-engine datamodel workflow:
@@ -807,7 +807,7 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
    if __name__ == "__main__":
        run_datamodel_workflow()
 
-See Also
+See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup and connection pattern
