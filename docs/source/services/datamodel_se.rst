@@ -301,6 +301,109 @@ Example: inspect static info
    )
    print("Top-level named object count:", len(static_resp.info.singletons))
 
+Using GetStaticInfo for complete client discovery
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use ``GetStaticInfo`` at startup to build a client-side model of the datamodel
+tree for a rules context (for example, ``meshing`` or ``flserver``). This lets
+the client validate paths, infer callable commands/queries, and derive argument
+contracts before sending execution RPCs.
+
+Important ``StaticInfo`` fields for client inference:
+
+- ``type``: node type/category
+- ``named_objects``, ``singletons``, ``parameters``: hierarchical children
+- ``commands`` and ``queries``: callable operations at a node
+- ``command_info`` and ``query_info``: operation signatures and return type
+- ``help_string`` and ``attrs``: descriptive and constraint metadata
+
+For command/query signature extraction, each operation may expose:
+
+- ``return_type`` from ``CommandInfo``
+- ``args`` list of ``CommandArg`` entries
+- per-argument metadata: ``name``, ``type``, ``help_string``, ``doc_string``, ``attrs``, ``info``
+
+Typical client bootstrap flow:
+
+1. Call ``GetStaticInfo`` once per active rules context.
+2. Traverse recursively and index full paths.
+3. Build capability tables (commands, queries, parameter paths, object paths).
+4. Build argument schemas from ``command_info.args`` and ``query_info.args``.
+5. Use these indexes to validate requests before ``GetState``/``SetState``/``Execute*`` calls.
+
+Example: build path and operation indexes from static info
+
+.. code-block:: python
+
+   from ansys.api.fluent.v1 import datamodel_se_pb2
+
+   def collect_static_model(info, path="", by_path=None, operations=None):
+       if by_path is None:
+           by_path = {}
+       if operations is None:
+           operations = {}
+
+       by_path[path] = info
+       operations[path] = {
+           "type": info.type,
+           "commands": {
+               name: {
+                   "return_type": node.command_info.return_type,
+                   "args": [
+                       {"name": a.name, "type": a.type}
+                       for a in node.command_info.args
+                   ],
+               }
+               for name, node in info.commands.items()
+           },
+           "queries": {
+               name: {
+                   "return_type": node.query_info.return_type,
+                   "args": [
+                       {"name": a.name, "type": a.type}
+                       for a in node.query_info.args
+                   ],
+               }
+               for name, node in info.queries.items()
+           },
+       }
+
+       for name, child in info.named_objects.items():
+           child_path = f"{path}/{name}" if path else name
+           collect_static_model(child, child_path, by_path, operations)
+       for name, child in info.singletons.items():
+           child_path = f"{path}/{name}" if path else name
+           collect_static_model(child, child_path, by_path, operations)
+       for name, child in info.parameters.items():
+           child_path = f"{path}/{name}" if path else name
+           collect_static_model(child, child_path, by_path, operations)
+       for name, child in info.commands.items():
+           child_path = f"{path}/{name}" if path else name
+           collect_static_model(child, child_path, by_path, operations)
+       for name, child in info.queries.items():
+           child_path = f"{path}/{name}" if path else name
+           collect_static_model(child, child_path, by_path, operations)
+
+       return by_path, operations
+
+   static_resp = stub.GetStaticInfo(
+       datamodel_se_pb2.GetStaticInfoRequest(rules="meshing"),
+       metadata=metadata,
+   )
+
+   by_path, operations = collect_static_model(static_resp.info)
+
+   target = "GlobalSettings"
+   if target not in by_path:
+       raise ValueError(f"Unknown datamodel path: {target}")
+
+   print("Node type:", operations[target]["type"])
+   print("Commands:", list(operations[target]["commands"].keys()))
+   print("Queries:", list(operations[target]["queries"].keys()))
+
+This approach keeps the client metadata-driven and resilient to schema changes,
+because the model is inferred from server static info instead of hardcoded trees.
+
 Command and query execution
 ---------------------------
 

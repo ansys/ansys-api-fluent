@@ -41,6 +41,83 @@ Query the settings structure and object metadata.
 - ``GetStaticInfo(GetStaticInfoRequest)`` → ``StaticInfo``
   Request fields: ``root: string``, ``optional_attrs: repeated string``
 
+Using GetStaticInfo for client discovery
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use ``GetStaticInfo`` once during bootstrap to build a local model of the
+settings tree. This allows you to validate paths and infer capabilities before
+making mutating calls.
+
+Useful fields in ``StaticInfo`` for client logic:
+
+- ``type``: node kind (for example, group, named-object, command/query node)
+- ``children``: available navigation paths
+- ``commands`` and ``queries``: operations available at a path
+- ``arguments``: argument names for command/query invocation
+- ``user_creatable`` and ``object_type``: named-object lifecycle support
+- ``include_child_named_objects``: named-object propagation behavior
+- ``list_size``: fixed-size list constraints
+- ``has_allowed_values`` and ``attrs``: input constraints and UI hints
+
+Typical flow:
+
+1. Request static info for ``root="fluent"``.
+2. Traverse recursively and index by full path.
+3. Use these indexes to validate path existence, operation availability, and argument names.
+
+Example: fetch, index, and inspect capabilities
+
+.. code-block:: python
+
+   import grpc
+   from ansys.api.fluent.v1 import settings_pb2, settings_pb2_grpc
+
+   def build_indexes(info, path="", by_path=None, capabilities=None):
+       if by_path is None:
+           by_path = {}
+       if capabilities is None:
+           capabilities = {}
+
+       by_path[path] = info
+       capabilities[path] = {
+           "commands": [x.name for x in info.commands],
+           "queries": [x.name for x in info.queries],
+           "arguments": [x.name for x in info.arguments],
+       }
+
+       for child in info.children:
+           child_path = f"{path}/{child.name}" if path else child.name
+           build_indexes(child.value, child_path, by_path, capabilities)
+
+       return by_path, capabilities
+
+   channel = grpc.insecure_channel("127.0.0.1:50051")
+   metadata = [("password", "your-server-password")]
+   stub = settings_pb2_grpc.SettingsServiceStub(channel)
+
+   response = stub.GetStaticInfo(
+       settings_pb2.GetStaticInfoRequest(
+           root="fluent",
+           optional_attrs=["active?", "read-only?", "default", "min", "max"],
+       ),
+       metadata=metadata,
+   )
+
+   by_path, capabilities = build_indexes(response.info)
+
+   target = "setup/models/energy"
+   if target not in by_path:
+       raise ValueError(f"Unknown settings path: {target}")
+
+   print("Commands:", capabilities[target]["commands"])
+   print("Queries:", capabilities[target]["queries"])
+   print("Args:", capabilities[target]["arguments"])
+
+   channel.close()
+
+This pattern keeps client behavior driven by server metadata instead of
+hardcoded path catalogs, which helps when the settings schema evolves.
+
 Getting and setting values
 --------------------------
 
