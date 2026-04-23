@@ -10,7 +10,7 @@ Overview
 
 .. include:: ../shared_example_assumptions.rst
 
-The ``DataModelService`` (SE) allows you to:
+The ``DataModelService`` allows you to:
 
 - Initialize and stream datamodel state
 - Read, set, and patch state values at any datamodel path
@@ -332,6 +332,12 @@ Each node in the static info tree contains:
 - ``commands`` and ``queries``: What operations you can perform here
 - ``command_info`` and ``query_info``: Details about each operation, including argument names and return types
 - ``help_string`` and ``attrs``: Documentation and metadata
+
+**How to get it**
+
+Use the ``GetStaticInfo`` RPC call to retrieve this metadata. You need to specify 
+which rules context you want to explore (for example, ``meshing`` or ``flserver``), 
+and the server responds with a complete description of that context.
 
 **Building your client with static info**
 

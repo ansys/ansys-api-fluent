@@ -9,7 +9,7 @@ Overview
 
 .. include:: ../shared_example_assumptions.rst
 
-The ``Settings`` service allows you to:
+The ``SettingsService`` allows you to:
 
 - Query the settings hierarchy structure and metadata
 - Retrieve and modify configuration values (scalars, strings, lists, maps)
@@ -46,9 +46,9 @@ Using GetStaticInfo for client discovery
 
 **What is static info?**
 
-``GetStaticInfo`` returns a complete description of the Fluent settings hierarchy
-structure. Think of it as a schema: it tells you what settings exist, what 
-operations (commands/queries) are available, and what each operation expects.
+Static info is metadata that describes what your client can do with Fluent
+settings. Specifically, it tells you what settings exist, what operations are
+available, and what arguments each operation expects.
 
 **Why query it?**
 
@@ -73,6 +73,12 @@ Each node in the static info tree contains:
 - ``include_child_named_objects``: How child objects are organized
 - ``list_size``: Size constraints for list-type settings
 - ``has_allowed_values`` and ``attrs``: Metadata about constraints and options
+
+**How to get it**
+
+Use the ``GetStaticInfo`` RPC call to retrieve this metadata. In Settings,
+request it with ``root="fluent"``. The server then returns a complete
+description of the settings hierarchy.
 
 **Building your client with static info**
 
