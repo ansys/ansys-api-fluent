@@ -19,11 +19,9 @@ Welcome to the **ansys-api-fluent** documentation. This package provides the aut
    services/batch_ops
    services/connection
    services/datamodel_se
-   services/datamodel_tui
    services/events
    services/monitor
    services/reduction
-   services/scheme_eval
    services/settings
    services/svar
    services/transcript
@@ -33,6 +31,13 @@ Welcome to the **ansys-api-fluent** documentation. This package provides the aut
    :caption: Helper Modules
 
    helpers/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Legacy
+
+   legacy/datamodel_tui
+   legacy/scheme_eval
 
 .. toctree::
    :maxdepth: 1
