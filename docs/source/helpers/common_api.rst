@@ -27,7 +27,6 @@ Used By Proto Files
 
 The ``common_api.proto`` helper types are used by:
 
-- ``meshing_queries.proto`` (for point-based query locations)
 - ``reduction.proto`` (for vector-like point values such as centroid, force, and moment)
 
 Common Message Types
@@ -46,5 +45,4 @@ See Also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup
-- :doc:`../services/meshing_queries` - Meshing queries service
 - :doc:`../services/reduction` - Reduction service

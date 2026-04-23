@@ -21,7 +21,6 @@ Welcome to the **ansys-api-fluent** documentation. This package provides the aut
    services/datamodel_se
    services/datamodel_tui
    services/events
-   services/meshing_queries
    services/monitor
    services/reduction
    services/scheme_eval
