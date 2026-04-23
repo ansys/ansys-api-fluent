@@ -1,5 +1,5 @@
-Transcript Service
-==================
+Transcript
+==========
 
 The Transcript service provides access to Fluent's command transcript and logging.
 

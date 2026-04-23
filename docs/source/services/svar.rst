@@ -1,5 +1,5 @@
-Solution Variables Service
-==========================
+Solution Variables
+==================
 
 The Solution Variables service provides metadata and streaming access to Fluent
 solution variables for domains and zones.

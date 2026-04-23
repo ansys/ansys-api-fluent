@@ -1,5 +1,5 @@
-Health Service
-==============
+Health
+======
 
 The Health service provides RPCs to query the serving status of the server.
 

@@ -1,5 +1,5 @@
-Datamodel Service
-=================
+Datamodel
+=========
 
 The Datamodel service provides structured access to Fluent's
 state-engine datamodel. You can use this service to read and update state,

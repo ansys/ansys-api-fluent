@@ -1,7 +1,7 @@
-Datamodel Service (TUI)
-=======================
+TUI
+===
 
-The Datamodel service (TUI) provides structured access to Fluent's TUI datamodel.
+The TUI service provides structured access to Fluent's TUI datamodel.
 You can use it to query the command hierarchy, retrieve documentation, and execute commands.
 
 Overview
@@ -9,7 +9,7 @@ Overview
 
 .. include:: ../shared_example_assumptions.rst
 
-The ``DataModel`` service (TUI) allows you to:
+The ``TUI`` service allows you to:
 
 - Retrieve child node names at a path
 - Get documentation strings for nodes

@@ -1,5 +1,5 @@
-App Utilities Service
-=====================
+App Utilities
+=============
 
 The App Utilities service provides access to Fluent application-level operations and information.
 

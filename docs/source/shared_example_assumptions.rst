@@ -1,4 +1,3 @@
 .. note::
 
-   Unless otherwise specified, all examples in this documentation assume
-   **Ansys Fluent 27R1** is used as the server.
+   All examples in this documentation require **Ansys Fluent 27R1 or later** as the server.

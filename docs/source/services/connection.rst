@@ -1,5 +1,5 @@
-Connection Service
-==================
+Connection
+==========
 
 The Connection service manages client connections to Fluent servers.
 

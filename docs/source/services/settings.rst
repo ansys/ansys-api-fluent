@@ -1,5 +1,5 @@
-Settings Service
-================
+Settings
+========
 
 The Settings service provides hierarchical access to Fluent simulation configuration,
 including problem setup, solver parameters, boundary conditions, and case settings.

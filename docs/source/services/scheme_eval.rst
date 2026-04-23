@@ -1,7 +1,7 @@
-Scheme Evaluation Service
-=========================
+Scheme Interpreter
+==================
 
-The Scheme Evaluation service provides access to Fluent's Scheme execution and
+The Scheme Interpreter service provides access to Fluent's Scheme execution and
 evaluation capabilities.
 
 Overview

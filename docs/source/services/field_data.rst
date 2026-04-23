@@ -1,5 +1,5 @@
-Field Data Service
-==================
+Field Data
+==========
 
 The Field Data service provides access to simulation field data including surfaces, scalar fields, vector fields, and spatial information.
 

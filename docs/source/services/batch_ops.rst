@@ -1,5 +1,5 @@
-Batch Operations Service
-=========================
+Batch Operations
+================
 
 The Batch Operations service provides batch execution capabilities for command sequences.
 

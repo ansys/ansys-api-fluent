@@ -1,5 +1,5 @@
-Reduction Service
-=================
+Reduction
+=========
 
 The Reduction service provides scalar and vector reduction operations over
 surfaces and cell zones.
