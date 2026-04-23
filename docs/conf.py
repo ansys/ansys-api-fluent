@@ -13,7 +13,7 @@ author = "ANSYS, Inc."
 from ansys.api.fluent._version import __version__
 
 release = __version__
-version = ".".join(__version__.split(".")[:2])
+version = __version__
 
 extensions = [
     "sphinx.ext.autodoc",
