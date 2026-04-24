@@ -305,9 +305,8 @@ Using GetStaticInfo for complete client discovery
 
 **What is static info?**
 
-Static info is the API schema for the DataModel service. Like other schemas 
-(JSON Schema, OpenAPI, GraphQL introspection), it describes the structure and 
-constraints of the API independently of runtime state.
+Static info is the API schema for the DataModel service, describing the 
+structure and constraints of the API independently of runtime state.
 
 Specifically, static info tells you:
 
