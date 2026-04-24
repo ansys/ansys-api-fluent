@@ -48,8 +48,8 @@ Glossary
     Package
         A namespace for message and service definitions, used to organize proto definitions.
 
-    Data Model
-        Fluent's internal object model for settings, simulation parameters, and state.
+    DataModel
+        Fluent's API for accessing and modifying configuration and state.
 
     TUI
         Text User Interface - the command-line interface for Fluent.

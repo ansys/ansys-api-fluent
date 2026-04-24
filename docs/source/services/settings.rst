@@ -61,9 +61,8 @@ requests before sending them.
 
 **Why query it?**
 
-Instead of hardcoding paths and operations in your client, you can ask the server
-once: "What settings exist?" The server responds with the full tree. Your client 
-can then use this information to:
+Static info lets you discover the API's structure upfront, before making any
+operational calls. Your client can use this information to:
 
 - Validate that a path exists before trying to read/write it
 - Check which commands and queries are available at a location

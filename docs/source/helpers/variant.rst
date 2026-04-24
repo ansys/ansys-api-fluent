@@ -67,5 +67,5 @@ See also
 ~~~~~~~~
 
 - :doc:`../gettingstarted` - Basic client setup
-- :doc:`../services/datamodel_se` - Data model (state engine) service
+- :doc:`../services/datamodel_se` - DataModel service
 - :doc:`../services/reduction` - Reduction service

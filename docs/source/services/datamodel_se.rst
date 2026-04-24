@@ -310,7 +310,7 @@ structure and constraints of the API independently of runtime state.
 
 Specifically, static info tells you:
 
-- What objects and operations exist in the data model tree
+- What objects and operations exist in the datamodel tree
 - What data types and constraints apply to each field
 - What arguments each command or query expects and what they return
 - Structural relationships (for example, what children a node can have, what operations are available at each location)
@@ -319,9 +319,8 @@ This lets you explore the API's capabilities programmatically and validate reque
 
 **Why query it?**
 
-Instead of hardcoding paths and operations in your client, you can ask the server
-once: "What can I access?" The server responds with the full tree. Your client can
-then use this information to:
+Static info lets you discover the API's structure upfront, before making any
+operational calls. Your client can use this information to:
 
 - Validate that a path exists before trying to read/write it
 - Check which commands are available at a given location
