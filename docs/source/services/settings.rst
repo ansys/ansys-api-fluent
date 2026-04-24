@@ -97,10 +97,17 @@ attribute metadata (for example, ``active?``, ``read-only?``, ``default``,
 
 A typical client workflow looks like this:
 
-1. At startup, call ``GetStaticInfo`` with ``root="fluent"`` to fetch the schema.
-2. Recursively walk through the response and build indexes of all available paths and operations.
-3. When the user asks to read/write/execute something, check your indexes first.
-4. Only send the RPC call if the operation is valid according to what you learned from static info.
+1. **Fetch and cache the schema**: At startup, establish a connection to the Fluent gRPC server and call ``GetStaticInfo`` 
+   with ``root="fluent"``, optionally requesting attributes like ``active?``, ``read-only?``, ``default``, 
+   ``min``, and ``max`` to enrich your discovery. Store the returned schema in memory for the lifetime of your client session.
+2. **Index the schema**: Traverse the schema tree recursively, building dictionaries that map paths to node information 
+   and operations. For example, create a dict like ``paths["setup/models/energy"] = node_info`` and 
+   ``operations["setup/models/energy"] = {"commands": [...], "queries": [...], "children": [...]}``. 
+   This indexing enables fast lookups later.
+3. **Validate user requests**: When application logic or user input asks to read, write, or execute at a given path, 
+   first check your indexes to confirm the path exists and the operation is available.
+4. **Execute only valid operations**: If validation succeeds, proceed with the actual RPC call (e.g., ``GetVar``, 
+   ``SetVar``, ``ExecuteCommand``). If validation fails, reject the request with a clear error message.
 
 **Example: fetch, index, and inspect capabilities**
 
