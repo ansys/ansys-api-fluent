@@ -46,9 +46,8 @@ Using GetStaticInfo for client discovery
 
 **What is static info?**
 
-Static info is the API schema for the Settings service. Like other schemas
-(JSON Schema, OpenAPI, GraphQL introspection), it describes the structure and
-constraints of the API independently of current setting values.
+Static info is the API schema for the Settings service, describing the 
+structure and constraints of the API independently of runtime state.
 
 Specifically, static info tells you:
 
