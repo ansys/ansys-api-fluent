@@ -67,7 +67,7 @@ operational calls. While building your client you can use this information to:
 - Validate that a path exists before trying to read/write it
 - Check which commands and queries are available at a location
 - Understand what arguments each operation expects
-- Build a robust client that adapts if the settings schema changes
+- Build a robust client that adapts if the schema changes
 
 **Key information in the response**
 

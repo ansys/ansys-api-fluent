@@ -298,7 +298,7 @@ Example: inspect static info
        datamodel_se_pb2.GetStaticInfoRequest(rules="meshing"),
        metadata=metadata,
    )
-   print("Top-level named object count:", len(static_resp.info.singletons))
+   print("Top-level singleton count:", len(static_resp.info.singletons))
 
 Programmatic API discovery
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -563,11 +563,15 @@ Example: subscribe to modification events and read event stream
        metadata=metadata,
    )
 
-Working with variant values
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Converting Variant messages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Most DataModel request and response payloads rely on ``Variant``. The helper functions
-below convert between Python objects and ``Variant`` messages.
+Most DataModel request and response payloads rely on ``Variant``, a discriminated union 
+type (using protobuf's ``oneof``) that can hold scalars, vectors, nested structures, or 
+dictionaries. At runtime, exactly one field is populated; use ``WhichOneof("as")`` to 
+determine which type is present. See :doc:`../helpers/variant` for details on the type definition.
+The helper functions below convert between native 
+Python objects and ``Variant`` messages.
 
 .. code-block:: python
 
@@ -809,7 +813,7 @@ This example demonstrates an end-to-end DataModel workflow:
            # 4) Command execution
            from ansys.api.fluent.v1 import variant_pb2
 
-            cmd_args = variant_pb2.Variant(
+           cmd_args = variant_pb2.Variant(
                 variant_map_state=variant_pb2.VariantMap(
                     item={
                         "FileName": variant_pb2.Variant(string_state=r"<file-name>"),
@@ -917,3 +921,4 @@ See also
 - :doc:`../gettingstarted` - Basic client setup and connection pattern
 - :doc:`settings` - Hierarchical settings service and value model examples
 - :doc:`datamodel_tui` - Datamodel service in TUI mode
+- :doc:`../helpers/variant` - Variant type definition and usage
