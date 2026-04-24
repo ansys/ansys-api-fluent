@@ -300,8 +300,8 @@ Example: inspect static info
    )
    print("Top-level named object count:", len(static_resp.info.singletons))
 
-Using GetStaticInfo for complete client discovery
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Programmatic API discovery
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **What is static info?**
 
@@ -320,7 +320,7 @@ This lets you explore the API's capabilities programmatically and validate reque
 **Why query it?**
 
 Static info lets you discover the API's structure upfront, before making any
-operational calls. Your client can use this information to:
+operational calls.  While building your client you can use this information to:
 
 - Validate that a path exists before trying to read/write it
 - Check which commands are available at a given location

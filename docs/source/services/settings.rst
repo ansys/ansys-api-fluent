@@ -41,8 +41,8 @@ Query the settings structure and object metadata.
 - ``GetStaticInfo(GetStaticInfoRequest)`` → ``StaticInfo``
   Request fields: ``root: string``, ``optional_attrs: repeated string``
 
-Using GetStaticInfo for client discovery
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Programmatic API discovery
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **What is static info?**
 
@@ -62,7 +62,7 @@ requests before sending them.
 **Why query it?**
 
 Static info lets you discover the API's structure upfront, before making any
-operational calls. Your client can use this information to:
+operational calls. While building your client you can use this information to:
 
 - Validate that a path exists before trying to read/write it
 - Check which commands and queries are available at a location
