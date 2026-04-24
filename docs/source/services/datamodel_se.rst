@@ -1,9 +1,9 @@
 ﻿DataModel
 =========
 
-The Datamodel service provides structured access to Fluent's
-state-engine datamodel. You can use this service to read and update state,
-inspect metadata, execute commands and queries, and subscribe to datamodel events.
+The DataModel service provides structured access to Fluent's datamodel state.
+You can use this service to read and update state, inspect metadata, execute
+commands and queries, and subscribe to data changes.
 
 Overview
 ~~~~~~~~
@@ -12,8 +12,8 @@ Overview
 
 The ``DataModelService`` allows you to:
 
-- Initialize and stream datamodel state
-- Read, set, and patch state values at any datamodel path
+- Initialize and stream state
+- Read, set, and patch values at any path
 - Query object attributes and static metadata
 - Execute commands and queries with typed arguments
 - Rename and delete objects, including selective child deletion
@@ -26,17 +26,16 @@ Service definition
 
 **Main Classes:**
 
-- ``DataModelServiceStub``: gRPC client stub for solver-engine datamodel operations
+- ``DataModelServiceStub``: gRPC client stub for DataModel operations
 - ``Variant``: Generic typed value container used in most state/argument/result payloads
 - ``StaticInfo`` and ``MemberSpecs``: Structural and specification metadata objects
 
 Key concepts
 ~~~~~~~~~~~~
 
-- ``rules``: Datamodel rules context. Use the rules string associated with your active
-    solver-engine datamodel context. The examples in this page use both ``meshing``
-    and ``flserver`` rules to illustrate different object families.
-- ``path``: Datamodel object path (for example, ``GlobalSettings/EnableCleanCAD``).
+- ``rules``: Selects which DataModel tree to work with. Common values are
+  ``meshing`` and ``flserver``.
+- ``path``: DataModel object path (for example, ``GlobalSettings/EnableCleanCAD``).
 - ``Variant``: Flexible value message supporting scalars, vectors, nested vectors,
   and dictionaries.
 
@@ -209,7 +208,7 @@ Example: use ``UpdateDict`` only on Dict parameters
 Object lifecycle operations
 ---------------------------
 
-Manage named objects and child objects in the datamodel tree.
+Manage named objects and child objects.
 The examples in this section use ``flserver`` contour object paths.
 
 - ``GetObjectNames(GetObjectNamesRequest)`` -> ``GetObjectNamesResponse``
@@ -306,11 +305,12 @@ Using GetStaticInfo for complete client discovery
 
 **What is static info?**
 
-``GetStaticInfo`` returns a complete description of the server's data structure
-for a given rules context (such as ``meshing`` or ``flserver``, which tell the
-server which simulation mode to describe). Think of it as a schema: it tells you
-what data exists, what operations are available, and what arguments each operation
-expects.
+Static info is metadata that describes what your client can do with the server.
+Specifically, it tells you what data exists, what operations are available, and 
+what arguments each operation expects.
+
+Think of it like a menu: it shows what is available before you try to execute
+anything.
 
 **Why query it?**
 
@@ -551,7 +551,7 @@ Example: subscribe to modification events and read event stream
 Working with variant values
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Most datamodel request and response payloads rely on ``Variant``. The helper functions
+Most DataModel request and response payloads rely on ``Variant``. The helper functions
 below convert between Python objects and ``Variant`` messages.
 
 .. code-block:: python
@@ -612,7 +612,7 @@ below convert between Python objects and ``Variant`` messages.
 Complete end-to-end example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This example demonstrates an end-to-end solver-engine datamodel workflow:
+This example demonstrates an end-to-end DataModel workflow:
 
 1. Initialize datamodel
 2. Read and update state
