@@ -150,9 +150,6 @@ Event types in ``BeginStreamingResponse``
     * - ``solver_time_estimate_event``
        - ``SolverTimeEstimateEvent``
        - Estimated remaining time
-    * - ``client_execute_event``
-       - ``ClientExecuteEvent``
-       - Request to execute a client-side function
 
 Complete example
 ~~~~~~~~~~~~~~~~
@@ -211,9 +208,6 @@ prints key payload fields, and handles stream failures.
           if event_type == "data_model_changed_event":
                 ev = response.data_model_changed_event
                 return f"data_model_changed paths={list(ev.paths)}"
-          if event_type == "client_execute_event":
-                ev = response.client_execute_event
-                return f"client_execute function={ev.function} args={len(ev.arguments)}"
 
           # Zero-payload event notifications
           return event_type or "unknown_event"
@@ -257,6 +251,7 @@ Best practices
 4. **Keep handlers lightweight** - Avoid expensive work in the stream loop; offload to worker queues when needed.
 5. **Treat ``error_event`` specially** - Log and surface fatal errors immediately.
 6. **Limit demo streams** - In examples/tests, stop after N events to avoid endless runs.
+7. **Ignore ``client_execute_event`` in end-user clients** - This event is reserved for internal workflows and is not part of the public end-user event contract.
 
 See also
 ~~~~~~~~
