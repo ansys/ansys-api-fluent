@@ -46,9 +46,19 @@ Using GetStaticInfo for client discovery
 
 **What is static info?**
 
-Static info is metadata that describes what your client can do with Fluent
-settings. Specifically, it tells you what settings exist, what operations are
-available, and what arguments each operation expects.
+Static info is the API schema for the Settings service. Like other schemas
+(JSON Schema, OpenAPI, GraphQL introspection), it describes the structure and
+constraints of the API independently of current setting values.
+
+Specifically, static info tells you:
+
+- What settings objects and operations exist in the hierarchy
+- What types and constraints apply at each location
+- What arguments each command or query expects
+- Structural relationships (for example, which children exist under each node)
+
+This lets you explore the API's capabilities programmatically and validate
+requests before sending them.
 
 **Why query it?**
 
@@ -72,13 +82,18 @@ Each node in the static info tree contains:
 - ``user_creatable`` and ``object_type``: Whether you can create/delete objects at this location
 - ``include_child_named_objects``: How child objects are organized
 - ``list_size``: Size constraints for list-type settings
-- ``has_allowed_values`` and ``attrs``: Metadata about constraints and options
+- ``has_allowed_values``: Whether values are constrained to an allowed set
+- ``help`` and ``attrs``: Help text and additional metadata
 
 **How to get it**
 
 Use the ``GetStaticInfo`` RPC call to retrieve this metadata. In Settings,
 request it with ``root="fluent"``. The server then returns a complete
 description of the settings hierarchy.
+
+You can also pass ``optional_attrs`` in the request to include extra
+attribute metadata (for example, ``active?``, ``read-only?``, ``default``,
+``min``, and ``max``) directly in the static response.
 
 **Building your client with static info**
 

@@ -305,12 +305,18 @@ Using GetStaticInfo for complete client discovery
 
 **What is static info?**
 
-Static info is metadata that describes what your client can do with the server.
-Specifically, it tells you what data exists, what operations are available, and 
-what arguments each operation expects.
+Static info is the API schema for the DataModel service. Like other schemas 
+(JSON Schema, OpenAPI, GraphQL introspection), it describes the structure and 
+constraints of the API independently of runtime state.
 
-Think of it like a menu: it shows what is available before you try to execute
-anything.
+Specifically, static info tells you:
+
+- What objects and operations exist in the data model tree
+- What data types and constraints apply to each field
+- What arguments each command or query expects and what they return
+- Structural relationships (for example, what children a node can have, what operations are available at each location)
+
+This lets you explore the API's capabilities programmatically and validate requests before sending them.
 
 **Why query it?**
 
@@ -330,7 +336,7 @@ Each node in the static info tree contains:
 - ``type``: What kind of object this is (for example, a parameter, a command, or a container)
 - ``named_objects``, ``singletons``, ``parameters``: The children under this node
 - ``commands`` and ``queries``: What operations you can perform here
-- ``command_info`` and ``query_info``: Details about each operation, including argument names and return types
+- ``command_info`` and ``query_info``: Details about each operation, including return type, argument schema, and documentation
 - ``help_string`` and ``attrs``: Documentation and metadata
 
 **How to get it**
@@ -351,6 +357,10 @@ A typical client workflow looks like this:
 For operations with arguments, extract the argument details from ``command_info.args`` 
 or ``query_info.args``. Each argument tells you its name and type, so you can validate 
 or prompt the user before sending the request.
+
+In addition to ``name`` and ``type``, each argument can also include ``info``
+(nested static schema), ``attrs`` metadata, and ``doc_string``.
+Commands and queries can also provide a top-level ``doc_string``.
 
 **Example: exploring the structure**
 
