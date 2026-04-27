@@ -10,8 +10,8 @@ import "ansys/api/fluent/v1/variant.proto";
 
 // DataModel service provides operations for managing Fluent datamodel state and events
 service DataModel {
-  // BeginStreaming starts streaming datamodel state changes and events
-  rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse) {}
+  // StreamStateChanges starts streaming datamodel state changes and events
+  rpc StreamStateChanges(StreamStateChangesRequest) returns (stream StreamStateChangesResponse) {}
   // initDatamodel initializes the datamodel with specified rules
   rpc InitDatamodel(InitDatamodelRequest) returns (InitDatamodelResponse) {}
   // GetState retrieves the current state at a specified path
@@ -48,8 +48,8 @@ service DataModel {
   rpc SubscribeEvents(SubscribeEventsRequest) returns (SubscribeEventsResponse) {}
   // UnsubscribeEvents unsubscribes from previously subscribed datamodel events
   rpc UnsubscribeEvents(UnsubscribeEventsRequest) returns (UnsubscribeEventsResponse) {}
-  // BeginEventStreaming starts streaming previously subscribed datamodel events
-  rpc BeginEventStreaming(BeginEventStreamingRequest) returns (stream BeginEventStreamingResponse) {}
+  // StreamEvents starts streaming previously subscribed datamodel events
+  rpc StreamEvents(StreamEventsRequest) returns (stream StreamEventsResponse) {}
 }
 
 // DiffState specifies the level of detail for state differences
@@ -59,15 +59,15 @@ enum DiffState {
   DIFF_STATE_NOCOMMANDS = 2;   // State without commands
 }
 
-// BeginStreamingRequest is the request message for initiating state streaming
-message BeginStreamingRequest {
+// StreamStateChangesRequest is the request message for initiating state streaming
+message StreamStateChangesRequest {
   string rules = 1;               // The rules context for the streaming operation
   bool return_state_changes = 2;  // Whether to return state changes in the stream
   DiffState diff_state = 3;       // The level of detail for state differences
 }
 
-// BeginStreamingResponse is the streaming response containing state updates
-message BeginStreamingResponse {
+// StreamStateChangesResponse is the streaming response containing state updates
+message StreamStateChangesResponse {
   ansys.api.fluent.v1.variant.Variant state = 1;  // The current state or state changes
   repeated string deleted_paths = 2;              // Paths of deleted objects
   repeated string events = 3;                     // Events that occurred
@@ -440,8 +440,8 @@ message UnsubscribeEventsResponse {
   repeated EventSubscription responses = 1;  // The list of unsubscribed events with their status
 }
 
-// BeginEventStreamingRequest is the request message for starting event streaming
-message BeginEventStreamingRequest {
+// StreamEventsRequest is the request message for starting event streaming
+message StreamEventsRequest {
 }
 
 // CreatedEventResponse is the response message for object creation events
@@ -490,8 +490,8 @@ message CommandExecutedEventResponse {
   ansys.api.fluent.v1.variant.Variant args = 3;  // command arguments
 }
 
-// BeginEventStreamingResponse is the streaming response containing events
-message BeginEventStreamingResponse {
+// StreamEventsResponse is the streaming response containing events
+message StreamEventsResponse {
   string tag = 1;    // The tag identifying the subscription that generated this event
   string rules = 2;  // The rules context for the event
   oneof event_response {
