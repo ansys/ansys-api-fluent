@@ -6,8 +6,8 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.settings;
 
-// SettingsService provides operations for managing and querying Fluent settings objects
-service SettingsService {
+// Settings service provides operations for managing and querying Fluent settings objects
+service Settings {
   /* Static info about objects (type, children, commands, arguments,
      object-type) in a recursive manner. */
   rpc GetStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse);

@@ -8,8 +8,8 @@ package ansys.api.fluent.v1.datamodel_se;
 
 import "ansys/api/fluent/v1/variant.proto";
 
-// DataModelService provides operations for managing Fluent datamodel state and events
-service DataModelService {
+// DataModel service provides operations for managing Fluent datamodel state and events
+service DataModel {
   // BeginStreaming starts streaming datamodel state changes and events
   rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse) {}
   // initDatamodel initializes the datamodel with specified rules
