@@ -8,7 +8,7 @@ package ansys.api.fluent.v1.svar;
 
 import "ansys/api/fluent/v1/field_data.proto";
 
-// SolutionVariable provides RPCs for retrieving and setting solution variable data and metadata.
+// SolutionVariable service provides RPCs for retrieving and setting solution variable data and metadata.
 service SolutionVariable {
   // Retrieves domain and zone metadata.
   rpc GetZonesInfo(GetZonesInfoRequest) returns (GetZonesInfoResponse);

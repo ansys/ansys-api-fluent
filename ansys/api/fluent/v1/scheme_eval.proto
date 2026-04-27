@@ -8,7 +8,7 @@ package ansys.api.fluent.v1.scheme_eval;
 
 import "ansys/api/fluent/v1/scheme_pointer.proto";
 
-// SchemeInterpreter provides Scheme language evaluation capabilities.
+// SchemeInterpreter service provides Scheme language evaluation capabilities.
 service SchemeInterpreter {
   // Eval evaluates a Scheme pointer and returns the result. (DEPRECATED: Use SchemeEval instead)
   rpc Eval(ansys.api.fluent.v1.scheme_pointer.SchemePointer) returns (ansys.api.fluent.v1.scheme_pointer.SchemePointer) {

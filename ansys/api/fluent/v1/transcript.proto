@@ -8,7 +8,7 @@ package ansys.api.fluent.v1.transcript;
 
 option objc_class_prefix = "HLW";
 
-// Transcript provides streaming of solver transcript output to clients.
+// Transcript service provides streaming of solver transcript output to clients.
 service Transcript {
   // Begins streaming of transcript messages; the server sends a stream of
   // `TranscriptResponse` messages until the stream is closed.

@@ -6,10 +6,10 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.app_utilities;
 
-// AppUtilities provides operations that span the Fluent application lifecycle but do not belong
+// ApplicationUtilities service provides operations that span the Fluent application lifecycle but do not belong
 // to a domain-specific service. Typical uses include retrieving version and build metadata, managing
 // feature flags, and controlling application startup and shutdown.
-service AppUtilities {
+service ApplicationUtilities {
   // Returns the product version of the running application.
   rpc GetProductVersion(GetProductVersionRequest) returns (GetProductVersionResponse);
 

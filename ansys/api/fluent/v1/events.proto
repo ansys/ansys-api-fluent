@@ -8,7 +8,7 @@ package ansys.api.fluent.v1.events;
 
 import "ansys/api/fluent/v1/scheme_pointer.proto";
 
-// Events provides streaming of solver and workflow events to clients.
+// Events service provides streaming of solver and workflow events to clients.
 service Events {
   // Begins streaming of events; the server sends a stream of
   // `BeginStreamingResponse` messages until the stream is closed.
