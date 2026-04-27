@@ -34,8 +34,8 @@ service DataModel {
   rpc DeleteCommandArguments(DeleteCommandArgumentsRequest) returns (DeleteCommandArgumentsResponse) {}
   // GetSpecs retrieves specifications for a datamodel object
   rpc GetSpecs(GetSpecsRequest) returns (GetSpecsResponse) {}
-  // GetStaticInfo retrieves static information about the datamodel structure
-  rpc GetStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse) {}
+  // GetSchema retrieves static information about the datamodel structure
+  rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse) {}
   // Rename renames a datamodel object
   rpc Rename(RenameRequest) returns (RenameResponse) {}
   // FixState fixes the state of a datamodel object to ensure consistency
@@ -313,7 +313,7 @@ message GetSpecsResponse {
 message CommandArg {
   string type = 1;                                             // The type of the argument
   string name = 2;                                             // The name of the argument
-  StaticInfo info = 3;                                         // Static information about the argument
+  Schema info = 3;                                             // Static information about the argument
   string help_string = 4;                                      // Help text for the argument
   map<string, ansys.api.fluent.v1.variant.Variant> attrs = 5;  // Additional attributes for the argument
   string doc_string = 6;                                       // Documentation string for the argument
@@ -326,28 +326,28 @@ message CommandInfo {
   string doc_string = 3;         // Documentation string for the command
 }
 
-// StaticInfo contains comprehensive static information about datamodel objects
-message StaticInfo {
-  map<string, StaticInfo> named_objects = 1;                    // Named objects within this object
-  map<string, StaticInfo> singletons = 2;                       // Singleton objects within this object
-  map<string, StaticInfo> parameters = 3;                       // Parameters within this object
-  map<string, StaticInfo> commands = 4;                         // Commands available for this object
+// Schema contains comprehensive static information about datamodel objects
+message Schema {
+  map<string, Schema> named_objects = 1;                    // Named objects within this object
+  map<string, Schema> singletons = 2;                       // Singleton objects within this object
+  map<string, Schema> parameters = 3;                       // Parameters within this object
+  map<string, Schema> commands = 4;                         // Commands available for this object
   string type = 5;                                              // The type of this object
   CommandInfo command_info = 6;                                 // Information about the command (if this is a command)
-  map<string, StaticInfo> queries = 7;                          // Queries available for this object
+  map<string, Schema> queries = 7;                          // Queries available for this object
   CommandInfo query_info = 8;                                   // Information about the query (if this is a query)
   string help_string = 9;                                       // Help text for this object
   map<string, ansys.api.fluent.v1.variant.Variant> attrs = 10;  // Additional attributes for this object
 }
 
-// GetStaticInfoRequest is the request message for retrieving static information
-message GetStaticInfoRequest {
+// GetSchemaRequest is the request message for retrieving static information
+message GetSchemaRequest {
   string rules = 1;  // The rules context for the static info query
 }
 
-// GetStaticInfoResponse is the response message containing static information
-message GetStaticInfoResponse {
-  StaticInfo info = 1;  // The static information for the datamodel
+// GetSchemaResponse is the response message containing static information
+message GetSchemaResponse {
+  Schema info = 1;  // The static information for the datamodel
 }
 
 // CreatedEventRequest is used to subscribe to object creation events
