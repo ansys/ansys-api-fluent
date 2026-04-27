@@ -12,7 +12,7 @@ import "ansys/api/fluent/v1/variant.proto";
 service DataModel {
   // StreamStateChanges starts streaming datamodel state changes and events
   rpc StreamStateChanges(StreamStateChangesRequest) returns (stream StreamStateChangesResponse) {}
-  // initDatamodel initializes the datamodel with specified rules
+  // InitDatamodel initializes the datamodel with specified rules
   rpc InitDatamodel(InitDatamodelRequest) returns (InitDatamodelResponse) {}
   // GetState retrieves the current state at a specified path
   rpc GetState(GetStateRequest) returns (GetStateResponse) {}
