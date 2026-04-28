@@ -328,13 +328,13 @@ message CommandInfo {
 
 // Schema contains comprehensive static information about datamodel objects
 message Schema {
-  map<string, Schema> named_objects = 1;                    // Named objects within this object
-  map<string, Schema> singletons = 2;                       // Singleton objects within this object
-  map<string, Schema> parameters = 3;                       // Parameters within this object
-  map<string, Schema> commands = 4;                         // Commands available for this object
+  map<string, Schema> named_objects = 1;                        // Named objects within this object
+  map<string, Schema> singletons = 2;                           // Singleton objects within this object
+  map<string, Schema> parameters = 3;                           // Parameters within this object
+  map<string, Schema> commands = 4;                             // Commands available for this object
   string type = 5;                                              // The type of this object
   CommandInfo command_info = 6;                                 // Information about the command (if this is a command)
-  map<string, Schema> queries = 7;                          // Queries available for this object
+  map<string, Schema> queries = 7;                              // Queries available for this object
   CommandInfo query_info = 8;                                   // Information about the query (if this is a query)
   string help_string = 9;                                       // Help text for this object
   map<string, ansys.api.fluent.v1.variant.Variant> attrs = 10;  // Additional attributes for this object

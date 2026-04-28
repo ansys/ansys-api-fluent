@@ -44,6 +44,9 @@ service Settings {
 
   /* Attribute access */
   rpc GetAttrs(GetAttrsRequest) returns (GetAttrsResponse);
+
+  /* Returns whether the provided string is considered a wildcard by the solver application's syntax */
+  rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
 }
 
 // Value represents the value of an object -- return value of GetVar
@@ -74,7 +77,7 @@ message PathInfo {
 
 // SchemaMap represents a named entry in static information maps
 message SchemaMap {
-  string name = 1;       // The name of the entry
+  string name = 1;   // The name of the entry
   Schema value = 2;  // The static information associated with this entry
 }
 
@@ -240,4 +243,14 @@ message AttrInfoMap {
 message GetAttrsResponse {
   Value values = 1;                         // The attribute values for the requested object
   repeated AttrInfoMap group_children = 2;  // Attribute information for child objects (when recursive is true)
+}
+
+// Checks if a string is a wildcard.
+message IsWildcardRequest {
+  string input = 1;  // Input string to evaluate.
+}
+
+// Indicates whether the input is a wildcard.
+message IsWildcardResponse {
+  bool is_wildcard = 1;  // True if the input string is a wildcard per solver application syntax.
 }

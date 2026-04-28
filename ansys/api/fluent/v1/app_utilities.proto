@@ -6,10 +6,10 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.app_utilities;
 
-// ApplicationUtilities service provides operations that span the Fluent application lifecycle but do not belong
+// ApplicationRuntime service provides operations that span the Fluent application lifecycle but do not belong
 // to a domain-specific service. Typical uses include retrieving version and build metadata, managing
 // feature flags, and controlling application startup and shutdown.
-service ApplicationUtilities {
+service ApplicationRuntime {
   // Returns the product version of the running application.
   rpc GetProductVersion(GetProductVersionRequest) returns (GetProductVersionResponse);
 
@@ -38,31 +38,6 @@ service ApplicationUtilities {
 
   // Enables beta/experimental features for this session.
   rpc EnableBeta(EnableBetaRequest) returns (EnableBetaResponse);
-
-  // Returns whether the provided string is considered a wildcard by the solver application's syntax.
-  rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
-
-  // Returns whether solution data is currently available.
-  rpc IsSolutionDataAvailable(IsSolutionDataAvailableRequest) returns (IsSolutionDataAvailableResponse);
-
-  // The following three RPCs support synchronous client-side callbacks triggered by solution events
-  // (for example, per-iteration or per-time-step).
-  //
-  // Conceptually:
-  // 1) The client registers an event of interest.
-  // 2) When the event occurs, the solver pauses and notifies the registered client.
-  // 3) After the client completes its callback work, it resumes the solver.
-  //
-  // This mechanism is useful when a client must perform an action at deterministic points in the solve.
-
-  // Registers the client so the solver pauses when a selected solution event occurs.
-  rpc RegisterSolutionEventsPause(RegisterSolutionEventsPauseRequest) returns (RegisterSolutionEventsPauseResponse);
-
-  // Resumes solver execution after a pause triggered by a solution event.
-  rpc ResumeSolutionEvent(ResumeSolutionEventRequest) returns (ResumeSolutionEventResponse);
-
-  // Unregisters a prior pause-on-solution-event registration.
-  rpc UnregisterSolutionEventsPause(UnregisterSolutionEventsPauseRequest) returns (UnregisterSolutionEventsPauseResponse);
 
   // Terminates the application.
   rpc Exit(ExitRequest) returns (ExitResponse);
@@ -192,61 +167,6 @@ message EnableBetaRequest {
 message EnableBetaResponse {
 }
 
-// Checks if a string is a wildcard.
-message IsWildcardRequest {
-  // Input string to evaluate.
-  string input = 1;
-}
-
-// Indicates whether the input is a wildcard.
-message IsWildcardResponse {
-  // True if the input string is a wildcard per solver application syntax.
-  bool is_wildcard = 1;
-}
-
-// Request to check if solution data is available.
-message IsSolutionDataAvailableRequest {
-}
-
-// Indicates whether solution data is available.
-message IsSolutionDataAvailableResponse {
-  // True if solution data is currently available.
-  bool is_solution_data_available = 1;
-}
-
-// Registers interest in a specific solution event. When the event occurs, the solver pauses and waits
-// until the client explicitly resumes it.
-message RegisterSolutionEventsPauseRequest {
-  // Solution event that triggers a pause.
-  SolutionEvent solution_event = 1;
-}
-
-// Contains the registration identifier.
-message RegisterSolutionEventsPauseResponse {
-  // Registration id used to resume and/or unregister this pause registration.
-  int64 registration_id = 1;
-}
-
-// Resumes from a pause on solution event.
-message ResumeSolutionEventRequest {
-  // Identifier of the registration to resume.
-  int64 registration_id = 1;
-}
-
-// Result of resuming.
-message ResumeSolutionEventResponse {
-}
-
-// Unregisters from pause on solution events.
-message UnregisterSolutionEventsPauseRequest {
-  // Identifier of the registration to unregister.
-  int64 registration_id = 1;
-}
-
-// Result of unregistering.
-message UnregisterSolutionEventsPauseResponse {
-}
-
 // Requests to exit the application.
 message ExitRequest {
 }
@@ -277,14 +197,4 @@ enum AppMode {
   APP_MODE_SOLVER_ICING = 3;
   // Solver aero mode.
   APP_MODE_SOLVER_AERO = 4;
-}
-
-// Solution-related events that can be used to pause/resume execution.
-enum SolutionEvent {
-  // Unspecified solution event.
-  SOLUTION_EVENT_UNSPECIFIED = 0;
-  // Fired after an iteration completes.
-  SOLUTION_EVENT_ITERATION = 1;
-  // Fired after a time step completes.
-  SOLUTION_EVENT_TIME_STEP = 2;
 }

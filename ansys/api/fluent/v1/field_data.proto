@@ -52,6 +52,9 @@ service FieldData {
 
   // GetSolverMeshElements retrieves solver mesh elements (cells)
   rpc GetSolverMeshElements(GetSolverMeshElementsRequest) returns (stream GetSolverMeshElementsResponse) {}
+
+  // Returns whether solution data is currently available.
+  rpc IsDataAvailable(IsDataAvailableRequest) returns (IsDataAvailableResponse) {}
 }
 
 // Empty represents an empty or null state
@@ -691,4 +694,14 @@ message Element {
 // GetSolverMeshElementsResponse is the streaming response containing mesh elements
 message GetSolverMeshElementsResponse {
   repeated Element elements = 1;  // The mesh elements
+}
+
+// Request to check if solution data is available.
+message IsDataAvailableRequest {
+}
+
+// Indicates whether solution data is available.
+message IsDataAvailableResponse {
+  // True if solution data is currently available.
+  bool is_data_available = 1;
 }
