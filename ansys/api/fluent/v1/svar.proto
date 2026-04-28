@@ -18,8 +18,6 @@ service SolutionVariable {
   rpc GetSolutionVariableData(GetSolutionVariableDataRequest) returns (stream GetSolutionVariableDataResponse);
   // Streams data to set values for a given solution variable.
   rpc SetSolutionVariableData(stream SetSolutionVariableDataRequest) returns (SetSolutionVariableDataResponse);
-  // Returns whether solution data is currently available.
-  rpc IsSolutionDataAvailable(IsSolutionDataAvailableRequest) returns (IsSolutionDataAvailableResponse);
 }
 
 // Request to retrieve domain and zone metadata.
@@ -134,14 +132,4 @@ message SolutionVariableHeader {
 
 // Response to the SetSolutionVariableData request.
 message SetSolutionVariableDataResponse {
-}
-
-// Request to check if solution data is available.
-message IsSolutionDataAvailableRequest {
-}
-
-// Indicates whether solution data is available.
-message IsSolutionDataAvailableResponse {
-  // True if solution data is currently available.
-  bool is_solution_data_available = 1;
 }
