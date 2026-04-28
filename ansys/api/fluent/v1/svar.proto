@@ -18,6 +18,8 @@ service SolutionVariable {
   rpc GetSvarData(GetSvarDataRequest) returns (stream GetSvarDataResponse);
   // Streams SVAR data to set values for a given SVAR.
   rpc SetSvarData(stream SetSvarDataRequest) returns (SetSvarDataResponse);
+  // Returns whether solution data is currently available.
+  rpc IsSolutionDataAvailable(IsSolutionDataAvailableRequest) returns (IsSolutionDataAvailableResponse);
 }
 
 // Request to retrieve domain and zone metadata.
@@ -132,4 +134,14 @@ message SvarHeader {
 
 // Response to the SetSvarData request.
 message SetSvarDataResponse {
+}
+
+// Request to check if solution data is available.
+message IsSolutionDataAvailableRequest {
+}
+
+// Indicates whether solution data is available.
+message IsSolutionDataAvailableResponse {
+  // True if solution data is currently available.
+  bool is_solution_data_available = 1;
 }

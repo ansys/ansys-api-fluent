@@ -42,9 +42,6 @@ service ApplicationUtilities {
   // Returns whether the provided string is considered a wildcard by the solver application's syntax.
   rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
 
-  // Returns whether solution data is currently available.
-  rpc IsSolutionDataAvailable(IsSolutionDataAvailableRequest) returns (IsSolutionDataAvailableResponse);
-
   // The following three RPCs support synchronous client-side callbacks triggered by solution events
   // (for example, per-iteration or per-time-step).
   //
@@ -202,16 +199,6 @@ message IsWildcardRequest {
 message IsWildcardResponse {
   // True if the input string is a wildcard per solver application syntax.
   bool is_wildcard = 1;
-}
-
-// Request to check if solution data is available.
-message IsSolutionDataAvailableRequest {
-}
-
-// Indicates whether solution data is available.
-message IsSolutionDataAvailableResponse {
-  // True if solution data is currently available.
-  bool is_solution_data_available = 1;
 }
 
 // Registers interest in a specific solution event. When the event occurs, the solver pauses and waits
