@@ -24,14 +24,14 @@ service Events {
   //
   // This mechanism is useful when a client must perform an action at deterministic points in the solve.
 
-  // Registers the client so the solver pauses when a selected solution event occurs.
-  rpc RegisterSolutionEventsPause(RegisterSolutionEventsPauseRequest) returns (RegisterSolutionEventsPauseResponse);
+  // The solver pauses when a selected solution event occurs.
+  rpc PauseSolveFor(PauseSolveForRequest) returns (PauseSolveForResponse);
 
   // Resumes solver execution after a pause triggered by a solution event.
-  rpc ResumeSolutionEvent(ResumeSolutionEventRequest) returns (ResumeSolutionEventResponse);
+  rpc ResumeSolve(ResumeSolveRequest) returns (ResumeSolveResponse);
 
   // Unregisters a prior pause-on-solution-event registration.
-  rpc UnregisterSolutionEventsPause(UnregisterSolutionEventsPauseRequest) returns (UnregisterSolutionEventsPauseResponse);
+  rpc CancelPauseSolve(CancelPauseSolveRequest) returns (CancelPauseSolveResponse);
 }
 
 // Event at start of the time step.
@@ -162,35 +162,35 @@ message BeginStreamingRequest {
 
 // Registers interest in a specific solution event. When the event occurs, the solver pauses and waits
 // until the client explicitly resumes it.
-message RegisterSolutionEventsPauseRequest {
+message PauseSolveForRequest {
   // Solution event that triggers a pause.
   SolutionEvent solution_event = 1;
 }
 
 // Contains the registration identifier.
-message RegisterSolutionEventsPauseResponse {
+message PauseSolveForResponse {
   // Registration id used to resume and/or unregister this pause registration.
   int64 registration_id = 1;
 }
 
 // Resumes from a pause on solution event.
-message ResumeSolutionEventRequest {
+message ResumeSolveRequest {
   // Identifier of the registration to resume.
   int64 registration_id = 1;
 }
 
 // Result of resuming.
-message ResumeSolutionEventResponse {
+message ResumeSolveResponse {
 }
 
 // Unregisters from pause on solution events.
-message UnregisterSolutionEventsPauseRequest {
+message CancelPauseSolveRequest {
   // Identifier of the registration to unregister.
   int64 registration_id = 1;
 }
 
 // Result of unregistering.
-message UnregisterSolutionEventsPauseResponse {
+message CancelPauseSolveResponse {
 }
 
 // Event when the data model changes.
