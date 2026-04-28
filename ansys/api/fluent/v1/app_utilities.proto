@@ -39,9 +39,6 @@ service ApplicationUtilities {
   // Enables beta/experimental features for this session.
   rpc EnableBeta(EnableBetaRequest) returns (EnableBetaResponse);
 
-  // Returns whether the provided string is considered a wildcard by the solver application's syntax.
-  rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
-
   // The following three RPCs support synchronous client-side callbacks triggered by solution events
   // (for example, per-iteration or per-time-step).
   //
@@ -187,18 +184,6 @@ message EnableBetaRequest {
 
 // Result of enabling beta features.
 message EnableBetaResponse {
-}
-
-// Checks if a string is a wildcard.
-message IsWildcardRequest {
-  // Input string to evaluate.
-  string input = 1;
-}
-
-// Indicates whether the input is a wildcard.
-message IsWildcardResponse {
-  // True if the input string is a wildcard per solver application syntax.
-  bool is_wildcard = 1;
 }
 
 // Registers interest in a specific solution event. When the event occurs, the solver pauses and waits
