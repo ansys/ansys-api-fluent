@@ -6,11 +6,11 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.settings;
 
-// SettingsService provides operations for managing and querying Fluent settings objects
-service SettingsService {
+// Settings service provides operations for managing and querying Fluent settings objects
+service Settings {
   /* Static info about objects (type, children, commands, arguments,
      object-type) in a recursive manner. */
-  rpc GetStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse);
+  rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse);
 
   /* Get the value of a path */
   rpc GetVar(GetVarRequest) returns (GetVarResponse);
@@ -72,24 +72,24 @@ message PathInfo {
   string path = 2;  // The path to the object from the root
 }
 
-// StaticInfoMap represents a named entry in static information maps
-message StaticInfoMap {
+// SchemaMap represents a named entry in static information maps
+message SchemaMap {
   string name = 1;       // The name of the entry
-  StaticInfo value = 2;  // The static information associated with this entry
+  Schema value = 2;  // The static information associated with this entry
 }
 
-// StaticInfo contains comprehensive static information about a settings object
-message StaticInfo {
+// Schema contains comprehensive static information about a settings object
+message Schema {
   // Type of the current object e.g. group, named-object.
   string type = 1;
   // Children of current object.
-  repeated StaticInfoMap children = 2;
+  repeated SchemaMap children = 2;
   // Commands available for current object.
-  repeated StaticInfoMap commands = 3;
+  repeated SchemaMap commands = 3;
   // Arguments associated with the current command/query object.
-  repeated StaticInfoMap arguments = 4;
+  repeated SchemaMap arguments = 4;
   // Class template for named object instance.
-  StaticInfo object_type = 5;
+  Schema object_type = 5;
   // Help string for the current object.
   string help = 6;
   // Boolean indicating if the current object has list of allowed values.
@@ -102,20 +102,20 @@ message StaticInfo {
   // Boolean indicating if an instance can be created by the user for the current named-object.
   bool user_creatable = 10;
   // Queries available for current object.
-  repeated StaticInfoMap queries = 11;
+  repeated SchemaMap queries = 11;
   // File purpose string for the current command object.
   map<string, Value> attrs = 12;
 }
 
-// GetStaticInfoRequest is the request message for retrieving static information
-message GetStaticInfoRequest {
+// GetSchemaRequest is the request message for retrieving static information
+message GetSchemaRequest {
   string root = 1;                     // The root path to retrieve static information from
   repeated string optional_attrs = 2;  // Optional attributes to be returned in the static info.
 }
 
-// GetStaticInfoResponse is the response message containing static information
-message GetStaticInfoResponse {
-  StaticInfo info = 1;  // The static information for the requested object
+// GetSchemaResponse is the response message containing static information
+message GetSchemaResponse {
+  Schema info = 1;  // The static information for the requested object
 }
 
 // GetVarRequest is the request message for retrieving a variable value

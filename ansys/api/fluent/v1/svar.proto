@@ -8,8 +8,8 @@ package ansys.api.fluent.v1.svar;
 
 import "ansys/api/fluent/v1/field_data.proto";
 
-// Svar provides RPCs for retrieving and setting SVAR data and metadata.
-service Svar {
+// SolutionVariable service provides RPCs for retrieving and setting solution variable data and metadata.
+service SolutionVariable {
   // Retrieves domain and zone metadata.
   rpc GetZonesInfo(GetZonesInfoRequest) returns (GetZonesInfoResponse);
   // Retrieves SVAR metadata for a domain and zone.
