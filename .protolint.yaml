@@ -7,10 +7,6 @@ lint:
     # Enable all default rules (Google protobuf style)
     all_default: true
 
-    # Disable rules that flag prepositions in message names (e.g. "PauseSolveForRequest").
-    remove:
-      - MESSAGE_NAMES_EXCLUDE_PREPOSITIONS
-
   # Linter rules option.
   rules_option:
     max_line_length:
