@@ -13,6 +13,25 @@ service Events {
   // Begins streaming of events; the server sends a stream of
   // `BeginStreamingResponse` messages until the stream is closed.
   rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse);
+
+  // The following three RPCs support synchronous client-side callbacks triggered by solution events
+  // (for example, per-iteration or per-time-step).
+  //
+  // Conceptually:
+  // 1) The client registers an event of interest.
+  // 2) When the event occurs, the solver pauses and notifies the registered client.
+  // 3) After the client completes its callback work, it resumes the solver.
+  //
+  // This mechanism is useful when a client must perform an action at deterministic points in the solve.
+
+  // Registers the client so the solver pauses when a selected solution event occurs.
+  rpc RegisterSolutionEventsPause(RegisterSolutionEventsPauseRequest) returns (RegisterSolutionEventsPauseResponse);
+
+  // Resumes solver execution after a pause triggered by a solution event.
+  rpc ResumeSolutionEvent(ResumeSolutionEventRequest) returns (ResumeSolutionEventResponse);
+
+  // Unregisters a prior pause-on-solution-event registration.
+  rpc UnregisterSolutionEventsPause(UnregisterSolutionEventsPauseRequest) returns (UnregisterSolutionEventsPauseResponse);
 }
 
 // Event at start of the time step.
@@ -127,8 +146,51 @@ message ErrorEvent {
 message CommandCompletedEvent {
 }
 
+// Solution-related events that can be used to pause/resume execution.
+enum SolutionEvent {
+  // Unspecified solution event.
+  SOLUTION_EVENT_UNSPECIFIED = 0;
+  // Fired after an iteration completes.
+  SOLUTION_EVENT_ITERATION = 1;
+  // Fired after a time step completes.
+  SOLUTION_EVENT_TIME_STEP = 2;
+}
+
 // Request to begin streaming events.
 message BeginStreamingRequest {
+}
+
+// Registers interest in a specific solution event. When the event occurs, the solver pauses and waits
+// until the client explicitly resumes it.
+message RegisterSolutionEventsPauseRequest {
+  // Solution event that triggers a pause.
+  SolutionEvent solution_event = 1;
+}
+
+// Contains the registration identifier.
+message RegisterSolutionEventsPauseResponse {
+  // Registration id used to resume and/or unregister this pause registration.
+  int64 registration_id = 1;
+}
+
+// Resumes from a pause on solution event.
+message ResumeSolutionEventRequest {
+  // Identifier of the registration to resume.
+  int64 registration_id = 1;
+}
+
+// Result of resuming.
+message ResumeSolutionEventResponse {
+}
+
+// Unregisters from pause on solution events.
+message UnregisterSolutionEventsPauseRequest {
+  // Identifier of the registration to unregister.
+  int64 registration_id = 1;
+}
+
+// Result of unregistering.
+message UnregisterSolutionEventsPauseResponse {
 }
 
 // Event when the data model changes.
