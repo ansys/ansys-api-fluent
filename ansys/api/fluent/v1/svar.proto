@@ -119,8 +119,8 @@ message Payload {
 message SetSolutionVariableDataRequest {
   oneof array {
     SolutionVariableHeader header = 1;  // Solution variable name and domain ID.
-    Payload payload = 2;    // Payload.
-    Info payload_info = 3;  // Payload info.
+    Payload payload = 2;                // Payload.
+    Info payload_info = 3;              // Payload info.
   }
 }
 

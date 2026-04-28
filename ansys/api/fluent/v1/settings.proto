@@ -77,7 +77,7 @@ message PathInfo {
 
 // SchemaMap represents a named entry in static information maps
 message SchemaMap {
-  string name = 1;       // The name of the entry
+  string name = 1;   // The name of the entry
   Schema value = 2;  // The static information associated with this entry
 }
 
