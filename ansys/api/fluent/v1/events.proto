@@ -160,22 +160,20 @@ enum SolutionEvent {
 message BeginStreamingRequest {
 }
 
-// protolint:disable MESSAGE_NAMES_EXCLUDE_PREPOSITIONS
-
 // Registers interest in a specific solution event. When the event occurs, the solver pauses and waits
 // until the client explicitly resumes it.
+// protolint:disable:next MESSAGE_NAMES_EXCLUDE_PREPOSITIONS
 message PauseSolveForRequest {
   // Solution event that triggers a pause.
   SolutionEvent solution_event = 1;
 }
 
 // Contains the registration identifier.
+// protolint:disable:next MESSAGE_NAMES_EXCLUDE_PREPOSITIONS
 message PauseSolveForResponse {
   // Registration id used to resume and/or unregister this pause registration.
   int64 registration_id = 1;
 }
-
-// protolint:enable MESSAGE_NAMES_EXCLUDE_PREPOSITIONS
 
 // Resumes from a pause on solution event.
 message ResumeSolveRequest {
