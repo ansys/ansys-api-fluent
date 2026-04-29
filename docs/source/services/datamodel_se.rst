@@ -50,7 +50,7 @@ Initialize and consume datamodel state deltas or snapshots.
 
 - ``InitDatamodel(InitDatamodelRequest)`` -> ``InitDatamodelResponse``
   Request fields: ``rules: string``, ``return_state_changes: bool``
-- ``BeginStreaming(BeginStreamingRequest)`` -> ``stream BeginStreamingResponse``
+- ``StreamStateChanges(StreamStateChangesRequest)`` -> ``stream StreamStateChangesResponse``
   Request fields: ``rules: string``, ``return_state_changes: bool``, ``diff_state: DiffState``
 
 Example: initialize and consume a few state streaming updates
@@ -73,8 +73,8 @@ Example: initialize and consume a few state streaming updates
    )
    print("Datamodel initialized")
 
-   stream = stub.BeginStreaming(
-       datamodel_se_pb2.BeginStreamingRequest(
+   stream = stub.StreamStateChanges(
+       datamodel_se_pb2.StreamStateChangesRequest(
            rules="meshing",
            return_state_changes=True,
            diff_state=datamodel_se_pb2.DIFF_STATE_FULL,
@@ -274,7 +274,7 @@ Get attributes and structural metadata for dynamic clients and tooling.
   Request fields: ``rules: string``, ``path: string``, ``attribute: string``
 - ``GetSpecs(GetSpecsRequest)`` -> ``GetSpecsResponse``
   Request fields: ``rules: string``, ``path: string``, ``include_children: bool``
-- ``GetStaticInfo(GetStaticInfoRequest)`` -> ``GetStaticInfoResponse``
+- ``GetSchema(GetSchemaRequest)`` -> ``GetSchemaResponse``
   Request field: ``rules: string``
 
 Example: retrieve a single attribute value
@@ -291,15 +291,15 @@ Example: retrieve a single attribute value
    )
    print("Default value kind:", attr_resp.result.WhichOneof("as"))
 
-Example: inspect static info
+Example: inspect schema
 
 .. code-block:: python
 
-   static_resp = stub.GetStaticInfo(
-       datamodel_se_pb2.GetStaticInfoRequest(rules="meshing"),
+   schema_resp = stub.GetSchema(
+       datamodel_se_pb2.GetSchemaRequest(rules="meshing"),
        metadata=metadata,
    )
-   print("Top-level named object count:", len(static_resp.info.singletons))
+   print("Top-level named object count:", len(schema_resp.info.singletons))
 
 Command and query execution
 ---------------------------
@@ -381,7 +381,7 @@ Subscribe to specific event types, then consume event stream updates.
 
 - ``SubscribeEvents(SubscribeEventsRequest)`` -> ``SubscribeEventsResponse``
 - ``UnsubscribeEvents(UnsubscribeEventsRequest)`` -> ``UnsubscribeEventsResponse``
-- ``BeginEventStreaming(BeginEventStreamingRequest)`` -> ``stream BeginEventStreamingResponse``
+- ``StreamEvents(StreamEventsRequest)`` -> ``stream StreamEventsResponse``
 
 Example: subscribe to modification events and read event stream
 
@@ -404,8 +404,8 @@ Example: subscribe to modification events and read event stream
    tags = [r.tag for r in sub_resp.responses]
    print("Subscription tags:", tags)
 
-   event_stream = stub.BeginEventStreaming(
-       datamodel_se_pb2.BeginEventStreamingRequest(),
+   event_stream = stub.StreamEvents(
+       datamodel_se_pb2.StreamEventsRequest(),
        metadata=metadata,
    )
 
@@ -712,8 +712,8 @@ This example demonstrates an end-to-end solver-engine datamodel workflow:
                metadata=metadata,
            )
 
-           events = stub.BeginEventStreaming(
-               datamodel_se_pb2.BeginEventStreamingRequest(),
+           events = stub.StreamEvents(
+               datamodel_se_pb2.StreamEventsRequest(),
                metadata=metadata,
            )
            for i, event in enumerate(events):
