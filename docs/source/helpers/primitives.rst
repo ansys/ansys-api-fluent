@@ -1,14 +1,14 @@
-Common API
+Primitives
 ==========
 
-The Common API defines shared data structures used by multiple Fluent service protos.
+The Primitives module defines shared data structures used by multiple Fluent service protos.
 
 Overview
 ~~~~~~~~
 
 .. include:: ../shared_example_assumptions.rst
 
-The ``CommonAPI`` module defines common data types including:
+The ``Primitives`` module defines common data types including:
 
 - Point: 3D Cartesian coordinates
 - Vector: 3D vector data
@@ -20,12 +20,12 @@ other service proto definitions.
 Service definition
 ~~~~~~~~~~~~~~~~~~
 
-**Package:** ``ansys.api.fluent.v1.common_api``
+**Package:** ``ansys.api.fluent.v1.primitives``
 
 Used by proto files
 ~~~~~~~~~~~~~~~~~~~
 
-The ``common_api.proto`` helper types are used by:
+The ``primitives.proto`` helper types are used by:
 
 - ``reduction.proto`` (for vector-like point values such as centroid, force, and moment)
 
@@ -39,7 +39,7 @@ Represents a 3D Cartesian coordinate.
 
 .. code-block:: python
 
-   point = common_api_pb2.Point(x=0.0, y=0.0, z=0.0)
+   point = primitives_pb2.Point(x=0.0, y=0.0, z=0.0)
 
 See also
 ~~~~~~~~

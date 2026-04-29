@@ -8,6 +8,6 @@ listed separately to keep service documentation focused on RPC workflows.
 .. toctree::
    :maxdepth: 2
 
-   common_api
+   primitives
    scheme_pointer
    variant
