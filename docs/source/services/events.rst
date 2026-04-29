@@ -218,9 +218,6 @@ Event types in ``BeginStreamingResponse``
     * - ``solver_time_estimate_event``
        - ``SolverTimeEstimateEvent``
        - Estimated remaining time
-    * - ``client_execute_event``
-       - ``ClientExecuteEvent``
-       - Request to execute a client-side function
 
 Complete example
 ~~~~~~~~~~~~~~~~
