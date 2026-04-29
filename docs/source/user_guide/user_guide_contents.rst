@@ -14,13 +14,15 @@ different audience — choose the one that fits your use case.
    * - Guide
      - Audience and scope
    * - :doc:`build_a_client`
-     - Step-by-step walkthrough for developers making direct RPC calls —
-       reading and writing simulation state, subscribing to events, and
-       evaluating field data.
+     - **Start here.** A six-step guide to connecting to a live Fluent server,
+       calling ``GetSchema`` to discover available paths, reading and writing
+       simulation state with ``GetState``/``SetState`` and ``GetVar``/``SetVar``,
+       and subscribing to solver events via ``BeginStreaming``.
    * - :doc:`building_on_the_api`
-     - Patterns for library authors and tool builders who need to introspect
-       the schema, generate stubs, or layer abstractions across multiple
-       services.
+     - **For tool and library authors.** Explains the API schema as a
+       machine-readable contract independent of any running session — covering
+       how to introspect path hierarchies, parameter types, commands, and
+       constraints to generate stubs or build abstractions across services.
 
 .. toctree::
    :hidden:
