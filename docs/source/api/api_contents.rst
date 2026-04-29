@@ -8,17 +8,6 @@ API reference
    :hidden:
    :maxdepth: 2
 
-   services/health
-   services/app_utilities
-   services/datamodel_se
-   services/settings
-   services/events
-   services/field_data
-   services/monitor
-   services/reduction
-   services/svar
-   services/transcript
-   services/connection
+   services/index
    helpers/index
-   legacy/datamodel_tui
-   legacy/scheme_eval
+   legacy/index

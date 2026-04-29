@@ -51,21 +51,12 @@ Glossary
         A namespace for message and service definitions, used to organise proto
         definitions.
 
-    Payload
-        The actual data content in a response, often numeric field values in
-        Field Data service responses.
-
     Protocol Buffers
         A language-neutral, platform-neutral method of serializing structured data.
         Used by all Fluent v1 services.
 
     RPC
         Remote Procedure Call — a method on a service that can be called over gRPC.
-
-    Rules context
-        A string (for example, ``"meshing"`` or ``"flserver"``) that identifies
-        which DataModel API family to address. Passed as the ``rules`` field in
-        every DataModel service request.
 
     Service
         A collection of related RPC operations defined in a ``.proto`` file.
