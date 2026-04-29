@@ -1,7 +1,7 @@
 ﻿Events
 ======
 
-The Events service provides server-streamed notifications for solver lifecycle,
+The ``Events`` service provides server-streamed notifications for solver lifecycle,
 file I/O, progress, and data-model activity.
 
 Overview

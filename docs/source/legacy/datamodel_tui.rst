@@ -1,7 +1,7 @@
 TextInterface
 =============
 
-The TextInterface service provides structured access to Fluent's TUI datamodel.
+The ``TextInterface`` service provides structured access to Fluent's TUI datamodel.
 You can use it to query the command hierarchy, retrieve documentation, and execute commands.
 
 Overview

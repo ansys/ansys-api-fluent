@@ -4,7 +4,7 @@ DataModel
 Overview
 --------
 
-The DataModel service provides structured read/write access to Fluent's
+The ``DataModel`` service provides structured read/write access to Fluent's
 internal object model. It organises Fluent objects as a tree of singletons,
 named-object collections, parameters, commands, and queries — all addressed by
 a **rules** string and a slash-separated **path**.

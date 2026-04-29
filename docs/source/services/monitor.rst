@@ -1,7 +1,7 @@
 ﻿Monitor
 =======
 
-The Monitor service provides RPCs to query monitor metadata and stream live monitor data during a Fluent simulation.
+The ``Monitor`` service provides RPCs to query monitor metadata and stream live monitor data during a Fluent simulation.
 
 Overview
 ~~~~~~~~

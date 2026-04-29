@@ -1,10 +1,10 @@
-﻿Transcript service
-==================
+﻿Transcript
+==========
 
 Overview
 --------
 
-The Transcript service streams the Fluent console output — every line that
+The ``Transcript`` service streams the Fluent console output — every line that
 Fluent writes to its terminal — to the client as a continuous server-side
 stream. This lets you monitor solver progress, capture log messages, and
 display Fluent output in your own application UI without polling.

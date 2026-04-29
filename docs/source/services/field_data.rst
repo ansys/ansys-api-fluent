@@ -1,10 +1,10 @@
-Field Data
-==========
+FieldData
+=========
 
 Overview
 --------
 
-The Field Data service streams simulation results — scalar fields, vector
+The ``FieldData`` service streams simulation results — scalar fields, vector
 fields, surface geometry, mesh nodes and elements, pathlines, and particle
 tracks — out of a running Fluent session. It also provides discovery RPCs so
 you can enumerate available surfaces and fields before requesting data.

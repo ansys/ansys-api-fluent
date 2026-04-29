@@ -4,7 +4,7 @@ ApplicationRuntime
 Overview
 --------
 
-The ApplicationRuntime service exposes application-level operations that span
+The ``ApplicationRuntime`` service exposes application-level operations that span
 the Fluent process lifecycle: retrieving version and build metadata, inspecting
 process information in client-server mode, managing Python journal recording,
 controlling experimental feature flags, setting the working directory, and

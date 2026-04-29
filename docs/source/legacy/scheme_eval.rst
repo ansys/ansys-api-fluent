@@ -1,7 +1,7 @@
 SchemeInterpreter
 =================
 
-The SchemeInterpreter service provides access to Fluent's Scheme execution and
+The ``SchemeInterpreter`` service provides access to Fluent's Scheme execution and
 evaluation capabilities.
 
 Overview

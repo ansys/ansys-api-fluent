@@ -4,7 +4,7 @@
 Overview
 --------
 
-The Health service tells you whether the Fluent server is ready to accept
+The ``Health`` service tells you whether the Fluent server is ready to accept
 requests. Call it immediately after opening a channel and before issuing any
 other RPC.
 

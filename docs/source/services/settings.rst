@@ -4,7 +4,7 @@ Settings
 Overview
 --------
 
-The Settings service provides hierarchical read/write access to Fluent's
+The ``Settings`` service provides hierarchical read/write access to Fluent's
 simulation configuration — boundary conditions, solver controls, model
 parameters, and results settings. Every RPC addresses a settings node by a
 ``PathInfo`` message that contains two fields: ``root``, a string that selects
