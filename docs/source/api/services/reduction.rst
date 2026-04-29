@@ -322,21 +322,21 @@ Reduction request patterns
    :header-rows: 1
    :widths: 30 35 35
 
-    * - Pattern
-       - Typical request fields
-       - Notes
-    * - Location-only geometric query
-       - ``locations``
-       - Used by ``Area``, ``Volume``, ``Centroid``, ``Force``.
-    * - Expression-based reduction
-       - ``expression``, ``locations``
-       - Used by averages, integrals, extrema, and ``CountIf``.
-    * - Weighted sum reduction
-       - ``expression``, ``locations``, ``weight``
-       - Used by ``Sum``.
-    * - Conditional weighted sum
-       - ``expression``, ``condition``, ``locations``, ``weight``
-       - Used by ``SumIf``.
+   * - Pattern
+     - Typical request fields
+     - Notes
+   * - Location-only geometric query
+     - ``locations``
+     - Used by ``Area``, ``Volume``, ``Centroid``, ``Force``.
+   * - Expression-based reduction
+     - ``expression``, ``locations``
+     - Used by averages, integrals, extrema, and ``CountIf``.
+   * - Weighted sum reduction
+     - ``expression``, ``locations``, ``weight``
+     - Used by ``Sum``.
+   * - Conditional weighted sum
+     - ``expression``, ``condition``, ``locations``, ``weight``
+     - Used by ``SumIf``.
 
 Best practices
 ~~~~~~~~~~~~~~
@@ -351,5 +351,5 @@ See also
 --------
 
 - :doc:`../../getting_started/gettingstarted` — basic client setup
-- :doc:`field_data` � raw field data (scalar, vector, mesh)
-- :doc:`svar` � per-zone solution variable data
+- :doc:`field_data` — raw field data (scalar, vector, mesh)
+- :doc:`svar` — per-zone solution variable data

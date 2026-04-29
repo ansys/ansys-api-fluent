@@ -31,7 +31,7 @@ templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 html_theme = "ansys_sphinx_theme"
-html_static_path = ["_static"]
+html_static_path = ["source/_static"]
 html_logo = pyansys_logo_black
 html_favicon = ansys_favicon
 

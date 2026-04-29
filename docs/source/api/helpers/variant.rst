@@ -66,6 +66,6 @@ Example usage
 See also
 ~~~~~~~~
 
-- :doc:`../gettingstarted` - Basic client setup
+- :doc:`../../getting_started/gettingstarted` - Basic client setup
 - :doc:`../services/datamodel_se` - Data model (state engine) service
 - :doc:`../services/reduction` - Reduction service

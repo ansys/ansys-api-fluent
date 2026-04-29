@@ -163,6 +163,6 @@ Best practices
 See also
 ~~~~~~~~
 
-- :doc:`../gettingstarted` - Basic client setup
-- :doc:`../services/scheme_eval` - Scheme evaluation service
+- :doc:`../../getting_started/gettingstarted` - Basic client setup
+- :doc:`../legacy/scheme_eval` - Scheme evaluation service
 - :doc:`../services/events` - Events service
