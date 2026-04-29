@@ -8,13 +8,12 @@ Overview
 
 .. include:: ../shared_example_assumptions.rst
 
-The ``AppUtilities`` service gives you access to:
+The ``ApplicationRuntime`` service gives you access to:
 
 - Product version and build information
 - Application mode information
 - Python journal operations
 - Beta feature management
-- Solution data availability checks
 - Working directory management
 
 Service definition
@@ -24,7 +23,7 @@ Service definition
 
 **Main Classes:**
 
-- ``AppUtilitiesStub``: Client stub for application operations
+- ``ApplicationRuntimeStub``: Client stub for application operations
 
 Core RPC operations
 ~~~~~~~~~~~~~~~~~~~
@@ -155,7 +154,7 @@ Complete example
    def get_app_info():
        channel = grpc.insecure_channel(f"{HOST}:{PORT}")
        metadata = [("password", PASSWORD)]
-       stub = app_utilities_pb2_grpc.AppUtilitiesStub(channel)
+       stub = app_utilities_pb2_grpc.ApplicationRuntimeStub(channel)
 
        try:
            # Get version

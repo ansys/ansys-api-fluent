@@ -15,6 +15,7 @@ The ``FieldData`` service allows you to:
 - Stream field values (double, float, int, long formats)
 - Retrieve mesh node and element data
 - Access specialized field data like pathlines and particle tracks
+- Check whether solution data and boundary values are available
 
 Service definition
 ~~~~~~~~~~~~~~~~~~
@@ -296,6 +297,34 @@ Best practices
 2. **Check field range** - Use ``GetRange`` to understand data before streaming
 3. **Use appropriate chunk size** - Larger chunks (256-512 KB) for faster streaming
 4. **Handle large streams** - Process chunks incrementally, don't load all in memory
+
+Check data and boundary value availability
+------------------------------------------
+
+Before streaming field data, verify that solution data is present and optionally
+check whether boundary values are enabled.
+
+``IsDataAvailable``
+^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+   avail_resp = field_stub.IsDataAvailable(
+       field_data_pb2.IsDataAvailableRequest(),
+       metadata=metadata,
+   )
+   print(f"Data available: {avail_resp.is_data_available}")
+
+``IsBoundaryValuesEnabled``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+   bv_resp = field_stub.IsBoundaryValuesEnabled(
+       field_data_pb2.IsBoundaryValuesEnabledRequest(),
+       metadata=metadata,
+   )
+   print(f"Boundary values enabled: {bv_resp.is_boundary_values_enabled}")
 
 See also
 ~~~~~~~~

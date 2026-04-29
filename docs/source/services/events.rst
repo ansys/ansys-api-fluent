@@ -49,6 +49,74 @@ Starts the event stream and yields a sequence of
           event_type = response.WhichOneof("as")
           print(f"Received event: {event_type}")
 
+Solver pause callbacks
+----------------------
+
+These three RPCs allow a client to register a pause that fires when a specific
+solution event occurs (per-iteration or per-time-step), perform work while the
+solver is paused, and then resume or cancel the pause registration.
+
+PauseSolveFor
+^^^^^^^^^^^^^
+
+Register a pause trigger on a solution event. Returns a ``registration_id`` used
+by the other two RPCs.
+
+.. code-block:: python
+
+    pause_resp = events_stub.PauseSolveFor(
+          events_pb2.PauseSolveForRequest(
+                solution_event=events_pb2.SOLUTION_EVENT_ITERATION,
+          ),
+          metadata=metadata,
+    )
+    registration_id = pause_resp.registration_id
+
+The ``solution_event`` field accepts values from the ``SolutionEvent`` enum:
+
+.. list-table:: SolutionEvent enum values
+    :header-rows: 1
+    :widths: 10 35 55
+
+    * - Value
+      - Enum constant
+      - Description
+    * - ``0``
+      - ``SOLUTION_EVENT_UNSPECIFIED``
+      - Unspecified solution event.
+    * - ``1``
+      - ``SOLUTION_EVENT_ITERATION``
+      - Fired after an iteration completes.
+    * - ``2``
+      - ``SOLUTION_EVENT_TIME_STEP``
+      - Fired after a time step completes.
+
+ResumeSolve
+^^^^^^^^^^^
+
+Resume solver execution after the solver has paused due to a registered event.
+Pass the ``registration_id`` returned by ``PauseSolveFor``.
+
+.. code-block:: python
+
+    events_stub.ResumeSolve(
+          events_pb2.ResumeSolveRequest(registration_id=registration_id),
+          metadata=metadata,
+    )
+
+CancelPauseSolve
+^^^^^^^^^^^^^^^^
+
+Unregister a prior pause-on-solution-event registration so the solver no longer
+pauses for that event.
+
+.. code-block:: python
+
+    events_stub.CancelPauseSolve(
+          events_pb2.CancelPauseSolveRequest(registration_id=registration_id),
+          metadata=metadata,
+    )
+
 Working with ``oneof`` events
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
