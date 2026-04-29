@@ -23,6 +23,7 @@ workflows.
        passed as arguments and returned from DataModel and Settings RPCs.
 
 .. toctree::
+   :hidden:
    :maxdepth: 2
 
    primitives
