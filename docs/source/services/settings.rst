@@ -1,5 +1,5 @@
-Settings service
-================
+Settings
+========
 
 Overview
 --------

@@ -1,7 +1,7 @@
-Scheme interpreter
-==================
+SchemeInterpreter
+=================
 
-The Scheme Interpreter service provides access to Fluent's Scheme execution and
+The SchemeInterpreter service provides access to Fluent's Scheme execution and
 evaluation capabilities.
 
 Overview
@@ -9,7 +9,7 @@ Overview
 
 .. include:: ../shared_example_assumptions.rst
 
-The ``SchemeEval`` service allows you to:
+The ``SchemeInterpreter`` service allows you to:
 
 - Execute Scheme commands through ``Exec``
 - Evaluate Scheme expressions as strings through ``StringEval``
@@ -23,7 +23,7 @@ Service definition
 
 **Main Classes:**
 
-- ``SchemeEvalStub``: Client stub for Scheme evaluation
+- ``SchemeInterpreterStub``: Client stub for Scheme evaluation
 - ``ExecRequest`` / ``ExecResponse``: Execute one or more Scheme commands
 - ``StringEvalRequest`` / ``StringEvalResponse``: Evaluate a Scheme expression from a string
 - ``SchemeEvalRequest`` / ``SchemeEvalResponse``: Evaluate a typed ``SchemePointer`` expression
@@ -184,7 +184,7 @@ expression, and evaluates a typed ``SchemePointer`` expression.
    def run_scheme_examples():
        channel = grpc.insecure_channel(f"{HOST}:{PORT}")
        metadata = [("password", PASSWORD)]
-       stub = scheme_eval_pb2_grpc.SchemeEvalStub(channel)
+       stub = scheme_eval_pb2_grpc.SchemeInterpreterStub(channel)
 
        try:
            # Step 1: Execute a few Scheme commands.

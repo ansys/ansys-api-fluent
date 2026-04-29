@@ -1,7 +1,7 @@
-TUI
-===
+TextInterface
+=============
 
-The TUI service provides structured access to Fluent's TUI datamodel.
+The TextInterface service provides structured access to Fluent's TUI datamodel.
 You can use it to query the command hierarchy, retrieve documentation, and execute commands.
 
 Overview
@@ -9,7 +9,7 @@ Overview
 
 .. include:: ../shared_example_assumptions.rst
 
-The ``TUI`` service allows you to:
+The ``TextInterface`` service allows you to:
 
 - Retrieve child node names at a path
 - Get documentation strings for nodes
@@ -23,7 +23,7 @@ Service definition
 
 **Main Classes:**
 
-- ``DataModelStub``: gRPC client stub for TUI datamodel operations
+- ``TextInterfaceStub``: gRPC client stub for TUI datamodel operations
 - ``google.protobuf.Value``: Dynamic value container for response payloads
 - ``google.protobuf.Struct``: Dynamic key/value container for command arguments
 - ``StaticInfo``: Menu/command metadata tree
@@ -57,7 +57,7 @@ Example: get child names
 
    channel = grpc.insecure_channel("127.0.0.1:50051")
    metadata = [("password", "your-server-password")]
-   stub = datamodel_tui_pb2_grpc.DataModelStub(channel)
+   stub = datamodel_tui_pb2_grpc.TextInterfaceStub(channel)
 
    resp = stub.GetAttributeValue(
        datamodel_tui_pb2.GetAttributeValueRequest(
@@ -144,6 +144,103 @@ Example: retrieve static info for a subtree
    )
    print("Available menus:", list(static_resp.info.menus.keys()))
    print("Available commands:", list(static_resp.info.commands.keys()))
+
+Get and set state
+-----------------
+
+Read or write the current state at any TUI datamodel path.
+
+- ``GetState(GetStateRequest)`` → ``GetStateResponse``
+  Request field: ``path: string``
+  Response field: ``state: google.protobuf.Value``
+- ``SetState(SetStateRequest)`` → ``SetStateResponse``
+  Request fields: ``path: string``, ``state: google.protobuf.Value``
+  Response field: ``state: google.protobuf.Value`` (value after server normalisation)
+
+Example: read then write state
+
+.. code-block:: python
+
+   state_resp = stub.GetState(
+       datamodel_tui_pb2.GetStateRequest(path="/mesh/auto-mesh-controls"),
+       metadata=metadata,
+   )
+   print("Current state:", state_resp.state.WhichOneof("kind"))
+
+   stub.SetState(
+       datamodel_tui_pb2.SetStateRequest(
+           path="/mesh/auto-mesh-controls/growth-rate",
+           state=struct_pb2.Value(number_value=1.2),
+       ),
+       metadata=metadata,
+   )
+
+Subscribe to change notifications
+---------------------------------
+
+``NotifyChanges`` is a server-streaming RPC. The client sends one request
+containing the paths to watch; the server streams ``NotifyChangesResponse``
+messages as those paths change.
+
+- ``NotifyChanges(NotifyChangesRequest)`` → ``stream NotifyChangesResponse``
+  Request fields: ``paths: google.protobuf.Value``, ``args: google.protobuf.Struct``
+  Response fields: ``changed_paths: google.protobuf.Value``, ``state_difference: google.protobuf.Value``
+
+Example: watch a subtree for changes
+
+.. code-block:: python
+
+   stream = stub.NotifyChanges(
+       datamodel_tui_pb2.NotifyChangesRequest(
+           paths=struct_pb2.Value(
+               list_value=struct_pb2.ListValue(
+                   values=[struct_pb2.Value(string_value="/mesh")]
+               )
+           ),
+           args=struct_pb2.Struct(),
+       ),
+       metadata=metadata,
+   )
+   for notification in stream:
+       print("Changed paths kind:", notification.changed_paths.WhichOneof("kind"))
+       print("Difference kind:", notification.state_difference.WhichOneof("kind"))
+
+Batch attribute and state reads
+--------------------------------
+
+``CompositeGet`` batches multiple ``GetAttributeValue`` or ``GetState``
+requests into a single round trip. Each element in ``getters`` is a
+``DataModelGetter`` with exactly one of its oneof fields set:
+``get_attribute_value_request`` or ``get_state_request``.
+
+- ``CompositeGet(CompositeGetRequest)`` → ``CompositeGetResponse``
+  Request field: ``getters: repeated DataModelGetter``
+  Response field: ``response: google.protobuf.Value``
+
+Example: fetch child names and state in one call
+
+.. code-block:: python
+
+   composite_resp = stub.CompositeGet(
+       datamodel_tui_pb2.CompositeGetRequest(
+           getters=[
+               datamodel_tui_pb2.DataModelGetter(
+                   get_attribute_value_request=datamodel_tui_pb2.GetAttributeValueRequest(
+                       path="/mesh",
+                       attribute=datamodel_tui_pb2.ATTRIBUTE_CHILD_NAMES,
+                       args=struct_pb2.Struct(),
+                   )
+               ),
+               datamodel_tui_pb2.DataModelGetter(
+                   get_state_request=datamodel_tui_pb2.GetStateRequest(
+                       path="/mesh/auto-mesh-controls",
+                   )
+               ),
+           ]
+       ),
+       metadata=metadata,
+   )
+   print("Composite result kind:", composite_resp.response.WhichOneof("kind"))
 
 Working with ``google.protobuf.Value``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -258,7 +355,7 @@ This example demonstrates an end-to-end TUI datamodel workflow using the core me
    def run_tui_datamodel_workflow() -> None:
        channel = grpc.insecure_channel(f"{HOST}:{PORT}")
        metadata = [("password", PASSWORD)]
-       stub = datamodel_tui_pb2_grpc.DataModelStub(channel)
+       stub = datamodel_tui_pb2_grpc.TextInterfaceStub(channel)
 
        try:
            # 1) Get child names at /mesh
@@ -319,6 +416,6 @@ This example demonstrates an end-to-end TUI datamodel workflow using the core me
 See also
 ~~~~~~~~
 
-- :doc:`../gettingstarted` - Basic client setup and connection pattern
-- :doc:`datamodel_se` - Datamodel service (Solver Engine)
-- :doc:`settings` - Settings service for hierarchical configuration APIs
+- :doc:`../gettingstarted` — basic client setup and connection pattern
+- :doc:`../services/datamodel_se` — DataModel service (Solver Engine)
+- :doc:`../services/settings` — Settings service for hierarchical configuration

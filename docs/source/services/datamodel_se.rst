@@ -1,5 +1,5 @@
-DataModel service
-=================
+DataModel
+=========
 
 Overview
 --------

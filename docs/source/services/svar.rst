@@ -1,10 +1,10 @@
-Solution Variables service
-==========================
+﻿SolutionVariable
+================
 
 Overview
 --------
 
-The Solution Variables service provides metadata discovery and bidirectional
+The SolutionVariable service provides metadata discovery and bidirectional
 streaming access to per-zone solution variable arrays inside a running Fluent
 session. Use it to read raw solver fields (pressure, velocity components, etc.)
 at zone level, or to write modified values back into the solver.

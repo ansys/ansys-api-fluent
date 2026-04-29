@@ -1,5 +1,5 @@
-ApplicationRuntime service
-==========================
+ApplicationRuntime
+==================
 
 Overview
 --------

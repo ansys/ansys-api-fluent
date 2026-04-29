@@ -1,5 +1,5 @@
-﻿Health service
-==============
+﻿Health
+======
 
 Overview
 --------
