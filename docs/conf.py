@@ -6,9 +6,12 @@ import sys
 # Add the ansys-api-fluent package to the path
 sys.path.insert(0, os.path.abspath(".."))
 
+from ansys_sphinx_theme import ansys_favicon, pyansys_logo_black
+
 project = "ansys-api-fluent"
-copyright = "2026 ANSYS, Inc."
+copyright = "(c) 2026 ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
+cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
 
 from ansys.api.fluent._version import __version__
 
@@ -21,32 +24,31 @@ extensions = [
     "sphinx.ext.coverage",
     "sphinx.ext.mathjax",
     "sphinx.ext.viewcode",
-    "sphinx_rtd_theme",
+    "sphinx_copybutton",
 ]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-html_theme = "sphinx_rtd_theme"
+html_theme = "ansys_sphinx_theme"
 html_static_path = ["_static"]
-html_logo = None
-html_favicon = None
+html_logo = pyansys_logo_black
+html_favicon = ansys_favicon
 
 html_theme_options = {
+    "github_url": "https://github.com/ansys/ansys-api-fluent",
+    "show_prev_next": False,
+    "show_breadcrumbs": True,
+    "additional_breadcrumbs": [
+        ("PyAnsys", "https://docs.pyansys.com/"),
+    ],
     "navigation_depth": 5,
     "collapse_navigation": True,
-    "sticky_navigation": True,
-    "sticky_navigation_offset": 120,
-    "prev_next_buttons_location": "bottom",
-    "display_version": True,
-    "includehidden": True,
-    "display_github": True,
-    "github_url": "https://github.com/ansys/ansys-api-fluent",
-    "github_user": "ansys",
-    "github_repo": "ansys-api-fluent",
-    "github_version": "main",
-    "conf_py_path": "/docs/",
 }
+
+# Copy button: strip Python prompts from copied code
+copybutton_prompt_text = r">>> ?|\.\.\. "
+copybutton_prompt_is_regexp = True
 
 # Intersphinx mappings
 intersphinx_mapping = {
@@ -64,12 +66,6 @@ latex_elements = {
     "papersize": "letterpaper",
     "pointsize": "10pt",
 }
-
-# JSON schema for Sphinx
-json_schema_draft = "2020-12"
-
-# Source file quality indicator
-nitpick_ignore = []
 
 # Suppress warnings
 suppress_warnings = [
