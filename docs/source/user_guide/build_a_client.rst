@@ -8,10 +8,6 @@ No prior knowledge of gRPC or Fluent internals is assumed.
 
 .. include:: ../shared_example_assumptions.rst
 
-.. contents:: Steps in this guide
-   :local:
-   :depth: 1
-
 Overview
 --------
 
