@@ -13,6 +13,20 @@ env:
   MAIN_PYTHON_VERSION: '3.12'
 
 jobs:
+  pre-commit:
+    name: Run pre-commit checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      - name: Run pre-commit
+        uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
+
   build:
     name: Build package
     runs-on: ubuntu-latest
@@ -81,7 +95,7 @@ jobs:
   release:
     name: Release package to GitHub
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [build]
+    needs: [build, pre-commit]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -104,7 +118,7 @@ jobs:
   release-pypi:
     name: Release project to PyPI
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [build]
+    needs: [build, pre-commit]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -127,7 +141,7 @@ jobs:
   release-private-pypi:
     name: Release project to private PyPI
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [build]
+    needs: [build, pre-commit]
     runs-on: ubuntu-latest
     permissions:
       id-token: write

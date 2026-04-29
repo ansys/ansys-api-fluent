@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.reduction;
 
-import "ansys/api/fluent/v1/common_api.proto";
+import "ansys/api/fluent/v1/primitives.proto";
 
 import "ansys/api/fluent/v1/variant.proto";
 
@@ -97,7 +97,7 @@ message CentroidRequest {
 
 // CentroidResponse contains the computed centroid coordinates
 message CentroidResponse {
-  ansys.api.fluent.v1.common_api.Point value = 1;  // The centroid coordinates (x, y, z)
+  ansys.api.fluent.v1.primitives.Point value = 1;  // The centroid coordinates (x, y, z)
 }
 
 // CountRequest is the request message for counting cells or faces
@@ -128,7 +128,7 @@ message ForceRequest {
 
 // ForceResponse contains the computed force vector
 message ForceResponse {
-  ansys.api.fluent.v1.common_api.Point value = 1;  // The force vector components (Fx, Fy, Fz)
+  ansys.api.fluent.v1.primitives.Point value = 1;  // The force vector components (Fx, Fy, Fz)
 }
 
 // MassAveRequest is the request message for computing mass-weighted average
@@ -215,7 +215,7 @@ message PressureForceRequest {
 
 // PressureForceResponse contains the computed pressure force vector
 message PressureForceResponse {
-  ansys.api.fluent.v1.common_api.Point value = 1;  // The pressure force vector components (Fx, Fy, Fz)
+  ansys.api.fluent.v1.primitives.Point value = 1;  // The pressure force vector components (Fx, Fy, Fz)
 }
 
 // ViscousForceRequest is the request message for computing viscous force
@@ -225,7 +225,7 @@ message ViscousForceRequest {
 
 // ViscousForceResponse contains the computed viscous force vector
 message ViscousForceResponse {
-  ansys.api.fluent.v1.common_api.Point value = 1;  // The viscous force vector components (Fx, Fy, Fz)
+  ansys.api.fluent.v1.primitives.Point value = 1;  // The viscous force vector components (Fx, Fy, Fz)
 }
 
 // VolumeRequest is the request message for computing total volume
@@ -268,7 +268,7 @@ message MomentRequest {
 
 // MomentResponse contains the computed moment vector
 message MomentResponse {
-  ansys.api.fluent.v1.common_api.Point value = 1;  // The moment vector components (Mx, My, Mz)
+  ansys.api.fluent.v1.primitives.Point value = 1;  // The moment vector components (Mx, My, Mz)
 }
 
 // SumRequest is the request message for computing weighted sum
