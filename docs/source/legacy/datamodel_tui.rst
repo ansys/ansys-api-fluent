@@ -26,7 +26,7 @@ Service definition
 - ``TextInterfaceStub``: gRPC client stub for TUI datamodel operations
 - ``google.protobuf.Value``: Dynamic value container for response payloads
 - ``google.protobuf.Struct``: Dynamic key/value container for command arguments
-- ``StaticInfo``: Menu/command metadata tree
+- ``Schema``: Menu/command metadata tree
 
 Key concepts
 ~~~~~~~~~~~~
@@ -126,24 +126,24 @@ Example: execute a query
    )
    print("Query result kind:", query_resp.result.WhichOneof("kind"))
 
-Get static info
----------------
+Get schema
+----------
 
 Retrieve schema-like static information for menus and commands at a path.
 
-- ``GetStaticInfo(GetStaticInfoRequest)`` -> ``GetStaticInfoResponse``
+- ``GetSchema(GetSchemaRequest)`` -> ``GetSchemaResponse``
   Request field: ``path: string``
 
-Example: retrieve static info for a subtree
+Example: retrieve api schema for a subtree
 
 .. code-block:: python
 
-   static_resp = stub.GetStaticInfo(
-       datamodel_tui_pb2.GetStaticInfoRequest(path="/mesh"),
+   schema_resp = stub.GetSchema(
+       datamodel_tui_pb2.GetSchemaRequest(path="/mesh"),
        metadata=metadata,
    )
-   print("Available menus:", list(static_resp.info.menus.keys()))
-   print("Available commands:", list(static_resp.info.commands.keys()))
+   print("Available menus:", list(schema_resp.info.menus.keys()))
+   print("Available commands:", list(schema_resp.info.commands.keys()))
 
 Get and set state
 -----------------
@@ -399,13 +399,13 @@ This example demonstrates an end-to-end TUI datamodel workflow using the core me
            )
            print("Query result:", value_to_python(query_resp.result))
 
-           # 5) Retrieve static metadata
-           static_resp = stub.GetStaticInfo(
-               datamodel_tui_pb2.GetStaticInfoRequest(path="/mesh"),
+           # 5) Retrieve schema
+           schema_resp = stub.GetSchema(
+               datamodel_tui_pb2.GetSchemaRequest(path="/mesh"),
                metadata=metadata,
            )
-           print("Available menus:", list(static_resp.info.menus.keys()))
-           print("Available commands:", list(static_resp.info.commands.keys()))
+           print("Available menus:", list(schema_resp.info.menus.keys()))
+           print("Available commands:", list(schema_resp.info.commands.keys()))
 
        finally:
            channel.close()

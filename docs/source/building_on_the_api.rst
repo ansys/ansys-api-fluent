@@ -42,7 +42,7 @@ What the schema contains
 The two services return different message types, reflecting their different
 structural models.
 
-**DataModel service — ``GetSchemaResponse.info`` (``StaticInfo``)**
+**DataModel service — ``GetSchemaResponse.info`` (``Schema``)**
 
 .. list-table::
    :header-rows: 1
@@ -51,9 +51,9 @@ structural models.
    * - Field
      - Content
    * - ``singletons``
-     - Child singleton objects. Each has its own ``StaticInfo`` sub-tree.
+     - Child singleton objects. Each has its own ``Schema`` sub-tree.
    * - ``named_objects``
-     - Child named-object families. Each has a prototype ``StaticInfo`` that
+     - Child named-object families. Each has a prototype ``Schema`` that
        describes all instances of that family.
    * - ``parameters``
      - Leaf parameters. Each entry carries a type tag (``Bool``, ``Integer``,
@@ -179,7 +179,7 @@ named Python (or other language) classes and methods rather than raw path
 strings.
 
 PyFluent (the official Ansys Python client for Fluent) uses this approach: the
-``StaticInfo`` schema for the DataModel service and the ``Schema`` for the
+``Schema`` schema for the DataModel service and the ``Schema`` for the
 Settings service were consumed by a code generator that emitted the full Python
 class hierarchy — one class per object type, one method per command or query,
 typed properties for every parameter. End-user code calls

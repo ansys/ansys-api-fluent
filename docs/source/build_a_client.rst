@@ -95,10 +95,10 @@ or ``flserver``).
    print("Top-level named objects:", list(root_schema.named_objects.keys()))
    print("Top-level commands:", list(root_schema.commands.keys()))
 
-The returned ``StaticInfo`` (accessible as ``schema_resp.info``) is a recursive
+The returned ``Schema`` (accessible as ``schema_resp.info``) is a recursive
 structure. Each node contains:
 
-.. list-table:: ``StaticInfo`` fields
+.. list-table:: ``Schema`` fields
    :header-rows: 1
    :widths: 25 75
 

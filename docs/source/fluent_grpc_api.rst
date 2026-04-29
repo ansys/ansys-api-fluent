@@ -12,11 +12,10 @@ The Fluent gRPC API exposes two complementary, high-level services:
 
 - The **DataModel service** covers multiple Fluent applications, including the
   meshing workflow and the solver object model. It organises Fluent objects as
-  a tree of singletons, named objects, parameters, commands, and queries
-  addressed by a *rules context* and a slash-separated *path*.
+  a tree addressed by a *rules context* and a slash-separated *path*.
 
 - The **Settings service** covers simulation configuration — boundary
-  conditions, solver controls, and results settings. It uses a flat,
+  conditions, solver controls, and results settings. It uses a 
   slash-separated path hierarchy that maps directly to the Fluent settings
   tree.
 
@@ -44,8 +43,8 @@ exposes two distinct layers:
        types, available commands, command arguments, and help text. This is the
        contract. It is independent of any running simulation.
    * - **Runtime**
-     - ``GetState`` / ``SetState`` / ``ExecuteCommand`` (DataModel)
-       ``GetVar`` / ``SetVar`` / ``ExecuteCommand`` (Settings)
+     - | ``GetState`` / ``SetState`` / ``ExecuteCommand`` (DataModel)
+       | ``GetVar`` / ``SetVar`` / ``ExecuteCommand`` (Settings)
      - Read, write, and act on live simulation state. These calls require a
        running Fluent session.
 
