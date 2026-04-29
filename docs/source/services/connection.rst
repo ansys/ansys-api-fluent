@@ -86,11 +86,14 @@ Key message types
 RPC operations
 ~~~~~~~~~~~~~~
 
-Connect (bidirectional stream)
-------------------------------
+Connect (server-streaming)
+--------------------------
 
-Establishes a bidirectional connection stream with the server. The client sends connection requests
-and receives streamed status responses. This RPC must complete successfully before using other services.
+Establishes a connection by sending one ``ConnectRequest`` and receiving a
+stream of ``ConnectResponse`` messages. The first response indicates whether
+the connection succeeded. The stream may continue to carry status updates for
+the lifetime of the session. This RPC must complete successfully before using
+other services.
 
 **Basic Parameters:**
 
@@ -426,8 +429,8 @@ Best practices
    health to detect connection drops.
 
 See also
-~~~~~~~~
+--------
 
-- :doc:`../gettingstarted` - Basic client setup
-- :doc:`health` - Health service for connectivity checks
-- :doc:`field_data` - Field data service for streaming data after connection
+- :doc:`../gettingstarted` — basic client setup
+- :doc:`health` — check server readiness after connecting
+- :doc:`app_utilities` — version and process information once connected

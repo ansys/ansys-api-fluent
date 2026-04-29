@@ -1,108 +1,101 @@
-﻿Transcript
-==========
-
-The Transcript service provides access to Fluent's command transcript and logging.
+﻿Transcript service
+==================
 
 Overview
-~~~~~~~~
+--------
+
+The Transcript service streams the Fluent console output — every line that
+Fluent writes to its terminal — to the client as a continuous server-side
+stream. This lets you monitor solver progress, capture log messages, and
+display Fluent output in your own application UI without polling.
 
 .. include:: ../shared_example_assumptions.rst
-
-The ``Transcript`` service allows you to:
-
-- Retrieve command history
-- Access solver output/logs
-- Monitor transcript stream
-- Query execution results
-
-Service definition
-~~~~~~~~~~~~~~~~~~
-
-**Package:** ``ansys.api.fluent.v1.transcript``
-
-**Main Classes:**
-
-- ``TranscriptStub``: Client stub for transcript operations
-
-Core RPC operations
-~~~~~~~~~~~~~~~~~~~
-
-Get transcript (stream)
------------------------
-
-Stream transcript messages and solver output.
-
-.. code-block:: python
-
-   request = transcript_pb2.GetTranscriptRequest()
-   
-   for transcript_msg in stub.GetTranscript(
-       request,
-       metadata=metadata,
-   ):
-       if transcript_msg.type == transcript_pb2.TranscriptMessage.STDOUT:
-           print(f"Output: {transcript_msg.message}")
-       elif transcript_msg.type == transcript_pb2.TranscriptMessage.STDERR:
-           print(f"Error: {transcript_msg.message}")
-
-Complete example
-~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
    import grpc
    from ansys.api.fluent.v1 import transcript_pb2, transcript_pb2_grpc
 
-   HOST = "127.0.0.1"
-   PORT = 50051
-   PASSWORD = "your-server-password"
+   channel = grpc.insecure_channel("127.0.0.1:50051")
+   metadata = [("password", "your-server-password")]
+   stub = transcript_pb2_grpc.TranscriptStub(channel)
 
-   def stream_transcript():
-       channel = grpc.insecure_channel(f"{HOST}:{PORT}")
-       metadata = [("password", PASSWORD)]
-       stub = transcript_pb2_grpc.TranscriptStub(channel)
-       
-       try:
-           request = transcript_pb2.GetTranscriptRequest()
-           
-           line_count = 0
-           for transcript_msg in stub.GetTranscript(
-               request,
-               metadata=metadata,
-           ):
-               message = transcript_msg.message
-               if message:
-                   print(message, end='')
-                   line_count += 1
-           
-           print(f"\nReceived {line_count} transcript lines")
-           
-       except grpc.RpcError as err:
-           print(f"Error: {err.code()} - {err.details()}")
-           raise
-       finally:
-           channel.close()
+Runtime API
+-----------
 
-   if __name__ == "__main__":
-       stream_transcript()
+BeginStreaming
+~~~~~~~~~~~~~~
 
-Message types
-~~~~~~~~~~~~~
+Opens a server-side streaming RPC. The server sends a ``TranscriptResponse``
+message for each line (or chunk) of Fluent output. The stream remains open
+for the lifetime of the Fluent session; iterate it in a background thread
+so it does not block your main client logic.
+
+- ``BeginStreaming(TranscriptRequest)`` → ``stream TranscriptResponse``
+
+``TranscriptResponse`` has one field:
 
 .. list-table::
    :header-rows: 1
+   :widths: 20 20 60
 
-   * - Type
+   * - Field
+     - Type
      - Description
-   * - STDOUT
-     - Standard output/solver messages
-   * - STDERR
-     - Standard error/warning messages
-   * - INFO
-     - Informational messages
+   * - ``transcript``
+     - ``string``
+     - One line or chunk of Fluent console output, including its trailing
+       newline where present.
+
+.. code-block:: python
+
+   stream = stub.BeginStreaming(
+       transcript_pb2.TranscriptRequest(),
+       metadata=metadata,
+   )
+
+   for response in stream:
+       print(response.transcript, end="")
+
+Background streaming example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Run the transcript stream in a daemon thread so that the main thread can
+continue issuing other RPCs while Fluent output is being printed.
+
+.. code-block:: python
+
+   import threading
+
+   def _stream_transcript(stub, metadata, stop_event):
+       stream = stub.BeginStreaming(
+           transcript_pb2.TranscriptRequest(),
+           metadata=metadata,
+       )
+       try:
+           for response in stream:
+               if stop_event.is_set():
+                   break
+               print(response.transcript, end="", flush=True)
+       except Exception:
+           pass  # stream closed when the session ends
+
+   stop_event = threading.Event()
+   t = threading.Thread(
+       target=_stream_transcript,
+       args=(stub, metadata, stop_event),
+       daemon=True,
+   )
+   t.start()
+
+   # ... do other work ...
+
+   stop_event.set()  # signal the thread to stop
 
 See also
-~~~~~~~~
+--------
 
-- :doc:`../gettingstarted` - Basic client setup
-- :doc:`monitor` - Monitor service
+- :doc:`app_utilities` — ``StartPythonJournal`` and ``StopPythonJournal`` to
+  record API calls alongside the transcript
+- :doc:`events` — structured solver lifecycle events (iteration counts,
+  convergence signals) as an alternative to parsing the transcript

@@ -348,8 +348,8 @@ Best practices
 5. **Keep condition expressions clear** - Prefer simple threshold logic for ``CountIf`` and ``SumIf``.
 
 See also
-~~~~~~~~
+--------
 
-- :doc:`../gettingstarted` - Basic client setup
-- :doc:`field_data` - Field data service
-- :doc:`health` - Health service for connectivity checks
+- :doc:`../gettingstarted` — basic client setup
+- :doc:`field_data` — raw field data (scalar, vector, mesh)
+- :doc:`svar` — per-zone solution variable data

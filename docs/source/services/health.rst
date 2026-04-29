@@ -1,123 +1,99 @@
-﻿Health
-======
-
-The Health service provides RPCs to query the serving status of the server.
+﻿Health service
+==============
 
 Overview
-~~~~~~~~
+--------
+
+The Health service tells you whether the Fluent server is ready to accept
+requests. Call it immediately after opening a channel and before issuing any
+other RPC.
 
 .. include:: ../shared_example_assumptions.rst
-
-The ``Health`` service is used to verify that your server is running and ready to serve requests. 
-Use this as the first check when connecting to a server.
-
-Service definition
-~~~~~~~~~~~~~~~~~~
-
-**Package:** ``ansys.api.fluent.v1.health``
-
-**Main Classes:**
-
-- ``HealthCheckRequest``: Request message (service name)
-- ``HealthCheckResponse``: Response with serving status
-- ``HealthStub``: Client stub for making requests
-
-RPC operations
-~~~~~~~~~~~~~~
-
-Check
------
-
-Queries the serving status of a service.
-
-.. code-block:: python
-
-   # Check overall server status
-   response = health_stub.Check(
-       health_pb2.HealthCheckRequest(),
-       metadata=metadata,
-   )
-   status = response.status
-   # Returns: SERVING_STATUS_SERVING (1) if healthy
-
-Complete example
-~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
    import grpc
    from ansys.api.fluent.v1 import health_pb2, health_pb2_grpc
 
-   HOST = "127.0.0.1"
-   PORT = 50051
-   PASSWORD = "your-server-password"
+   channel = grpc.insecure_channel("127.0.0.1:50051")
+   metadata = [("password", "your-server-password")]
+   stub = health_pb2_grpc.HealthStub(channel)
 
-   def check_server_health():
-       channel = grpc.insecure_channel(f"{HOST}:{PORT}")
-       metadata = [("password", PASSWORD)]
-       stub = health_pb2_grpc.HealthStub(channel)
-       
-       try:
-           response = stub.Check(
-               health_pb2.HealthCheckRequest(service=""),
-               metadata=metadata,
-           )
-           
-           status_map = {
-               0: "UNSPECIFIED",
-               1: "SERVING",
-               2: "NOT_SERVING",
-               3: "UNKNOWN"
-           }
-           
-           status_name = status_map.get(response.status, "UNKNOWN")
-           print(f"Server status: {status_name}")
-           
-           if response.status == 1:  # SERVING
-               return True
-           return False
-           
-       except grpc.RpcError as err:
-           print(f"Health check failed: {err.details()}")
-           raise
-       finally:
-           channel.close()
+Runtime API
+-----------
 
-   if __name__ == "__main__":
-       is_healthy = check_server_health()
-       print(f"Server is {'ready' if is_healthy else 'not ready'}")
+Check
+~~~~~
+
+Performs a single health check and returns the current serving status.
+If the ``service`` field is empty the server reports the overall process
+status. If the named service is not known the call fails with
+``NOT_FOUND``.
+
+.. code-block:: python
+
+   response = stub.Check(
+       health_pb2.HealthCheckRequest(service=""),
+       metadata=metadata,
+   )
+   if response.status == health_pb2.HealthCheckResponse.SERVING_STATUS_SERVING:
+       print("Server is ready")
+   else:
+       print(f"Server not ready — status: {response.status}")
+
+Watch
+~~~~~
+
+Opens a server-side stream that immediately emits the current status and
+then emits a new message every time the status changes. Iterate the stream
+to monitor liveness over time. The stream does not end unless the caller
+cancels it.
+
+If the requested service is unknown when the call is received the server
+will emit ``SERVING_STATUS_SERVICE_UNKNOWN`` and keep the stream open; if
+the service later becomes known the server emits the current status.
+
+If the server returns ``UNIMPLEMENTED`` the ``Watch`` method is not
+supported — do not retry it; use ``Check`` polling instead.
+
+.. code-block:: python
+
+   stream = stub.Watch(
+       health_pb2.HealthCheckRequest(service=""),
+       metadata=metadata,
+   )
+   for update in stream:
+       print(f"Status changed: {update.status}")
+       if update.status == health_pb2.HealthCheckResponse.SERVING_STATUS_NOT_SERVING:
+           print("Server stopped serving — reconnect or exit")
+           break
 
 Serving status values
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 .. list-table::
    :header-rows: 1
+   :widths: 40 10 50
 
-   * - Status
+   * - Enum constant
      - Value
      - Meaning
-   * - UNSPECIFIED
+   * - ``SERVING_STATUS_UNSPECIFIED``
      - 0
-     - Default/unspecified status
-   * - SERVING
+     - Default value; do not use.
+   * - ``SERVING_STATUS_SERVING``
      - 1
-     - Server is ready and serving
-   * - NOT_SERVING
+     - The server is ready and accepting requests.
+   * - ``SERVING_STATUS_NOT_SERVING``
      - 2
-     - Server is not currently serving
-   * - UNKNOWN
+     - The server is running but not accepting requests.
+   * - ``SERVING_STATUS_SERVICE_UNKNOWN``
      - 3
-     - Requested service is unknown
-
-Best practices
-~~~~~~~~~~~~~~
-
-1. **Always check health first** - Before using other services, verify the server is healthy
-2. **Handle errors gracefully** - Network issues or wrong credentials will raise RpcError
-3. **Implement retry logic** - For transient failures, retry with exponential backoff
+     - The requested named service is not known (only returned by ``Watch``).
 
 See also
-~~~~~~~~
+--------
 
-- :doc:`gettingstarted` - Basic client setup
-- :doc:`field_data` - Field data retrieval service
+- :doc:`../gettingstarted` — basic client setup and the five-step connection pattern
+- :doc:`app_utilities` — version and process information once the server is confirmed healthy
+- :doc:`connection` — bidirectional connection management

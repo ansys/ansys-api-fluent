@@ -155,14 +155,40 @@ Opens a server-side streaming RPC that emits ``StreamingResponse`` messages as t
 produces new monitor samples. Each response contains one ``XAxisData`` point and one or more
 ``MonitorData`` y-values.
 
+``StreamingRequest`` has one optional field:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
+
+   * - Field
+     - Type
+     - Description
+   * - ``filters``
+     - ``repeated MonitorFilter``
+     - Zero or more filters. If empty, all monitor data is streamed. Each
+       ``MonitorFilter`` can restrict by ``x_axis_type``, ``monitor_names``,
+       or ``frequency``.
+
 .. code-block:: python
 
+   # Stream all monitors (no filter)
    request = monitor_pb2.StreamingRequest()
 
-   for sample in monitor_stub.BeginStreaming(
-       request,
-       metadata=metadata,
-   ):
+   for sample in monitor_stub.BeginStreaming(request, metadata=metadata):
+       x = sample.x_axis_data
+       for y in sample.y_axis_values:
+           print(f"  iter={x.x_axis_index}  {y.name}={y.value:.6g}")
+
+   # Stream only residual monitors on the iteration axis
+   filtered_request = monitor_pb2.StreamingRequest(
+       filters=[
+           monitor_pb2.MonitorFilter(
+               x_axis_type=monitor_pb2.XAXIS_TYPE_ITERATION,
+           )
+       ]
+   )
+   for sample in monitor_stub.BeginStreaming(filtered_request, metadata=metadata):
        x = sample.x_axis_data
        for y in sample.y_axis_values:
            print(f"  iter={x.x_axis_index}  {y.name}={y.value:.6g}")
@@ -470,9 +496,8 @@ Best practices
    when the stream is interrupted.
 
 See also
-~~~~~~~~
+--------
 
-- :doc:`../gettingstarted` - Basic client setup
-- :doc:`health` - Health service for connectivity checks
-- :doc:`connection` - Connection service for session management
-- :doc:`settings` - Settings service for solver control
+- :doc:`../gettingstarted` — basic client setup
+- :doc:`events` — structured solver lifecycle events (iteration signals, pause callbacks)
+- :doc:`reduction` — on-demand scalar reductions over surfaces and zones

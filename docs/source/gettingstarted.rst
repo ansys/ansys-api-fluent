@@ -1,8 +1,12 @@
 Getting started
 ===============
 
-This guide shows how to use the packaged Python gRPC interface in ``ansys-api-fluent`` 
-to connect to a Fluent v1 gRPC server and call services directly.
+This guide shows how to install the package, connect to a running Fluent
+server, and make your first service calls.
+
+If you want a map of the whole API before diving in, read
+:doc:`fluent_grpc_api` first — it explains the overall structure in two
+pages you can scan in a few minutes.
 
 Installation
 ~~~~~~~~~~~~
@@ -48,7 +52,7 @@ Prerequisites
 Before writing a client, you need:
 
 - Python 3.10 or later
-- A running v1 gRPC server
+- A running Fluent server (Ansys Fluent 27R1 or later)
 - The server IP address or host name
 - The server port
 - The server password
@@ -160,12 +164,21 @@ Here is a complete script that demonstrates connecting to a server and using mul
 Next steps
 ~~~~~~~~~~
 
-Now that you understand the basic pattern, explore the :doc:`services` to learn about:
+Now that you understand the basic connection pattern, follow
+:doc:`build_a_client` for a step-by-step walkthrough that covers:
 
-- **Health Service** (:doc:`services/health`): Monitor server status
-- **Field Data Service** (:doc:`services/field_data`): Retrieve simulation field data
-- **App Utilities** (:doc:`services/app_utilities`): Access Fluent application settings
-- Other specialized services for your use case
+- Discovering available paths via the DataModel API schema and the Settings API schema
+- Reading and writing state with the DataModel service and the Settings service
+- Subscribing to live solver events
+
+Or jump directly to a service reference:
+
+- **Health service** (:doc:`services/health`): verify server readiness
+- **DataModel service** (:doc:`services/datamodel_se`): read/write object-model state
+- **Settings service** (:doc:`services/settings`): read/write solver configuration
+- **Events service** (:doc:`services/events`): stream solver lifecycle events
+- **Field Data service** (:doc:`services/field_data`): retrieve simulation field data
+- **ApplicationRuntime service** (:doc:`services/app_utilities`): version, journal, app mode
 
 Common errors and solutions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -327,8 +327,8 @@ Best practices
 6. **Limit demo streams** - In examples/tests, stop after N events to avoid endless runs.
 
 See also
-~~~~~~~~
+--------
 
-- :doc:`../gettingstarted` - Basic client setup
-- :doc:`field_data` - Field data retrieval service
-- :doc:`health` - Health service for connectivity checks
+- :doc:`../gettingstarted` — basic client setup
+- :doc:`monitor` — residual and report-monitor data streams
+- :doc:`transcript` — raw Fluent console output stream

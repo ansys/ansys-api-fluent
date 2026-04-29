@@ -1,333 +1,288 @@
-﻿Field data
-==========
-
-The Field Data service provides access to simulation field data including surfaces, scalar fields, vector fields, and spatial information.
+Field Data service
+==================
 
 Overview
-~~~~~~~~
+--------
+
+The Field Data service streams simulation results — scalar fields, vector
+fields, surface geometry, mesh nodes and elements, pathlines, and particle
+tracks — out of a running Fluent session. It also provides discovery RPCs so
+you can enumerate available surfaces and fields before requesting data.
+
+Most data-retrieval RPCs are **server-streaming**: they return one or more
+typed payload chunks that you iterate over. The ``SetSvarData`` analogue for
+writing is on the Solution Variables service (:doc:`svar`).
 
 .. include:: ../shared_example_assumptions.rst
-
-The ``FieldData`` service allows you to:
-
-- Discover available surfaces and mesh information
-- Query available scalar and vector fields
-- Stream field values (double, float, int, long formats)
-- Retrieve mesh node and element data
-- Access specialized field data like pathlines and particle tracks
-- Check whether solution data and boundary values are available
-
-Service definition
-~~~~~~~~~~~~~~~~~~
-
-**Package:** ``ansys.api.fluent.v1.field_data``
-
-**Main Classes:**
-
-- ``FieldDataStub``: Client stub for all field data operations
-- Request messages: ``GetFieldsRequest``, ``GetSurfacesInfoRequest``, ``GetRangeRequest``, etc.
-- Response messages: Corresponding response types
-- Payload types: ``DoublePayload``, ``FloatPayload``, ``IntPayload``, ``LongPayload``
-
-Core RPC operations
-~~~~~~~~~~~~~~~~~~~
-
-Get surfaces information
-------------------------
-
-Retrieve information about available surfaces in the simulation.
-
-.. code-block:: python
-
-   response = field_stub.GetSurfacesInfo(
-       field_data_pb2.GetSurfacesInfoRequest(),
-       metadata=metadata,
-   )
-   
-   for surface_info in response.surface_info:
-       print(f"Surface: {surface_info.surface_name}")
-       for surface_id in surface_info.surface_ids:
-           print(f"  ID: {surface_id.id}")
-
-Get fields information
-----------------------
-
-Discover available scalar fields that can be requested.
-
-.. code-block:: python
-
-   response = field_stub.GetFieldsInfo(
-       field_data_pb2.GetFieldsInfoRequest(),
-       metadata=metadata,
-   )
-   
-   for field in response.field_info:
-       print(f"{field.solver_name}: {field.display_name}")
-       print(f"  Section: {field.section}, Domain: {field.domain}")
-
-Get range
----------
-
-Get the minimum and maximum values of a field on a surface.
-
-.. code-block:: python
-
-   request = field_data_pb2.GetRangeRequest(
-       field_name="temperature",
-       surface_ids=[field_data_pb2.SurfaceId(id=2)],
-       node_value=True
-   )
-   
-   response = field_stub.GetRange(
-       request,
-       metadata=metadata,
-   )
-   
-   print(f"Range: {response.minimum} to {response.maximum}")
-
-Get fields (stream)
--------------------
-
-Stream scalar field values. This is the main way to retrieve field data.
-
-.. code-block:: python
-
-   request = field_data_pb2.GetFieldsRequest(
-       provide_bytes_stream=False,
-       chunk_size=256 * 1024,
-       scalar_field_requests=[
-           field_data_pb2.ScalarFieldRequest(
-               surface_id=2,
-               scalar_field_name="temperature",
-               data_location=field_data_pb2.DataLocation.DATA_LOCATION_NODES,
-               provide_boundary_values=False
-           )
-       ]
-   )
-   
-   value_count = 0
-   values_min = None
-   values_max = None
-   
-   for chunk in field_stub.GetFields(
-       request,
-       metadata=metadata,
-   ):
-       chunk_type = chunk.WhichOneof("chunk")
-       
-       if chunk_type == "payload_info":
-           # Contains metadata about the payload
-           continue
-       elif chunk_type == "double_payload":
-           values = list(chunk.double_payload.payloads)
-       elif chunk_type == "float_payload":
-           values = [float(v) for v in chunk.float_payload.payloads]
-       elif chunk_type == "int_payload":
-           values = [float(v) for v in chunk.int_payload.payloads]
-       elif chunk_type == "long_payload":
-           values = [float(v) for v in chunk.long_payload.payloads]
-       else:
-           continue
-       
-       if values:
-           value_count += len(values)
-           chunk_min = min(values)
-           chunk_max = max(values)
-           values_min = chunk_min if values_min is None else min(values_min, chunk_min)
-           values_max = chunk_max if values_max is None else max(values_max, chunk_max)
-   
-   print(f"Streamed {value_count} values, range: {values_min} to {values_max}")
-
-Complete example
-~~~~~~~~~~~~~~~~
-
-A complete workflow that discovers and streams field data:
 
 .. code-block:: python
 
    import grpc
    from ansys.api.fluent.v1 import field_data_pb2, field_data_pb2_grpc
 
-   HOST = "127.0.0.1"
-   PORT = 50051
-   PASSWORD = "your-server-password"
+   channel = grpc.insecure_channel("127.0.0.1:50051")
+   metadata = [("password", "your-server-password")]
+   stub = field_data_pb2_grpc.FieldDataStub(channel)
 
-   def list_field_data():
-       channel = grpc.insecure_channel(f"{HOST}:{PORT}")
-       metadata = [("password", PASSWORD)]
-       stub = field_data_pb2_grpc.FieldDataStub(channel)
-       
-       try:
-           # Step 1: Get available surfaces
-           print("=== Available Surfaces ===")
-           surf_response = stub.GetSurfacesInfo(
-               field_data_pb2.GetSurfacesInfoRequest(),
-               metadata=metadata,
-           )
-           
-           surface_ids = {}
-           for surface_info in surf_response.surface_info:
-               for sid in surface_info.surface_ids:
-                   surface_ids[sid.id] = surface_info.surface_name
-                   print(f"ID {sid.id}: {surface_info.surface_name}")
-           
-           if not surface_ids:
-               print("No surfaces available")
-               return
-           
-           first_surface_id = list(surface_ids.keys())[0]
-           
-           # Step 2: Get available scalar fields
-           print("\n=== Available Scalar Fields ===")
-           field_response = stub.GetFieldsInfo(
-               field_data_pb2.GetFieldsInfoRequest(),
-               metadata=metadata,
-           )
-           
-           if not field_response.field_info:
-               print("No scalar fields available")
-               return
-           
-           first_field = field_response.field_info[0].solver_name
-           for field_info in field_response.field_info[:5]:
-               print(f"{field_info.solver_name}: {field_info.display_name}")
-           
-           # Step 3: Get field range
-           print(f"\n=== Field Range for {first_field} ===")
-           range_request = field_data_pb2.GetRangeRequest(
-               field_name=first_field,
-               surface_ids=[field_data_pb2.SurfaceId(id=first_surface_id)],
-               node_value=True
-           )
-           
-           range_response = stub.GetRange(
-               range_request,
-               metadata=metadata,
-           )
-           
-           print(f"Min: {range_response.minimum:.6g}")
-           print(f"Max: {range_response.maximum:.6g}")
-           
-           # Step 4: Stream field values
-           print(f"\n=== Streaming {first_field} data ===")
-           stream_request = field_data_pb2.GetFieldsRequest(
-               provide_bytes_stream=False,
-               chunk_size=256 * 1024,
-               scalar_field_requests=[
-                   field_data_pb2.ScalarFieldRequest(
-                       surface_id=first_surface_id,
-                       scalar_field_name=first_field,
-                       data_location=field_data_pb2.DataLocation.DATA_LOCATION_NODES,
-                       provide_boundary_values=False
-                   )
-               ]
-           )
-           
-           value_count = 0
-           chunk_count = 0
-           
-           for chunk in stub.GetFields(
-               stream_request,
-               metadata=metadata,
-           ):
-               chunk_type = chunk.WhichOneof("chunk")
-               
-               if chunk_type == "payload_info":
-                   chunk_count += 1
-               elif chunk_type == "double_payload":
-                   value_count += len(chunk.double_payload.payloads)
-               elif chunk_type in ["float_payload", "int_payload", "long_payload"]:
-                   value_count += len(getattr(chunk, chunk_type).payloads)
-           
-           print(f"Received {chunk_count} payload chunks with {value_count} values")
-           
-       except grpc.RpcError as err:
-           print(f"Error: {err.code()} - {err.details()}")
-           raise
-       finally:
-           channel.close()
+Runtime API
+-----------
 
-   if __name__ == "__main__":
-       list_field_data()
+Availability checks
+~~~~~~~~~~~~~~~~~~~
 
-Data location options
-~~~~~~~~~~~~~~~~~~~~~
+Before requesting field data, check whether solution data and boundary values
+are currently available. These calls are cheap and save you from issuing
+streaming RPCs against an empty or uninitialised solver.
 
-.. list-table::
-   :header-rows: 1
+- ``IsDataAvailable(IsDataAvailableRequest)`` → ``IsDataAvailableResponse``
+  Response field: ``available: bool``
+- ``IsBoundaryValuesEnabled(IsBoundaryValuesEnabledRequest)`` → ``IsBoundaryValuesEnabledResponse``
+  Response field: ``enabled: bool``
 
-   * - Option
-     - Value
-     - Description
-   * - DATA_LOCATION_NODES
-     - Values at mesh nodes
-     - Cell vertex values
-   * - DATA_LOCATION_ELEMENTS
-     - Values at cell centers
-     - Averaged to cell centers
+.. code-block:: python
+
+   avail = stub.IsDataAvailable(
+       field_data_pb2.IsDataAvailableRequest(), metadata=metadata,
+   )
+   bv_enabled = stub.IsBoundaryValuesEnabled(
+       field_data_pb2.IsBoundaryValuesEnabledRequest(), metadata=metadata,
+   )
+   print(f"Data available: {avail.available}")
+   print(f"Boundary values enabled: {bv_enabled.enabled}")
+
+Discovery: surfaces and fields
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Enumerate the surfaces and fields in the current session before requesting
+data. Use the IDs and names returned here in subsequent streaming calls.
+
+- ``GetSurfacesInfo(GetSurfacesInfoRequest)`` → ``GetSurfacesInfoResponse``
+- ``GetFieldsInfo(GetFieldsInfoRequest)`` → ``GetFieldsInfoResponse``
+- ``GetVectorFieldsInfo(GetVectorFieldsInfoRequest)`` → ``GetVectorFieldsInfoResponse``
+- ``GetRange(GetRangeRequest)`` → ``GetRangeResponse``
+  Request fields: ``field_name: string``, ``surface_ids: repeated SurfaceId``, ``node_value: bool``
+  Response fields: ``minimum: double``, ``maximum: double``
+
+.. code-block:: python
+
+   # Surfaces
+   surf_resp = stub.GetSurfacesInfo(
+       field_data_pb2.GetSurfacesInfoRequest(), metadata=metadata,
+   )
+   surface_ids = {}
+   for info in surf_resp.surface_info:
+       for sid in info.surface_ids:
+           surface_ids[sid.id] = info.surface_name
+           print(f"  Surface id={sid.id}  name={info.surface_name}")
+
+   # Scalar fields
+   field_resp = stub.GetFieldsInfo(
+       field_data_pb2.GetFieldsInfoRequest(), metadata=metadata,
+   )
+   for f in field_resp.field_info:
+       print(f"  Scalar: {f.solver_name!r}  ({f.display_name})")
+
+   # Vector fields
+   vec_resp = stub.GetVectorFieldsInfo(
+       field_data_pb2.GetVectorFieldsInfoRequest(), metadata=metadata,
+   )
+   for v in vec_resp.vector_field_info:
+       print(f"  Vector: {v.solver_name!r}  ({v.display_name})")
+
+   # Range of a scalar field on the first surface
+   first_id = next(iter(surface_ids))
+   rng = stub.GetRange(
+       field_data_pb2.GetRangeRequest(
+           field_name="temperature",
+           surface_ids=[field_data_pb2.SurfaceId(id=first_id)],
+           node_value=True,
+       ),
+       metadata=metadata,
+   )
+   print(f"Temperature range: {rng.minimum:.4f} — {rng.maximum:.4f}")
+
+Scalar field streaming
+~~~~~~~~~~~~~~~~~~~~~~
+
+``GetFields`` is the primary way to stream one or more scalar fields in a
+single request. Each response chunk contains either metadata (``payload_info``)
+or a typed numeric payload. Accumulate chunks by field and surface.
+
+``GetScalarField`` is the simpler single-field alternative.
+
+- ``GetFields(GetFieldsRequest)`` → ``stream GetFieldsResponse``
+- ``GetScalarField(GetScalarFieldRequest)`` → ``stream GetScalarFieldResponse``
+
+.. code-block:: python
+
+   # --- GetFields (multi-field batch) ---
+   request = field_data_pb2.GetFieldsRequest(
+       provide_bytes_stream=False,
+       chunk_size=256 * 1024,
+       scalar_field_requests=[
+           field_data_pb2.ScalarFieldRequest(
+               surface_id=first_id,
+               scalar_field_name="temperature",
+               data_location=field_data_pb2.DataLocation.DATA_LOCATION_NODES,
+               provide_boundary_values=False,
+           )
+       ],
+   )
+   all_values = []
+   for chunk in stub.GetFields(request, metadata=metadata):
+       kind = chunk.WhichOneof("chunk")
+       if kind == "double_payload":
+           all_values.extend(chunk.double_payload.payloads)
+       elif kind == "float_payload":
+           all_values.extend(chunk.float_payload.payloads)
+   print(f"Received {len(all_values)} temperature values")
+
+   # --- GetScalarField (single-field, simpler) ---
+   for chunk in stub.GetScalarField(
+       field_data_pb2.GetScalarFieldRequest(
+           surface_id=first_id,
+           scalar_field_name="pressure",
+           data_location=field_data_pb2.DataLocation.DATA_LOCATION_NODES,
+           provide_boundary_values=False,
+       ),
+       metadata=metadata,
+   ):
+       kind = chunk.WhichOneof("chunk")
+       if kind == "double_payload":
+           print(f"  Pressure chunk: {len(chunk.double_payload.payloads)} values")
+
+Vector field streaming
+~~~~~~~~~~~~~~~~~~~~~~
+
+Retrieve vector field data (velocity, flux, etc.) on selected surfaces.
+
+- ``GetVectorField(GetVectorFieldRequest)`` → ``stream GetVectorFieldResponse``
+
+.. code-block:: python
+
+   for chunk in stub.GetVectorField(
+       field_data_pb2.GetVectorFieldRequest(
+           surface_id=first_id,
+           vector_field_name="velocity",
+           data_location=field_data_pb2.DataLocation.DATA_LOCATION_NODES,
+       ),
+       metadata=metadata,
+   ):
+       kind = chunk.WhichOneof("chunk")
+       if kind == "float_payload":
+           print(f"  Vector chunk: {len(chunk.float_payload.payloads)} component values")
+
+Surface geometry
+~~~~~~~~~~~~~~~~
+
+Stream the vertex coordinates and connectivity of a surface. Use
+``GetSurfaces`` for surfaces and the mesh-node/element RPCs below for
+the solver volume mesh.
+
+- ``GetSurfaces(GetSurfacesRequest)`` → ``stream GetSurfacesResponse``
+
+.. code-block:: python
+
+   for chunk in stub.GetSurfaces(
+       field_data_pb2.GetSurfacesRequest(
+           surface_ids=[field_data_pb2.SurfaceId(id=first_id)],
+           provide_faces=True,
+           provide_overset_state=False,
+       ),
+       metadata=metadata,
+   ):
+       kind = chunk.WhichOneof("chunk")
+       if kind == "vertices_chunk":
+           print(f"  Vertices chunk: {len(chunk.vertices_chunk.vertices)} vertex values")
+       elif kind == "faces_connectivity_chunk":
+           print(f"  Connectivity chunk received")
+
+Solver mesh (nodes and elements)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Retrieve the raw solver mesh — node coordinates at float or double precision,
+and element connectivity. These RPCs stream the volumetric mesh, not surfaces.
+
+- ``GetSolverMeshNodesFloat(GetSolverMeshNodesRequest)`` → ``stream GetSolverMeshNodesFloatResponse``
+- ``GetSolverMeshNodesDouble(GetSolverMeshNodesRequest)`` → ``stream GetSolverMeshNodesDoubleResponse``
+- ``GetSolverMeshElements(GetSolverMeshElementsRequest)`` → ``stream GetSolverMeshElementsResponse``
+
+.. code-block:: python
+
+   node_count = 0
+   for chunk in stub.GetSolverMeshNodesFloat(
+       field_data_pb2.GetSolverMeshNodesRequest(zone_ids=[12]),
+       metadata=metadata,
+   ):
+       if chunk.HasField("float_payload"):
+           node_count += len(chunk.float_payload.payloads) // 3  # x, y, z per node
+   print(f"Total nodes: {node_count}")
+
+   for chunk in stub.GetSolverMeshElements(
+       field_data_pb2.GetSolverMeshElementsRequest(zone_ids=[12]),
+       metadata=metadata,
+   ):
+       kind = chunk.WhichOneof("chunk")
+       if kind is not None:
+           print(f"  Elements chunk type: {kind}")
+
+Pathlines and particle tracks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Stream pathline or particle-track field data for flow visualisation. Both RPCs
+follow the same payload-chunk pattern as scalar and vector fields.
+
+- ``GetPathlinesField(GetPathlinesFieldRequest)`` → ``stream GetPathlinesFieldResponse``
+- ``GetParticleTracksField(GetParticleTracksFieldRequest)`` → ``stream GetParticleTracksFieldResponse``
+
+.. code-block:: python
+
+   for chunk in stub.GetPathlinesField(
+       field_data_pb2.GetPathlinesFieldRequest(
+           field="velocity-magnitude",
+           surface_ids=[field_data_pb2.SurfaceId(id=first_id)],
+       ),
+       metadata=metadata,
+   ):
+       kind = chunk.WhichOneof("chunk")
+       if kind is not None:
+           print(f"  Pathlines chunk: {kind}")
+
+Legacy streaming (BeginFieldsStreaming)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``BeginFieldsStreaming`` is an older, lower-level streaming RPC. Prefer
+``GetFields``, ``GetScalarField``, or ``GetVectorField`` for new clients.
+
+- ``BeginFieldsStreaming(BeginFieldsStreamingRequest)`` → ``stream BeginFieldsStreamingResponse``
 
 Payload types
-~~~~~~~~~~~~~
+-------------
 
-Field data is returned in different numeric formats:
+All numeric payloads are typed. Each chunk response uses a ``oneof`` to carry
+exactly one payload type.
 
 .. list-table::
    :header-rows: 1
+   :widths: 25 75
 
-   * - Type
-     - Python Type
-     - Use Case
-   * - DoublePayload
-     - ``double``
-     - High precision values
-   * - FloatPayload
-     - ``float``
-     - Standard precision
-   * - IntPayload
-     - ``sint32``
-     - Integer values
-   * - LongPayload
-     - ``sint64``
-     - Large integer values
+   * - ``oneof`` field
+     - Content
+   * - ``double_payload``
+     - ``DoublePayload`` — ``repeated double payloads``
+   * - ``float_payload``
+     - ``FloatPayload`` — ``repeated float payloads``
+   * - ``int_payload``
+     - ``IntPayload`` — ``repeated sint32 payloads``
+   * - ``long_payload``
+     - ``LongPayload`` — ``repeated sint64 payloads``
 
-Best practices
-~~~~~~~~~~~~~~
-
-1. **Always discover first** - Call ``GetSurfacesInfo`` and ``GetFieldsInfo`` before requests
-2. **Check field range** - Use ``GetRange`` to understand data before streaming
-3. **Use appropriate chunk size** - Larger chunks (256-512 KB) for faster streaming
-4. **Handle large streams** - Process chunks incrementally, don't load all in memory
-
-Check data and boundary value availability
-------------------------------------------
-
-Before streaming field data, verify that solution data is present and optionally
-check whether boundary values are enabled.
-
-``IsDataAvailable``
-^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-   avail_resp = field_stub.IsDataAvailable(
-       field_data_pb2.IsDataAvailableRequest(),
-       metadata=metadata,
-   )
-   print(f"Data available: {avail_resp.is_data_available}")
-
-``IsBoundaryValuesEnabled``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-   bv_resp = field_stub.IsBoundaryValuesEnabled(
-       field_data_pb2.IsBoundaryValuesEnabledRequest(),
-       metadata=metadata,
-   )
-   print(f"Boundary values enabled: {bv_resp.is_boundary_values_enabled}")
+A ``payload_info`` chunk precedes the data chunks and contains metadata such
+as field type, zone, and size.
 
 See also
-~~~~~~~~
+--------
 
-- :doc:`../gettingstarted` - Basic client setup
-- :doc:`health` - Health service for connectivity checks
+- :doc:`svar` — read and write solution variable data by zone
+- :doc:`reduction` — compute scalar reductions (area averages, forces, extrema)
+- :doc:`monitor` — stream live monitor data as the solver iterates

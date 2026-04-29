@@ -1,92 +1,73 @@
-﻿Settings
-========
-
-The Settings service provides hierarchical access to Fluent simulation configuration,
-including problem setup, solver parameters, boundary conditions, and case settings.
+Settings service
+================
 
 Overview
-~~~~~~~~
+--------
+
+The Settings service provides hierarchical read/write access to Fluent's
+simulation configuration — boundary conditions, solver controls, model
+parameters, and results settings. Every RPC addresses a settings node by a
+``PathInfo`` message that contains two fields: ``root``, a string that selects
+which part of the Settings API you are working with (the common value is
+``"fluent"``), and ``path``, a slash-separated location within that root such
+as ``setup/boundary-conditions/wall``.
 
 .. include:: ../shared_example_assumptions.rst
 
-The ``Settings`` service allows you to:
+.. code-block:: python
 
-- Query the settings hierarchy structure and metadata
-- Retrieve and modify configuration values (scalars, strings, lists, maps)
-- Create, rename, and delete named objects (boundary conditions, etc.)
-- Manage list objects (resizing, querying size)
-- Execute commands and queries on settings objects
-- Access object attributes with optional recursive retrieval
+   import grpc
+   from ansys.api.fluent.v1 import settings_pb2, settings_pb2_grpc
 
-Service definition
-~~~~~~~~~~~~~~~~~~
+   channel = grpc.insecure_channel("127.0.0.1:50051")
+   metadata = [("password", "your-server-password")]
+   stub = settings_pb2_grpc.SettingsStub(channel)
 
-**Package:** ``ansys.api.fluent.v1.settings``
-
-**Main Classes:**
-
-- ``SettingsStub``: Client stub for settings operations
-- ``PathInfo``: Specifies root and path to a settings object
-- ``Value``: Container for typed settings values (oneof: bool, int64, double, string, list, map)
-- ``StaticInfo``: Metadata about settings objects (type, children, commands, queries, help)
-
-Core RPC operations
-~~~~~~~~~~~~~~~~~~~
-
-Hierarchy and metadata discovery
---------------------------------
-
-Query the settings structure and object metadata.
-
-- ``GetStaticInfo(GetStaticInfoRequest)`` → ``StaticInfo``
-  Request fields: ``root: string``, ``optional_attrs: repeated string``
+Runtime API
+-----------
 
 Getting and setting values
---------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Retrieve and modify typed configuration values.
+Read and write typed configuration values. The ``Value`` message uses a
+``oneof`` to hold one active type — always call ``WhichOneof("value")`` on a
+returned ``Value`` before accessing it.
 
 - ``GetVar(GetVarRequest)`` → ``GetVarResponse``
   Request field: ``path_info: PathInfo``
 - ``SetVar(SetVarRequest)`` → ``SetVarResponse``
   Request fields: ``path_info: PathInfo``, ``value: Value``
 
-Example: retrieve and modify operating pressure setting
-
 .. code-block:: python
 
-   # Get current operating pressure
    get_resp = stub.GetVar(
        settings_pb2.GetVarRequest(
            path_info=settings_pb2.PathInfo(
                root="fluent",
-               path="setup/general/operating-conditions/operating-pressure"
+               path="setup/general/operating-conditions/operating-pressure",
            )
        ),
        metadata=metadata,
    )
-   
-   # Extract the value (could be bool, int, string, or nested)
-   current_pressure = get_resp.value
-   if current_pressure.WhichOneof("value") == "integer":
-       print(f"Current operating pressure: {current_pressure.integer}")
+   if get_resp.value.WhichOneof("value") == "real":
+       print("Operating pressure:", get_resp.value.real)
 
-   # Set operating pressure to a new value
-   set_resp = stub.SetVar(
+   stub.SetVar(
        settings_pb2.SetVarRequest(
            path_info=settings_pb2.PathInfo(
                root="fluent",
-               path="setup/general/operating-conditions/operating-pressure"
+               path="setup/general/operating-conditions/operating-pressure",
            ),
-           value=settings_pb2.Value(integer=101329)
+           value=settings_pb2.Value(real=101325.0),
        ),
        metadata=metadata,
    )
 
-Object creation, deletion, and renaming
----------------------------------------
+Object lifecycle
+~~~~~~~~~~~~~~~~
 
-Manage named objects in the settings hierarchy.
+Create, rename, and delete named objects such as boundary conditions or
+graphics objects.
 
 - ``Create(CreateRequest)`` → ``CreateResponse``
   Request fields: ``path_info: PathInfo``, ``name: string``
@@ -95,51 +76,35 @@ Manage named objects in the settings hierarchy.
 - ``Rename(RenameRequest)`` → ``RenameResponse``
   Request fields: ``path_info: PathInfo``, ``old_name: string``, ``new_name: string``
 
-Example: create a new contour, rename it, and then delete it
-
 .. code-block:: python
 
-   # Create a new contour named "contour-1"
-   create_resp = stub.Create(
+   stub.Create(
        settings_pb2.CreateRequest(
-           path_info=settings_pb2.PathInfo(
-               root="fluent",
-               path="results/graphics/contour"
-           ),
-           name="contour-1"
+           path_info=settings_pb2.PathInfo(root="fluent", path="results/graphics/contour"),
+           name="contour-1",
        ),
        metadata=metadata,
    )
-
-   # Rename the contour to "contour-renamed"
-   rename_resp = stub.Rename(
+   stub.Rename(
        settings_pb2.RenameRequest(
-           path_info=settings_pb2.PathInfo(
-               root="fluent",
-               path="results/graphics/contour"
-           ),
+           path_info=settings_pb2.PathInfo(root="fluent", path="results/graphics/contour"),
            old_name="contour-1",
-           new_name="contour-renamed"
+           new_name="contour-renamed",
        ),
        metadata=metadata,
    )
-
-   # Delete the contour
-   delete_resp = stub.Delete(
+   stub.Delete(
        settings_pb2.DeleteRequest(
-           path_info=settings_pb2.PathInfo(
-               root="fluent",
-               path="results/graphics/contour"
-           ),
-           name="contour-renamed"
+           path_info=settings_pb2.PathInfo(root="fluent", path="results/graphics/contour"),
+           name="contour-renamed",
        ),
        metadata=metadata,
    )
 
 Object and list queries
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
-Query object names and list sizes.
+Enumerate existing named objects and inspect or resize list-typed settings.
 
 - ``GetObjectNames(GetObjectNamesRequest)`` → ``GetObjectNamesResponse``
   Request field: ``path_info: PathInfo``
@@ -148,298 +113,120 @@ Query object names and list sizes.
 - ``ResizeListObject(ResizeListObjectRequest)`` → ``ResizeListObjectResponse``
   Request fields: ``path_info: PathInfo``, ``size: int32``
 
-Example: enumerate boundary conditions and check list sizes
-
 .. code-block:: python
 
-   # Get all wall boundary condition names
    names_resp = stub.GetObjectNames(
        settings_pb2.GetObjectNamesRequest(
-           path_info=settings_pb2.PathInfo(
-               root="fluent",
-               path="setup/boundary-conditions/wall"
-           )
+           path_info=settings_pb2.PathInfo(root="fluent", path="setup/boundary-conditions/wall")
        ),
        metadata=metadata,
    )
+   print("Wall boundary conditions:", names_resp.names)
 
-   print(f"Wall BCs: {names_resp.names}")
-
-   # Get size of lights list
    size_resp = stub.GetListSize(
        settings_pb2.GetListSizeRequest(
-           path_info=settings_pb2.PathInfo(
-               root="fluent",
-               path="results/graphics/lighting/lights"
-           )
+           path_info=settings_pb2.PathInfo(root="fluent", path="results/graphics/lighting/lights")
        ),
        metadata=metadata,
    )
-
-   print(f"Lights list size: {size_resp.size}")
-
-   # Resize to 10 elements
-   resize_resp = stub.ResizeListObject(
-       settings_pb2.ResizeListObjectRequest(
-           path_info=settings_pb2.PathInfo(
-               root="fluent",
-               path="results/graphics/lighting/lights"
-           ),
-           size=10
-       ),
-       metadata=metadata,
-   )
+   print("Lights list size:", size_resp.size)
 
 Commands and queries
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
-Execute commands and queries on settings objects.
+Execute actions and ask computed questions on settings objects.
+``ExecuteCommand`` performs a state-mutating action; ``ExecuteQuery`` returns a
+computed result without side effects.
 
 - ``ExecuteCommand(ExecuteCommandRequest)`` → ``ExecuteCommandResponse``
   Request fields: ``path_info: PathInfo``, ``command: string``, ``args: Value``
 - ``ExecuteQuery(ExecuteQueryRequest)`` → ``ExecuteQueryResponse``
   Request fields: ``path_info: PathInfo``, ``query: string``, ``args: Value``
 
-Example: execute a command and query
-
 .. code-block:: python
 
-   # Execute a command (e.g., reset to defaults)
-   cmd_resp = stub.ExecuteCommand(
+   stub.ExecuteCommand(
        settings_pb2.ExecuteCommandRequest(
-           path_info=settings_pb2.PathInfo(
-               root="fluent",
-               path="solution/run-calculation"
-           ),
+           path_info=settings_pb2.PathInfo(root="fluent", path="solution/run-calculation"),
            command="iterate",
        ),
        metadata=metadata,
    )
 
-   # Execute a query (e.g., validate settings)
    query_resp = stub.ExecuteQuery(
        settings_pb2.ExecuteQueryRequest(
-           path_info=settings_pb2.PathInfo(
-               root="fluent",
-               path="setup/models/system-coupling"
-           ),
+           path_info=settings_pb2.PathInfo(root="fluent", path="setup/models/system-coupling"),
            query="get-tensor-type",
        ),
        metadata=metadata,
    )
-
-   # Check query result
    if query_resp.reply.WhichOneof("value") == "string":
-       print(f"Tensor type: {query_resp.reply.string}")
+       print("Tensor type:", query_resp.reply.string)
 
 Attribute access
-----------------
+~~~~~~~~~~~~~~~~
 
-Retrieve attributes from settings objects.
+Retrieve named attributes — for example, type, active status, or read-only
+status — from a settings object.
 
 - ``GetAttrs(GetAttrsRequest)`` → ``GetAttrsResponse``
   Request fields: ``path_info: PathInfo``, ``attrs: repeated string``, ``recursive: bool``
 
-Example: retrieve object attributes
-
 .. code-block:: python
 
-   response = stub.GetAttrs(
+   attrs_resp = stub.GetAttrs(
        settings_pb2.GetAttrsRequest(
-           path_info=settings_pb2.PathInfo(
-               root="fluent",
-               path="setup/models/energy"
-           ),
+           path_info=settings_pb2.PathInfo(root="fluent", path="setup/models/energy"),
            attrs=["type", "active?", "read-only?"],
-           recursive=False
+           recursive=False,
        ),
        metadata=metadata,
    )
-
-   # response.values contains the attribute data
-   attrs_value = response.values
-   if attrs_value.WhichOneof("value") == "value_map":
-       for key, val in attrs_value.value_map.m.items():
+   if attrs_resp.values.WhichOneof("value") == "value_map":
+       for key, val in attrs_resp.values.value_map.m.items():
            print(f"{key}: {val}")
 
-Working with value results
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+API schema
+----------
 
-Settings RPCs return ``Value`` objects which use a ``oneof`` to hold one active type.
-Use this helper to convert ``Value`` to native Python types.
+``GetSchema`` returns the API schema for the Settings service — a complete
+description of the paths, object types, available commands, queries, and help
+text that exist for a given root, independent of any running simulation.
 
-.. code-block:: python
+Use it when you need to enumerate what is available programmatically — for
+example, to discover which commands exist before calling ``ExecuteCommand``, or
+to build a higher-level settings client. See :doc:`../build_a_client` for a
+step-by-step walkthrough of schema discovery.
 
-   def value_to_python(v):
-       kind = v.WhichOneof("value")
-       if kind == "boolean":
-           return v.boolean
-       if kind == "integer":
-           return v.integer
-       if kind == "real":
-           return v.real
-       if kind == "string":
-           return v.string
-       if kind == "value_list":
-           return [value_to_python(item) for item in v.value_list.lsts]
-       if kind == "value_map":
-           return {key: value_to_python(val) for key, val in v.value_map.m.items()}
-       return None
-
-Complete example
-~~~~~~~~~~~~~~~~
-
-An end-to-end workflow demonstrating hierarchy discovery, value retrieval/modification,
-object management, and command execution.
+- ``GetSchema(GetSchemaRequest)`` → ``GetSchemaResponse``
+  Request fields: ``root: string``, ``optional_attrs: repeated string``
+  Response field: ``info: Schema``
 
 .. code-block:: python
 
-   import grpc
-   from ansys.api.fluent.v1 import settings_pb2, settings_pb2_grpc
+   schema_resp = stub.GetSchema(
+       settings_pb2.GetSchemaRequest(root="fluent"),
+       metadata=metadata,
+   )
+   schema = schema_resp.info
+   print("Top-level children:", [c.name for c in schema.children])
+   print("Top-level commands:", [c.name for c in schema.commands])
 
-   HOST = "127.0.0.1"
-   PORT = 50051
-   PASSWORD = "your-server-password"
+Wildcard detection
+~~~~~~~~~~~~~~~~~~
 
-   def value_to_python(v):
-       kind = v.WhichOneof("value")
-       if kind == "boolean":
-           return v.boolean
-       if kind == "integer":
-           return v.integer
-       if kind == "real":
-           return v.real
-       if kind == "string":
-           return v.string
-       if kind == "value_list":
-           return [value_to_python(item) for item in v.value_list.lsts]
-       if kind == "value_map":
-           return {key: value_to_python(val) for key, val in v.value_map.m.items()}
-       return None
+``IsWildcard`` checks whether the solver application treats a given string as
+a wildcard pattern. This is useful when building path queries that accept
+wildcard syntax.
 
-   def run_settings_workflow():
-       channel = grpc.insecure_channel(f"{HOST}:{PORT}")
-       metadata = [("password", PASSWORD)]
-       stub = settings_pb2_grpc.SettingsServiceStub(channel)
+- ``IsWildcard(IsWildcardRequest)`` → ``IsWildcardResponse``
+  Request field: ``input: string``
+  Response field: ``is_wildcard: bool``
 
-       try:
-           # Step 1: Query and display current settings
-           print("\n=== Query Current Settings ===")
-           dim_resp = stub.GetVar(
-               settings_pb2.GetVarRequest(
-                   path_info=settings_pb2.PathInfo(
-                       root="fluent",
-                       path="setup/general/operating-conditions/operating-pressure"
-                   )
-               ),
-               metadata=metadata,
-           )
-           print(f"Dimension: {value_to_python(dim_resp.value)}")
+.. code-block:: python
 
-           # Step 2: Modify a setting
-           print("\n=== Modify Setting ===")
-           set_resp = stub.SetVar(
-               settings_pb2.SetVarRequest(
-                   path_info=settings_pb2.PathInfo(
-                       root="fluent",
-                       path="setup/general/operating-conditions/operating-pressure"
-                   ),
-                   value=settings_pb2.Value(integer=101325)
-               ),
-               metadata=metadata,
-           )
-           print("Operating pressure set to 101325 Pa")
-
-           # Step 3: Manage boundary conditions
-           print("\n=== Manage Boundary Conditions ===")
-           names_resp = stub.GetObjectNames(
-               settings_pb2.GetObjectNamesRequest(
-                   path_info=settings_pb2.PathInfo(
-                       root="fluent",
-                       path="setup/boundary-conditions/wall"
-                   )
-               ),
-               metadata=metadata,
-           )
-           print(f"Existing walls: {names_resp.names}")
-
-           # Step 4: Execute a command
-           print("\n=== Execute Command ===")
-           cmd_resp = stub.ExecuteCommand(
-               settings_pb2.ExecuteCommandRequest(
-                   path_info=settings_pb2.PathInfo(
-                       root="fluent",
-                       path="solution/run-calculation"
-                   ),
-                   command="iterate",
-                   args=settings_pb2.Value()
-               ),
-               metadata=metadata,
-           )
-           print("Iteration command executed")
-
-           # Create a contour object to demonstrate create/rename/delete
-           create_resp = stub.Create(
-               settings_pb2.CreateRequest(
-                   path_info=settings_pb2.PathInfo(
-                       root="fluent",
-                       path="results/graphics/contour"
-                   ),
-                   name="contour-1"
-               ),
-               metadata=metadata,
-           )
-           print("Created contour: contour-1")
-
-           # Rename it
-           rename_resp = stub.Rename(
-               settings_pb2.RenameRequest(
-                   path_info=settings_pb2.PathInfo(
-                       root="fluent",
-                       path="results/graphics/contour"
-                   ),
-                   old_name="contour-1",
-                   new_name="contour-renamed"
-               ),
-               metadata=metadata,
-           )
-           print("Renamed to: contour-renamed")
-
-           # Cleanup: Delete the contour we created
-           delete_resp = stub.Delete(
-               settings_pb2.DeleteRequest(
-                   path_info=settings_pb2.PathInfo(
-                       root="fluent",
-                       path="results/graphics/contour"
-                   ),
-                   name="contour-renamed"
-               ),
-               metadata=metadata,
-           )
-           print("Deleted contour: contour-renamed")
-
-           print("\n=== Workflow Complete ===")
-
-       except grpc.RpcError as err:
-           print(f"Error: {err.code()} - {err.details()}")
-           raise
-       finally:
-           channel.close()
-
-   if __name__ == "__main__":
-       run_settings_workflow()
-
-Best practices
-~~~~~~~~~~~~~~
-
-1. **Always use root="fluent"** - The root is always the literal string ``"fluent"``, not a path like ``/setup``.
-2. **Use hierarchical paths** - Provide the full path in the ``path`` field, e.g., ``"setup/general/dimension"`` or ``"setup/boundary-conditions/wall"``.
-3. **Decode Value types defensively** - Always check ``WhichOneof("value")`` before accessing a Value field to handle bool, int, float, string, list, or map types correctly.
-4. **Use GetObjectNames to list children** - When managing named objects (e.g., boundary conditions), use GetObjectNames to enumerate existing names before creating new ones.
-5. **Batch related modifications** - Group related SetVar calls to reduce round trips when configuring related settings.
-
-See also
-~~~~~~~~
-
-- :doc:`../gettingstarted` - Basic client setup
-- :doc:`datamodel_se` - Datamodel service for mesh and field-related settings
+   wc_resp = stub.IsWildcard(
+       settings_pb2.IsWildcardRequest(input="wall-*"),
+       metadata=metadata,
+   )
+   print(f"'wall-*' is wildcard: {wc_resp.is_wildcard}")
