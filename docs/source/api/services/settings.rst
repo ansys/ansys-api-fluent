@@ -12,9 +12,10 @@ which part of the Settings API you are working with (the common value is
 ``"fluent"``), and ``path``, a slash-separated location within that root such
 as ``setup/boundary-conditions/wall``.
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import settings_pb2, settings_pb2_grpc
@@ -39,6 +40,7 @@ returned ``Value`` before accessing it.
   Request fields: ``path_info: PathInfo``, ``value: Value``
 
 .. code-block:: python
+   :caption: Python
 
    get_resp = stub.GetVar(
        settings_pb2.GetVarRequest(
@@ -77,6 +79,7 @@ graphics objects.
   Request fields: ``path_info: PathInfo``, ``old_name: string``, ``new_name: string``
 
 .. code-block:: python
+   :caption: Python
 
    stub.Create(
        settings_pb2.CreateRequest(
@@ -114,6 +117,7 @@ Enumerate existing named objects and inspect or resize list-typed settings.
   Request fields: ``path_info: PathInfo``, ``size: int32``
 
 .. code-block:: python
+   :caption: Python
 
    names_resp = stub.GetObjectNames(
        settings_pb2.GetObjectNamesRequest(
@@ -144,6 +148,7 @@ computed result without side effects.
   Request fields: ``path_info: PathInfo``, ``query: string``, ``args: Value``
 
 .. code-block:: python
+   :caption: Python
 
    stub.ExecuteCommand(
        settings_pb2.ExecuteCommandRequest(
@@ -173,6 +178,7 @@ status — from a settings object.
   Request fields: ``path_info: PathInfo``, ``attrs: repeated string``, ``recursive: bool``
 
 .. code-block:: python
+   :caption: Python
 
    attrs_resp = stub.GetAttrs(
        settings_pb2.GetAttrsRequest(
@@ -186,32 +192,6 @@ status — from a settings object.
        for key, val in attrs_resp.values.value_map.m.items():
            print(f"{key}: {val}")
 
-API schema
-----------
-
-``GetSchema`` returns the API schema for the Settings service — a complete
-description of the paths, object types, available commands, queries, and help
-text that exist for a given root, independent of any running simulation.
-
-Use it when you need to enumerate what is available programmatically — for
-example, to discover which commands exist before calling ``ExecuteCommand``, or
-to build a higher-level settings client. See :doc:`../build_a_client` for a
-step-by-step walkthrough of schema discovery.
-
-- ``GetSchema(GetSchemaRequest)`` → ``GetSchemaResponse``
-  Request fields: ``root: string``, ``optional_attrs: repeated string``
-  Response field: ``info: Schema``
-
-.. code-block:: python
-
-   schema_resp = stub.GetSchema(
-       settings_pb2.GetSchemaRequest(root="fluent"),
-       metadata=metadata,
-   )
-   schema = schema_resp.info
-   print("Top-level children:", [c.name for c in schema.children])
-   print("Top-level commands:", [c.name for c in schema.commands])
-
 Wildcard detection
 ~~~~~~~~~~~~~~~~~~
 
@@ -224,9 +204,37 @@ wildcard syntax.
   Response field: ``is_wildcard: bool``
 
 .. code-block:: python
+   :caption: Python
 
    wc_resp = stub.IsWildcard(
        settings_pb2.IsWildcardRequest(input="wall-*"),
        metadata=metadata,
    )
    print(f"'wall-*' is wildcard: {wc_resp.is_wildcard}")
+
+API schema
+----------
+
+``GetSchema`` returns the API schema for the Settings service — a complete
+description of the paths, object types, available commands, queries, and help
+text that exist for a given root, independent of any running simulation.
+
+Use it when you need to enumerate what is available programmatically — for
+example, to discover which commands exist before calling ``ExecuteCommand``, or
+to build a higher-level settings client. See :doc:`../../user_guide/build_a_client` for a
+step-by-step walkthrough of schema discovery.
+
+- ``GetSchema(GetSchemaRequest)`` → ``GetSchemaResponse``
+  Request fields: ``root: string``, ``optional_attrs: repeated string``
+  Response field: ``info: Schema``
+
+.. code-block:: python
+   :caption: Python
+
+   schema_resp = stub.GetSchema(
+       settings_pb2.GetSchemaRequest(root="fluent"),
+       metadata=metadata,
+   )
+   schema = schema_resp.info
+   print("Top-level children:", [c.name for c in schema.children])
+   print("Top-level commands:", [c.name for c in schema.commands])

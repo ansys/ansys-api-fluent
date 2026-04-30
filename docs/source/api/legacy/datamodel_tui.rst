@@ -7,7 +7,7 @@ You can use it to query the command hierarchy, retrieve documentation, and execu
 Overview
 ~~~~~~~~
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 The ``TextInterface`` service allows you to:
 
@@ -50,6 +50,7 @@ Retrieve the names of direct child nodes at a path.
 Example: get child names
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import datamodel_tui_pb2, datamodel_tui_pb2_grpc
@@ -80,6 +81,7 @@ Retrieve documentation/help text for a node.
 Example: get documentation string
 
 .. code-block:: python
+   :caption: Python
 
    doc_resp = stub.GetAttributeValue(
        datamodel_tui_pb2.GetAttributeValueRequest(
@@ -104,6 +106,7 @@ Execute commands and query endpoints on TUI nodes.
 Example: execute a command with structured args
 
 .. code-block:: python
+   :caption: Python
 
    cmd_resp = stub.ExecuteCommand(
        datamodel_tui_pb2.ExecuteCommandRequest(
@@ -117,6 +120,7 @@ Example: execute a command with structured args
 Example: execute a query
 
 .. code-block:: python
+   :caption: Python
 
    query_resp = stub.ExecuteQuery(
        datamodel_tui_pb2.ExecuteQueryRequest(
@@ -137,6 +141,7 @@ Retrieve schema-like static information for menus and commands at a path.
 Example: retrieve api schema for a subtree
 
 .. code-block:: python
+   :caption: Python
 
    schema_resp = stub.GetSchema(
        datamodel_tui_pb2.GetSchemaRequest(path="/mesh"),
@@ -160,6 +165,7 @@ Read or write the current state at any TUI datamodel path.
 Example: read then write state
 
 .. code-block:: python
+   :caption: Python
 
    state_resp = stub.GetState(
        datamodel_tui_pb2.GetStateRequest(path="/mesh/auto-mesh-controls"),
@@ -189,6 +195,7 @@ messages as those paths change.
 Example: watch a subtree for changes
 
 .. code-block:: python
+   :caption: Python
 
    stream = stub.NotifyChanges(
        datamodel_tui_pb2.NotifyChangesRequest(
@@ -220,6 +227,7 @@ requests into a single round trip. Each element in ``getters`` is a
 Example: fetch child names and state in one call
 
 .. code-block:: python
+   :caption: Python
 
    composite_resp = stub.CompositeGet(
        datamodel_tui_pb2.CompositeGetRequest(
@@ -248,6 +256,7 @@ Working with ``google.protobuf.Value``
 The TUI datamodel API uses ``google.protobuf.Value`` for response payloads.
 
 .. code-block:: python
+   :caption: Python
 
    from google.protobuf import struct_pb2
 
@@ -303,6 +312,7 @@ This example demonstrates an end-to-end TUI datamodel workflow using the core me
 6. Retrieve static metadata
 
 .. code-block:: python
+   :caption: Python
 
    from __future__ import annotations
    import grpc
@@ -416,6 +426,6 @@ This example demonstrates an end-to-end TUI datamodel workflow using the core me
 See also
 ~~~~~~~~
 
-- :doc:`../gettingstarted` — basic client setup and connection pattern
+- :doc:`../../getting_started/gettingstarted` — basic client setup and connection pattern
 - :doc:`../services/datamodel_se` — DataModel service (Solver Engine)
 - :doc:`../services/settings` — Settings service for hierarchical configuration

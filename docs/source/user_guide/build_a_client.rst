@@ -6,11 +6,7 @@ You will learn how to connect to Fluent, discover what is available through the
 API schema, read and write configuration state, and react to live solver events.
 No prior knowledge of gRPC or Fluent internals is assumed.
 
-.. include:: shared_example_assumptions.rst
-
-.. contents:: Steps in this guide
-   :local:
-   :depth: 1
+.. include:: ../shared_example_assumptions.rst
 
 Overview
 --------
@@ -45,6 +41,7 @@ Every client starts by opening a gRPC channel and checking that the server is
 ready to accept requests.
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import health_pb2, health_pb2_grpc
@@ -77,6 +74,7 @@ commands, and queries exist for a given *rules context* (such as ``meshing``
 or ``flserver``).
 
 .. code-block:: python
+   :caption: Python
 
    from ansys.api.fluent.v1 import datamodel_se_pb2, datamodel_se_pb2_grpc
 
@@ -122,6 +120,7 @@ structure. Each node contains:
 Walk the tree to find a path you want to interact with:
 
 .. code-block:: python
+   :caption: Python
 
    def print_schema_tree(node, prefix="", depth=2):
        """Print the DataModel API schema tree up to `depth` levels."""
@@ -146,6 +145,7 @@ Once you know the path to a parameter or object from the API schema, use
 as ``Variant`` messages.
 
 .. code-block:: python
+   :caption: Python
 
    from ansys.api.fluent.v1 import variant_pb2
 
@@ -181,6 +181,7 @@ as ``Variant`` messages.
 To execute a command discovered in the API schema:
 
 .. code-block:: python
+   :caption: Python
 
    cmd_args = variant_pb2.Variant(
        variant_map_state=variant_pb2.VariantMap(
@@ -207,6 +208,7 @@ configuration. Call ``GetSchema`` to retrieve the full tree of available
 settings paths, their types, allowed values, and help text.
 
 .. code-block:: python
+   :caption: Python
 
    from ansys.api.fluent.v1 import settings_pb2, settings_pb2_grpc
 
@@ -246,6 +248,7 @@ The returned ``Schema`` object describes the settings hierarchy:
 Walk the tree to find paths of interest:
 
 .. code-block:: python
+   :caption: Python
 
    def find_settings_paths(node, prefix="", depth=3):
        """Print Settings API paths up to `depth` levels."""
@@ -265,6 +268,7 @@ Use ``GetVar`` and ``SetVar`` with a ``PathInfo`` to access any path discovered
 in the Settings API schema. Values are exchanged as ``Value`` messages.
 
 .. code-block:: python
+   :caption: Python
 
    # Read current operating pressure
    get_resp = settings_stub.GetVar(
@@ -299,6 +303,7 @@ Named objects (boundary conditions, contours, etc.) are managed with
 ``Create``, ``Rename``, ``Delete``, and ``GetObjectNames``:
 
 .. code-block:: python
+   :caption: Python
 
    # List existing wall boundary conditions
    names_resp = settings_stub.GetObjectNames(
@@ -331,6 +336,7 @@ The Events service delivers solver lifecycle notifications as a server-side
 stream. Subscribe once and iterate over the stream while your solver runs.
 
 .. code-block:: python
+   :caption: Python
 
    from ansys.api.fluent.v1 import events_pb2, events_pb2_grpc
 
@@ -357,7 +363,7 @@ stream. Subscribe once and iterate over the stream while your solver runs.
 
 For deterministic per-iteration or per-time-step callbacks (where you need to
 pause and resume the solver), use the three solver-pause RPCs on the Events
-service. See :doc:`services/events` for the full reference.
+service. See :doc:`../api/services/events` for the full reference.
 
 Complete example
 ----------------
@@ -365,6 +371,7 @@ Complete example
 The following script ties all six steps together into one runnable program.
 
 .. code-block:: python
+   :caption: Python
 
    from __future__ import annotations
    import grpc
@@ -491,8 +498,8 @@ The following script ties all six steps together into one runnable program.
 Next steps
 ----------
 
-- :doc:`services/datamodel_se` — full DataModel service reference
-- :doc:`services/settings` — full Settings service reference
-- :doc:`services/events` — event types and solver pause callbacks
-- :doc:`services/field_data` — streaming mesh geometry and field values
-- :doc:`services/health` — health-check patterns
+- :doc:`../api/services/datamodel_se` — full DataModel service reference
+- :doc:`../api/services/settings` — full Settings service reference
+- :doc:`../api/services/events` — event types and solver pause callbacks
+- :doc:`../api/services/field_data` — streaming mesh geometry and field values
+- :doc:`../api/services/health` — health-check patterns

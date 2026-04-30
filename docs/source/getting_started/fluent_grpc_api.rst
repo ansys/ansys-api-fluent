@@ -60,6 +60,7 @@ These two layers serve different purposes and different audiences:
 A typical client discovery workflow looks like this:
 
 .. code-block:: python
+   :caption: Python
 
    # 1. Fetch the API schema — no live solver state required
    schema_resp = dm_stub.GetSchema(
@@ -81,7 +82,7 @@ A typical client discovery workflow looks like this:
        metadata=metadata,
    )
 
-See :doc:`build_a_client` for a complete step-by-step walkthrough of both
+See :doc:`../user_guide/build_a_client` for a complete step-by-step walkthrough of both
 layers for both services.
 
 Who this documentation is for
@@ -93,23 +94,23 @@ This documentation is written for two audiences.
    You want to call a specific RPC — read a setting, execute a command, stream
    field data. Go directly to the runtime sections of the relevant service page:
 
-   - :doc:`services/health` — check server readiness before any other call
-   - :doc:`services/connection` — session management and version negotiation
-   - :doc:`services/app_utilities` — version, process info, journal, beta flags, exit
-   - :doc:`services/datamodel_se` — object-model state read/write, commands, events
-   - :doc:`services/settings` — solver configuration read/write, named objects
-   - :doc:`services/events` — solver lifecycle events and pause callbacks
-   - :doc:`services/field_data` — mesh geometry and field value streaming
-   - :doc:`services/monitor` — live residual and report monitor data
-   - :doc:`services/reduction` — surface and zone scalar reductions (area, force, etc.)
-   - :doc:`services/svar` — per-zone solution variable arrays
-   - :doc:`services/transcript` — Fluent console output stream
+   - :doc:`../api/services/health` — check server readiness before any other call
+   - :doc:`../api/services/connection` — session management and version negotiation
+   - :doc:`../api/services/app_utilities` — version, process info, journal, beta flags, exit
+   - :doc:`../api/services/datamodel_se` — object-model state read/write, commands, events
+   - :doc:`../api/services/settings` — solver configuration read/write, named objects
+   - :doc:`../api/services/events` — solver lifecycle events and pause callbacks
+   - :doc:`../api/services/field_data` — mesh geometry and field value streaming
+   - :doc:`../api/services/monitor` — live residual and report monitor data
+   - :doc:`../api/services/reduction` — surface and zone scalar reductions (area, force, etc.)
+   - :doc:`../api/services/svar` — per-zone solution variable arrays
+   - :doc:`../api/services/transcript` — Fluent console output stream
 
 **Developers building client libraries or applications**
    You are generating code, building a higher-level abstraction, or need to
-   enumerate everything the API exposes. Read :doc:`build_a_client` first,
+   enumerate everything the API exposes. Read :doc:`../user_guide/build_a_client` first,
    paying particular attention to the API schema discovery steps. Then read
-   :doc:`building_on_the_api` for schema-driven code generation, dynamic
+   :doc:`../user_guide/building_on_the_api` for schema-driven code generation, dynamic
    clients, and the difference in runtime discoverability between the two
    schema-bearing services.
 
@@ -118,12 +119,13 @@ Connection and authentication
 
 All examples in this documentation share the same connection assumptions:
 
-.. include:: shared_example_assumptions.rst
+.. include:: ../shared_example_assumptions.rst
 
 Every RPC must be accompanied by a ``metadata`` list containing the server
 password:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
 
@@ -141,4 +143,4 @@ should remain open for the lifetime of your client session.
 
    Always call the Health service ``Check`` RPC immediately after opening a
    channel to confirm the server is ready before issuing any other calls.
-   See :doc:`services/health` for details.
+   See :doc:`../api/services/health` for details.

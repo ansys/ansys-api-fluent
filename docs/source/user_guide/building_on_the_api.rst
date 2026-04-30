@@ -6,10 +6,6 @@ generator, or an application on top of the Fluent gRPC API — not for
 developers who are making direct one-off calls. If you want to connect and
 call a specific RPC, start with :doc:`build_a_client` instead.
 
-.. contents:: On this page
-   :local:
-   :depth: 1
-
 What the API schema is
 ----------------------
 

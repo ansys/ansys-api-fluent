@@ -1,4 +1,4 @@
-﻿SolutionVariable
+SolutionVariable
 ================
 
 Overview
@@ -9,9 +9,10 @@ streaming access to per-zone solution variable arrays inside a running Fluent
 session. Use it to read raw solver fields (pressure, velocity components, etc.)
 at zone level, or to write modified values back into the solver.
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import svar_pb2, svar_pb2_grpc
@@ -30,7 +31,7 @@ Retrieves the list of domains and zones available in the current session.
 Call this first to discover valid ``domain_id`` and ``zone_id`` values to use
 in subsequent requests.
 
-- ``GetZonesInfo(GetZonesInfoRequest)`` → ``GetZonesInfoResponse``
+- ``GetZonesInfo(GetZonesInfoRequest)`` ? ``GetZonesInfoResponse``
 
 ``GetZonesInfoResponse`` fields:
 
@@ -50,6 +51,7 @@ in subsequent requests.
        and ``partitions_info``.
 
 .. code-block:: python
+   :caption: Python
 
    zones_resp = stub.GetZonesInfo(
        svar_pb2.GetZonesInfoRequest(),
@@ -88,7 +90,7 @@ Retrieves metadata for the solution variables available on a specific domain
 and zone. Use this to confirm that a variable name exists and to learn its
 data type and dimension before streaming data.
 
-- ``GetSolutionVariableInfo(GetSolutionVariableInfoRequest)`` → ``GetSolutionVariableInfoResponse``
+- ``GetSolutionVariableInfo(GetSolutionVariableInfoRequest)`` ? ``GetSolutionVariableInfoResponse``
   Request fields: ``domain_id: uint32``, ``zone_id: uint64``
 
 ``GetSolutionVariableInfoResponse`` has one field: ``svars_info`` — a list of
@@ -113,6 +115,7 @@ data type and dimension before streaming data.
      - Numeric type: ``FLOAT``, ``DOUBLE``, ``INT``, or ``LONG``.
 
 .. code-block:: python
+   :caption: Python
 
    info_resp = stub.GetSolutionVariableInfo(
        svar_pb2.GetSolutionVariableInfoRequest(domain_id=1, zone_id=12),
@@ -133,7 +136,7 @@ typed payload chunks. Each streamed ``GetSolutionVariableDataResponse``
 carries either a ``payload_info`` header (one per zone, sent first) or a
 ``payload`` data chunk.
 
-- ``GetSolutionVariableData(GetSolutionVariableDataRequest)`` → ``stream GetSolutionVariableDataResponse``
+- ``GetSolutionVariableData(GetSolutionVariableDataRequest)`` ? ``stream GetSolutionVariableDataResponse``
 
 ``GetSolutionVariableDataRequest`` fields:
 
@@ -170,6 +173,7 @@ carries either a ``payload_info`` header (one per zone, sent first) or a
   ``int_payload``, ``long_payload``, or ``byte_payload``.
 
 .. code-block:: python
+   :caption: Python
 
    request = svar_pb2.GetSolutionVariableDataRequest(
        provide_bytes_stream=False,
@@ -209,11 +213,12 @@ messages in a strict order:
 2. For each zone: one ``payload_info`` (``Info``) message followed by one or
    more ``payload`` (``Payload``) chunk messages.
 
-- ``SetSolutionVariableData(stream SetSolutionVariableDataRequest)`` → ``SetSolutionVariableDataResponse``
+- ``SetSolutionVariableData(stream SetSolutionVariableDataRequest)`` ? ``SetSolutionVariableDataResponse``
 
 ``SolutionVariableHeader`` fields: ``name: string``, ``domain_id: uint32``
 
 .. code-block:: python
+   :caption: Python
 
    import math
    import numpy as np

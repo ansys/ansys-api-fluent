@@ -1,4 +1,4 @@
-﻿Connection
+Connection
 ==========
 
 The Connection service manages client connections to Fluent servers.
@@ -6,7 +6,7 @@ The Connection service manages client connections to Fluent servers.
 Overview
 ~~~~~~~~
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 The ``Connection`` service establishes and maintains a bidirectional session between a client and the Fluent server.
 It provides:
@@ -98,6 +98,7 @@ other services.
 **Basic Parameters:**
 
 .. code-block:: python
+   :caption: Python
 
    request = connection_pb2.ConnectRequest(
        request_type=connection_pb2.ConnectRequest.REQUEST_TYPE_CONNECT,
@@ -114,6 +115,7 @@ Basic connection
 Establish a connection without authentication:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import connection_pb2, connection_pb2_grpc
@@ -150,6 +152,7 @@ Authenticated connection
 Connect with a password-protected server:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import connection_pb2, connection_pb2_grpc
@@ -185,6 +188,7 @@ Connection with error handling
 Handle various connection error scenarios:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import connection_pb2, connection_pb2_grpc
@@ -219,10 +223,10 @@ Handle various connection error scenarios:
                )
                
                if response.error_code == connection_pb2.CONNECTION_ERROR_NONE:
-                   print(f"✓ Connection successful: {error_msg}")
+                   print(f"? Connection successful: {error_msg}")
                    return True, channel, stub
                else:
-                   print(f"✗ Connection failed: {error_msg}")
+                   print(f"? Connection failed: {error_msg}")
                    return False, None, None
                    
        except grpc.RpcError as err:
@@ -235,6 +239,7 @@ Complete end-to-end example
 A comprehensive workflow connecting to a Fluent server and performing operations across multiple services:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import (
@@ -285,21 +290,21 @@ A comprehensive workflow connecting to a Fluent server and performing operations
                first_response = next(self.response_stream)
                
                if first_response.error_code == connection_pb2.CONNECTION_ERROR_NONE:
-                   print("✓ Connection established successfully")
+                   print("? Connection established successfully")
                    return True
                else:
                    error_name = self._error_code_to_string(first_response.error_code)
-                   print(f"✗ Connection failed: {error_name}")
+                   print(f"? Connection failed: {error_name}")
                    return False
                    
            except grpc.RpcError as err:
-               print(f"✗ Connection RPC failed: {err.details()}")
+               print(f"? Connection RPC failed: {err.details()}")
                return False
 
        def check_server_health(self):
            """Verify server is healthy and ready"""
            if not self.channel:
-               print("✗ Not connected. Call connect() first.")
+               print("? Not connected. Call connect() first.")
                return False
            
            print("Checking server health...")
@@ -312,20 +317,20 @@ A comprehensive workflow connecting to a Fluent server and performing operations
                )
                
                if response.status == 1:  # SERVING
-                   print("✓ Server is healthy and ready")
+                   print("? Server is healthy and ready")
                    return True
                else:
-                   print("✗ Server is not healthy")
+                   print("? Server is not healthy")
                    return False
                    
            except grpc.RpcError as err:
-               print(f"✗ Health check failed: {err.details()}")
+               print(f"? Health check failed: {err.details()}")
                return False
 
        def get_available_surfaces(self):
            """Retrieve list of available surfaces"""
            if not self.channel:
-               print("✗ Not connected. Call connect() first.")
+               print("? Not connected. Call connect() first.")
                return []
            
            print("Fetching available surfaces...")
@@ -345,14 +350,14 @@ A comprehensive workflow connecting to a Fluent server and performing operations
                            "name": surface_info.surface_name
                        })
                
-               print(f"✓ Found {len(surfaces)} surfaces")
+               print(f"? Found {len(surfaces)} surfaces")
                for surf in surfaces[:5]:
                    print(f"  - ID: {surf['id']}, Name: {surf['name']}")
                
                return surfaces
                
            except grpc.RpcError as err:
-               print(f"✗ Failed to get surfaces: {err.details()}")
+               print(f"? Failed to get surfaces: {err.details()}")
                return []
 
        def disconnect(self):
@@ -360,7 +365,7 @@ A comprehensive workflow connecting to a Fluent server and performing operations
            if self.channel:
                print("Disconnecting...")
                self.channel.close()
-               print("✓ Disconnected")
+               print("? Disconnected")
 
        @staticmethod
        def _error_code_to_string(error_code):
@@ -431,6 +436,6 @@ Best practices
 See also
 --------
 
-- :doc:`../gettingstarted` — basic client setup
-- :doc:`health` — check server readiness after connecting
-- :doc:`app_utilities` — version and process information once connected
+- :doc:`../../getting_started/gettingstarted` — basic client setup
+- :doc:`health` � check server readiness after connecting
+- :doc:`app_utilities` � version and process information once connected

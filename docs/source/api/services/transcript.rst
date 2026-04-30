@@ -1,4 +1,4 @@
-﻿Transcript
+Transcript
 ==========
 
 Overview
@@ -9,9 +9,10 @@ Fluent writes to its terminal — to the client as a continuous server-side
 stream. This lets you monitor solver progress, capture log messages, and
 display Fluent output in your own application UI without polling.
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import transcript_pb2, transcript_pb2_grpc
@@ -31,7 +32,7 @@ message for each line (or chunk) of Fluent output. The stream remains open
 for the lifetime of the Fluent session; iterate it in a background thread
 so it does not block your main client logic.
 
-- ``BeginStreaming(TranscriptRequest)`` → ``stream TranscriptResponse``
+- ``BeginStreaming(TranscriptRequest)`` ? ``stream TranscriptResponse``
 
 ``TranscriptResponse`` has one field:
 
@@ -48,6 +49,7 @@ so it does not block your main client logic.
        newline where present.
 
 .. code-block:: python
+   :caption: Python
 
    stream = stub.BeginStreaming(
        transcript_pb2.TranscriptRequest(),
@@ -64,6 +66,7 @@ Run the transcript stream in a daemon thread so that the main thread can
 continue issuing other RPCs while Fluent output is being printed.
 
 .. code-block:: python
+   :caption: Python
 
    import threading
 

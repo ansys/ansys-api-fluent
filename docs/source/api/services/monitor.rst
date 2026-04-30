@@ -1,4 +1,4 @@
-﻿Monitor
+Monitor
 =======
 
 The ``Monitor`` service provides RPCs to query monitor metadata and stream live monitor data during a Fluent simulation.
@@ -6,7 +6,7 @@ The ``Monitor`` service provides RPCs to query monitor metadata and stream live 
 Overview
 ~~~~~~~~
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 The ``Monitor`` service allows you to:
 
@@ -138,6 +138,7 @@ Returns all monitor set definitions currently registered with the solver.
 Call this before ``BeginStreaming`` to discover available monitor names and their metadata.
 
 .. code-block:: python
+   :caption: Python
 
    response = monitor_stub.GetMonitors(
        monitor_pb2.GetMonitorsRequest(),
@@ -171,6 +172,7 @@ produces new monitor samples. Each response contains one ``XAxisData`` point and
        or ``frequency``.
 
 .. code-block:: python
+   :caption: Python
 
    # Stream all monitors (no filter)
    request = monitor_pb2.StreamingRequest()
@@ -202,6 +204,7 @@ List all monitor sets
 Discover every monitor set registered with the running solver:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import monitor_pb2, monitor_pb2_grpc
@@ -230,7 +233,7 @@ Discover every monitor set registered with the running solver:
        }
 
        for ms in response.monitor_sets:
-           print(f"[{type_names.get(ms.type, '?')}] {ms.name} — {ms.title}")
+           print(f"[{type_names.get(ms.type, '?')}] {ms.name} � {ms.title}")
            print(f"  x-axis: {axis_names.get(ms.axis, '?')}, frequency: {ms.frequency}")
            print(f"  y-label: {ms.y_label}")
            print(f"  monitors: {', '.join(ms.monitors)}")
@@ -245,6 +248,7 @@ Inspect unit information
 Read the unit conversion metadata attached to each monitor set:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import monitor_pb2, monitor_pb2_grpc
@@ -273,6 +277,7 @@ Stream all monitor data
 Receive every sample emitted by the solver until the stream ends:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import monitor_pb2, monitor_pb2_grpc
@@ -290,7 +295,7 @@ Receive every sample emitted by the solver until the stream ends:
            for y in sample.y_axis_values:
                print(f"iter={x.x_axis_index}  {y.name}={y.value:.6g}")
    except grpc.RpcError as err:
-       print(f"Stream ended: {err.code()} — {err.details()}")
+       print(f"Stream ended: {err.code()} � {err.details()}")
    finally:
        channel.close()
 
@@ -300,6 +305,7 @@ Stream only residuals (filtered)
 Use ``MonitorFilter`` to receive only iteration-based residual samples:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import monitor_pb2, monitor_pb2_grpc
@@ -323,7 +329,7 @@ Use ``MonitorFilter`` to receive only iteration-based residual samples:
            for y in sample.y_axis_values:
                print(f"iter={x.x_axis_index}  {y.name}={y.value:.6e}")
    except grpc.RpcError as err:
-       print(f"Stream ended: {err.code()} — {err.details()}")
+       print(f"Stream ended: {err.code()} � {err.details()}")
    finally:
        channel.close()
 
@@ -333,6 +339,7 @@ Stream specific monitors by name
 Filter the stream to a named subset of monitors:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import monitor_pb2, monitor_pb2_grpc
@@ -356,7 +363,7 @@ Filter the stream to a named subset of monitors:
            for y in sample.y_axis_values:
                print(f"iter={x.x_axis_index}  {y.name}={y.value:.6e}")
    except grpc.RpcError as err:
-       print(f"Stream ended: {err.code()} — {err.details()}")
+       print(f"Stream ended: {err.code()} � {err.details()}")
    finally:
        channel.close()
 
@@ -367,6 +374,7 @@ A full workflow that connects to Fluent, discovers all monitors, then streams an
 convergence data until the solver finishes:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from collections import defaultdict
@@ -386,7 +394,7 @@ convergence data until the solver finishes:
        metadata = [("password", PASSWORD)]
 
        try:
-           # ── Step 1: health check ────────────────────────────────────────
+           # -- Step 1: health check ----------------------------------------
            health_stub = health_pb2_grpc.HealthStub(channel)
            health_resp = health_stub.Check(
                health_pb2.HealthCheckRequest(),
@@ -394,9 +402,9 @@ convergence data until the solver finishes:
            )
            if health_resp.status != 1:  # 1 == SERVING
                raise RuntimeError("Server is not ready")
-           print("✓ Server healthy")
+           print("? Server healthy")
 
-           # ── Step 2: discover monitors ───────────────────────────────────
+           # -- Step 2: discover monitors -----------------------------------
            monitor_stub = monitor_pb2_grpc.MonitorStub(channel)
            monitors_resp = monitor_stub.GetMonitors(
                monitor_pb2.GetMonitorsRequest(),
@@ -409,18 +417,18 @@ convergence data until the solver finishes:
            }
 
            all_monitor_names = []
-           print("\n── Monitor sets ──────────────────────────────────────────────")
+           print("\n-- Monitor sets ----------------------------------------------")
            for ms in monitors_resp.monitor_sets:
                kind = type_label.get(ms.type, "Unknown")
                print(f"  [{kind}] {ms.name}: {ms.monitors}")
                all_monitor_names.extend(ms.monitors)
 
            if not all_monitor_names:
-               print("No monitors available — is a case loaded?")
+               print("No monitors available � is a case loaded?")
                return
 
-           # ── Step 3: stream and summarise ────────────────────────────────
-           print("\n── Streaming monitor data (Ctrl-C to stop) ──────────────────")
+           # -- Step 3: stream and summarise --------------------------------
+           print("\n-- Streaming monitor data (Ctrl-C to stop) ------------------")
 
            # Store the last value seen for each monitor name
            last_values: dict[str, float] = {}
@@ -455,13 +463,13 @@ convergence data until the solver finishes:
            except grpc.RpcError as err:
                # OUT_OF_RANGE is the normal end-of-stream signal from Fluent
                if err.code() == grpc.StatusCode.OUT_OF_RANGE:
-                   print("\n✓ Solver finished — stream closed normally")
+                   print("\n? Solver finished � stream closed normally")
                else:
-                   print(f"\n✗ Stream error: {err.code()} — {err.details()}")
+                   print(f"\n? Stream error: {err.code()} � {err.details()}")
                    raise
 
-           # ── Step 4: print summary ────────────────────────────────────────
-           print("\n── Convergence summary ───────────────────────────────────────")
+           # -- Step 4: print summary ----------------------------------------
+           print("\n-- Convergence summary ---------------------------------------")
            for name, s in stats.items():
                print(
                    f"  {name:40s}  samples={s['count']:4d}"
@@ -469,7 +477,7 @@ convergence data until the solver finishes:
                )
 
        except grpc.RpcError as err:
-           print(f"RPC error: {err.code()} — {err.details()}")
+           print(f"RPC error: {err.code()} � {err.details()}")
            raise
        finally:
            channel.close()
@@ -480,24 +488,24 @@ convergence data until the solver finishes:
 Best practices
 ~~~~~~~~~~~~~~
 
-1. **Call GetMonitors before BeginStreaming** — use the returned monitor names to build
+1. **Call GetMonitors before BeginStreaming** � use the returned monitor names to build
    targeted ``MonitorFilter`` objects rather than receiving every signal.
 
-2. **Handle** ``OUT_OF_RANGE`` **gracefully** — Fluent signals end-of-stream with this
+2. **Handle** ``OUT_OF_RANGE`` **gracefully** � Fluent signals end-of-stream with this
    gRPC status code; treat it as a normal exit, not an error.
 
-3. **Distinguish residual from solution monitors** — residuals typically decrease monotonically
+3. **Distinguish residual from solution monitors** � residuals typically decrease monotonically
    and are useful for convergence checks; solution monitors track physical quantities.
 
-4. **Apply filters for large cases** — streaming all monitors in a case with many solution
+4. **Apply filters for large cases** � streaming all monitors in a case with many solution
    monitors can produce high message rates; filter by name or frequency to reduce load.
 
-5. **Close the channel in a** ``finally`` **block** — always release gRPC resources even
+5. **Close the channel in a** ``finally`` **block** � always release gRPC resources even
    when the stream is interrupted.
 
 See also
 --------
 
-- :doc:`../gettingstarted` — basic client setup
-- :doc:`events` — structured solver lifecycle events (iteration signals, pause callbacks)
-- :doc:`reduction` — on-demand scalar reductions over surfaces and zones
+- :doc:`../../getting_started/gettingstarted` — basic client setup
+- :doc:`events` � structured solver lifecycle events (iteration signals, pause callbacks)
+- :doc:`reduction` � on-demand scalar reductions over surfaces and zones

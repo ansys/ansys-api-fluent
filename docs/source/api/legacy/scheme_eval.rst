@@ -7,7 +7,7 @@ evaluation capabilities.
 Overview
 ~~~~~~~~
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 The ``SchemeInterpreter`` service allows you to:
 
@@ -38,6 +38,7 @@ Exec
 Execute one or more Scheme commands and return the console output.
 
 .. code-block:: python
+   :caption: Python
 
    response = stub.Exec(
        scheme_eval_pb2.ExecRequest(
@@ -59,6 +60,7 @@ StringEval
 Evaluate a Scheme expression provided as a string and return the result as a string.
 
 .. code-block:: python
+   :caption: Python
 
    response = stub.StringEval(
        scheme_eval_pb2.StringEvalRequest(input="(+ 1 2)"),
@@ -73,6 +75,7 @@ SchemeEval
 Evaluate a typed Scheme expression represented as a ``SchemePointer``.
 
 .. code-block:: python
+   :caption: Python
 
    expression = scheme_pointer_pb2.SchemePointer(
        list=scheme_pointer_pb2.SchemePointer.SchemeList(
@@ -98,6 +101,7 @@ The ``Eval`` RPC accepts and returns a ``SchemePointer`` directly, but it is
 deprecated in favor of ``SchemeEval``.
 
 .. code-block:: python
+   :caption: Python
 
    response = stub.Eval(
        scheme_pointer_pb2.SchemePointer(fixednum=5),
@@ -113,6 +117,7 @@ Working with SchemePointer results
 ``WhichOneof("val")`` to detect the active Scheme type.
 
 .. code-block:: python
+   :caption: Python
 
    def scheme_pointer_to_python(ptr):
        kind = ptr.WhichOneof("val")
@@ -146,6 +151,7 @@ An end-to-end workflow that executes Scheme commands, evaluates a string
 expression, and evaluates a typed ``SchemePointer`` expression.
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import scheme_eval_pb2, scheme_eval_pb2_grpc, scheme_pointer_pb2
@@ -251,5 +257,5 @@ Best practices
 See also
 ~~~~~~~~
 
-- :doc:`../gettingstarted` - Basic client setup
+- :doc:`../../getting_started/gettingstarted` - Basic client setup
 - :doc:`../helpers/scheme_pointer` - Scheme pointer helper types

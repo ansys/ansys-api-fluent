@@ -13,9 +13,10 @@ The **rules** string selects which part of the DataModel API you are working
 with. Common values are ``meshing`` (the meshing workflow object model) and
 ``flserver`` (the solver results and post-processing model).
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import datamodel_se_pb2, datamodel_se_pb2_grpc
@@ -39,6 +40,7 @@ full-snapshot state updates as the server-side object model changes.
   Request fields: ``rules: string``, ``return_state_changes: bool``, ``diff_state: DiffState``
 
 .. code-block:: python
+   :caption: Python
 
    stub.InitDatamodel(
        datamodel_se_pb2.InitDatamodelRequest(rules="meshing", return_state_changes=False),
@@ -79,6 +81,7 @@ identify which field is set before accessing it.
   Request fields: ``rules: string``, ``path: string``
 
 .. code-block:: python
+   :caption: Python
 
    from ansys.api.fluent.v1 import variant_pb2
 
@@ -113,6 +116,7 @@ Enumerate, rename, and delete named objects in the DataModel API tree.
   Request fields: ``rules: string``, ``path: string``, oneof ``child_names`` or ``delete_all``, ``wait: bool``
 
 .. code-block:: python
+   :caption: Python
 
    names_resp = stub.GetObjectNames(
        datamodel_se_pb2.GetObjectNamesRequest(rules="flserver", path="Case/Results/Graphics/Contour"),
@@ -154,6 +158,7 @@ without side effects.
   Request fields: ``rules: string``, ``path: string``, ``query: string``, ``args: Variant``
 
 .. code-block:: python
+   :caption: Python
 
    cmd_resp = stub.ExecuteCommand(
        datamodel_se_pb2.ExecuteCommandRequest(
@@ -184,6 +189,7 @@ delete it when you are done.
   Request fields: ``rules: string``, ``path: string``, ``command: string``, ``command_id: string``
 
 .. code-block:: python
+   :caption: Python
 
    create_args_resp = stub.CreateCommandArguments(
        datamodel_se_pb2.CreateCommandArgumentsRequest(
@@ -215,6 +221,7 @@ full member specification for a path.
   Request fields: ``rules: string``, ``path: string``, ``include_children: bool``
 
 .. code-block:: python
+   :caption: Python
 
    attr_resp = stub.GetAttributeValue(
        datamodel_se_pb2.GetAttributeValueRequest(
@@ -238,6 +245,7 @@ command execution — then consume them as a continuous stream. Call
 - ``StreamEvents(StreamEventsRequest)`` → ``stream StreamEventsResponse``
 
 .. code-block:: python
+   :caption: Python
 
    sub_resp = stub.SubscribeEvents(
        datamodel_se_pb2.SubscribeEventsRequest(
@@ -276,13 +284,14 @@ independent of any running simulation.
 
 Use it when you need to enumerate what is available programmatically — for
 example, to discover command names before calling ``ExecuteCommand``, or to
-build a higher-level client abstraction. See :doc:`../build_a_client` for a
+build a higher-level client abstraction. See :doc:`../../user_guide/build_a_client` for a
 step-by-step walkthrough of schema discovery.
 
 - ``GetSchema(GetSchemaRequest)`` → ``GetSchemaResponse``
   Request field: ``rules: string``
 
 .. code-block:: python
+   :caption: Python
 
    schema_resp = stub.GetSchema(
        datamodel_se_pb2.GetSchemaRequest(rules="meshing"),

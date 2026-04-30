@@ -13,9 +13,10 @@ Most data-retrieval RPCs are **server-streaming**: they return one or more
 typed payload chunks that you iterate over. The ``SetSvarData`` analogue for
 writing is on the Solution Variables service (:doc:`svar`).
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import field_data_pb2, field_data_pb2_grpc
@@ -40,6 +41,7 @@ streaming RPCs against an empty or uninitialised solver.
   Response field: ``enabled: bool``
 
 .. code-block:: python
+   :caption: Python
 
    avail = stub.IsDataAvailable(
        field_data_pb2.IsDataAvailableRequest(), metadata=metadata,
@@ -64,6 +66,7 @@ data. Use the IDs and names returned here in subsequent streaming calls.
   Response fields: ``minimum: double``, ``maximum: double``
 
 .. code-block:: python
+   :caption: Python
 
    # Surfaces
    surf_resp = stub.GetSurfacesInfo(
@@ -114,6 +117,7 @@ or a typed numeric payload. Accumulate chunks by field and surface.
 - ``GetScalarField(GetScalarFieldRequest)`` → ``stream GetScalarFieldResponse``
 
 .. code-block:: python
+   :caption: Python
 
    # --- GetFields (multi-field batch) ---
    request = field_data_pb2.GetFieldsRequest(
@@ -159,6 +163,7 @@ Retrieve vector field data (velocity, flux, etc.) on selected surfaces.
 - ``GetVectorField(GetVectorFieldRequest)`` → ``stream GetVectorFieldResponse``
 
 .. code-block:: python
+   :caption: Python
 
    for chunk in stub.GetVectorField(
        field_data_pb2.GetVectorFieldRequest(
@@ -182,6 +187,7 @@ the solver volume mesh.
 - ``GetSurfaces(GetSurfacesRequest)`` → ``stream GetSurfacesResponse``
 
 .. code-block:: python
+   :caption: Python
 
    for chunk in stub.GetSurfaces(
        field_data_pb2.GetSurfacesRequest(
@@ -208,6 +214,7 @@ and element connectivity. These RPCs stream the volumetric mesh, not surfaces.
 - ``GetSolverMeshElements(GetSolverMeshElementsRequest)`` → ``stream GetSolverMeshElementsResponse``
 
 .. code-block:: python
+   :caption: Python
 
    node_count = 0
    for chunk in stub.GetSolverMeshNodesFloat(
@@ -236,6 +243,7 @@ follow the same payload-chunk pattern as scalar and vector fields.
 - ``GetParticleTracksField(GetParticleTracksFieldRequest)`` → ``stream GetParticleTracksFieldResponse``
 
 .. code-block:: python
+   :caption: Python
 
    for chunk in stub.GetPathlinesField(
        field_data_pb2.GetPathlinesFieldRequest(

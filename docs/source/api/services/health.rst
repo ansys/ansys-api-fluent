@@ -1,4 +1,4 @@
-﻿Health
+Health
 ======
 
 Overview
@@ -8,9 +8,10 @@ The ``Health`` service tells you whether the Fluent server is ready to accept
 requests. Call it immediately after opening a channel and before issuing any
 other RPC.
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import health_pb2, health_pb2_grpc
@@ -31,6 +32,7 @@ status. If the named service is not known the call fails with
 ``NOT_FOUND``.
 
 .. code-block:: python
+   :caption: Python
 
    response = stub.Check(
        health_pb2.HealthCheckRequest(service=""),
@@ -39,7 +41,7 @@ status. If the named service is not known the call fails with
    if response.status == health_pb2.HealthCheckResponse.SERVING_STATUS_SERVING:
        print("Server is ready")
    else:
-       print(f"Server not ready — status: {response.status}")
+       print(f"Server not ready � status: {response.status}")
 
 Watch
 ~~~~~
@@ -54,9 +56,10 @@ will emit ``SERVING_STATUS_SERVICE_UNKNOWN`` and keep the stream open; if
 the service later becomes known the server emits the current status.
 
 If the server returns ``UNIMPLEMENTED`` the ``Watch`` method is not
-supported — do not retry it; use ``Check`` polling instead.
+supported � do not retry it; use ``Check`` polling instead.
 
 .. code-block:: python
+   :caption: Python
 
    stream = stub.Watch(
        health_pb2.HealthCheckRequest(service=""),
@@ -65,7 +68,7 @@ supported — do not retry it; use ``Check`` polling instead.
    for update in stream:
        print(f"Status changed: {update.status}")
        if update.status == health_pb2.HealthCheckResponse.SERVING_STATUS_NOT_SERVING:
-           print("Server stopped serving — reconnect or exit")
+           print("Server stopped serving � reconnect or exit")
            break
 
 Serving status values
@@ -94,6 +97,6 @@ Serving status values
 See also
 --------
 
-- :doc:`../gettingstarted` — basic client setup and the five-step connection pattern
-- :doc:`app_utilities` — version and process information once the server is confirmed healthy
-- :doc:`connection` — bidirectional connection management
+- :doc:`../../getting_started/gettingstarted` — basic client setup and the five-step connection pattern
+- :doc:`app_utilities` � version and process information once the server is confirmed healthy
+- :doc:`connection` � bidirectional connection management

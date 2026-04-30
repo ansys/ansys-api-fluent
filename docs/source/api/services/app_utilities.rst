@@ -10,9 +10,10 @@ process information in client-server mode, managing Python journal recording,
 controlling experimental feature flags, setting the working directory, and
 shutting down the application.
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import app_utilities_pb2, app_utilities_pb2_grpc
@@ -37,6 +38,7 @@ version you are connected to.
   Response fields: ``build_time: string``, ``build_id: int64``, ``vcs_revision: string``, ``vcs_branch: string``
 
 .. code-block:: python
+   :caption: Python
 
    ver = stub.GetProductVersion(
        app_utilities_pb2.GetProductVersionRequest(), metadata=metadata,
@@ -62,6 +64,7 @@ directory of each process so you can correlate logs or connect debuggers.
   Response fields: ``hostname: string``, ``process_id: int64``, ``working_directory: string``
 
 .. code-block:: python
+   :caption: Python
 
    ctrl = stub.GetControllerProcessInfo(
        app_utilities_pb2.GetControllerProcessInfoRequest(), metadata=metadata,
@@ -107,6 +110,7 @@ process can run in multiple modes.
      - Fluent is in aerodynamics-solver mode.
 
 .. code-block:: python
+   :caption: Python
 
    mode_resp = stub.GetAppMode(
        app_utilities_pb2.GetAppModeRequest(), metadata=metadata,
@@ -141,6 +145,7 @@ in ``StartPythonJournalResponse`` that you must pass to ``StopPythonJournal``.
   Response field: ``journal_str: string`` (journal content when no file name was given)
 
 .. code-block:: python
+   :caption: Python
 
    # Write journal to a file
    stub.StartPythonJournal(
@@ -181,6 +186,7 @@ Enabling beta features affects the current session only.
 - ``EnableBeta(EnableBetaRequest)`` → ``EnableBetaResponse``
 
 .. code-block:: python
+   :caption: Python
 
    beta_resp = stub.IsBetaEnabled(
        app_utilities_pb2.IsBetaEnabledRequest(), metadata=metadata,
@@ -201,6 +207,7 @@ that use relative paths will resolve against the new directory.
   Request field: ``path: string``
 
 .. code-block:: python
+   :caption: Python
 
    stub.SetWorkingDirectory(
        app_utilities_pb2.SetWorkingDirectoryRequest(path="/scratch/my_project"),
@@ -217,6 +224,7 @@ calls on the channel will succeed.
 - ``Exit(ExitRequest)`` → ``ExitResponse``
 
 .. code-block:: python
+   :caption: Python
 
    stub.Exit(app_utilities_pb2.ExitRequest(), metadata=metadata)
    channel.close()
@@ -224,6 +232,6 @@ calls on the channel will succeed.
 See also
 --------
 
-- :doc:`../gettingstarted` — basic client setup
+- :doc:`../../getting_started/gettingstarted` — basic client setup
 - :doc:`health` — confirm the server is ready before calling ApplicationRuntime RPCs
 - :doc:`transcript` — stream Fluent console output alongside journal recording
