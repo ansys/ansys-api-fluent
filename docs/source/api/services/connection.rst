@@ -283,14 +283,8 @@ A comprehensive workflow connecting to a Fluent server and performing operations
                version="1.0.0"
            )
            
-           # Create request generator
-           def request_gen():
-               yield connect_request
-           
            try:
-               self.response_stream = self.connection_stub.Connect(
-                   request_gen()
-               )
+               self.response_stream = self.connection_stub.Connect(connect_request)
                
                # Get first response to verify connection
                first_response = next(self.response_stream)

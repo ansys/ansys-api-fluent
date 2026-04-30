@@ -1,4 +1,4 @@
-﻿ansys-api-fluent documentation |version|
+ansys-api-fluent documentation |version|
 =========================================
 
 .. toctree::

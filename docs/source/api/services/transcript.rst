@@ -32,7 +32,7 @@ message for each line (or chunk) of Fluent output. The stream remains open
 for the lifetime of the Fluent session; iterate it in a background thread
 so it does not block your main client logic.
 
-- ``BeginStreaming(TranscriptRequest)`` ? ``stream TranscriptResponse``
+- ``BeginStreaming(TranscriptRequest)`` → ``stream TranscriptResponse``
 
 ``TranscriptResponse`` has one field:
 
