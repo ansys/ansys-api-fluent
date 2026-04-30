@@ -99,4 +99,4 @@ See also
 
 - :doc:`../../getting_started/gettingstarted` — basic client setup and the five-step connection pattern
 - :doc:`app_utilities` — version and process information once the server is confirmed healthy
-- :doc:`connection` — bidirectional connection management
+- :doc:`connection` — optional session-level service for version negotiation and pause/resume lifecycle control

@@ -97,9 +97,8 @@ Connect (server-streaming)
 
 Establishes a connection by sending one ``ConnectRequest`` and receiving a
 stream of ``ConnectResponse`` messages. The first response indicates whether
-the connection succeeded. The stream may continue to carry status updates for
-the lifetime of the session. This RPC must complete successfully before using
-other services.
+the connection succeeded. The stream may then continue to carry status updates
+for the lifetime of the session.
 
 **Basic Parameters:**
 
@@ -416,8 +415,10 @@ A comprehensive workflow connecting to a Fluent server and performing operations
 Best practices
 ~~~~~~~~~~~~~~
 
-1. **Always establish connection first**: The Connection service must be successfully connected
-   before attempting to use other services (Health, Field Data, etc.).
+1. **Use when you need session-level features**: Call ``Connection.Connect``
+   only when your deployment requires version negotiation, pause/resume
+   lifecycle control, or explicit session tracking. Most deployments can use
+   per-RPC metadata authentication without it.
 
 2. **Handle authentication errors**: Always check for CONNECTION_ERROR_PASSWORD_MISMATCH
    and guide users to verify credentials.
