@@ -233,7 +233,7 @@ Discover every monitor set registered with the running solver:
        }
 
        for ms in response.monitor_sets:
-           print(f"[{type_names.get(ms.type, '?')}] {ms.name} � {ms.title}")
+           print(f"[{type_names.get(ms.type, '?')}] {ms.name} — {ms.title}")
            print(f"  x-axis: {axis_names.get(ms.axis, '?')}, frequency: {ms.frequency}")
            print(f"  y-label: {ms.y_label}")
            print(f"  monitors: {', '.join(ms.monitors)}")

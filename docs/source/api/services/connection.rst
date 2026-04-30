@@ -443,5 +443,5 @@ See also
 --------
 
 - :doc:`../../getting_started/gettingstarted` — basic client setup
-- :doc:`health` � check server readiness after connecting
-- :doc:`app_utilities` � version and process information once connected
+- :doc:`health` — check server readiness after connecting
+- :doc:`app_utilities` — version and process information once connected

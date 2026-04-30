@@ -299,4 +299,4 @@ step-by-step walkthrough of schema discovery.
    )
    root = schema_resp.info
    print("Top-level singletons:", list(root.singletons.keys()))
-   print("Top-level named-object types:", list(root.namedobjects.keys()))
+   print("Top-level named-object types:", list(root.named_objects.keys()))
