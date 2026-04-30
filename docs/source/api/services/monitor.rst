@@ -295,7 +295,7 @@ Receive every sample emitted by the solver until the stream ends:
            for y in sample.y_axis_values:
                print(f"iter={x.x_axis_index}  {y.name}={y.value:.6g}")
    except grpc.RpcError as err:
-       print(f"Stream ended: {err.code()} � {err.details()}")
+       print(f"Stream ended: {err.code()} - {err.details()}")
    finally:
        channel.close()
 
@@ -329,7 +329,7 @@ Use ``MonitorFilter`` to receive only iteration-based residual samples:
            for y in sample.y_axis_values:
                print(f"iter={x.x_axis_index}  {y.name}={y.value:.6e}")
    except grpc.RpcError as err:
-       print(f"Stream ended: {err.code()} � {err.details()}")
+       print(f"Stream ended: {err.code()} - {err.details()}")
    finally:
        channel.close()
 
@@ -363,7 +363,7 @@ Filter the stream to a named subset of monitors:
            for y in sample.y_axis_values:
                print(f"iter={x.x_axis_index}  {y.name}={y.value:.6e}")
    except grpc.RpcError as err:
-       print(f"Stream ended: {err.code()} � {err.details()}")
+       print(f"Stream ended: {err.code()} - {err.details()}")
    finally:
        channel.close()
 
@@ -424,7 +424,7 @@ convergence data until the solver finishes:
                all_monitor_names.extend(ms.monitors)
 
            if not all_monitor_names:
-               print("No monitors available � is a case loaded?")
+               print("No monitors available - is a case loaded?")
                return
 
            # -- Step 3: stream and summarise --------------------------------
@@ -463,9 +463,9 @@ convergence data until the solver finishes:
            except grpc.RpcError as err:
                # OUT_OF_RANGE is the normal end-of-stream signal from Fluent
                if err.code() == grpc.StatusCode.OUT_OF_RANGE:
-                   print("\n? Solver finished � stream closed normally")
+                   print("\n? Solver finished - stream closed normally")
                else:
-                   print(f"\n? Stream error: {err.code()} � {err.details()}")
+                   print(f"\n? Stream error: {err.code()} - {err.details()}")
                    raise
 
            # -- Step 4: print summary ----------------------------------------
@@ -477,7 +477,7 @@ convergence data until the solver finishes:
                )
 
        except grpc.RpcError as err:
-           print(f"RPC error: {err.code()} � {err.details()}")
+           print(f"RPC error: {err.code()} - {err.details()}")
            raise
        finally:
            channel.close()
@@ -488,24 +488,24 @@ convergence data until the solver finishes:
 Best practices
 ~~~~~~~~~~~~~~
 
-1. **Call GetMonitors before BeginStreaming** � use the returned monitor names to build
+1. **Call GetMonitors before BeginStreaming** — use the returned monitor names to build
    targeted ``MonitorFilter`` objects rather than receiving every signal.
 
-2. **Handle** ``OUT_OF_RANGE`` **gracefully** � Fluent signals end-of-stream with this
+2. **Handle** ``OUT_OF_RANGE`` **gracefully** — Fluent signals end-of-stream with this
    gRPC status code; treat it as a normal exit, not an error.
 
-3. **Distinguish residual from solution monitors** � residuals typically decrease monotonically
+3. **Distinguish residual from solution monitors** — residuals typically decrease monotonically
    and are useful for convergence checks; solution monitors track physical quantities.
 
-4. **Apply filters for large cases** � streaming all monitors in a case with many solution
+4. **Apply filters for large cases** — streaming all monitors in a case with many solution
    monitors can produce high message rates; filter by name or frequency to reduce load.
 
-5. **Close the channel in a** ``finally`` **block** � always release gRPC resources even
+5. **Close the channel in a** ``finally`` **block** — always release gRPC resources even
    when the stream is interrupted.
 
 See also
 --------
 
 - :doc:`../../getting_started/gettingstarted` — basic client setup
-- :doc:`events` � structured solver lifecycle events (iteration signals, pause callbacks)
-- :doc:`reduction` � on-demand scalar reductions over surfaces and zones
+- :doc:`events` — structured solver lifecycle events (iteration signals, pause callbacks)
+- :doc:`reduction` — on-demand scalar reductions over surfaces and zones
