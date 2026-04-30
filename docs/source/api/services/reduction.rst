@@ -1,13 +1,13 @@
-﻿Reduction
+Reduction
 =========
 
-The Reduction service provides scalar and vector reduction operations over
+The ``Reduction`` service provides scalar and vector reduction operations over
 surfaces and cell zones.
 
 Overview
 ~~~~~~~~
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 The ``Reduction`` service allows you to:
 
@@ -43,6 +43,7 @@ Geometry and basic totals
 Example: area and centroid on selected surfaces
 
 .. code-block:: python
+   :caption: Python
 
    area_resp = reduction_stub.Area(
       reduction_pb2.AreaRequest(locations=["wall-inlet", "wall-outlet"]),
@@ -73,6 +74,7 @@ Weighted averages and integrals
 Example: volume-weighted average absolute pressure
 
 .. code-block:: python
+   :caption: Python
 
    response = reduction_stub.VolumeAve(
       reduction_pb2.VolumeAveRequest(
@@ -93,6 +95,7 @@ Force and moment
 Example: pressure and viscous force decomposition
 
 .. code-block:: python
+   :caption: Python
 
    pressure = reduction_stub.PressureForce(
       reduction_pb2.PressureForceRequest(locations=["car-body"]),
@@ -120,6 +123,7 @@ Extrema and conditional reductions
 Example: conditional count and weighted sum
 
 .. code-block:: python
+   :caption: Python
 
    count_if_resp = reduction_stub.CountIf(
       reduction_pb2.CountIfRequest(
@@ -146,6 +150,7 @@ Many Reduction responses use ``ansys.api.fluent.v1.variant.Variant`` in
 ``response.value``. Use ``WhichOneof('as')`` to identify the active value type.
 
 .. code-block:: python
+   :caption: Python
 
    def variant_to_python(v):
       kind = v.WhichOneof("as")
@@ -181,6 +186,7 @@ An end-to-end reduction workflow that computes geometric, statistical, and
 force-related metrics using proto-accurate request/response types.
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import reduction_pb2, reduction_pb2_grpc
@@ -322,21 +328,21 @@ Reduction request patterns
    :header-rows: 1
    :widths: 30 35 35
 
-    * - Pattern
-       - Typical request fields
-       - Notes
-    * - Location-only geometric query
-       - ``locations``
-       - Used by ``Area``, ``Volume``, ``Centroid``, ``Force``.
-    * - Expression-based reduction
-       - ``expression``, ``locations``
-       - Used by averages, integrals, extrema, and ``CountIf``.
-    * - Weighted sum reduction
-       - ``expression``, ``locations``, ``weight``
-       - Used by ``Sum``.
-    * - Conditional weighted sum
-       - ``expression``, ``condition``, ``locations``, ``weight``
-       - Used by ``SumIf``.
+   * - Pattern
+     - Typical request fields
+     - Notes
+   * - Location-only geometric query
+     - ``locations``
+     - Used by ``Area``, ``Volume``, ``Centroid``, ``Force``.
+   * - Expression-based reduction
+     - ``expression``, ``locations``
+     - Used by averages, integrals, extrema, and ``CountIf``.
+   * - Weighted sum reduction
+     - ``expression``, ``locations``, ``weight``
+     - Used by ``Sum``.
+   * - Conditional weighted sum
+     - ``expression``, ``condition``, ``locations``, ``weight``
+     - Used by ``SumIf``.
 
 Best practices
 ~~~~~~~~~~~~~~
@@ -348,8 +354,8 @@ Best practices
 5. **Keep condition expressions clear** - Prefer simple threshold logic for ``CountIf`` and ``SumIf``.
 
 See also
-~~~~~~~~
+--------
 
-- :doc:`../gettingstarted` - Basic client setup
-- :doc:`field_data` - Field data service
-- :doc:`health` - Health service for connectivity checks
+- :doc:`../../getting_started/gettingstarted` — basic client setup
+- :doc:`field_data` — raw field data (scalar, vector, mesh)
+- :doc:`svar` — per-zone solution variable data

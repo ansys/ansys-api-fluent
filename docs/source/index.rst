@@ -1,49 +1,22 @@
-﻿ansys-api-fluent documentation
-==============================
-
-Welcome to the **ansys-api-fluent** documentation. This package provides the auto-generated Python gRPC interface for Fluent v1 services.
+﻿ansys-api-fluent documentation |version|
+=========================================
 
 .. toctree::
+   :hidden:
    :maxdepth: 2
-   :caption: User Guide
 
-   gettingstarted
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Services
-
-   services/health
-   services/field_data
-   services/app_utilities
-   services/batch_ops
-   services/connection
-   services/datamodel_se
-   services/events
-   services/monitor
-   services/reduction
-   services/settings
-   services/svar
-   services/transcript
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Helper Modules
-
-   helpers/index
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Legacy
-
-   legacy/datamodel_tui
-   legacy/scheme_eval
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Help
-
+   getting_started/getting_started_contents
+   user_guide/user_guide_contents
+   api/api_contents
    glossary
+
+Welcome to ansys-api-fluent
+----------------------------
+
+This package provides the auto-generated Python gRPC interface for Ansys Fluent v1 services.
+
+Use the **Getting started** section to get connected quickly and **User guide** to build your first 
+end-to-end client. The **API reference** documents every RPC, message, and enum in detail.
 
 Indices and tables
 ==================

@@ -6,7 +6,7 @@ The Variant helper module provides polymorphic value containers used across Flue
 Overview
 ~~~~~~~~
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 The ``Variant`` helper types allow you to:
 
@@ -49,6 +49,7 @@ Example usage
 ~~~~~~~~~~~~~
 
 .. code-block:: python
+   :caption: Python
 
    # Creating numeric variant
    int_var = variant_pb2.Variant(int_value=42)
@@ -66,6 +67,6 @@ Example usage
 See also
 ~~~~~~~~
 
-- :doc:`../gettingstarted` - Basic client setup
+- :doc:`../../getting_started/gettingstarted` - Basic client setup
 - :doc:`../services/datamodel_se` - Data model (state engine) service
 - :doc:`../services/reduction` - Reduction service

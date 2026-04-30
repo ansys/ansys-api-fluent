@@ -6,7 +6,7 @@ The Primitives module defines shared data structures used by multiple Fluent ser
 Overview
 ~~~~~~~~
 
-.. include:: ../shared_example_assumptions.rst
+.. include:: ../../shared_example_assumptions.rst
 
 The ``Primitives`` module defines common data types including:
 
@@ -38,11 +38,12 @@ Point
 Represents a 3D Cartesian coordinate.
 
 .. code-block:: python
+   :caption: Python
 
    point = primitives_pb2.Point(x=0.0, y=0.0, z=0.0)
 
 See also
 ~~~~~~~~
 
-- :doc:`../gettingstarted` - Basic client setup
+- :doc:`../../getting_started/gettingstarted` - Basic client setup
 - :doc:`../services/reduction` - Reduction service
