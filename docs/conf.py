@@ -49,6 +49,11 @@ html_static_path = ["source/_static"]
 html_logo = pyansys_logo_black
 html_favicon = ansys_favicon
 
+# Custom stylesheet for the auto-generated proto reference fragments.
+html_css_files = [
+    "proto_docgen.css",
+]
+
 html_theme_options = {
     "github_url": "https://github.com/ansys/ansys-api-fluent",
     "show_prev_next": False,

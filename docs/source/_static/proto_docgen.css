@@ -1,0 +1,133 @@
+/* Styling for proto reference fragments emitted by docs/_ext/proto_docgen.py.
+ *
+ * Each generated message / enum / service block is wrapped in a
+ * ``.. container:: proto-block`` directive. The rules below add visual
+ * separation, breathing room, and lightweight color cues so the auto-generated
+ * sections read more comfortably alongside hand-written narrative content.
+ */
+
+.proto-meta {
+    margin: 0.5em 0 1.5em 0;
+    padding: 0.6em 1em;
+    background: var(--pst-color-surface, #f6f8fa);
+    border-left: 3px solid var(--pst-color-info, #4078c0);
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+.proto-meta dl,
+.proto-meta .field-list {
+    margin: 0;
+}
+
+.proto-meta dt,
+.proto-meta .field-list .field-name {
+    color: var(--pst-color-text-muted, #57606a);
+    font-weight: 600;
+}
+
+.proto-block {
+    margin: 1.6em 0;
+    padding: 0.8em 1.2em 0.4em 1.2em;
+    background: var(--pst-color-on-background, #ffffff);
+    border: 1px solid var(--pst-color-border, #d0d7de);
+    border-left: 4px solid var(--pst-color-primary, #1f6feb);
+    border-radius: 4px;
+}
+
+.proto-block.proto-enum {
+    border-left-color: #8957e5;
+}
+
+.proto-block.proto-service {
+    border-left-color: #1a7f37;
+}
+
+.proto-block > p.rubric {
+    margin-top: 0;
+    margin-bottom: 0.4em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--pst-color-border, #d0d7de);
+    font-size: 1.05em;
+    font-weight: 600;
+}
+
+.proto-block .proto-doc {
+    margin: 0.4em 0 0.8em 0;
+    color: var(--pst-color-text-base, #24292f);
+    line-height: 1.55;
+}
+
+/* Tables inside generated blocks: tighter, alternating rows, monospace fields. */
+.proto-block table.docutils {
+    margin: 0.5em 0 0.6em 0;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.proto-block table.docutils th,
+.proto-block table.docutils td {
+    padding: 0.45em 0.7em;
+    vertical-align: top;
+    line-height: 1.5;
+}
+
+.proto-block table.docutils thead th {
+    background: var(--pst-color-surface, #f6f8fa);
+    border-bottom: 2px solid var(--pst-color-border, #d0d7de);
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.proto-block table.docutils tbody tr:nth-child(even) {
+    background: var(--pst-color-surface, #f6f8fa);
+}
+
+.proto-block table.docutils code,
+.proto-block table.docutils tt {
+    font-size: 0.92em;
+    padding: 0.05em 0.35em;
+}
+
+/* Field-number column rendered tight and muted. */
+.proto-block table.docutils td.proto-tag {
+    color: var(--pst-color-text-muted, #57606a);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    width: 3em;
+}
+
+/* Inline qualifier badges (repeated, optional, oneof:<name>). */
+.proto-qualifier {
+    display: inline-block;
+    margin-right: 0.4em;
+    padding: 0.05em 0.45em;
+    font-size: 0.78em;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--pst-color-on-info, #ffffff);
+    background: var(--pst-color-info, #4078c0);
+    border-radius: 3px;
+    text-transform: lowercase;
+    letter-spacing: 0.02em;
+}
+
+.proto-qualifier.proto-qualifier-oneof {
+    background: #8957e5;
+}
+
+.proto-qualifier.proto-qualifier-optional {
+    background: #57606a;
+}
+
+/* Section dividers between message / enum / service groups. */
+.proto-group-heading {
+    margin: 1.8em 0 0.4em 0;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--pst-color-border, #d0d7de);
+    font-size: 1.15em;
+    font-weight: 600;
+    color: var(--pst-color-heading, #1f2328);
+    letter-spacing: 0.02em;
+}
