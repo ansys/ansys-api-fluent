@@ -31,7 +31,7 @@ Retrieves the list of domains and zones available in the current session.
 Call this first to discover valid ``domain_id`` and ``zone_id`` values to use
 in subsequent requests.
 
-- ``GetZonesInfo(GetZonesInfoRequest)`` ? ``GetZonesInfoResponse``
+- ``GetZonesInfo(GetZonesInfoRequest)`` → ``GetZonesInfoResponse``
 
 ``GetZonesInfoResponse`` fields:
 
@@ -90,7 +90,7 @@ Retrieves metadata for the solution variables available on a specific domain
 and zone. Use this to confirm that a variable name exists and to learn its
 data type and dimension before streaming data.
 
-- ``GetSolutionVariableInfo(GetSolutionVariableInfoRequest)`` ? ``GetSolutionVariableInfoResponse``
+- ``GetSolutionVariableInfo(GetSolutionVariableInfoRequest)`` → ``GetSolutionVariableInfoResponse``
   Request fields: ``domain_id: uint32``, ``zone_id: uint64``
 
 ``GetSolutionVariableInfoResponse`` has one field: ``svars_info`` — a list of
@@ -136,7 +136,7 @@ typed payload chunks. Each streamed ``GetSolutionVariableDataResponse``
 carries either a ``payload_info`` header (one per zone, sent first) or a
 ``payload`` data chunk.
 
-- ``GetSolutionVariableData(GetSolutionVariableDataRequest)`` ? ``stream GetSolutionVariableDataResponse``
+- ``GetSolutionVariableData(GetSolutionVariableDataRequest)`` → ``stream GetSolutionVariableDataResponse``
 
 ``GetSolutionVariableDataRequest`` fields:
 
@@ -213,7 +213,7 @@ messages in a strict order:
 2. For each zone: one ``payload_info`` (``Info``) message followed by one or
    more ``payload`` (``Payload``) chunk messages.
 
-- ``SetSolutionVariableData(stream SetSolutionVariableDataRequest)`` ? ``SetSolutionVariableDataResponse``
+- ``SetSolutionVariableData(stream SetSolutionVariableDataRequest)`` → ``SetSolutionVariableDataResponse``
 
 ``SolutionVariableHeader`` fields: ``name: string``, ``domain_id: uint32``
 
