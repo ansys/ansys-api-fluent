@@ -10,7 +10,8 @@
    api/index
    glossary
 
-This package provides the auto-generated Python gRPC interface for Ansys Fluent v1 services.
+This package provides the gRPC interface for Ansys Fluent and a Python layer for
+building a client.
 
 **New here?** Start with :ref:`getting_started` — it explains how the API is
 structured, walks you through installation, and gets you making your first RPC

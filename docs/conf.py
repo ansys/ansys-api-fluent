@@ -5,6 +5,8 @@ import sys
 
 # Add the ansys-api-fluent package to the path
 sys.path.insert(0, os.path.abspath(".."))
+# Make the local Sphinx extensions importable
+sys.path.insert(0, os.path.abspath("_ext"))
 
 from ansys_sphinx_theme import ansys_favicon, pyansys_logo_black
 
@@ -26,10 +28,21 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx_copybutton",
     "sphinx_tabs.tabs",
+    # Local extension: regenerates docs/source/api/_generated/*.rst from the
+    # v1 .proto files at the start of every Sphinx build.
+    "proto_docgen",
 ]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    # Auto-generated proto reference fragments are consumed via `.. include::`
+    # from the hand-written pages — they should not be rendered as standalone
+    # documents.
+    "api/_generated/**",
+]
 
 html_theme = "ansys_sphinx_theme"
 html_static_path = ["source/_static"]

@@ -79,6 +79,11 @@ jobs:
           python -m pip install -U pip
           python -m pip install -r docs/requirements.txt
 
+      - name: Regenerate proto reference fragments
+        # Mirrors what the Sphinx ``proto_docgen`` extension does on
+        # ``builder-inited`` so failures surface as their own CI step.
+        run: python docs/_ext/proto_docgen.py
+
       - name: Build documentation
         run: |
           cd docs
