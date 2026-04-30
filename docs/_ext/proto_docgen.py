@@ -3,19 +3,22 @@
 For each ``.proto`` file under ``ansys/api/fluent/v1`` this extension produces
 an RST fragment under ``docs/source/api/_generated/<basename>.rst`` containing:
 
+* a metadata block (source file, proto package, content counts),
 * the list of RPCs defined by services in that file (with leading comments),
-* every message with a table of its fields (name, type, comment),
+* every message with a table of its fields (name, tag, type, comment),
 * every enum with a table of its values.
 
 Comments are extracted from the proto ``SourceCodeInfo`` produced by
 ``grpc_tools.protoc``. Hand-curated narrative pages in ``api/services``,
 ``api/helpers`` and ``api/legacy`` consume these fragments via an
 ``.. include::`` directive at the bottom of each page.
+
+The matching stylesheet at ``docs/source/_static/proto_docgen.css`` controls
+the visual layout of the generated blocks.
 """
 
 from __future__ import annotations
 
-import os
 import shutil
 import subprocess
 import sys
@@ -33,6 +36,9 @@ _HERE = Path(__file__).resolve().parent
 _REPO_ROOT = _HERE.parent.parent
 _PROTO_ROOT = _REPO_ROOT / "ansys" / "api" / "fluent" / "v1"
 _OUT_DIR = _REPO_ROOT / "docs" / "source" / "api" / "_generated"
+
+# Indentation used inside ``.. container::`` directive bodies.
+_INDENT = "   "
 
 
 # ---------------------------------------------------------------------------
@@ -113,26 +119,22 @@ _FIELD_TYPE_NAMES = {
 }
 
 
+def _short_type_name(type_name: str) -> str:
+    """Strip the proto package prefix from a fully-qualified type name."""
+    return type_name.lstrip(".").rsplit(".", 1)[-1]
+
+
 def _render_field_type(field: descriptor_pb2.FieldDescriptorProto) -> str:
     if field.type in (
         descriptor_pb2.FieldDescriptorProto.TYPE_MESSAGE,
         descriptor_pb2.FieldDescriptorProto.TYPE_ENUM,
     ):
-        # type_name is a fully-qualified name like ".ansys.api.fluent.v1.variant.Variant".
-        type_name = field.type_name.lstrip(".").rsplit(".", 1)[-1]
-    else:
-        type_name = _FIELD_TYPE_NAMES.get(field.type, str(field.type))
-    if field.label == descriptor_pb2.FieldDescriptorProto.LABEL_REPEATED:
-        return f"repeated {type_name}"
-    return type_name
-
-
-def _render_rpc_type(name: str) -> str:
-    return name.lstrip(".").rsplit(".", 1)[-1]
+        return _short_type_name(field.type_name)
+    return _FIELD_TYPE_NAMES.get(field.type, str(field.type))
 
 
 # ---------------------------------------------------------------------------
-# RST emission
+# RST emission helpers
 # ---------------------------------------------------------------------------
 
 
@@ -147,42 +149,88 @@ def _rst_escape_cell(text: str) -> str:
     return text.replace("|", r"\|")
 
 
-def _emit_rpc_section(
+def _qualifier_badges(field: descriptor_pb2.FieldDescriptorProto, oneof_name: str | None) -> str:
+    """Return inline ``:guilabel:`` badges describing a field's qualifiers."""
+    badges: list[str] = []
+    if field.label == descriptor_pb2.FieldDescriptorProto.LABEL_REPEATED:
+        badges.append(":guilabel:`repeated`")
+    if oneof_name is not None:
+        badges.append(f":guilabel:`oneof: {oneof_name}`")
+    return " ".join(badges)
+
+
+def _emit_list_table_header(out: list[str], indent: str, headers: list[tuple[str, int]]) -> None:
+    widths = " ".join(str(w) for _, w in headers)
+    out.append(f"{indent}.. list-table::")
+    out.append(f"{indent}   :widths: {widths}")
+    out.append(f"{indent}   :header-rows: 1")
+    out.append(f"{indent}   :class: proto-table")
+    out.append("")
+    for i, (title, _) in enumerate(headers):
+        marker = "* - " if i == 0 else "  - "
+        out.append(f"{indent}   {marker}{title}")
+
+
+def _emit_list_table_row(out: list[str], indent: str, cells: list[str]) -> None:
+    for i, cell in enumerate(cells):
+        marker = "* - " if i == 0 else "  - "
+        out.append(f"{indent}   {marker}{cell}")
+
+
+# ---------------------------------------------------------------------------
+# Section emitters
+# ---------------------------------------------------------------------------
+
+
+def _emit_service(
     out: list[str],
     service: descriptor_pb2.ServiceDescriptorProto,
     service_idx: int,
     comments: dict[tuple[int, ...], str],
+    file_stem: str,
 ) -> None:
-    out.append(f".. rubric:: Service ``{service.name}``")
+    out.append(f".. _proto-{file_stem}-service-{service.name.lower()}:")
     out.append("")
+    out.append(".. container:: proto-block proto-service")
+    out.append("")
+    out.append(f"{_INDENT}.. rubric:: Service ``{service.name}``")
+    out.append("")
+
     svc_doc = _clean_comment(comments.get((6, service_idx), ""))
     if svc_doc:
-        out.append(svc_doc)
+        out.append(f"{_INDENT}.. container:: proto-doc")
+        out.append("")
+        out.append(f"{_INDENT}{_INDENT}{svc_doc}")
         out.append("")
 
     if not service.method:
         return
 
-    out.append(".. list-table::")
-    out.append("   :widths: 25 30 30 30")
-    out.append("   :header-rows: 1")
-    out.append("")
-    out.append("   * - RPC")
-    out.append("     - Request")
-    out.append("     - Response")
-    out.append("     - Description")
+    _emit_list_table_header(
+        out,
+        _INDENT,
+        [("RPC", 22), ("Request", 26), ("Response", 26), ("Description", 36)],
+    )
     for method_idx, method in enumerate(service.method):
         method_doc = _clean_comment(comments.get((6, service_idx, 2, method_idx), ""))
-        request = _render_rpc_type(method.input_type)
-        response = _render_rpc_type(method.output_type)
-        if method.client_streaming:
-            request = f"stream {request}"
-        if method.server_streaming:
-            response = f"stream {response}"
-        out.append(f"   * - ``{method.name}``")
-        out.append(f"     - ``{request}``")
-        out.append(f"     - ``{response}``")
-        out.append(f"     - {_rst_escape_cell(method_doc) or '—'}")
+        request = _short_type_name(method.input_type)
+        response = _short_type_name(method.output_type)
+        request_cell = (
+            f":guilabel:`stream` ``{request}``" if method.client_streaming else f"``{request}``"
+        )
+        response_cell = (
+            f":guilabel:`stream` ``{response}``" if method.server_streaming else f"``{response}``"
+        )
+        _emit_list_table_row(
+            out,
+            _INDENT,
+            [
+                f"``{method.name}``",
+                request_cell,
+                response_cell,
+                _rst_escape_cell(method_doc) or "—",
+            ],
+        )
     out.append("")
 
 
@@ -192,27 +240,50 @@ def _emit_message(
     comments: dict[tuple[int, ...], str],
     path_prefix: tuple[int, ...],
     qualified_name: str,
+    file_stem: str,
 ) -> None:
-    out.append(f".. rubric:: ``{qualified_name}``")
+    anchor = f"proto-{file_stem}-{qualified_name.lower().replace('.', '-')}"
+    out.append(f".. _{anchor}:")
     out.append("")
+    out.append(".. container:: proto-block proto-message")
+    out.append("")
+    out.append(f"{_INDENT}.. rubric:: ``{qualified_name}``")
+    out.append("")
+
     msg_doc = _clean_comment(comments.get(path_prefix, ""))
     if msg_doc:
-        out.append(msg_doc)
+        out.append(f"{_INDENT}.. container:: proto-doc")
+        out.append("")
+        out.append(f"{_INDENT}{_INDENT}{msg_doc}")
         out.append("")
 
     if msg.field:
-        out.append(".. list-table::")
-        out.append("   :widths: 25 25 50")
-        out.append("   :header-rows: 1")
-        out.append("")
-        out.append("   * - Field")
-        out.append("     - Type")
-        out.append("     - Description")
+        oneof_names = {i: oneof.name for i, oneof in enumerate(msg.oneof_decl)}
+        _emit_list_table_header(
+            out,
+            _INDENT,
+            [("Field", 22), ("#", 6), ("Type", 22), ("Description", 50)],
+        )
         for field_idx, field in enumerate(msg.field):
             field_doc = _clean_comment(comments.get(path_prefix + (2, field_idx), ""))
-            out.append(f"   * - ``{field.name}``")
-            out.append(f"     - ``{_render_field_type(field)}``")
-            out.append(f"     - {_rst_escape_cell(field_doc) or '—'}")
+            oneof_name = (
+                oneof_names.get(field.oneof_index)
+                if field.HasField("oneof_index")
+                else None
+            )
+            qualifiers = _qualifier_badges(field, oneof_name)
+            type_repr = f"``{_render_field_type(field)}``"
+            type_cell = f"{qualifiers} {type_repr}" if qualifiers else type_repr
+            _emit_list_table_row(
+                out,
+                _INDENT,
+                [
+                    f"``{field.name}``",
+                    str(field.number),
+                    type_cell,
+                    _rst_escape_cell(field_doc) or "—",
+                ],
+            )
         out.append("")
 
     # Nested enums
@@ -223,6 +294,7 @@ def _emit_message(
             comments,
             path_prefix + (4, enum_idx),
             f"{qualified_name}.{enum.name}",
+            file_stem,
         )
 
     # Nested messages (skip synthetic map entries)
@@ -235,6 +307,7 @@ def _emit_message(
             comments,
             path_prefix + (3, nested_idx),
             f"{qualified_name}.{nested.name}",
+            file_stem,
         )
 
 
@@ -244,30 +317,77 @@ def _emit_enum(
     comments: dict[tuple[int, ...], str],
     path_prefix: tuple[int, ...],
     qualified_name: str,
+    file_stem: str,
 ) -> None:
-    out.append(f".. rubric:: ``{qualified_name}`` (enum)")
+    anchor = f"proto-{file_stem}-{qualified_name.lower().replace('.', '-')}"
+    out.append(f".. _{anchor}:")
     out.append("")
+    out.append(".. container:: proto-block proto-enum")
+    out.append("")
+    out.append(f"{_INDENT}.. rubric:: ``{qualified_name}`` (enum)")
+    out.append("")
+
     enum_doc = _clean_comment(comments.get(path_prefix, ""))
     if enum_doc:
-        out.append(enum_doc)
+        out.append(f"{_INDENT}.. container:: proto-doc")
         out.append("")
-    out.append(".. list-table::")
-    out.append("   :widths: 35 15 50")
-    out.append("   :header-rows: 1")
-    out.append("")
-    out.append("   * - Name")
-    out.append("     - Number")
-    out.append("     - Description")
+        out.append(f"{_INDENT}{_INDENT}{enum_doc}")
+        out.append("")
+
+    _emit_list_table_header(
+        out,
+        _INDENT,
+        [("Name", 32), ("#", 6), ("Description", 60)],
+    )
     for value_idx, value in enumerate(enum.value):
         value_doc = _clean_comment(comments.get(path_prefix + (2, value_idx), ""))
-        out.append(f"   * - ``{value.name}``")
-        out.append(f"     - {value.number}")
-        out.append(f"     - {_rst_escape_cell(value_doc) or '—'}")
+        _emit_list_table_row(
+            out,
+            _INDENT,
+            [
+                f"``{value.name}``",
+                str(value.number),
+                _rst_escape_cell(value_doc) or "—",
+            ],
+        )
+    out.append("")
+
+
+def _emit_group_heading(out: list[str], title: str) -> None:
+    out.append(".. rst-class:: proto-group-heading")
+    out.append("")
+    out.append(title)
+    out.append("")
+
+
+def _emit_metadata_block(out: list[str], file_proto: descriptor_pb2.FileDescriptorProto) -> None:
+    """Emit a styled metadata header (source file + proto package) on
+    separate lines using an RST field list inside a styled container.
+    """
+    proto_path = f"ansys/api/fluent/v1/{Path(file_proto.name).name}"
+    out.append(".. container:: proto-meta")
+    out.append("")
+    out.append(f"{_INDENT}:Source file: :file:`{proto_path}`")
+    out.append(f"{_INDENT}:Proto package: ``{file_proto.package}``")
+
+    counts: list[str] = []
+    if file_proto.service:
+        n = len(file_proto.service)
+        counts.append(f"{n} service" + ("s" if n != 1 else ""))
+    if file_proto.message_type:
+        n = len(file_proto.message_type)
+        counts.append(f"{n} message" + ("s" if n != 1 else ""))
+    if file_proto.enum_type:
+        n = len(file_proto.enum_type)
+        counts.append(f"{n} enum" + ("s" if n != 1 else ""))
+    if counts:
+        out.append(f"{_INDENT}:Contains: {', '.join(counts)}")
     out.append("")
 
 
 def _emit_file(file_proto: descriptor_pb2.FileDescriptorProto) -> str:
     comments = _build_comment_index(file_proto)
+    file_stem = Path(file_proto.name).stem
     out: list[str] = []
     out.append(".. Auto-generated by docs/_ext/proto_docgen.py — do not edit by hand.")
     out.append("")
@@ -278,26 +398,23 @@ def _emit_file(file_proto: descriptor_pb2.FileDescriptorProto) -> str:
     # hierarchy. This keeps the fragment compatible with any parent page
     # heading convention.
     out.append(_heading("Generated reference", "-"))
-    out.append(
-        f"Generated from :file:`ansys/api/fluent/v1/{Path(file_proto.name).name}`. "
-        f"Proto package: ``{file_proto.package}``."
-    )
-    out.append("")
 
-    for service_idx, service in enumerate(file_proto.service):
-        _emit_rpc_section(out, service, service_idx, comments)
+    _emit_metadata_block(out, file_proto)
+
+    if file_proto.service:
+        _emit_group_heading(out, "Services")
+        for service_idx, service in enumerate(file_proto.service):
+            _emit_service(out, service, service_idx, comments, file_stem)
 
     if file_proto.message_type:
-        out.append(".. rubric:: Messages")
-        out.append("")
+        _emit_group_heading(out, "Messages")
         for msg_idx, msg in enumerate(file_proto.message_type):
-            _emit_message(out, msg, comments, (4, msg_idx), msg.name)
+            _emit_message(out, msg, comments, (4, msg_idx), msg.name, file_stem)
 
     if file_proto.enum_type:
-        out.append(".. rubric:: Enumerations")
-        out.append("")
+        _emit_group_heading(out, "Enumerations")
         for enum_idx, enum in enumerate(file_proto.enum_type):
-            _emit_enum(out, enum, comments, (5, enum_idx), enum.name)
+            _emit_enum(out, enum, comments, (5, enum_idx), enum.name, file_stem)
 
     return "\n".join(out) + "\n"
 
@@ -336,7 +453,6 @@ def generate(app=None) -> None:
     )
 
     if app is not None:
-        app.info = getattr(app, "info", lambda *_: None)
         try:
             from sphinx.util import logging as sphinx_logging
 
@@ -353,7 +469,7 @@ def _on_builder_inited(app) -> None:
 
 def setup(app):
     app.connect("builder-inited", _on_builder_inited)
-    return {"version": "0.1", "parallel_read_safe": True, "parallel_write_safe": True}
+    return {"version": "0.2", "parallel_read_safe": True, "parallel_write_safe": True}
 
 
 # Allow running directly (e.g. ``python docs/_ext/proto_docgen.py``).
