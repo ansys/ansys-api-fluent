@@ -223,9 +223,6 @@ Event types in ``BeginStreamingResponse``
    * - ``solver_time_estimate_event``
      - ``SolverTimeEstimateEvent``
      - Estimated remaining time
-   * - ``client_execute_event``
-     - ``ClientExecuteEvent``
-     - Request to execute a client-side function
 
 Complete example
 ~~~~~~~~~~~~~~~~
@@ -285,9 +282,6 @@ prints key payload fields, and handles stream failures.
           if event_type == "data_model_changed_event":
                 ev = response.data_model_changed_event
                 return f"data_model_changed paths={list(ev.paths)}"
-          if event_type == "client_execute_event":
-                ev = response.client_execute_event
-                return f"client_execute function={ev.function} args={len(ev.arguments)}"
 
           # Zero-payload event notifications
           return event_type or "unknown_event"

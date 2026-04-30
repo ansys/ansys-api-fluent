@@ -10,8 +10,9 @@ tracks — out of a running Fluent session. It also provides discovery RPCs so
 you can enumerate available surfaces and fields before requesting data.
 
 Most data-retrieval RPCs are **server-streaming**: they return one or more
-typed payload chunks that you iterate over. The ``SetSvarData`` analogue for
-writing is on the Solution Variables service (:doc:`svar`).
+typed payload chunks that you iterate over. The ``SetSolutionVariableData``
+RPC for writing solution variable values is on the Solution Variables service
+(:doc:`svar`).
 
 .. include:: ../../shared_example_assumptions.rst
 
@@ -36,9 +37,9 @@ are currently available. These calls are cheap and save you from issuing
 streaming RPCs against an empty or uninitialised solver.
 
 - ``IsDataAvailable(IsDataAvailableRequest)`` → ``IsDataAvailableResponse``
-  Response field: ``available: bool``
+  Response field: ``is_data_available: bool``
 - ``IsBoundaryValuesEnabled(IsBoundaryValuesEnabledRequest)`` → ``IsBoundaryValuesEnabledResponse``
-  Response field: ``enabled: bool``
+  Response field: ``is_boundary_values_enabled: bool``
 
 .. code-block:: python
    :caption: Python
@@ -49,8 +50,8 @@ streaming RPCs against an empty or uninitialised solver.
    bv_enabled = stub.IsBoundaryValuesEnabled(
        field_data_pb2.IsBoundaryValuesEnabledRequest(), metadata=metadata,
    )
-   print(f"Data available: {avail.available}")
-   print(f"Boundary values enabled: {bv_enabled.enabled}")
+   print(f"Data available: {avail.is_data_available}")
+   print(f"Boundary values enabled: {bv_enabled.is_boundary_values_enabled}")
 
 Discovery: surfaces and fields
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,18 +143,20 @@ or a typed numeric payload. Accumulate chunks by field and surface.
    print(f"Received {len(all_values)} temperature values")
 
    # --- GetScalarField (single-field, simpler) ---
-   for chunk in stub.GetScalarField(
+   # GetScalarFieldRequest fields: surface_ids (repeated SurfaceId), scalar_field (string),
+   # node_value (bool), boundary_values (bool).
+   # GetScalarFieldResponse has scalar_field_data: ScalarFieldData with scalar_field.data.
+   for resp in stub.GetScalarField(
        field_data_pb2.GetScalarFieldRequest(
-           surface_id=first_id,
-           scalar_field_name="pressure",
-           data_location=field_data_pb2.DataLocation.DATA_LOCATION_NODES,
-           provide_boundary_values=False,
+           surface_ids=[field_data_pb2.SurfaceId(id=first_id)],
+           scalar_field="pressure",
+           node_value=True,
+           boundary_values=False,
        ),
        metadata=metadata,
    ):
-       kind = chunk.WhichOneof("chunk")
-       if kind == "double_payload":
-           print(f"  Pressure chunk: {len(chunk.double_payload.payloads)} values")
+       sfd = resp.scalar_field_data
+       print(f"  Pressure: surface {sfd.surface_id.id}  values={len(sfd.scalar_field.data)}")
 
 Vector field streaming
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -165,17 +168,20 @@ Retrieve vector field data (velocity, flux, etc.) on selected surfaces.
 .. code-block:: python
    :caption: Python
 
-   for chunk in stub.GetVectorField(
+   # GetVectorFieldRequest fields: surface_ids (repeated SurfaceId), vector_field (string),
+   # node_value (bool). scalar_field (string) is optional — used for scalar colouring.
+   # GetVectorFieldResponse has vector_field_data: VectorFieldData with
+   # vector.vector_components (repeated VectorComponents with x, y, z doubles).
+   for resp in stub.GetVectorField(
        field_data_pb2.GetVectorFieldRequest(
-           surface_id=first_id,
-           vector_field_name="velocity",
-           data_location=field_data_pb2.DataLocation.DATA_LOCATION_NODES,
+           surface_ids=[field_data_pb2.SurfaceId(id=first_id)],
+           vector_field="velocity",
+           node_value=True,
        ),
        metadata=metadata,
    ):
-       kind = chunk.WhichOneof("chunk")
-       if kind == "float_payload":
-           print(f"  Vector chunk: {len(chunk.float_payload.payloads)} component values")
+       vfd = resp.vector_field_data
+       print(f"  Velocity: surface {vfd.surface_id.id}  vectors={len(vfd.vector.vector_components)}")
 
 Surface geometry
 ~~~~~~~~~~~~~~~~
@@ -189,19 +195,19 @@ the solver volume mesh.
 .. code-block:: python
    :caption: Python
 
-   for chunk in stub.GetSurfaces(
+   # GetSurfacesRequest fields: surface_ids (repeated SurfaceId), overset_mesh (bool).
+   # GetSurfacesResponse streams SurfaceData messages with points (Coordinate list)
+   # and facets (Facet list with node indices).
+   for resp in stub.GetSurfaces(
        field_data_pb2.GetSurfacesRequest(
            surface_ids=[field_data_pb2.SurfaceId(id=first_id)],
-           provide_faces=True,
-           provide_overset_state=False,
+           overset_mesh=False,
        ),
        metadata=metadata,
    ):
-       kind = chunk.WhichOneof("chunk")
-       if kind == "vertices_chunk":
-           print(f"  Vertices chunk: {len(chunk.vertices_chunk.vertices)} vertex values")
-       elif kind == "faces_connectivity_chunk":
-           print(f"  Connectivity chunk received")
+       sd = resp.surface_data
+       print(f"  Surface id={sd.surface_id.id}  "
+             f"points={len(sd.points)}  facets={len(sd.facets)}")
 
 Solver mesh (nodes and elements)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -216,22 +222,25 @@ and element connectivity. These RPCs stream the volumetric mesh, not surfaces.
 .. code-block:: python
    :caption: Python
 
+   # GetSolverMeshNodesRequest uses domain_id + thread_id, not zone IDs.
+   # The response streams repeated NodeFloat messages, each with id, x, y, z fields.
    node_count = 0
-   for chunk in stub.GetSolverMeshNodesFloat(
-       field_data_pb2.GetSolverMeshNodesRequest(zone_ids=[12]),
+   for resp in stub.GetSolverMeshNodesFloat(
+       field_data_pb2.GetSolverMeshNodesRequest(domain_id=1, thread_id=12),
        metadata=metadata,
    ):
-       if chunk.HasField("float_payload"):
-           node_count += len(chunk.float_payload.payloads) // 3  # x, y, z per node
+       node_count += len(resp.nodes)  # resp.nodes is repeated NodeFloat
    print(f"Total nodes: {node_count}")
 
-   for chunk in stub.GetSolverMeshElements(
-       field_data_pb2.GetSolverMeshElementsRequest(zone_ids=[12]),
+   # GetSolverMeshElementsResponse streams repeated Element messages
+   # (each with id, element_type, node_ids, and facets for polyhedra).
+   element_count = 0
+   for resp in stub.GetSolverMeshElements(
+       field_data_pb2.GetSolverMeshElementsRequest(domain_id=1, thread_id=12),
        metadata=metadata,
    ):
-       kind = chunk.WhichOneof("chunk")
-       if kind is not None:
-           print(f"  Elements chunk type: {kind}")
+       element_count += len(resp.elements)
+   print(f"Total elements: {element_count}")
 
 Pathlines and particle tracks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -245,16 +254,20 @@ follow the same payload-chunk pattern as scalar and vector fields.
 .. code-block:: python
    :caption: Python
 
-   for chunk in stub.GetPathlinesField(
+   # GetPathlinesFieldRequest fields: release_froms (repeated SurfaceId),
+   # field1 (string primary scalar), field2 (string secondary scalar), node_value (bool).
+   # GetPathlinesFieldResponse has pathline_data: PathlineData with oneof as:
+   # pathline_field_data or pathline_metadata.
+   for resp in stub.GetPathlinesField(
        field_data_pb2.GetPathlinesFieldRequest(
-           field="velocity-magnitude",
-           surface_ids=[field_data_pb2.SurfaceId(id=first_id)],
+           release_froms=[field_data_pb2.SurfaceId(id=first_id)],
+           field1="velocity-magnitude",
        ),
        metadata=metadata,
    ):
-       kind = chunk.WhichOneof("chunk")
+       kind = resp.pathline_data.WhichOneof("as")
        if kind is not None:
-           print(f"  Pathlines chunk: {kind}")
+           print(f"  Pathlines response: {kind}")
 
 Legacy streaming (BeginFieldsStreaming)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

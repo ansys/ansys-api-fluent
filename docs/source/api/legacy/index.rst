@@ -6,9 +6,11 @@ Legacy
 
 These services are retained for backward compatibility. They remain fully
 functional but are superseded by current equivalents — prefer
-:doc:`DataModel <../services/datamodel_se>` over ``TextInterface`` and
-:doc:`Settings <../services/settings>` or the :doc:`SchemePointer
-<../helpers/scheme_pointer>` helper over ``SchemeInterpreter`` for new work.
+:doc:`DataModel <../services/datamodel_se>` over ``TextInterface`` for new
+work. The ``SchemeInterpreter`` service itself has no direct modern replacement,
+but use its current RPCs (``SchemeEval`` or ``StringEval``) rather than the
+deprecated ``Eval`` RPC; see :doc:`SchemePointer <../helpers/scheme_pointer>`
+for the helper message type used to construct and read typed Scheme values.
 
 .. list-table::
    :widths: 25 75

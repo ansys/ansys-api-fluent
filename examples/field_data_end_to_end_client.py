@@ -67,7 +67,7 @@ def check_data_available(
         metadata=metadata,
         timeout=10.0,
     )
-    if not response.data_available:
+    if not response.is_data_available:
         raise RuntimeError(
             "Solution data is not available. Run the solver before requesting field data."
         )

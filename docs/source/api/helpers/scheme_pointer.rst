@@ -137,7 +137,9 @@ evaluation API.
    )
 
    channel = grpc.insecure_channel("127.0.0.1:50051")
-   stub = scheme_eval_pb2_grpc.SchemeEvalStub(channel)
+   metadata = [("password", "your-server-password")]
+   # Service name is SchemeInterpreter; the generated stub is SchemeInterpreterStub.
+   stub = scheme_eval_pb2_grpc.SchemeInterpreterStub(channel)
 
    expression = scheme_pointer_pb2.SchemePointer(
        list=scheme_pointer_pb2.SchemePointer.SchemeList(
