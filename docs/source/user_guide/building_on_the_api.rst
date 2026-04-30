@@ -1,10 +1,8 @@
-Building on the API
-===================
+Schema-driven client development
+=================================
 
 This page is for developers who are building a client library, a code
-generator, or an application on top of the Fluent gRPC API — not for
-developers who are making direct one-off calls. If you want to connect and
-call a specific RPC, start with :doc:`build_a_client` instead.
+generator, or an application on top of the Fluent gRPC services.
 
 What the API schema is
 ----------------------
