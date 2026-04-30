@@ -9,6 +9,13 @@ from ansys.api.fluent.v1 import field_data_pb2_grpc
 from ansys.api.fluent.v1 import health_pb2
 from ansys.api.fluent.v1 import health_pb2_grpc
 
+# ---------------------------------------------------------------------------
+# Connection parameters — adjust to match your running Fluent server.
+# ---------------------------------------------------------------------------
+HOST = "127.0.0.1"
+PORT = 50051
+PASSWORD = "your-server-password"
+
 
 @dataclass
 class SurfaceChoice:
@@ -31,23 +38,58 @@ class StreamSummary:
 
 
 def create_channel(host: str, port: int) -> grpc.Channel:
-    target = f"{host}:{port}"
-    return grpc.insecure_channel(target)
+    return grpc.insecure_channel(f"{host}:{port}")
 
 
-def check_health(channel: grpc.Channel) -> None:
+def check_health(channel: grpc.Channel, metadata: list[tuple[str, str]]) -> None:
+    """Verify the server is ready before issuing any other RPC."""
     health_stub = health_pb2_grpc.HealthStub(channel)
-    response = health_stub.Check(health_pb2.HealthCheckRequest(service=""), timeout=5.0)
-    print(f"Health status enum value: {response.status}")
+    response = health_stub.Check(
+        health_pb2.HealthCheckRequest(service=""),
+        metadata=metadata,
+        timeout=5.0,
+    )
+    serving = health_pb2.HealthCheckResponse.ServingStatus.SERVING_STATUS_SERVING
+    if response.status != serving:
+        raise RuntimeError(
+            f"Server is not ready: status={response.status}"
+        )
+    print(f"Server health: SERVING_STATUS_SERVING ({response.status})")
 
 
-def pick_surface(field_stub: field_data_pb2_grpc.FieldDataStub) -> SurfaceChoice:
-    response = field_stub.GetSurfacesInfo(field_data_pb2.GetSurfacesInfoRequest(), timeout=10.0)
+def check_data_available(
+    field_stub: field_data_pb2_grpc.FieldDataStub,
+    metadata: list[tuple[str, str]],
+) -> None:
+    """Raise if solution data is not yet available (e.g. solver has not run)."""
+    response = field_stub.IsDataAvailable(
+        field_data_pb2.IsDataAvailableRequest(),
+        metadata=metadata,
+        timeout=10.0,
+    )
+    if not response.data_available:
+        raise RuntimeError(
+            "Solution data is not available. Run the solver before requesting field data."
+        )
+    print("Solution data is available.")
+
+
+def pick_surface(
+    field_stub: field_data_pb2_grpc.FieldDataStub,
+    metadata: list[tuple[str, str]],
+) -> SurfaceChoice:
+    response = field_stub.GetSurfacesInfo(
+        field_data_pb2.GetSurfacesInfoRequest(),
+        metadata=metadata,
+        timeout=10.0,
+    )
 
     candidates: list[SurfaceChoice] = []
     for info in response.surface_info:
         for sid in info.surface_ids:
-            candidates.append(SurfaceChoice(id=sid.id, name=info.surface_name or "<unnamed>"))
+            candidates.append(
+                SurfaceChoice(id=sid.id, name=info.surface_name or "<unnamed>")
+            )
 
     if not candidates:
         raise RuntimeError("No surfaces returned by GetSurfacesInfo.")
@@ -61,8 +103,15 @@ def pick_surface(field_stub: field_data_pb2_grpc.FieldDataStub) -> SurfaceChoice
     return chosen
 
 
-def pick_scalar_field(field_stub: field_data_pb2_grpc.FieldDataStub) -> FieldChoice:
-    response = field_stub.GetFieldsInfo(field_data_pb2.GetFieldsInfoRequest(), timeout=10.0)
+def pick_scalar_field(
+    field_stub: field_data_pb2_grpc.FieldDataStub,
+    metadata: list[tuple[str, str]],
+) -> FieldChoice:
+    response = field_stub.GetFieldsInfo(
+        field_data_pb2.GetFieldsInfoRequest(),
+        metadata=metadata,
+        timeout=10.0,
+    )
 
     if not response.field_info:
         raise RuntimeError("No scalar fields returned by GetFieldsInfo.")
@@ -72,27 +121,31 @@ def pick_scalar_field(field_stub: field_data_pb2_grpc.FieldDataStub) -> FieldCho
         print(f"  solver_name={item.solver_name} display_name={item.display_name}")
 
     chosen = response.field_info[0]
-    result = FieldChoice(solver_name=chosen.solver_name, display_name=chosen.display_name)
+    result = FieldChoice(
+        solver_name=chosen.solver_name, display_name=chosen.display_name
+    )
     print(
-        "Using scalar field: "
-        f"solver_name={result.solver_name} display_name={result.display_name}"
+        f"Using scalar field: solver_name={result.solver_name}"
+        f" display_name={result.display_name}"
     )
     return result
 
 
 def get_scalar_range(
     field_stub: field_data_pb2_grpc.FieldDataStub,
+    metadata: list[tuple[str, str]],
     surface_id: int,
     scalar_solver_name: str,
     *,
     node_value: bool,
 ) -> tuple[float, float]:
+    # GetRangeRequest.surface_ids takes repeated SurfaceId messages.
     request = field_data_pb2.GetRangeRequest(
         field_name=scalar_solver_name,
         surface_ids=[field_data_pb2.SurfaceId(id=surface_id)],
         node_value=node_value,
     )
-    response = field_stub.GetRange(request, timeout=20.0)
+    response = field_stub.GetRange(request, metadata=metadata, timeout=20.0)
     return response.minimum, response.maximum
 
 
@@ -106,13 +159,15 @@ def _data_location(node_value: bool) -> field_data_pb2.DataLocation:
 
 def stream_scalar_field_via_get_fields(
     field_stub: field_data_pb2_grpc.FieldDataStub,
+    metadata: list[tuple[str, str]],
     surface_id: int,
     scalar_solver_name: str,
     *,
     node_value: bool,
 ) -> StreamSummary:
-    # This request shape mirrors pyfluent's v1 path:
-    # GetFieldsRequest + ScalarFieldRequest(data_location, provide_boundary_values).
+    # GetFieldsRequest with a ScalarFieldRequest embedded.
+    # GetFieldsResponse.chunk is a oneof: payload_info | double_payload |
+    # float_payload | long_payload | int_payload | byte_payload.
     request = field_data_pb2.GetFieldsRequest(
         provide_bytes_stream=False,
         chunk_size=256 * 1024,
@@ -131,7 +186,7 @@ def stream_scalar_field_via_get_fields(
     streamed_max: float | None = None
     payload_infos_seen = 0
 
-    for chunk in field_stub.GetFields(request, timeout=120.0):
+    for chunk in field_stub.GetFields(request, metadata=metadata, timeout=120.0):
         which = chunk.WhichOneof("chunk")
 
         if which == "payload_info":
@@ -147,15 +202,19 @@ def stream_scalar_field_via_get_fields(
         elif which == "long_payload":
             values = [float(v) for v in chunk.long_payload.payloads]
         else:
-            # Bytes payload can appear when provide_bytes_stream=True.
+            # byte_payload is only present when provide_bytes_stream=True.
             continue
 
         if values:
             total_values += len(values)
             local_min = min(values)
             local_max = max(values)
-            streamed_min = local_min if streamed_min is None else min(streamed_min, local_min)
-            streamed_max = local_max if streamed_max is None else max(streamed_max, local_max)
+            streamed_min = (
+                local_min if streamed_min is None else min(streamed_min, local_min)
+            )
+            streamed_max = (
+                local_max if streamed_max is None else max(streamed_max, local_max)
+            )
 
     return StreamSummary(
         value_count=total_values,
@@ -166,21 +225,22 @@ def stream_scalar_field_via_get_fields(
 
 
 def main() -> None:
-    host = "127.0.0.1"
-    port = 50051
     node_value = True
+    metadata = [("password", PASSWORD)]
 
-    channel = create_channel(host=host, port=port)
+    channel = create_channel(host=HOST, port=PORT)
     field_stub = field_data_pb2_grpc.FieldDataStub(channel)
 
     try:
-        check_health(channel)
+        check_health(channel, metadata)
+        check_data_available(field_stub, metadata)
 
-        surface = pick_surface(field_stub)
-        scalar_field = pick_scalar_field(field_stub)
+        surface = pick_surface(field_stub, metadata)
+        scalar_field = pick_scalar_field(field_stub, metadata)
 
         rmin, rmax = get_scalar_range(
             field_stub,
+            metadata,
             surface.id,
             scalar_field.solver_name,
             node_value=node_value,
@@ -189,26 +249,30 @@ def main() -> None:
 
         stream_summary = stream_scalar_field_via_get_fields(
             field_stub,
+            metadata,
             surface.id,
             scalar_field.solver_name,
             node_value=node_value,
         )
 
         print("\nStream summary")
-        print(f"  Surface id: {surface.id}")
-        print(f"  Surface name: {surface.name}")
-        print(f"  Scalar field: {scalar_field.solver_name}")
-        print(f"  Values streamed: {stream_summary.value_count}")
+        print(f"  Surface id:          {surface.id}")
+        print(f"  Surface name:        {surface.name}")
+        print(f"  Scalar field:        {scalar_field.solver_name}")
+        print(f"  Values streamed:     {stream_summary.value_count}")
         print(f"  Payload info chunks: {stream_summary.payload_infos_seen}")
         print(
-            "  Stream local min/max: "
+            f"  Stream local min/max: "
             f"{stream_summary.streamed_min} / {stream_summary.streamed_max}"
         )
 
     except grpc.RpcError as err:
         print(f"gRPC error: code={err.code()} details={err.details()}")
         raise
+    finally:
+        channel.close()
 
 
 if __name__ == "__main__":
     main()
+
