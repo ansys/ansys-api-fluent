@@ -223,8 +223,17 @@ Replace ``<out>`` with your project's source directory.
          protoc \
              -I ansys/api/fluent/v1 \
              --go_out=<out> \
+             --go_opt=M health.proto=github.com/ansys/ansys-api-fluent/v1 \
              --go-grpc_out=<out> \
+             --go-grpc_opt=M health.proto=github.com/ansys/ansys-api-fluent/v1 \
              ansys/api/fluent/v1/health.proto
+
+      .. note::
+
+         The Fluent ``.proto`` files do not declare a ``go_package`` option, so
+         ``--go_opt=M<file>=<import_path>`` and ``--go-grpc_opt=M<file>=<import_path>``
+         mappings are required for every proto file you compile. Repeat the
+         ``M`` flag for each ``.proto`` you pass to ``protoc``.
 
    .. tab:: Java
 
