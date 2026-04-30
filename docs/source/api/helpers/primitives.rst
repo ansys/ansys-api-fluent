@@ -38,6 +38,7 @@ Point
 Represents a 3D Cartesian coordinate.
 
 .. code-block:: python
+   :caption: Python
 
    point = primitives_pb2.Point(x=0.0, y=0.0, z=0.0)
 

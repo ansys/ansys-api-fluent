@@ -11,6 +11,7 @@ other RPC.
 .. include:: ../../shared_example_assumptions.rst
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import health_pb2, health_pb2_grpc
@@ -31,6 +32,7 @@ status. If the named service is not known the call fails with
 ``NOT_FOUND``.
 
 .. code-block:: python
+   :caption: Python
 
    response = stub.Check(
        health_pb2.HealthCheckRequest(service=""),
@@ -57,6 +59,7 @@ If the server returns ``UNIMPLEMENTED`` the ``Watch`` method is not
 supported � do not retry it; use ``Check`` polling instead.
 
 .. code-block:: python
+   :caption: Python
 
    stream = stub.Watch(
        health_pb2.HealthCheckRequest(service=""),

@@ -39,6 +39,7 @@ Starts the event stream and yields a sequence of
 ``BeginStreamingResponse`` messages.
 
 .. code-block:: python
+   :caption: Python
 
     stream = events_stub.BeginStreaming(
           events_pb2.BeginStreamingRequest(),
@@ -63,6 +64,7 @@ Register a pause trigger on a solution event. Returns a ``registration_id`` used
 by the other two RPCs.
 
 .. code-block:: python
+   :caption: Python
 
     pause_resp = events_stub.PauseSolveFor(
           events_pb2.PauseSolveForRequest(
@@ -98,6 +100,7 @@ Resume solver execution after the solver has paused due to a registered event.
 Pass the ``registration_id`` returned by ``PauseSolveFor``.
 
 .. code-block:: python
+   :caption: Python
 
     events_stub.ResumeSolve(
           events_pb2.ResumeSolveRequest(registration_id=registration_id),
@@ -111,6 +114,7 @@ Unregister a prior pause-on-solution-event registration so the solver no longer
 pauses for that event.
 
 .. code-block:: python
+   :caption: Python
 
     events_stub.CancelPauseSolve(
           events_pb2.CancelPauseSolveRequest(registration_id=registration_id),
@@ -125,6 +129,7 @@ Each streamed ``BeginStreamingResponse`` has exactly one populated event in the
 access the matching field.
 
 .. code-block:: python
+   :caption: Python
 
     response = next(stream)
     event_type = response.WhichOneof("as")
@@ -229,6 +234,7 @@ An end-to-end event listener that streams events, decodes event types,
 prints key payload fields, and handles stream failures.
 
 .. code-block:: python
+   :caption: Python
 
     import grpc
     from ansys.api.fluent.v1 import events_pb2, events_pb2_grpc

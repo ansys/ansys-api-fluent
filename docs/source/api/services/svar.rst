@@ -12,6 +12,7 @@ at zone level, or to write modified values back into the solver.
 .. include:: ../../shared_example_assumptions.rst
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import svar_pb2, svar_pb2_grpc
@@ -50,6 +51,7 @@ in subsequent requests.
        and ``partitions_info``.
 
 .. code-block:: python
+   :caption: Python
 
    zones_resp = stub.GetZonesInfo(
        svar_pb2.GetZonesInfoRequest(),
@@ -113,6 +115,7 @@ data type and dimension before streaming data.
      - Numeric type: ``FLOAT``, ``DOUBLE``, ``INT``, or ``LONG``.
 
 .. code-block:: python
+   :caption: Python
 
    info_resp = stub.GetSolutionVariableInfo(
        svar_pb2.GetSolutionVariableInfoRequest(domain_id=1, zone_id=12),
@@ -170,6 +173,7 @@ carries either a ``payload_info`` header (one per zone, sent first) or a
   ``int_payload``, ``long_payload``, or ``byte_payload``.
 
 .. code-block:: python
+   :caption: Python
 
    request = svar_pb2.GetSolutionVariableDataRequest(
        provide_bytes_stream=False,
@@ -214,6 +218,7 @@ messages in a strict order:
 ``SolutionVariableHeader`` fields: ``name: string``, ``domain_id: uint32``
 
 .. code-block:: python
+   :caption: Python
 
    import math
    import numpy as np

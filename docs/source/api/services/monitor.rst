@@ -138,6 +138,7 @@ Returns all monitor set definitions currently registered with the solver.
 Call this before ``BeginStreaming`` to discover available monitor names and their metadata.
 
 .. code-block:: python
+   :caption: Python
 
    response = monitor_stub.GetMonitors(
        monitor_pb2.GetMonitorsRequest(),
@@ -171,6 +172,7 @@ produces new monitor samples. Each response contains one ``XAxisData`` point and
        or ``frequency``.
 
 .. code-block:: python
+   :caption: Python
 
    # Stream all monitors (no filter)
    request = monitor_pb2.StreamingRequest()
@@ -202,6 +204,7 @@ List all monitor sets
 Discover every monitor set registered with the running solver:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import monitor_pb2, monitor_pb2_grpc
@@ -245,6 +248,7 @@ Inspect unit information
 Read the unit conversion metadata attached to each monitor set:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import monitor_pb2, monitor_pb2_grpc
@@ -273,6 +277,7 @@ Stream all monitor data
 Receive every sample emitted by the solver until the stream ends:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import monitor_pb2, monitor_pb2_grpc
@@ -300,6 +305,7 @@ Stream only residuals (filtered)
 Use ``MonitorFilter`` to receive only iteration-based residual samples:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import monitor_pb2, monitor_pb2_grpc
@@ -333,6 +339,7 @@ Stream specific monitors by name
 Filter the stream to a named subset of monitors:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import monitor_pb2, monitor_pb2_grpc
@@ -367,6 +374,7 @@ A full workflow that connects to Fluent, discovers all monitors, then streams an
 convergence data until the solver finishes:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from collections import defaultdict

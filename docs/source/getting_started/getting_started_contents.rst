@@ -20,7 +20,9 @@ installation guide to make your first calls against a running Fluent server.
        concepts.
    * - :doc:`gettingstarted`
      - Package installation, channel setup, health-check verification, and
-       your first RPC call.
+       your first RPC call. Also covers :ref:`using the API from other languages
+       <other-languages>` such as C++, Go, Java, and C# by generating stubs
+       directly from the ``.proto`` source files.
 
 .. toctree::
    :hidden:

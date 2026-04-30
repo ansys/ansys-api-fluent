@@ -15,6 +15,7 @@ as ``setup/boundary-conditions/wall``.
 .. include:: ../../shared_example_assumptions.rst
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import settings_pb2, settings_pb2_grpc
@@ -39,6 +40,7 @@ returned ``Value`` before accessing it.
   Request fields: ``path_info: PathInfo``, ``value: Value``
 
 .. code-block:: python
+   :caption: Python
 
    get_resp = stub.GetVar(
        settings_pb2.GetVarRequest(
@@ -77,6 +79,7 @@ graphics objects.
   Request fields: ``path_info: PathInfo``, ``old_name: string``, ``new_name: string``
 
 .. code-block:: python
+   :caption: Python
 
    stub.Create(
        settings_pb2.CreateRequest(
@@ -114,6 +117,7 @@ Enumerate existing named objects and inspect or resize list-typed settings.
   Request fields: ``path_info: PathInfo``, ``size: int32``
 
 .. code-block:: python
+   :caption: Python
 
    names_resp = stub.GetObjectNames(
        settings_pb2.GetObjectNamesRequest(
@@ -144,6 +148,7 @@ computed result without side effects.
   Request fields: ``path_info: PathInfo``, ``query: string``, ``args: Value``
 
 .. code-block:: python
+   :caption: Python
 
    stub.ExecuteCommand(
        settings_pb2.ExecuteCommandRequest(
@@ -173,6 +178,7 @@ status — from a settings object.
   Request fields: ``path_info: PathInfo``, ``attrs: repeated string``, ``recursive: bool``
 
 .. code-block:: python
+   :caption: Python
 
    attrs_resp = stub.GetAttrs(
        settings_pb2.GetAttrsRequest(
@@ -185,6 +191,26 @@ status — from a settings object.
    if attrs_resp.values.WhichOneof("value") == "value_map":
        for key, val in attrs_resp.values.value_map.m.items():
            print(f"{key}: {val}")
+
+Wildcard detection
+~~~~~~~~~~~~~~~~~~
+
+``IsWildcard`` checks whether the solver application treats a given string as
+a wildcard pattern. This is useful when building path queries that accept
+wildcard syntax.
+
+- ``IsWildcard(IsWildcardRequest)`` → ``IsWildcardResponse``
+  Request field: ``input: string``
+  Response field: ``is_wildcard: bool``
+
+.. code-block:: python
+   :caption: Python
+
+   wc_resp = stub.IsWildcard(
+       settings_pb2.IsWildcardRequest(input="wall-*"),
+       metadata=metadata,
+   )
+   print(f"'wall-*' is wildcard: {wc_resp.is_wildcard}")
 
 API schema
 ----------
@@ -203,6 +229,7 @@ step-by-step walkthrough of schema discovery.
   Response field: ``info: Schema``
 
 .. code-block:: python
+   :caption: Python
 
    schema_resp = stub.GetSchema(
        settings_pb2.GetSchemaRequest(root="fluent"),
@@ -211,22 +238,3 @@ step-by-step walkthrough of schema discovery.
    schema = schema_resp.info
    print("Top-level children:", [c.name for c in schema.children])
    print("Top-level commands:", [c.name for c in schema.commands])
-
-Wildcard detection
-~~~~~~~~~~~~~~~~~~
-
-``IsWildcard`` checks whether the solver application treats a given string as
-a wildcard pattern. This is useful when building path queries that accept
-wildcard syntax.
-
-- ``IsWildcard(IsWildcardRequest)`` → ``IsWildcardResponse``
-  Request field: ``input: string``
-  Response field: ``is_wildcard: bool``
-
-.. code-block:: python
-
-   wc_resp = stub.IsWildcard(
-       settings_pb2.IsWildcardRequest(input="wall-*"),
-       metadata=metadata,
-   )
-   print(f"'wall-*' is wildcard: {wc_resp.is_wildcard}")

@@ -12,6 +12,7 @@ display Fluent output in your own application UI without polling.
 .. include:: ../../shared_example_assumptions.rst
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import transcript_pb2, transcript_pb2_grpc
@@ -48,6 +49,7 @@ so it does not block your main client logic.
        newline where present.
 
 .. code-block:: python
+   :caption: Python
 
    stream = stub.BeginStreaming(
        transcript_pb2.TranscriptRequest(),
@@ -64,6 +66,7 @@ Run the transcript stream in a daemon thread so that the main thread can
 continue issuing other RPCs while Fluent output is being printed.
 
 .. code-block:: python
+   :caption: Python
 
    import threading
 

@@ -98,6 +98,7 @@ other services.
 **Basic Parameters:**
 
 .. code-block:: python
+   :caption: Python
 
    request = connection_pb2.ConnectRequest(
        request_type=connection_pb2.ConnectRequest.REQUEST_TYPE_CONNECT,
@@ -114,6 +115,7 @@ Basic connection
 Establish a connection without authentication:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import connection_pb2, connection_pb2_grpc
@@ -150,6 +152,7 @@ Authenticated connection
 Connect with a password-protected server:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import connection_pb2, connection_pb2_grpc
@@ -185,6 +188,7 @@ Connection with error handling
 Handle various connection error scenarios:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import connection_pb2, connection_pb2_grpc
@@ -235,6 +239,7 @@ Complete end-to-end example
 A comprehensive workflow connecting to a Fluent server and performing operations across multiple services:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import (

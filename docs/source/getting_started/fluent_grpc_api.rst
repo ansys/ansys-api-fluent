@@ -60,6 +60,7 @@ These two layers serve different purposes and different audiences:
 A typical client discovery workflow looks like this:
 
 .. code-block:: python
+   :caption: Python
 
    # 1. Fetch the API schema — no live solver state required
    schema_resp = dm_stub.GetSchema(
@@ -124,6 +125,7 @@ Every RPC must be accompanied by a ``metadata`` list containing the server
 password:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
 

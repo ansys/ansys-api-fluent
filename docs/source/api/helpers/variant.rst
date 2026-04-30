@@ -49,6 +49,7 @@ Example usage
 ~~~~~~~~~~~~~
 
 .. code-block:: python
+   :caption: Python
 
    # Creating numeric variant
    int_var = variant_pb2.Variant(int_value=42)

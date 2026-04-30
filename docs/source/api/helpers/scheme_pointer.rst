@@ -57,6 +57,7 @@ Example: create simple scalar values
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
+   :caption: Python
 
    from ansys.api.fluent.v1 import scheme_pointer_pb2
 
@@ -72,6 +73,7 @@ Example: build a scheme list
 This example builds the Scheme expression ``(+ 1 2)`` as a typed list.
 
 .. code-block:: python
+   :caption: Python
 
    from ansys.api.fluent.v1 import scheme_pointer_pb2
 
@@ -91,6 +93,7 @@ Example: inspect a returned SchemePointer
 Use ``WhichOneof("val")`` to determine which field is populated.
 
 .. code-block:: python
+   :caption: Python
 
    def scheme_pointer_to_python(ptr):
        kind = ptr.WhichOneof("val")
@@ -124,6 +127,7 @@ Usage with scheme evaluation
 evaluation API.
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import (
