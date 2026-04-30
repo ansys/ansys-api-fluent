@@ -8,17 +8,9 @@ Overview
 
 .. include:: ../../shared_example_assumptions.rst
 
-The ``Primitives`` module defines common data types including:
-
-- Point: 3D Cartesian coordinates
-- Vector: 3D vector data
-- Other shared structures
-
-This is a helper module (not a standalone service) and is primarily referenced by
-other service proto definitions.
-
-Service definition
-~~~~~~~~~~~~~~~~~~
+``primitives.proto`` currently defines one message type: ``Point``, a 3D Cartesian coordinate.
+It is a helper module, not a standalone gRPC service, and is referenced by other service protos
+that deal with geometric data.
 
 **Package:** ``ansys.api.fluent.v1.primitives``
 
@@ -27,23 +19,27 @@ Used by proto files
 
 The ``primitives.proto`` helper types are used by:
 
-- ``reduction.proto`` (for vector-like point values such as centroid, force, and moment)
+- ``reduction.proto`` — passed as arguments to and returned from geometric reduction RPCs
+  such as centroid, force, and moment calculations.
 
-Common message types
-~~~~~~~~~~~~~~~~~~~~
+Message types
+~~~~~~~~~~~~~
 
 Point
 -----
 
-Represents a 3D Cartesian coordinate.
+Represents a 3D Cartesian coordinate with ``double`` fields ``x``, ``y``, and ``z``.
 
 .. code-block:: python
    :caption: Python
 
-   point = primitives_pb2.Point(x=0.0, y=0.0, z=0.0)
+   from ansys.api.fluent.v1 import primitives_pb2
+
+   origin = primitives_pb2.Point(x=0.0, y=0.0, z=0.0)
+   corner = primitives_pb2.Point(x=1.5, y=2.0, z=-0.5)
 
 See also
 ~~~~~~~~
 
-- :doc:`../../getting_started/gettingstarted` - Basic client setup
-- :doc:`../services/reduction` - Reduction service
+- :doc:`../../getting_started/gettingstarted` — basic client setup
+- :doc:`../services/reduction` — reduction service (uses ``Point`` in request/response messages)

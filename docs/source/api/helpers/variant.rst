@@ -37,13 +37,52 @@ The ``variant.proto`` helper types are used by:
 Variant types
 ~~~~~~~~~~~~~
 
-The Variant message supports:
+The ``Variant`` message uses a ``oneof as`` to hold exactly one active value.
+The supported fields are:
 
-- Numeric types (int, float, double)
-- String values
-- Boolean values
-- Lists and nested variants
-- Custom objects
+.. list-table::
+   :header-rows: 1
+   :widths: 30 20 50
+
+   * - Field
+     - Proto type
+     - Description
+   * - ``empty_state``
+     - ``Empty``
+     - Represents a null or absent value.
+   * - ``bool_state``
+     - ``bool``
+     - A single boolean value.
+   * - ``int64_state``
+     - ``sint64``
+     - A single signed 64-bit integer.
+   * - ``double_state``
+     - ``double``
+     - A single double-precision float.
+   * - ``string_state``
+     - ``string``
+     - A single string value.
+   * - ``bool_vector_state``
+     - ``BoolVector``
+     - A list of booleans (``BoolVector.items``).
+   * - ``int64_vector_state``
+     - ``Int64Vector``
+     - A list of signed 64-bit integers.
+   * - ``double_vector_state``
+     - ``DoubleVector``
+     - A list of doubles.
+   * - ``string_vector_state``
+     - ``StringVector``
+     - A list of strings.
+   * - ``variant_vector_state``
+     - ``VariantVector``
+     - A heterogeneous list of ``Variant`` values.
+   * - ``variant_map_state``
+     - ``VariantMap``
+     - A ``map<string, Variant>`` dictionary.
+
+Always call ``WhichOneof("as")`` on a ``Variant`` returned by the server before
+accessing its value.
 
 Example usage
 ~~~~~~~~~~~~~
@@ -51,18 +90,43 @@ Example usage
 .. code-block:: python
    :caption: Python
 
-   # Creating numeric variant
-   int_var = variant_pb2.Variant(int_value=42)
-   
-   # Creating string variant
-   str_var = variant_pb2.Variant(string_value="hello")
-   
-   # Creating list variant
-   list_var = variant_pb2.Variant(
-       list_value=variant_pb2.VariantList(
-           items=[int_var, str_var]
+   from ansys.api.fluent.v1 import variant_pb2
+
+   # Scalar values
+   bool_var   = variant_pb2.Variant(bool_state=True)
+   int_var    = variant_pb2.Variant(int64_state=42)
+   double_var = variant_pb2.Variant(double_state=3.14)
+   str_var    = variant_pb2.Variant(string_state="hello")
+
+   # Vector values
+   double_vec = variant_pb2.Variant(
+       double_vector_state=variant_pb2.DoubleVector(items=[1.0, 2.0, 3.0])
+   )
+   str_vec = variant_pb2.Variant(
+       string_vector_state=variant_pb2.StringVector(items=["a", "b", "c"])
+   )
+
+   # Heterogeneous list (VariantVector)
+   mixed = variant_pb2.Variant(
+       variant_vector_state=variant_pb2.VariantVector(
+           items=[int_var, str_var, bool_var]
        )
    )
+
+   # Dictionary (VariantMap)
+   mapping = variant_pb2.Variant(
+       variant_map_state=variant_pb2.VariantMap(
+           item={
+               "count": variant_pb2.Variant(int64_state=10),
+               "label": variant_pb2.Variant(string_state="wall"),
+           }
+       )
+   )
+
+   # Reading a Variant returned by the server
+   def read_variant(v: variant_pb2.Variant):
+       field = v.WhichOneof("as")
+       return field, getattr(v, field)
 
 See also
 ~~~~~~~~

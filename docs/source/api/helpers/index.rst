@@ -13,14 +13,15 @@ workflows.
    * - Module
      - Purpose
    * - :doc:`Primitives <primitives>`
-     - Common scalar and composite data structures (``StringPair``,
-       ``StrIntPair``, ``Chunk``, etc.) shared across multiple service protos.
+     - Defines the ``Point`` message — a 3D Cartesian coordinate (``x``, ``y``,
+       ``z`` as ``double``) used by the Reduction service for geometric results
+       such as centroid, force, and moment.
    * - :doc:`SchemePointer <scheme_pointer>`
      - Typed value container used to exchange Scheme-typed data between the
        client and Fluent's Scheme runtime.
    * - :doc:`Variant <variant>`
-     - Polymorphic value container (bool, int, double, string, or list)
-       passed as arguments and returned from DataModel and Settings RPCs.
+     - Polymorphic value container (bool, int64, double, string, vectors, or
+       map) passed as arguments and returned from DataModel RPCs.
 
 .. toctree::
    :hidden:

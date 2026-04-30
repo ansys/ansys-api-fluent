@@ -8,17 +8,23 @@ Overview
 
 .. include:: ../../shared_example_assumptions.rst
 
-The ``Connection`` service establishes and maintains a bidirectional session between a client and the Fluent server.
-It provides:
+The ``Connection`` service provides session-level control over a client connection to the Fluent
+server: version negotiation, explicit authentication via ``ConnectRequest.password``, and
+connection lifecycle operations (connect, pause).
 
-- Secure connection establishment with authentication
-- Version negotiation and compatibility checking
-- Connection status monitoring via streamed responses
-- Connection lifecycle management (connect, pause, reconnect)
-- Error handling for authentication and connection failures
+**This service is optional for most deployments.** The standard pattern used throughout this
+documentation — opening a gRPC channel and passing ``metadata=[("password", ...)]`` on each RPC
+call — does not require calling ``Connection.Connect`` at all. The metadata password is checked
+per-RPC by the server without any prior session handshake.
 
-The Connection service is typically the first service you interact with when connecting to a Fluent server.
-It must be successfully established before accessing other services like Health or Field Data.
+Use ``Connection`` when:
+
+- Your deployment requires **explicit version negotiation** between client and server
+  (the server returns ``CONNECTION_ERROR_VERSION_MISMATCH`` if versions are incompatible).
+- You need **pause/resume** lifecycle control over the session
+  (``REQUEST_TYPE_PAUSE`` suspends server-side processing without closing the channel).
+- You are building a **multi-client orchestration layer** that tracks session state via
+  the streamed ``ConnectResponse`` messages.
 
 Service definition
 ~~~~~~~~~~~~~~~~~~
