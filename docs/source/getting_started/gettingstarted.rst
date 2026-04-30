@@ -36,10 +36,13 @@ The ``ansys-api-fluent`` package contains generated Python files for the Fluent 
 - You do not need to run ``protoc`` yourself
 - You import the generated v1 modules directly from ``ansys.api.fluent.v1``
 - You can start building a client immediately
+- The underlying ``.proto`` files are language-independent — see
+  :ref:`other-languages` to generate native clients in C++, Go, Java, or C#
 
 Typical imports look like:
 
 .. code-block:: python
+   :caption: Python
 
    from ansys.api.fluent.v1 import field_data_pb2
    from ansys.api.fluent.v1 import field_data_pb2_grpc
@@ -71,6 +74,7 @@ Every v1 gRPC client follows the same steps:
 Example:
 
 .. code-block:: python
+   :caption: Python
 
    import grpc
    from ansys.api.fluent.v1 import health_pb2, health_pb2_grpc
@@ -91,6 +95,7 @@ Complete example
 Here is a complete script that demonstrates connecting to a server and using multiple services:
 
 .. code-block:: python
+   :caption: Python
 
    from __future__ import annotations
    import grpc
@@ -160,6 +165,228 @@ Here is a complete script that demonstrates connecting to a server and using mul
 
    if __name__ == "__main__":
        main()
+
+.. _other-languages:
+
+Using the API with other languages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``.proto`` source files that define the Fluent gRPC API are
+language-independent. Any language with a gRPC implementation can generate a
+native client from them. Clone the repository to obtain the source files:
+
+.. code-block:: bash
+
+   git clone https://github.com/ansys/ansys-api-fluent.git
+   cd ansys-api-fluent
+
+The ``.proto`` files are located under ``ansys/api/fluent/v1/``.
+
+Generating stubs
+^^^^^^^^^^^^^^^^
+
+Install the ``protoc`` compiler and the appropriate gRPC plugin for your
+language, then run the relevant command below from the repository root.
+Replace ``<out>`` with your project's source directory.
+
+.. tabs::
+
+   .. tab:: Python
+
+      .. code-block:: bash
+
+         pip install grpcio-tools
+         python -m grpc_tools.protoc \
+             -I ansys/api/fluent/v1 \
+             --python_out=<out> \
+             --grpc_python_out=<out> \
+             ansys/api/fluent/v1/health.proto
+
+   .. tab:: C++
+
+      .. code-block:: bash
+
+         # Requires protoc and grpc_cpp_plugin on PATH
+         protoc \
+             -I ansys/api/fluent/v1 \
+             --cpp_out=<out> \
+             --grpc_out=<out> \
+             --plugin=protoc-gen-grpc=grpc_cpp_plugin \
+             ansys/api/fluent/v1/health.proto
+
+   .. tab:: Go
+
+      .. code-block:: bash
+
+         go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+         go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+         protoc \
+             -I ansys/api/fluent/v1 \
+             --go_out=<out> \
+             --go-grpc_out=<out> \
+             ansys/api/fluent/v1/health.proto
+
+   .. tab:: Java
+
+      .. code-block:: bash
+
+         # Requires protoc and protoc-gen-grpc-java plugin on PATH
+         protoc \
+             -I ansys/api/fluent/v1 \
+             --java_out=<out> \
+             --grpc-java_out=<out> \
+             --plugin=protoc-gen-grpc-java=protoc-gen-grpc-java \
+             ansys/api/fluent/v1/health.proto
+
+   .. tab:: C#
+
+      .. code-block:: bash
+
+         # Requires protoc and grpc_csharp_plugin on PATH
+         protoc \
+             -I ansys/api/fluent/v1 \
+             --csharp_out=<out> \
+             --grpc_out=<out> \
+             --plugin=protoc-gen-grpc=grpc_csharp_plugin \
+             ansys/api/fluent/v1/health.proto
+
+Health check example
+^^^^^^^^^^^^^^^^^^^^
+
+The following minimal health check uses the generated stubs to verify that
+the Fluent server is ready. All examples connect to ``127.0.0.1:50051``
+and pass the server password as channel metadata.
+
+.. tabs::
+
+   .. tab:: Python
+
+      .. code-block:: python
+
+         import grpc
+         from ansys.api.fluent.v1 import health_pb2, health_pb2_grpc
+
+         channel = grpc.insecure_channel("127.0.0.1:50051")
+         stub = health_pb2_grpc.HealthStub(channel)
+         resp = stub.Check(
+             health_pb2.HealthCheckRequest(),
+             metadata=[("password", "your-server-password")],
+         )
+         print(f"Status: {resp.status}")
+         channel.close()
+
+   .. tab:: C++
+
+      .. code-block:: cpp
+
+         #include <iostream>
+         #include <grpcpp/grpcpp.h>
+         #include "health.grpc.pb.h"
+
+         int main() {
+             auto channel = grpc::CreateChannel(
+                 "127.0.0.1:50051",
+                 grpc::InsecureChannelCredentials());
+
+             grpc::ClientContext ctx;
+             ctx.AddMetadata("password", "your-server-password");
+
+             auto stub = ansys::api::fluent::v1::Health::NewStub(channel);
+             ansys::api::fluent::v1::HealthCheckRequest req;
+             ansys::api::fluent::v1::HealthCheckResponse resp;
+             stub->Check(&ctx, req, &resp);
+
+             std::cout << "Status: " << resp.status() << std::endl;
+             return 0;
+         }
+
+   .. tab:: Go
+
+      .. code-block:: go
+
+         package main
+
+         import (
+             "context"
+             "fmt"
+             "log"
+             "google.golang.org/grpc"
+             "google.golang.org/grpc/credentials/insecure"
+             "google.golang.org/grpc/metadata"
+             pb "github.com/ansys/ansys-api-fluent/ansys/api/fluent/v1"
+         )
+
+         func main() {
+             conn, err := grpc.Dial("127.0.0.1:50051",
+                 grpc.WithTransportCredentials(insecure.NewCredentials()))
+             if err != nil {
+                 log.Fatal(err)
+             }
+             defer conn.Close()
+
+             ctx := metadata.AppendToOutgoingContext(
+                 context.Background(), "password", "your-server-password")
+
+             client := pb.NewHealthClient(conn)
+             resp, err := client.Check(ctx, &pb.HealthCheckRequest{})
+             if err != nil {
+                 log.Fatal(err)
+             }
+             fmt.Printf("Status: %v\n", resp.Status)
+         }
+
+   .. tab:: Java
+
+      .. code-block:: java
+
+         import io.grpc.ManagedChannel;
+         import io.grpc.ManagedChannelBuilder;
+         import io.grpc.Metadata;
+         import io.grpc.stub.MetadataUtils;
+         import ansys.api.fluent.v1.HealthGrpc;
+         import ansys.api.fluent.v1.HealthCheckRequest;
+         import ansys.api.fluent.v1.HealthCheckResponse;
+
+         public class HealthCheckExample {
+             public static void main(String[] args) {
+                 Metadata headers = new Metadata();
+                 headers.put(
+                     Metadata.Key.of("password", Metadata.ASCII_STRING_MARSHALLER),
+                     "your-server-password");
+
+                 ManagedChannel channel = ManagedChannelBuilder
+                     .forAddress("127.0.0.1", 50051)
+                     .usePlaintext()
+                     .build();
+
+                 HealthGrpc.HealthBlockingStub stub =
+                     MetadataUtils.attachHeaders(
+                         HealthGrpc.newBlockingStub(channel), headers);
+
+                 HealthCheckResponse resp =
+                     stub.check(HealthCheckRequest.newBuilder().build());
+                 System.out.println("Status: " + resp.getStatus());
+                 channel.shutdown();
+             }
+         }
+
+   .. tab:: C#
+
+      .. code-block:: csharp
+
+         using Grpc.Core;
+         using Ansys.Api.Fluent.V1;
+
+         var channel = new Channel(
+             "127.0.0.1:50051", ChannelCredentials.Insecure);
+         var headers = new Metadata { { "password", "your-server-password" } };
+         var options = new CallOptions(headers: headers);
+
+         var client = new Health.HealthClient(channel);
+         var resp = client.Check(new HealthCheckRequest(), options);
+
+         Console.WriteLine($"Status: {resp.Status}");
+         await channel.ShutdownAsync();
 
 Next steps
 ~~~~~~~~~~
