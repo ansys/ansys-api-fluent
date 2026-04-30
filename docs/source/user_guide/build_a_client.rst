@@ -11,28 +11,33 @@ No prior knowledge of gRPC or Fluent internals is assumed.
 Overview
 --------
 
-A complete Fluent client typically does five things in order:
+Fluent primarily exposes two APIs for reading and writing simulation configuration:
+
+:doc:`DataModel <../api/services/datamodel_se>`
+   Hierarchical read/write access to Fluent's internal object model — meshing
+   workflows and post-processing. Paths are addressed
+   by a **rules** string (which selects the context) and a slash-separated
+   **path** within it.
+
+:doc:`Settings <../api/services/settings>`
+   Hierarchical read/write access to Fluent's simulation configuration —
+   boundary conditions, solver controls, model parameters, and results
+   settings. Paths are addressed by a **root** string (typically ``fluent``)
+   and a slash-separated **path** within it.
+
+Both follow the same pattern: call ``GetSchema`` RPC method to discover the 
+configuration structure and how to address each element, then read and write 
+state using those addresses.
+
+Building a typical Fluent client involves five steps:
 
 1. **Connect** — open a channel to the Fluent server and verify it is healthy.
-2. **Discover** — call ``GetSchema`` on the DataModel service or the Settings
-   service to learn what paths, parameters, commands, and queries exist.
+2. **Discover** — call ``GetSchema`` on the DataModel or Settings service to
+   learn what paths, parameters, commands, and queries exist.
 3. **Read state** — call ``GetState`` or ``GetVar`` to retrieve current values.
 4. **Write state** — call ``SetState`` or ``SetVar`` to change configuration.
 5. **React** — subscribe to the Events service to receive live solver
    notifications.
-
-The two main APIs for configuration access are:
-
-- The **DataModel API** (``DataModel`` service) — a tree of named objects,
-  singletons, parameters, commands, and queries that covers the meshing and
-  solver object model.
-- The **Settings API** (``Settings`` service) — a flat, slash-separated path
-  hierarchy that maps directly to Fluent solver settings such as boundary
-  conditions, solver controls, and results configuration.
-
-Both APIs expose a ``GetSchema`` RPC that returns a complete description of all
-available paths. Use it to explore what is available before writing any
-``GetState`` / ``SetVar`` calls.
 
 Step 1 — Connect and verify server health
 -----------------------------------------
@@ -66,10 +71,10 @@ them to every stub you create.
    If ``Check`` raises ``grpc.RpcError`` with code ``UNAVAILABLE``, the server
    is not reachable. Verify the host, port, and that Fluent is running.
 
-Step 2 — Discover the DataModel API schema
-------------------------------------------
+Step 2 — Discover the DataModel service schema
+----------------------------------------------
 
-The DataModel API organises Fluent's object model as a tree. Before reading or
+The DataModel service organises Fluent's object model as a tree. Before reading or
 writing any value, call ``GetSchema`` to learn what paths, parameter types,
 commands, and queries exist for a given *rules context* (such as ``meshing``
 or ``flserver``).
@@ -118,13 +123,14 @@ structure. Each node contains:
    * - ``help_string``
      - Human-readable description
 
-Walk the tree to find a path you want to interact with:
+The following example prints the schema as an indented outline to help you
+identify the path to the element you want:
 
 .. code-block:: python
    :caption: Python
 
    def print_schema_tree(node, prefix="", depth=2):
-       """Print the DataModel API schema tree up to `depth` levels."""
+       """Print the DataModel schema tree up to `depth` levels."""
        if depth == 0:
            return
        for name in list(node.singletons.keys()) + list(node.named_objects.keys()):
@@ -201,10 +207,10 @@ To execute a command discovered in the API schema:
        metadata=metadata,
    )
 
-Step 4 — Discover the Settings API schema
-------------------------------------------
+Step 4 — Discover the Settings service schema
+---------------------------------------------
 
-The Settings API uses a flat, slash-separated path hierarchy to expose solver
+The Settings service uses a flat, slash-separated path hierarchy to expose solver
 configuration. Call ``GetSchema`` to retrieve the full tree of available
 settings paths, their types, allowed values, and help text.
 
@@ -246,13 +252,13 @@ The returned ``Schema`` object describes the settings hierarchy:
    * - ``has_allowed_values``
      - Whether the parameter has a restricted set of valid values
 
-Walk the tree to find paths of interest:
+The following example prints every settings path with its type:
 
 .. code-block:: python
    :caption: Python
 
    def find_settings_paths(node, prefix="", depth=3):
-       """Print Settings API paths up to `depth` levels."""
+       """Print Settings service paths up to `depth` levels."""
        if depth == 0:
            return
        for child in node.children:
@@ -266,7 +272,7 @@ Step 5 — Read and write Settings values
 -----------------------------------------
 
 Use ``GetVar`` and ``SetVar`` with a ``PathInfo`` to access any path discovered
-in the Settings API schema. Values are exchanged as ``Value`` messages.
+in the Settings service schema. Values are exchanged as ``Value`` messages.
 
 .. code-block:: python
    :caption: Python
@@ -406,7 +412,7 @@ The following script ties all six steps together into one runnable program.
        print("Server is healthy")
 
        # ------------------------------------------------------------------
-       # Step 2: Discover the DataModel API schema
+       # Step 2: Discover the DataModel service schema
        # ------------------------------------------------------------------
        dm_stub = datamodel_se_pb2_grpc.DataModelStub(channel)
        schema_resp = dm_stub.GetSchema(
@@ -441,7 +447,7 @@ The following script ties all six steps together into one runnable program.
        )
 
        # ------------------------------------------------------------------
-       # Step 4: Discover the Settings API schema
+       # Step 4: Discover the Settings service schema
        # ------------------------------------------------------------------
        settings_stub = settings_pb2_grpc.SettingsStub(channel)
        schema_resp = settings_stub.GetSchema(
