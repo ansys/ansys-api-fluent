@@ -55,7 +55,8 @@ ready to accept requests.
 
    health_stub = health_pb2_grpc.HealthStub(channel)
    resp = health_stub.Check(health_pb2.HealthCheckRequest(), metadata=metadata)
-   print(f"Server status: {resp.status}")  # Should print SERVING
+   assert resp.status == health_pb2.HealthCheckResponse.SERVING_STATUS_SERVING
+   print("Server is healthy")
 
 Keep ``channel`` and ``metadata`` alive for the lifetime of your client; pass
 them to every stub you create.
@@ -401,7 +402,8 @@ The following script ties all six steps together into one runnable program.
        # ------------------------------------------------------------------
        health_stub = health_pb2_grpc.HealthStub(channel)
        resp = health_stub.Check(health_pb2.HealthCheckRequest(), metadata=metadata)
-       print(f"Server status: {resp.status}")
+       assert resp.status == health_pb2.HealthCheckResponse.SERVING_STATUS_SERVING
+       print("Server is healthy")
 
        # ------------------------------------------------------------------
        # Step 2: Discover the DataModel API schema
