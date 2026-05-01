@@ -20,8 +20,10 @@ service DataModel {
   rpc SetState(SetStateRequest) returns (SetStateResponse) {}
   // UpdateDict merges a dictionary into the state at a specified path
   rpc UpdateDict(UpdateDictRequest) returns (UpdateDictResponse) {}
-  // DeleteObject deletes an object at a specified path
-  rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse) {}
+  // Create creates a new named object at a specified path
+  rpc Create(CreateRequest) returns (CreateResponse) {}
+  // Delete deletes an object at a specified path
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
   // GetAttributeValue retrieves the value of a specific attribute
   rpc GetAttributeValue(GetAttributeValueRequest) returns (GetAttributeValueResponse) {}
   // ExecuteCommand executes a command on a datamodel object
@@ -125,15 +127,29 @@ message UpdateDictResponse {
   repeated string deleted_paths = 2;              // Paths of deleted objects
 }
 
-// DeleteObjectRequest is the request message for deleting an object
-message DeleteObjectRequest {
+// CreateRequest is the request message for creating a new named object
+message CreateRequest {
+  string rules = 1;  // The rules context for the creation
+  string path = 2;   // The path to the parent object
+  string name = 3;   // The name of the new object to create
+  bool wait = 4;     // Whether to wait for the operation to complete
+}
+
+// CreateResponse is the response message after creating a new named object
+message CreateResponse {
+  ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after creation
+  repeated string deleted_paths = 2;              // Paths of deleted objects
+}
+
+// DeleteRequest is the request message for deleting an object
+message DeleteRequest {
   string rules = 1;  // The rules context for the deletion
   string path = 2;   // The path to the object to delete
   bool wait = 3;     // Whether to wait for the operation to complete
 }
 
-// DeleteObjectResponse is the response message after deleting an object
-message DeleteObjectResponse {
+// DeleteResponse is the response message after deleting an object
+message DeleteResponse {
   ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after deletion
   repeated string deleted_paths = 2;              // Paths of deleted objects
 }

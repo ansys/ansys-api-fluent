@@ -13,10 +13,10 @@ service Settings {
   rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse);
 
   /* Get the value of a path */
-  rpc GetVar(GetVarRequest) returns (GetVarResponse);
+  rpc GetState(GetStateRequest) returns (GetStateResponse);
 
   /* Set the value of a path */
-  rpc SetVar(SetVarRequest) returns (SetVarResponse);
+  rpc SetState(SetStateRequest) returns (SetStateResponse);
 
   /* Rename an object */
   rpc Rename(RenameRequest) returns (RenameResponse);
@@ -49,7 +49,7 @@ service Settings {
   rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
 }
 
-// Value represents the value of an object -- return value of GetVar
+// Value represents the value of an object -- return value of GetState
 message Value {
   // ValueList represents a list of Value objects
   message ValueList {
@@ -121,24 +121,24 @@ message GetSchemaResponse {
   Schema info = 1;  // The static information for the requested object
 }
 
-// GetVarRequest is the request message for retrieving a variable value
-message GetVarRequest {
+// GetStateRequest is the request message for retrieving a variable value
+message GetStateRequest {
   PathInfo path_info = 1;  // The path to the variable to retrieve
 }
 
-// GetVarResponse is the response message containing the variable value
-message GetVarResponse {
+// GetStateResponse is the response message containing the variable value
+message GetStateResponse {
   Value value = 1;  // The value of the requested variable
 }
 
-// SetVarRequest is the request message for setting a variable value
-message SetVarRequest {
+// SetStateRequest is the request message for setting a variable value
+message SetStateRequest {
   PathInfo path_info = 1;  // The path to the variable to set
   Value value = 2;         // The new value to set
 }
 
-// SetVarResponse is the response message for a set variable operation
-message SetVarResponse {
+// SetStateResponse is the response message for a set variable operation
+message SetStateResponse {
 }
 
 // CreateRequest is the request message for creating a new object
