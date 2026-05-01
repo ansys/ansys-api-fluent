@@ -124,13 +124,76 @@ def _short_type_name(type_name: str) -> str:
     return type_name.lstrip(".").rsplit(".", 1)[-1]
 
 
-def _render_field_type(field: descriptor_pb2.FieldDescriptorProto) -> str:
+def _anchor_for(file_stem: str, qualified_name: str) -> str:
+    return f"proto-{file_stem}-{qualified_name.lower().replace('.', '-')}"
+
+
+def _build_type_index(
+    file_protos: Iterable[descriptor_pb2.FileDescriptorProto],
+) -> dict[str, tuple[str, str]]:
+    """Map fully-qualified proto type names to ``(file_stem, qualified_name)``.
+
+    The qualified name is the dotted path within the file (e.g.
+    ``Outer.Inner``) used to build anchors.
+    """
+    index: dict[str, tuple[str, str]] = {}
+
+    def _walk_message(
+        msg: descriptor_pb2.DescriptorProto,
+        package: str,
+        file_stem: str,
+        qualified: str,
+    ) -> None:
+        full = f".{package}.{qualified}" if package else f".{qualified}"
+        index[full] = (file_stem, qualified)
+        for nested in msg.nested_type:
+            if nested.options.map_entry:
+                continue
+            _walk_message(
+                nested, package, file_stem, f"{qualified}.{nested.name}"
+            )
+        for enum in msg.enum_type:
+            enum_q = f"{qualified}.{enum.name}"
+            full_e = f".{package}.{enum_q}" if package else f".{enum_q}"
+            index[full_e] = (file_stem, enum_q)
+
+    for fp in file_protos:
+        file_stem = Path(fp.name).stem
+        package = fp.package
+        for msg in fp.message_type:
+            _walk_message(msg, package, file_stem, msg.name)
+        for enum in fp.enum_type:
+            full_e = f".{package}.{enum.name}" if package else f".{enum.name}"
+            index[full_e] = (file_stem, enum.name)
+    return index
+
+
+def _render_type_ref(
+    full_type_name: str, type_index: dict[str, tuple[str, str]]
+) -> str:
+    """Render a message/enum type as a clickable ``:ref:`` link if known."""
+    short = _short_type_name(full_type_name)
+    target = type_index.get(full_type_name)
+    if target is None:
+        return f"``{short}``"
+    file_stem, qualified = target
+    anchor = _anchor_for(file_stem, qualified)
+    # ``:ref:`` cannot contain nested inline literals, so the link text is
+    # rendered as plain text. The CSS gives proto blocks enough emphasis
+    # that monospace on the type cell is not strictly necessary.
+    return f":ref:`{short} <{anchor}>`"
+
+
+def _render_field_type(
+    field: descriptor_pb2.FieldDescriptorProto,
+    type_index: dict[str, tuple[str, str]],
+) -> str:
     if field.type in (
         descriptor_pb2.FieldDescriptorProto.TYPE_MESSAGE,
         descriptor_pb2.FieldDescriptorProto.TYPE_ENUM,
     ):
-        return _short_type_name(field.type_name)
-    return _FIELD_TYPE_NAMES.get(field.type, str(field.type))
+        return _render_type_ref(field.type_name, type_index)
+    return f"``{_FIELD_TYPE_NAMES.get(field.type, str(field.type))}``"
 
 
 # ---------------------------------------------------------------------------
@@ -188,6 +251,7 @@ def _emit_service(
     service_idx: int,
     comments: dict[tuple[int, ...], str],
     file_stem: str,
+    type_index: dict[str, tuple[str, str]],
 ) -> None:
     out.append(f".. _proto-{file_stem}-service-{service.name.lower()}:")
     out.append("")
@@ -213,13 +277,13 @@ def _emit_service(
     )
     for method_idx, method in enumerate(service.method):
         method_doc = _clean_comment(comments.get((6, service_idx, 2, method_idx), ""))
-        request = _short_type_name(method.input_type)
-        response = _short_type_name(method.output_type)
+        request_ref = _render_type_ref(method.input_type, type_index)
+        response_ref = _render_type_ref(method.output_type, type_index)
         request_cell = (
-            f":guilabel:`stream` ``{request}``" if method.client_streaming else f"``{request}``"
+            f":guilabel:`stream` {request_ref}" if method.client_streaming else request_ref
         )
         response_cell = (
-            f":guilabel:`stream` ``{response}``" if method.server_streaming else f"``{response}``"
+            f":guilabel:`stream` {response_ref}" if method.server_streaming else response_ref
         )
         _emit_list_table_row(
             out,
@@ -241,8 +305,9 @@ def _emit_message(
     path_prefix: tuple[int, ...],
     qualified_name: str,
     file_stem: str,
+    type_index: dict[str, tuple[str, str]],
 ) -> None:
-    anchor = f"proto-{file_stem}-{qualified_name.lower().replace('.', '-')}"
+    anchor = _anchor_for(file_stem, qualified_name)
     out.append(f".. _{anchor}:")
     out.append("")
     out.append(".. container:: proto-block proto-message")
@@ -272,7 +337,7 @@ def _emit_message(
                 else None
             )
             qualifiers = _qualifier_badges(field, oneof_name)
-            type_repr = f"``{_render_field_type(field)}``"
+            type_repr = _render_field_type(field, type_index)
             type_cell = f"{qualifiers} {type_repr}" if qualifiers else type_repr
             _emit_list_table_row(
                 out,
@@ -308,6 +373,7 @@ def _emit_message(
             path_prefix + (3, nested_idx),
             f"{qualified_name}.{nested.name}",
             file_stem,
+            type_index,
         )
 
 
@@ -319,7 +385,7 @@ def _emit_enum(
     qualified_name: str,
     file_stem: str,
 ) -> None:
-    anchor = f"proto-{file_stem}-{qualified_name.lower().replace('.', '-')}"
+    anchor = _anchor_for(file_stem, qualified_name)
     out.append(f".. _{anchor}:")
     out.append("")
     out.append(".. container:: proto-block proto-enum")
@@ -385,7 +451,10 @@ def _emit_metadata_block(out: list[str], file_proto: descriptor_pb2.FileDescript
     out.append("")
 
 
-def _emit_file(file_proto: descriptor_pb2.FileDescriptorProto) -> str:
+def _emit_file(
+    file_proto: descriptor_pb2.FileDescriptorProto,
+    type_index: dict[str, tuple[str, str]],
+) -> str:
     comments = _build_comment_index(file_proto)
     file_stem = Path(file_proto.name).stem
     out: list[str] = []
@@ -404,12 +473,16 @@ def _emit_file(file_proto: descriptor_pb2.FileDescriptorProto) -> str:
     if file_proto.service:
         _emit_group_heading(out, "Services")
         for service_idx, service in enumerate(file_proto.service):
-            _emit_service(out, service, service_idx, comments, file_stem)
+            _emit_service(
+                out, service, service_idx, comments, file_stem, type_index
+            )
 
     if file_proto.message_type:
         _emit_group_heading(out, "Messages")
         for msg_idx, msg in enumerate(file_proto.message_type):
-            _emit_message(out, msg, comments, (4, msg_idx), msg.name, file_stem)
+            _emit_message(
+                out, msg, comments, (4, msg_idx), msg.name, file_stem, type_index
+            )
 
     if file_proto.enum_type:
         _emit_group_heading(out, "Enumerations")
@@ -436,12 +509,13 @@ def generate(app=None) -> None:
 
     fds = _compile_descriptor_set(proto_files)
     requested = {p.name for p in proto_files}
+    emitted_files = [
+        fp for fp in fds.file if Path(fp.name).name in requested
+    ]
+    type_index = _build_type_index(emitted_files)
     written: list[str] = []
-    for file_proto in fds.file:
-        # Skip transitive imports we did not request explicitly.
-        if Path(file_proto.name).name not in requested:
-            continue
-        rst = _emit_file(file_proto)
+    for file_proto in emitted_files:
+        rst = _emit_file(file_proto, type_index)
         out_path = _OUT_DIR / f"{Path(file_proto.name).stem}.rst"
         out_path.write_text(rst, encoding="utf-8")
         written.append(out_path.name)
