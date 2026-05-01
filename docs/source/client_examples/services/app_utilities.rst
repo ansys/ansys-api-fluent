@@ -241,4 +241,4 @@ See also
 .. .proto file in ansys/api/fluent/v1. Edit the proto comments to update it.
 .. ----------------------------------------------------------------------------
 
-.. include:: ../_generated/app_utilities.rst
+.. include:: ../../api/_generated/app_utilities.rst

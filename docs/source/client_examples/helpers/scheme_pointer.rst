@@ -178,4 +178,4 @@ See also
 .. .proto file in ansys/api/fluent/v1. Edit the proto comments to update it.
 .. ----------------------------------------------------------------------------
 
-.. include:: ../_generated/scheme_pointer.rst
+.. include:: ../../api/_generated/scheme_pointer.rst

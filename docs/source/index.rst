@@ -8,6 +8,7 @@
    getting_started/index
    user_guide/index
    api/index
+   client_examples/index
    glossary
 
 This package provides the gRPC interface for Ansys Fluent and a Python layer for

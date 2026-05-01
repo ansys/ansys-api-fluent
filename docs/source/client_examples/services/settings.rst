@@ -244,4 +244,4 @@ step-by-step walkthrough of schema discovery.
 .. .proto file in ansys/api/fluent/v1. Edit the proto comments to update it.
 .. ----------------------------------------------------------------------------
 
-.. include:: ../_generated/settings.rst
+.. include:: ../../api/_generated/settings.rst

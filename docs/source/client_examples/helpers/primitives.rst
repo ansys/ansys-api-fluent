@@ -49,4 +49,4 @@ See also
 .. .proto file in ansys/api/fluent/v1. Edit the proto comments to update it.
 .. ----------------------------------------------------------------------------
 
-.. include:: ../_generated/primitives.rst
+.. include:: ../../api/_generated/primitives.rst
