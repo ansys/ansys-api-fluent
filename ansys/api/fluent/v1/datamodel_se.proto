@@ -34,8 +34,6 @@ service DataModel {
   rpc CreateCommandArguments(CreateCommandArgumentsRequest) returns (CreateCommandArgumentsResponse) {}
   // DeleteCommandArguments deletes previously created command arguments
   rpc DeleteCommandArguments(DeleteCommandArgumentsRequest) returns (DeleteCommandArgumentsResponse) {}
-  // GetSpecs retrieves specifications for a datamodel object
-  rpc GetSpecs(GetSpecsRequest) returns (GetSpecsResponse) {}
   // GetSchema retrieves static information about the datamodel structure
   rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse) {}
   // Rename renames a datamodel object
@@ -217,112 +215,6 @@ message DeleteCommandArgumentsRequest {
 
 // DeleteCommandArgumentsResponse is the response message for a delete command arguments operation
 message DeleteCommandArgumentsResponse {
-}
-
-// GetSpecsRequest is the request message for retrieving specifications
-message GetSpecsRequest {
-  string rules = 1;           // The rules context for the specs query
-  string path = 2;            // The path to the object
-  bool include_children = 3;  // Whether to include specifications for child objects
-}
-
-// CommonSpecs contains common specification fields shared across different parameter types
-message CommonSpecs {
-  bool readonly = 1;                                // Whether the parameter is read-only
-  ansys.api.fluent.v1.variant.Variant default = 2;  // The default value
-  string display_text = 3;                          // Text to display in the UI
-  bool is_active = 4;                               // Whether the parameter is currently active
-  string reference_path = 5;                        // Reference path for the parameter
-  bool has_developer_exposure_level = 6;            // Whether this has developer-only exposure
-  string help_string = 7;                           // Help text for the parameter
-}
-
-// BoolParameterSpecs contains specifications for boolean parameters
-message BoolParameterSpecs {
-  CommonSpecs common = 1;  // Common specifications for this parameter
-}
-
-// IntParameterSpecs contains specifications for integer parameters
-message IntParameterSpecs {
-  CommonSpecs common = 1;  // Common specifications for this parameter
-  oneof il {
-    int32 lower_bound = 2;  // The lower bound for valid values
-  }
-  oneof iu {
-    int32 upper_bound = 3;  // The upper bound for valid values
-  }
-}
-
-// RealParameterSpecs contains specifications for real (double) parameters
-message RealParameterSpecs {
-  CommonSpecs common = 1;  // Common specifications for this parameter
-  oneof rl {
-    double lower_bound = 2;  // The lower bound for valid values
-  }
-  oneof ru {
-    double upper_bound = 3;  // The upper bound for valid values
-  }
-}
-
-// StringParameterSpecs contains specifications for string parameters
-message StringParameterSpecs {
-  CommonSpecs common = 1;                    // Common specifications for this parameter
-  repeated string allowed_string_lists = 2;  // List of allowed string values
-}
-
-// IntListParameterSpecs contains specifications for integer list parameters
-message IntListParameterSpecs {
-  CommonSpecs common = 1;  // Common specifications for this parameter
-}
-
-// StringListParameterSpecs contains specifications for string list parameters
-message StringListParameterSpecs {
-  CommonSpecs common = 1;                    // Common specifications for this parameter
-  repeated string allowed_string_lists = 2;  // List of allowed string values for list elements
-}
-
-// CommandSpecs contains specifications for a command
-message CommandSpecs {
-  string name = 1;     // The name of the command
-  bool is_active = 2;  // Whether the command is currently active
-}
-
-// SingletonSpecs contains specifications for singleton objects
-message SingletonSpecs {
-  CommonSpecs common = 1;               // Common specifications for this singleton
-  repeated string members = 2;          // Member names within the singleton
-  repeated CommandSpecs commands = 3;   // Available commands for the singleton
-  repeated string creatable_types = 4;  // Types that can be created within this singleton
-}
-
-// NamedObjectSpecs contains specifications for named objects
-message NamedObjectSpecs {
-  CommonSpecs common = 1;               // Common specifications for this named object
-  repeated string members = 2;          // Member names within the named object
-  repeated CommandSpecs commands = 3;   // Available commands for the named object
-  repeated string creatable_types = 4;  // Types that can be created within this named object
-}
-
-// MemberSpecs contains specifications for a member, which can be various parameter or object types
-message MemberSpecs {
-  string name = 1;  // The name of the member
-  string type = 2;  // The type of the member
-  oneof as {
-    BoolParameterSpecs bool = 3;              // Specifications if this is a boolean parameter
-    IntParameterSpecs int = 4;                // Specifications if this is an integer parameter
-    RealParameterSpecs real = 5;              // Specifications if this is a real parameter
-    StringParameterSpecs string = 6;          // Specifications if this is a string parameter
-    IntListParameterSpecs intlist = 7;        // Specifications if this is an integer list parameter
-    StringListParameterSpecs stringlist = 8;  // Specifications if this is a string list parameter
-    SingletonSpecs singleton = 9;             // Specifications if this is a singleton object
-    NamedObjectSpecs namedobject = 10;        // Specifications if this is a named object
-  }
-  repeated MemberSpecs children = 11;  // Child member specifications
-}
-
-// GetSpecsResponse is the response message containing member specifications
-message GetSpecsResponse {
-  MemberSpecs member = 1;  // The specifications for the requested member
 }
 
 // CommandArg contains information about a command argument
