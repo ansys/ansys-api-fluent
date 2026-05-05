@@ -6,7 +6,7 @@ Overview
 
 The ``DataModel`` service provides structured read/write access to Fluent's
 internal object model. It organises Fluent objects as a tree of singletons,
-named-object collections, parameters, commands, and queries � all addressed by
+named-object collections, parameters, commands, and queries all addressed by
 a **rules** string and a slash-separated **path**.
 
 The **rules** string selects which part of the DataModel API you are working
@@ -34,9 +34,9 @@ Initialization and state streaming
 Initialize the DataModel API for a rules context, then stream incremental or
 full-snapshot state updates as the server-side object model changes.
 
-- ``InitDatamodel(InitDatamodelRequest)`` ? ``InitDatamodelResponse``
+- ``InitDatamodel(InitDatamodelRequest)`` → ``InitDatamodelResponse``
   Request fields: ``rules: string``, ``return_state_changes: bool``
-- ``StreamStateChanges(StreamStateChangesRequest)`` ? ``stream StreamStateChangesResponse``
+- ``StreamStateChanges(StreamStateChangesRequest)`` → ``stream StreamStateChangesResponse``
   Request fields: ``rules: string``, ``return_state_changes: bool``, ``diff_state: DiffState``
 
 .. code-block:: python
@@ -71,13 +71,13 @@ node types. ``UpdateDict`` applies a partial update to a Dict-typed parameter;
 result payloads. Always call ``WhichOneof("as")`` on a returned ``Variant`` to
 identify which field is set before accessing it.
 
-- ``GetState(GetStateRequest)`` ? ``GetStateResponse``
+- ``GetState(GetStateRequest)`` → ``GetStateResponse``
   Request fields: ``rules: string``, ``path: string``
-- ``SetState(SetStateRequest)`` ? ``SetStateResponse``
+- ``SetState(SetStateRequest)`` → ``SetStateResponse``
   Request fields: ``rules: string``, ``path: string``, ``state: Variant``, ``wait: bool``
-- ``UpdateDict(UpdateDictRequest)`` ? ``UpdateDictResponse``
+- ``UpdateDict(UpdateDictRequest)`` → ``UpdateDictResponse``
   Request fields: ``rules: string``, ``path: string``, ``merge_dict: Variant``, ``wait: bool``, ``recursive: bool``
-- ``FixState(FixStateRequest)`` ? ``FixStateResponse``
+- ``FixState(FixStateRequest)`` → ``FixStateResponse``
   Request fields: ``rules: string``, ``path: string``
 
 .. code-block:: python
@@ -106,13 +106,13 @@ Object lifecycle
 
 Enumerate, rename, and delete named objects in the DataModel API tree.
 
-- ``GetObjectNames(GetObjectNamesRequest)`` ? ``GetObjectNamesResponse``
+- ``GetObjectNames(GetObjectNamesRequest)`` → ``GetObjectNamesResponse``
   Request fields: ``rules: string``, ``path: string``
-- ``Rename(RenameRequest)`` ? ``RenameResponse``
+- ``Rename(RenameRequest)`` → ``RenameResponse``
   Request fields: ``rules: string``, ``path: string``, ``new_name: string``, ``wait: bool``
-- ``DeleteObject(DeleteObjectRequest)`` ? ``DeleteObjectResponse``
+- ``DeleteObject(DeleteObjectRequest)`` → ``DeleteObjectResponse``
   Request fields: ``rules: string``, ``path: string``, ``wait: bool``
-- ``DeleteChildObjects(DeleteChildObjectsRequest)`` ? ``DeleteChildObjectsResponse``
+- ``DeleteChildObjects(DeleteChildObjectsRequest)`` → ``DeleteChildObjectsResponse``
   Request fields: ``rules: string``, ``path: string``, oneof ``child_names`` or ``delete_all``, ``wait: bool``
 
 .. code-block:: python
@@ -152,9 +152,9 @@ Execute actions and ask computed questions at a target path. ``ExecuteCommand``
 performs a state-mutating action; ``ExecuteQuery`` returns a computed result
 without side effects.
 
-- ``ExecuteCommand(ExecuteCommandRequest)`` ? ``ExecuteCommandResponse``
+- ``ExecuteCommand(ExecuteCommandRequest)`` → ``ExecuteCommandResponse``
   Request fields: ``rules: string``, ``path: string``, ``command: string``, ``wait: bool``, ``args: Variant``
-- ``ExecuteQuery(ExecuteQueryRequest)`` ? ``ExecuteQueryResponse``
+- ``ExecuteQuery(ExecuteQueryRequest)`` → ``ExecuteQueryResponse``
   Request fields: ``rules: string``, ``path: string``, ``query: string``, ``args: Variant``
 
 .. code-block:: python
@@ -183,9 +183,9 @@ Some multi-step workflows require an explicit command-argument instance that
 persists between calls. Create one, populate its state via ``SetState``, then
 delete it when you are done.
 
-- ``CreateCommandArguments(CreateCommandArgumentsRequest)`` ? ``CreateCommandArgumentsResponse``
+- ``CreateCommandArguments(CreateCommandArgumentsRequest)`` → ``CreateCommandArgumentsResponse``
   Request fields: ``rules: string``, ``path: string``, ``command: string``
-- ``DeleteCommandArguments(DeleteCommandArgumentsRequest)`` ? ``DeleteCommandArgumentsResponse``
+- ``DeleteCommandArguments(DeleteCommandArgumentsRequest)`` → ``DeleteCommandArgumentsResponse``
   Request fields: ``rules: string``, ``path: string``, ``command: string``, ``command_id: string``
 
 .. code-block:: python
@@ -211,13 +211,13 @@ delete it when you are done.
 Attribute access
 ~~~~~~~~~~~~~~~~
 
-Retrieve a named attribute value � for example, the default value, allowed
-values, or read-only status � at a specific path. ``GetSpecs`` returns the
+Retrieve a named attribute value for example, the default value, allowed
+values, or read-only status at a specific path. ``GetSpecs`` returns the
 full member specification for a path.
 
-- ``GetAttributeValue(GetAttributeValueRequest)`` ? ``GetAttributeValueResponse``
+- ``GetAttributeValue(GetAttributeValueRequest)`` → ``GetAttributeValueResponse``
   Request fields: ``rules: string``, ``path: string``, ``attribute: string``
-- ``GetSpecs(GetSpecsRequest)`` ? ``GetSpecsResponse``
+- ``GetSpecs(GetSpecsRequest)`` → ``GetSpecsResponse``
   Request fields: ``rules: string``, ``path: string``, ``include_children: bool``
 
 .. code-block:: python
@@ -236,13 +236,13 @@ full member specification for a path.
 Event subscription
 ~~~~~~~~~~~~~~~~~~
 
-Subscribe to object-level events � creation, modification, deletion, and
-command execution � then consume them as a continuous stream. Call
+Subscribe to object-level events creation, modification, deletion, and
+command execution then consume them as a continuous stream. Call
 ``UnsubscribeEvents`` to stop receiving events for a given subscription.
 
-- ``SubscribeEvents(SubscribeEventsRequest)`` ? ``SubscribeEventsResponse``
-- ``UnsubscribeEvents(UnsubscribeEventsRequest)`` ? ``UnsubscribeEventsResponse``
-- ``StreamEvents(StreamEventsRequest)`` ? ``stream StreamEventsResponse``
+- ``SubscribeEvents(SubscribeEventsRequest)`` → ``SubscribeEventsResponse``
+- ``UnsubscribeEvents(UnsubscribeEventsRequest)`` → ``UnsubscribeEventsResponse``
+- ``StreamEvents(StreamEventsRequest)`` → ``stream StreamEventsResponse``
 
 .. code-block:: python
    :caption: Python
@@ -277,17 +277,17 @@ command execution � then consume them as a continuous stream. Call
 API schema
 ----------
 
-``GetSchema`` returns the API schema for the DataModel service � a complete,
+``GetSchema`` returns the API schema for the DataModel service a complete,
 recursive description of all paths, object types, parameter types, commands,
 queries, and argument signatures that exist for a given rules context,
 independent of any running simulation.
 
-Use it when you need to enumerate what is available programmatically � for
+Use it when you need to enumerate what is available programmatically for
 example, to discover command names before calling ``ExecuteCommand``, or to
 build a higher-level client abstraction. See :doc:`../build_a_client` for a
 step-by-step walkthrough of schema discovery.
 
-- ``GetSchema(GetSchemaRequest)`` ? ``GetSchemaResponse``
+- ``GetSchema(GetSchemaRequest)`` → ``GetSchemaResponse``
   Request field: ``rules: string``
 
 .. code-block:: python

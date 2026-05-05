@@ -31,7 +31,7 @@ Retrieves the list of domains and zones available in the current session.
 Call this first to discover valid ``domain_id`` and ``zone_id`` values to use
 in subsequent requests.
 
-- ``GetZonesInfo(GetZonesInfoRequest)`` ? ``GetZonesInfoResponse``
+- ``GetZonesInfo(GetZonesInfoRequest)`` â†’ ``GetZonesInfoResponse``
 
 ``GetZonesInfoResponse`` fields:
 
@@ -90,10 +90,10 @@ Retrieves metadata for the solution variables available on a specific domain
 and zone. Use this to confirm that a variable name exists and to learn its
 data type and dimension before streaming data.
 
-- ``GetSolutionVariableInfo(GetSolutionVariableInfoRequest)`` ? ``GetSolutionVariableInfoResponse``
+- ``GetSolutionVariableInfo(GetSolutionVariableInfoRequest)`` â†’ ``GetSolutionVariableInfoResponse``
   Request fields: ``domain_id: uint32``, ``zone_id: uint64``
 
-``GetSolutionVariableInfoResponse`` has one field: ``svars_info`` — a list of
+``GetSolutionVariableInfoResponse`` has one field: ``svars_info`` â†’ a list of
 ``SolutionVariableInfo`` entries, each containing:
 
 .. list-table::
@@ -136,7 +136,7 @@ typed payload chunks. Each streamed ``GetSolutionVariableDataResponse``
 carries either a ``payload_info`` header (one per zone, sent first) or a
 ``payload`` data chunk.
 
-- ``GetSolutionVariableData(GetSolutionVariableDataRequest)`` ? ``stream GetSolutionVariableDataResponse``
+- ``GetSolutionVariableData(GetSolutionVariableDataRequest)`` â†’ ``stream GetSolutionVariableDataResponse``
 
 ``GetSolutionVariableDataRequest`` fields:
 
@@ -166,9 +166,9 @@ carries either a ``payload_info`` header (one per zone, sent first) or a
 
 ``GetSolutionVariableDataResponse`` carries a ``oneof array``:
 
-- ``payload_info`` (``Info``) — sent once per zone; contains ``field_type``,
+- ``payload_info`` (``Info``) â†’ sent once per zone; contains ``field_type``,
   ``field_size`` (number of elements), and ``zone`` ID.
-- ``payload`` (``Payload``) — one or more data chunks per zone; the ``oneof
+- ``payload`` (``Payload``) â†’ one or more data chunks per zone; the ``oneof
   chunk`` inside ``Payload`` is one of ``double_payload``, ``float_payload``,
   ``int_payload``, ``long_payload``, or ``byte_payload``.
 
@@ -213,7 +213,7 @@ messages in a strict order:
 2. For each zone: one ``payload_info`` (``Info``) message followed by one or
    more ``payload`` (``Payload``) chunk messages.
 
-- ``SetSolutionVariableData(stream SetSolutionVariableDataRequest)`` ? ``SetSolutionVariableDataResponse``
+- ``SetSolutionVariableData(stream SetSolutionVariableDataRequest)`` â†’ ``SetSolutionVariableDataResponse``
 
 ``SolutionVariableHeader`` fields: ``name: string``, ``domain_id: uint32``
 
@@ -281,9 +281,9 @@ messages in a strict order:
 See also
 --------
 
-- :doc:`field_data` — surface and mesh field streaming; defines the shared
+- :doc:`field_data` - surface and mesh field streaming; defines the shared
   payload types (``DoublePayload``, ``FloatPayload``, etc.) and ``FieldType`` enum
-- :doc:`reduction` — on-demand scalar reductions (area average, force, etc.)
+- :doc:`reduction` - on-demand scalar reductions (area average, force, etc.)
   without streaming raw arrays
 
 .. ----------------------------------------------------------------------------

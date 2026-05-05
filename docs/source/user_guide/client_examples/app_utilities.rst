@@ -32,9 +32,9 @@ Retrieve the version number and build metadata of the running Fluent
 installation. Call these immediately after the health check to log which server
 version you are connected to.
 
-- ``GetProductVersion(GetProductVersionRequest)`` ? ``GetProductVersionResponse``
+- ``GetProductVersion(GetProductVersionRequest)`` → ``GetProductVersionResponse``
   Response fields: ``major: int64``, ``minor: int64``, ``patch: int64``
-- ``GetBuildInfo(GetBuildInfoRequest)`` ? ``GetBuildInfoResponse``
+- ``GetBuildInfo(GetBuildInfoRequest)`` → ``GetBuildInfoResponse``
   Response fields: ``build_time: string``, ``build_id: int64``, ``vcs_revision: string``, ``vcs_branch: string``
 
 .. code-block:: python
@@ -58,9 +58,9 @@ In a Fluent client-server deployment a Controller process commands a separate
 Solver process. These two RPCs return the host, process ID, and working
 directory of each process so you can correlate logs or connect debuggers.
 
-- ``GetControllerProcessInfo(GetControllerProcessInfoRequest)`` ? ``GetControllerProcessInfoResponse``
+- ``GetControllerProcessInfo(GetControllerProcessInfoRequest)`` → ``GetControllerProcessInfoResponse``
   Response fields: ``hostname: string``, ``process_id: int64``, ``working_directory: string``
-- ``GetSolverProcessInfo(GetSolverProcessInfoRequest)`` ? ``GetSolverProcessInfoResponse``
+- ``GetSolverProcessInfo(GetSolverProcessInfoRequest)`` → ``GetSolverProcessInfoResponse``
   Response fields: ``hostname: string``, ``process_id: int64``, ``working_directory: string``
 
 .. code-block:: python
@@ -79,11 +79,11 @@ directory of each process so you can correlate logs or connect debuggers.
 Application mode
 ~~~~~~~~~~~~~~~~
 
-Returns the current mode Fluent is operating in � meshing, solver, or a
+Returns the current mode Fluent is operating in - meshing, solver, or a
 specialised solver variant. Use this to branch client logic when the same
 process can run in multiple modes.
 
-- ``GetAppMode(GetAppModeRequest)`` ? ``GetAppModeResponse``
+- ``GetAppMode(GetAppModeRequest)`` → ``GetAppModeResponse``
   Response field: ``app_mode: AppMode``
 
 .. list-table:: ``AppMode`` enum values
@@ -137,10 +137,10 @@ If you omit it, the server tracks the journal in memory and returns its content
 in ``StopPythonJournalResponse.journal_str``; it also returns a ``journal_id``
 in ``StartPythonJournalResponse`` that you must pass to ``StopPythonJournal``.
 
-- ``StartPythonJournal(StartPythonJournalRequest)`` ? ``StartPythonJournalResponse``
+- ``StartPythonJournal(StartPythonJournalRequest)`` → ``StartPythonJournalResponse``
   Request field: ``journal_name: optional string``
   Response field: ``journal_id: optional string`` (returned when no file name given)
-- ``StopPythonJournal(StopPythonJournalRequest)`` ? ``StopPythonJournalResponse``
+- ``StopPythonJournal(StopPythonJournalRequest)`` → ``StopPythonJournalResponse``
   Request field: ``journal_id: optional string``
   Response field: ``journal_str: string`` (journal content when no file name was given)
 
@@ -181,9 +181,9 @@ Fluent may ship experimental features that are disabled by default. These two
 RPCs let you check whether beta features are active and enable them if needed.
 Enabling beta features affects the current session only.
 
-- ``IsBetaEnabled(IsBetaEnabledRequest)`` ? ``IsBetaEnabledResponse``
+- ``IsBetaEnabled(IsBetaEnabledRequest)`` → ``IsBetaEnabledResponse``
   Response field: ``is_beta_enabled: bool``
-- ``EnableBeta(EnableBetaRequest)`` ? ``EnableBetaResponse``
+- ``EnableBeta(EnableBetaRequest)`` → ``EnableBetaResponse``
 
 .. code-block:: python
    :caption: Python
@@ -203,7 +203,7 @@ Working directory
 Changes the working directory of the Fluent process. Subsequent file operations
 that use relative paths will resolve against the new directory.
 
-- ``SetWorkingDirectory(SetWorkingDirectoryRequest)`` ? ``SetWorkingDirectoryResponse``
+- ``SetWorkingDirectory(SetWorkingDirectoryRequest)`` → ``SetWorkingDirectoryResponse``
   Request field: ``path: string``
 
 .. code-block:: python
@@ -221,7 +221,7 @@ Terminates the Fluent process. Call this only when your session is complete.
 The server will close the connection after processing the request; no further
 calls on the channel will succeed.
 
-- ``Exit(ExitRequest)`` ? ``ExitResponse``
+- ``Exit(ExitRequest)`` → ``ExitResponse``
 
 .. code-block:: python
    :caption: Python
@@ -232,9 +232,9 @@ calls on the channel will succeed.
 See also
 --------
 
-- :doc:`../../getting_started/gettingstarted` � basic client setup
-- :doc:`health` � confirm the server is ready before calling ApplicationRuntime RPCs
-- :doc:`transcript` � stream Fluent console output alongside journal recording
+- :doc:`../../getting_started/gettingstarted` - basic client setup
+- :doc:`health` - confirm the server is ready before calling ApplicationRuntime RPCs
+- :doc:`transcript` - stream Fluent console output alongside journal recording
 
 .. ----------------------------------------------------------------------------
 .. The block below is generated by docs/_ext/proto_docgen.py from the matching

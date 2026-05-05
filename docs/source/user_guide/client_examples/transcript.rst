@@ -4,8 +4,8 @@ Transcript
 Overview
 --------
 
-The ``Transcript`` service streams the Fluent console output — every line that
-Fluent writes to its terminal — to the client as a continuous server-side
+The ``Transcript`` service streams the Fluent console output - every line that
+Fluent writes to its terminal - to the client as a continuous server-side
 stream. This lets you monitor solver progress, capture log messages, and
 display Fluent output in your own application UI without polling.
 
@@ -32,7 +32,7 @@ message for each line (or chunk) of Fluent output. The stream remains open
 for the lifetime of the Fluent session; iterate it in a background thread
 so it does not block your main client logic.
 
-- ``BeginStreaming(TranscriptRequest)`` ? ``stream TranscriptResponse``
+- ``BeginStreaming(TranscriptRequest)`` â†’ ``stream TranscriptResponse``
 
 ``TranscriptResponse`` has one field:
 
@@ -98,9 +98,9 @@ continue issuing other RPCs while Fluent output is being printed.
 See also
 --------
 
-- :doc:`app_utilities` — ``StartPythonJournal`` and ``StopPythonJournal`` to
+- :doc:`app_utilities` - ``StartPythonJournal`` and ``StopPythonJournal`` to
   record API calls alongside the transcript
-- :doc:`events` — structured solver lifecycle events (iteration counts,
+- :doc:`events` - structured solver lifecycle events (iteration counts,
   convergence signals) as an alternative to parsing the transcript
 
 .. ----------------------------------------------------------------------------

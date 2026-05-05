@@ -4,9 +4,9 @@ FieldData
 Overview
 --------
 
-The ``FieldData`` service streams simulation results — scalar fields, vector
+The ``FieldData`` service streams simulation results - scalar fields, vector
 fields, surface geometry, mesh nodes and elements, pathlines, and particle
-tracks — out of a running Fluent session. It also provides discovery RPCs so
+tracks - out of a running Fluent session. It also provides discovery RPCs so
 you can enumerate available surfaces and fields before requesting data.
 
 Most data-retrieval RPCs are **server-streaming**: they return one or more
@@ -36,9 +36,9 @@ Before requesting field data, check whether solution data and boundary values
 are currently available. These calls are cheap and save you from issuing
 streaming RPCs against an empty or uninitialised solver.
 
-- ``IsDataAvailable(IsDataAvailableRequest)`` ? ``IsDataAvailableResponse``
+- ``IsDataAvailable(IsDataAvailableRequest)`` â†’ ``IsDataAvailableResponse``
   Response field: ``is_data_available: bool``
-- ``IsBoundaryValuesEnabled(IsBoundaryValuesEnabledRequest)`` ? ``IsBoundaryValuesEnabledResponse``
+- ``IsBoundaryValuesEnabled(IsBoundaryValuesEnabledRequest)`` â†’ ``IsBoundaryValuesEnabledResponse``
   Response field: ``is_boundary_values_enabled: bool``
 
 .. code-block:: python
@@ -59,10 +59,10 @@ Discovery: surfaces and fields
 Enumerate the surfaces and fields in the current session before requesting
 data. Use the IDs and names returned here in subsequent streaming calls.
 
-- ``GetSurfacesInfo(GetSurfacesInfoRequest)`` ? ``GetSurfacesInfoResponse``
-- ``GetFieldsInfo(GetFieldsInfoRequest)`` ? ``GetFieldsInfoResponse``
-- ``GetVectorFieldsInfo(GetVectorFieldsInfoRequest)`` ? ``GetVectorFieldsInfoResponse``
-- ``GetRange(GetRangeRequest)`` ? ``GetRangeResponse``
+- ``GetSurfacesInfo(GetSurfacesInfoRequest)`` â†’ ``GetSurfacesInfoResponse``
+- ``GetFieldsInfo(GetFieldsInfoRequest)`` â†’ ``GetFieldsInfoResponse``
+- ``GetVectorFieldsInfo(GetVectorFieldsInfoRequest)`` â†’ ``GetVectorFieldsInfoResponse``
+- ``GetRange(GetRangeRequest)`` â†’ ``GetRangeResponse``
   Request fields: ``field_name: string``, ``surface_ids: repeated SurfaceId``, ``node_value: bool``
   Response fields: ``minimum: double``, ``maximum: double``
 
@@ -103,7 +103,7 @@ data. Use the IDs and names returned here in subsequent streaming calls.
        ),
        metadata=metadata,
    )
-   print(f"Temperature range: {rng.minimum:.4f} — {rng.maximum:.4f}")
+   print(f"Temperature range: {rng.minimum:.4f} - {rng.maximum:.4f}")
 
 Scalar field streaming
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -114,8 +114,8 @@ or a typed numeric payload. Accumulate chunks by field and surface.
 
 ``GetScalarField`` is the simpler single-field alternative.
 
-- ``GetFields(GetFieldsRequest)`` ? ``stream GetFieldsResponse``
-- ``GetScalarField(GetScalarFieldRequest)`` ? ``stream GetScalarFieldResponse``
+- ``GetFields(GetFieldsRequest)`` â†’ ``stream GetFieldsResponse``
+- ``GetScalarField(GetScalarFieldRequest)`` â†’ ``stream GetScalarFieldResponse``
 
 .. code-block:: python
    :caption: Python
@@ -163,13 +163,13 @@ Vector field streaming
 
 Retrieve vector field data (velocity, flux, etc.) on selected surfaces.
 
-- ``GetVectorField(GetVectorFieldRequest)`` ? ``stream GetVectorFieldResponse``
+- ``GetVectorField(GetVectorFieldRequest)`` â†’ ``stream GetVectorFieldResponse``
 
 .. code-block:: python
    :caption: Python
 
    # GetVectorFieldRequest fields: surface_ids (repeated SurfaceId), vector_field (string),
-   # node_value (bool). scalar_field (string) is optional — used for scalar colouring.
+   # node_value (bool). scalar_field (string) is optional - used for scalar colouring.
    # GetVectorFieldResponse has vector_field_data: VectorFieldData with
    # vector.vector_components (repeated VectorComponents with x, y, z doubles).
    for resp in stub.GetVectorField(
@@ -190,7 +190,7 @@ Stream the vertex coordinates and connectivity of a surface. Use
 ``GetSurfaces`` for surfaces and the mesh-node/element RPCs below for
 the solver volume mesh.
 
-- ``GetSurfaces(GetSurfacesRequest)`` ? ``stream GetSurfacesResponse``
+- ``GetSurfaces(GetSurfacesRequest)`` â†’ ``stream GetSurfacesResponse``
 
 .. code-block:: python
    :caption: Python
@@ -212,12 +212,12 @@ the solver volume mesh.
 Solver mesh (nodes and elements)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Retrieve the raw solver mesh — node coordinates at float or double precision,
+Retrieve the raw solver mesh - node coordinates at float or double precision,
 and element connectivity. These RPCs stream the volumetric mesh, not surfaces.
 
-- ``GetSolverMeshNodesFloat(GetSolverMeshNodesRequest)`` ? ``stream GetSolverMeshNodesFloatResponse``
-- ``GetSolverMeshNodesDouble(GetSolverMeshNodesRequest)`` ? ``stream GetSolverMeshNodesDoubleResponse``
-- ``GetSolverMeshElements(GetSolverMeshElementsRequest)`` ? ``stream GetSolverMeshElementsResponse``
+- ``GetSolverMeshNodesFloat(GetSolverMeshNodesRequest)`` â†’ ``stream GetSolverMeshNodesFloatResponse``
+- ``GetSolverMeshNodesDouble(GetSolverMeshNodesRequest)`` â†’ ``stream GetSolverMeshNodesDoubleResponse``
+- ``GetSolverMeshElements(GetSolverMeshElementsRequest)`` â†’ ``stream GetSolverMeshElementsResponse``
 
 .. code-block:: python
    :caption: Python
@@ -248,8 +248,8 @@ Pathlines and particle tracks
 Stream pathline or particle-track field data for flow visualisation. Both RPCs
 follow the same payload-chunk pattern as scalar and vector fields.
 
-- ``GetPathlinesField(GetPathlinesFieldRequest)`` ? ``stream GetPathlinesFieldResponse``
-- ``GetParticleTracksField(GetParticleTracksFieldRequest)`` ? ``stream GetParticleTracksFieldResponse``
+- ``GetPathlinesField(GetPathlinesFieldRequest)`` â†’ ``stream GetPathlinesFieldResponse``
+- ``GetParticleTracksField(GetParticleTracksFieldRequest)`` â†’ ``stream GetParticleTracksFieldResponse``
 
 .. code-block:: python
    :caption: Python
@@ -275,7 +275,7 @@ Legacy streaming (BeginFieldsStreaming)
 ``BeginFieldsStreaming`` is an older, lower-level streaming RPC. Prefer
 ``GetFields``, ``GetScalarField``, or ``GetVectorField`` for new clients.
 
-- ``BeginFieldsStreaming(BeginFieldsStreamingRequest)`` ? ``stream BeginFieldsStreamingResponse``
+- ``BeginFieldsStreaming(BeginFieldsStreamingRequest)`` â†’ ``stream BeginFieldsStreamingResponse``
 
 Payload types
 -------------
@@ -290,13 +290,13 @@ exactly one payload type.
    * - ``oneof`` field
      - Content
    * - ``double_payload``
-     - ``DoublePayload`` — ``repeated double payloads``
+     - ``DoublePayload`` - ``repeated double payloads``
    * - ``float_payload``
-     - ``FloatPayload`` — ``repeated float payloads``
+     - ``FloatPayload`` - ``repeated float payloads``
    * - ``int_payload``
-     - ``IntPayload`` — ``repeated sint32 payloads``
+     - ``IntPayload`` - ``repeated sint32 payloads``
    * - ``long_payload``
-     - ``LongPayload`` — ``repeated sint64 payloads``
+     - ``LongPayload`` - ``repeated sint64 payloads``
 
 A ``payload_info`` chunk precedes the data chunks and contains metadata such
 as field type, zone, and size.
@@ -304,9 +304,9 @@ as field type, zone, and size.
 See also
 --------
 
-- :doc:`svar` — read and write solution variable data by zone
-- :doc:`reduction` — compute scalar reductions (area averages, forces, extrema)
-- :doc:`monitor` — stream live monitor data as the solver iterates
+- :doc:`svar` - read and write solution variable data by zone
+- :doc:`reduction` - compute scalar reductions (area averages, forces, extrema)
+- :doc:`monitor` - stream live monitor data as the solver iterates
 
 .. ----------------------------------------------------------------------------
 .. The block below is generated by docs/_ext/proto_docgen.py from the matching

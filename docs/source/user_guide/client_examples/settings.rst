@@ -5,7 +5,7 @@ Overview
 --------
 
 The ``Settings`` service provides hierarchical read/write access to Fluent's
-simulation configuration � boundary conditions, solver controls, model
+simulation configuration - boundary conditions, solver controls, model
 parameters, and results settings. Every RPC addresses a settings node by a
 ``PathInfo`` message that contains two fields: ``root``, a string that selects
 which part of the Settings API you are working with (the common value is
@@ -31,12 +31,12 @@ Getting and setting values
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Read and write typed configuration values. The ``Value`` message uses a
-``oneof`` to hold one active type � always call ``WhichOneof("value")`` on a
+``oneof`` to hold one active type - always call ``WhichOneof("value")`` on a
 returned ``Value`` before accessing it.
 
-- ``GetVar(GetVarRequest)`` ? ``GetVarResponse``
+- ``GetVar(GetVarRequest)`` → ``GetVarResponse``
   Request field: ``path_info: PathInfo``
-- ``SetVar(SetVarRequest)`` ? ``SetVarResponse``
+- ``SetVar(SetVarRequest)`` → ``SetVarResponse``
   Request fields: ``path_info: PathInfo``, ``value: Value``
 
 .. code-block:: python
@@ -71,11 +71,11 @@ Object lifecycle
 Create, rename, and delete named objects such as boundary conditions or
 graphics objects.
 
-- ``Create(CreateRequest)`` ? ``CreateResponse``
+- ``Create(CreateRequest)`` → ``CreateResponse``
   Request fields: ``path_info: PathInfo``, ``name: string``
-- ``Delete(DeleteRequest)`` ? ``DeleteResponse``
+- ``Delete(DeleteRequest)`` → ``DeleteResponse``
   Request fields: ``path_info: PathInfo``, ``name: string``
-- ``Rename(RenameRequest)`` ? ``RenameResponse``
+- ``Rename(RenameRequest)`` → ``RenameResponse``
   Request fields: ``path_info: PathInfo``, ``old_name: string``, ``new_name: string``
 
 .. code-block:: python
@@ -109,11 +109,11 @@ Object and list queries
 
 Enumerate existing named objects and inspect or resize list-typed settings.
 
-- ``GetObjectNames(GetObjectNamesRequest)`` ? ``GetObjectNamesResponse``
+- ``GetObjectNames(GetObjectNamesRequest)`` → ``GetObjectNamesResponse``
   Request field: ``path_info: PathInfo``
-- ``GetListSize(GetListSizeRequest)`` ? ``GetListSizeResponse``
+- ``GetListSize(GetListSizeRequest)`` → ``GetListSizeResponse``
   Request field: ``path_info: PathInfo``
-- ``ResizeListObject(ResizeListObjectRequest)`` ? ``ResizeListObjectResponse``
+- ``ResizeListObject(ResizeListObjectRequest)`` → ``ResizeListObjectResponse``
   Request fields: ``path_info: PathInfo``, ``size: int32``
 
 .. code-block:: python
@@ -142,9 +142,9 @@ Execute actions and ask computed questions on settings objects.
 ``ExecuteCommand`` performs a state-mutating action; ``ExecuteQuery`` returns a
 computed result without side effects.
 
-- ``ExecuteCommand(ExecuteCommandRequest)`` ? ``ExecuteCommandResponse``
+- ``ExecuteCommand(ExecuteCommandRequest)`` → ``ExecuteCommandResponse``
   Request fields: ``path_info: PathInfo``, ``command: string``, ``args: Value``
-- ``ExecuteQuery(ExecuteQueryRequest)`` ? ``ExecuteQueryResponse``
+- ``ExecuteQuery(ExecuteQueryRequest)`` → ``ExecuteQueryResponse``
   Request fields: ``path_info: PathInfo``, ``query: string``, ``args: Value``
 
 .. code-block:: python
@@ -171,10 +171,10 @@ computed result without side effects.
 Attribute access
 ~~~~~~~~~~~~~~~~
 
-Retrieve named attributes � for example, type, active status, or read-only
-status � from a settings object.
+Retrieve named attributes - for example, type, active status, or read-only
+status - from a settings object.
 
-- ``GetAttrs(GetAttrsRequest)`` ? ``GetAttrsResponse``
+- ``GetAttrs(GetAttrsRequest)`` → ``GetAttrsResponse``
   Request fields: ``path_info: PathInfo``, ``attrs: repeated string``, ``recursive: bool``
 
 .. code-block:: python
@@ -199,7 +199,7 @@ Wildcard detection
 a wildcard pattern. This is useful when building path queries that accept
 wildcard syntax.
 
-- ``IsWildcard(IsWildcardRequest)`` ? ``IsWildcardResponse``
+- ``IsWildcard(IsWildcardRequest)`` → ``IsWildcardResponse``
   Request field: ``input: string``
   Response field: ``is_wildcard: bool``
 
@@ -215,16 +215,16 @@ wildcard syntax.
 API schema
 ----------
 
-``GetSchema`` returns the API schema for the Settings service � a complete
+``GetSchema`` returns the API schema for the Settings service - a complete
 description of the paths, object types, available commands, queries, and help
 text that exist for a given root, independent of any running simulation.
 
-Use it when you need to enumerate what is available programmatically � for
+Use it when you need to enumerate what is available programmatically - for
 example, to discover which commands exist before calling ``ExecuteCommand``, or
 to build a higher-level settings client. See :doc:`../build_a_client` for a
 step-by-step walkthrough of schema discovery.
 
-- ``GetSchema(GetSchemaRequest)`` ? ``GetSchemaResponse``
+- ``GetSchema(GetSchemaRequest)`` → ``GetSchemaResponse``
   Request fields: ``root: string``, ``optional_attrs: repeated string``
   Response field: ``info: Schema``
 
