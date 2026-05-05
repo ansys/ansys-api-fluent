@@ -4,24 +4,20 @@
 User guide
 ==========
 
-The user guide covers practical, task-oriented workflows. Choose the guide that
-fits your use case.
+The user guide covers practical, task-oriented workflows.
 
 :doc:`build_a_client`
-   **Start here.** A six-step guide to connecting to a live Fluent server,
-   calling ``GetSchema`` to discover available paths, reading and writing
-   simulation state with ``GetState``/``SetState`` and ``GetVar``/``SetVar``,
-   and subscribing to solver events via ``BeginStreaming``.
+   A step-by-step guide to connecting to a live Fluent server, calling
+   ``GetSchema`` to discover available paths, reading and writing simulation
+   state, subscribing to solver events, and generating a typed client from the
+   schema.
 
-:doc:`building_on_the_api`
-   **For tool and library authors.** Explains the API schema as a
-   machine-readable contract independent of any running session — covering
-   how to introspect path hierarchies, parameter types, commands, and
-   constraints to generate stubs or build abstractions across services.
+:doc:`client_examples/index`
+   Runnable Python examples for every gRPC service and shared helper module.
 
 .. toctree::
    :hidden:
    :maxdepth: 2
 
    build_a_client
-   building_on_the_api
+   client_examples/index
