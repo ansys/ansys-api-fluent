@@ -88,7 +88,11 @@ def _clean_comment(text: str) -> str:
         return ""
     lines = [ln.strip().lstrip("*").strip() for ln in text.splitlines()]
     lines = [ln for ln in lines if ln]
-    return " ".join(lines)
+    result = " ".join(lines)
+    # Re-encode to UTF-8 replacing any characters that cannot be represented
+    # (e.g. lone surrogates from protoc SourceCodeInfo) so write_text never
+    # raises UnicodeEncodeError.
+    return result.encode("utf-8", errors="replace").decode("utf-8")
 
 
 # ---------------------------------------------------------------------------
@@ -463,7 +467,7 @@ def generate(app=None) -> None:
     for file_proto in emitted_files:
         rst = _emit_file(file_proto, type_index)
         out_path = _OUT_DIR / f"{Path(file_proto.name).stem}.rst"
-        out_path.write_text(rst, encoding="utf-8")
+        out_path.write_text(rst, encoding="utf-8", errors="replace")
         written.append(out_path.name)
 
     # Stub index so Sphinx does not warn about an empty directory.

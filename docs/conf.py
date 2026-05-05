@@ -84,3 +84,5 @@ suppress_warnings = [
     "myst.header_anchor",
     "misc.copy_overwrite",
 ]
+
+source_encoding = "utf-8"
