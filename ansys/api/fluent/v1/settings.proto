@@ -13,19 +13,19 @@ service Settings {
   rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse);
 
   /* Get the value of a path */
-  rpc GetVar(GetVarRequest) returns (GetVarResponse);
+  rpc GetState(GetStateRequest) returns (GetStateResponse);
 
   /* Set the value of a path */
-  rpc SetVar(SetVarRequest) returns (SetVarResponse);
+  rpc SetState(SetStateRequest) returns (SetStateResponse);
 
   /* Rename an object */
   rpc Rename(RenameRequest) returns (RenameResponse);
 
-  /* Create a new object */
-  rpc Create(CreateRequest) returns (CreateResponse);
+  /* Create a new named object */
+  rpc CreateObject(CreateObjectRequest) returns (CreateObjectResponse);
 
-  /* Delete an object */
-  rpc Delete(DeleteRequest) returns (DeleteResponse);
+  /* Delete a named object */
+  rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse);
 
   /* Get the current list of object names */
   rpc GetObjectNames(GetObjectNamesRequest) returns (GetObjectNamesResponse);
@@ -49,7 +49,7 @@ service Settings {
   rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
 }
 
-// Value represents the value of an object -- return value of GetVar
+// Value represents the value of an object -- return value of GetState
 message Value {
   // ValueList represents a list of Value objects
   message ValueList {
@@ -121,34 +121,34 @@ message GetSchemaResponse {
   Schema info = 1;  // The static information for the requested object
 }
 
-// GetVarRequest is the request message for retrieving a variable value
-message GetVarRequest {
+// GetStateRequest is the request message for retrieving a variable value
+message GetStateRequest {
   PathInfo path_info = 1;  // The path to the variable to retrieve
 }
 
-// GetVarResponse is the response message containing the variable value
-message GetVarResponse {
+// GetStateResponse is the response message containing the variable value
+message GetStateResponse {
   Value value = 1;  // The value of the requested variable
 }
 
-// SetVarRequest is the request message for setting a variable value
-message SetVarRequest {
+// SetStateRequest is the request message for setting a variable value
+message SetStateRequest {
   PathInfo path_info = 1;  // The path to the variable to set
   Value value = 2;         // The new value to set
 }
 
-// SetVarResponse is the response message for a set variable operation
-message SetVarResponse {
+// SetStateResponse is the response message for a set variable operation
+message SetStateResponse {
 }
 
-// CreateRequest is the request message for creating a new object
-message CreateRequest {
+// CreateObjectRequest is the request message for creating a new object
+message CreateObjectRequest {
   PathInfo path_info = 1;  // The path where the new object should be created
   string name = 2;         // The name of the new object to create
 }
 
-// CreateResponse is the response message for a create object operation
-message CreateResponse {
+// CreateObjectResponse is the response message for a create object operation
+message CreateObjectResponse {
 }
 
 // RenameRequest is the request message for renaming an object
@@ -162,14 +162,14 @@ message RenameRequest {
 message RenameResponse {
 }
 
-// DeleteRequest is the request message for deleting an object
-message DeleteRequest {
+// DeleteObjectRequest is the request message for deleting an object
+message DeleteObjectRequest {
   PathInfo path_info = 1;  // The path containing the object to delete
   string name = 2;         // The name of the object to delete
 }
 
-// DeleteResponse is the response message for a delete object operation
-message DeleteResponse {
+// DeleteObjectResponse is the response message for a delete object operation
+message DeleteObjectResponse {
 }
 
 // GetObjectNamesRequest is the request message for retrieving object names
