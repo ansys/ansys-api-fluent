@@ -291,10 +291,10 @@ def _emit_message(
 
     Example output::
 
-        1. ``rules`` : ``string``
+        ``rules`` (1) : ``string``
            The rules context for the state query.
 
-        2. ``path`` : ``string``
+        ``path`` (2) : ``string``
            The path to retrieve state from.
 
     Nested enums and messages are emitted recursively after the field list.
@@ -327,8 +327,8 @@ def _emit_message(
             prefix = f"{', '.join(qualifiers)} " if qualifiers else ""
 
             type_repr = _render_field_type(field, type_index)
-            # Term: N. ``field_name`` : [qualifiers] type
-            out.append(f"{field.number}. ``{field.name}`` : {prefix}{type_repr}")
+            # Term: ``field_name`` (N) : [qualifiers] type
+            out.append(f"``{field.name}`` ({field.number}) : {prefix}{type_repr}")
             out.append(f"   {field_doc}" if field_doc else "   —")
             out.append("")
 
@@ -370,10 +370,10 @@ def _emit_enum(
 
     Example output::
 
-        0. ``DIFF_STATE_UNSPECIFIED``
+        ``DIFF_STATE_UNSPECIFIED`` (0)
            Unspecified diff state.
 
-        1. ``DIFF_STATE_FULL``
+        ``DIFF_STATE_FULL`` (1)
            Full state including commands.
     """
     anchor = _anchor_for(file_stem, qualified_name)
@@ -391,7 +391,7 @@ def _emit_enum(
 
     for value_idx, value in enumerate(enum.value):
         value_doc = _clean_comment(comments.get(path_prefix + (2, value_idx), ""))
-        out.append(f"{value.number}. ``{value.name}``")
+        out.append(f"``{value.name}`` ({value.number})")
         out.append(f"   {value_doc}" if value_doc else "   —")
         out.append("")
 
