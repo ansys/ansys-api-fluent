@@ -82,4 +82,5 @@ latex_elements = {
 
 suppress_warnings = [
     "myst.header_anchor",
+    "misc.copy_overwrite",
 ]
