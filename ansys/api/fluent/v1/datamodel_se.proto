@@ -20,10 +20,10 @@ service DataModel {
   rpc SetState(SetStateRequest) returns (SetStateResponse) {}
   // UpdateDict merges a dictionary into the state at a specified path
   rpc UpdateDict(UpdateDictRequest) returns (UpdateDictResponse) {}
-  // Create creates a new named object at a specified path
-  rpc Create(CreateRequest) returns (CreateResponse) {}
-  // Delete deletes an object at a specified path
-  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+  // CreateObject creates a new named object at a specified path
+  rpc CreateObject(CreateObjectRequest) returns (CreateObjectResponse) {}
+  // DeleteObject deletes an object at a specified path
+  rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse) {}
   // GetAttributeValue retrieves the value of a specific attribute
   rpc GetAttributeValue(GetAttributeValueRequest) returns (GetAttributeValueResponse) {}
   // ExecuteCommand executes a command on a datamodel object
@@ -125,29 +125,29 @@ message UpdateDictResponse {
   repeated string deleted_paths = 2;              // Paths of deleted objects
 }
 
-// CreateRequest is the request message for creating a new named object
-message CreateRequest {
+// CreateObjectRequest is the request message for creating a new named object
+message CreateObjectRequest {
   string rules = 1;  // The rules context for the creation
   string path = 2;   // The path to the parent object
   string name = 3;   // The name of the new object to create
   bool wait = 4;     // Whether to wait for the operation to complete
 }
 
-// CreateResponse is the response message after creating a new named object
-message CreateResponse {
+// CreateObjectResponse is the response message after creating a new named object
+message CreateObjectResponse {
   ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after creation
   repeated string deleted_paths = 2;              // Paths of deleted objects
 }
 
-// DeleteRequest is the request message for deleting an object
-message DeleteRequest {
+// DeleteObjectRequest is the request message for deleting an object
+message DeleteObjectRequest {
   string rules = 1;  // The rules context for the deletion
   string path = 2;   // The path to the object to delete
   bool wait = 3;     // Whether to wait for the operation to complete
 }
 
-// DeleteResponse is the response message after deleting an object
-message DeleteResponse {
+// DeleteObjectResponse is the response message after deleting an object
+message DeleteObjectResponse {
   ansys.api.fluent.v1.variant.Variant state = 1;  // The updated state after deletion
   repeated string deleted_paths = 2;              // Paths of deleted objects
 }

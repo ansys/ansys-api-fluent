@@ -21,11 +21,11 @@ service Settings {
   /* Rename an object */
   rpc Rename(RenameRequest) returns (RenameResponse);
 
-  /* Create a new object */
-  rpc Create(CreateRequest) returns (CreateResponse);
+  /* Create a new named object */
+  rpc CreateObject(CreateObjectRequest) returns (CreateObjectResponse);
 
-  /* Delete an object */
-  rpc Delete(DeleteRequest) returns (DeleteResponse);
+  /* Delete a named object */
+  rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse);
 
   /* Get the current list of object names */
   rpc GetObjectNames(GetObjectNamesRequest) returns (GetObjectNamesResponse);
@@ -141,14 +141,14 @@ message SetStateRequest {
 message SetStateResponse {
 }
 
-// CreateRequest is the request message for creating a new object
-message CreateRequest {
+// CreateObjectRequest is the request message for creating a new object
+message CreateObjectRequest {
   PathInfo path_info = 1;  // The path where the new object should be created
   string name = 2;         // The name of the new object to create
 }
 
-// CreateResponse is the response message for a create object operation
-message CreateResponse {
+// CreateObjectResponse is the response message for a create object operation
+message CreateObjectResponse {
 }
 
 // RenameRequest is the request message for renaming an object
@@ -162,14 +162,14 @@ message RenameRequest {
 message RenameResponse {
 }
 
-// DeleteRequest is the request message for deleting an object
-message DeleteRequest {
+// DeleteObjectRequest is the request message for deleting an object
+message DeleteObjectRequest {
   PathInfo path_info = 1;  // The path containing the object to delete
   string name = 2;         // The name of the object to delete
 }
 
-// DeleteResponse is the response message for a delete object operation
-message DeleteResponse {
+// DeleteObjectResponse is the response message for a delete object operation
+message DeleteObjectResponse {
 }
 
 // GetObjectNamesRequest is the request message for retrieving object names
