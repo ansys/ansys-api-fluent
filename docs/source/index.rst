@@ -8,7 +8,6 @@
    getting_started/index
    user_guide/index
    api/index
-   client_examples/index
    glossary
 
 This package provides the gRPC interface for Ansys Fluent and a Python layer for
@@ -18,12 +17,11 @@ building a client.
 structured, walks you through installation, and gets you making your first RPC
 call against a running Fluent server.
 
-**Ready to build something?** Head to the :ref:`user_guide`. If you want to
-connect to a live Fluent session, read and write simulation state, and stream
-solver events, follow the step-by-step :doc:`Build a client
-<user_guide/build_a_client>` guide. If you are writing a tool or library that
-needs to introspect the API schema without a running session, see
-:doc:`Building on the API <user_guide/building_on_the_api>`.
+**Ready to build something?** Head to the :ref:`user_guide`. The
+:doc:`Build a client <user_guide/build_a_client>` guide walks through
+connecting to a live Fluent session, reading and writing simulation state, and
+streaming solver events. Runnable Python examples for every service are in the
+:ref:`client_examples` section of the user guide.
 
 **Looking up a specific service, RPC, or message?** Go straight to the
 :ref:`api_reference`. It documents every gRPC service, RPC method, and message in

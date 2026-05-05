@@ -1,118 +1,112 @@
 The Fluent gRPC API
 ===================
 
-This page orients you to the overall structure of the Fluent gRPC API before
-you dive into any service-specific detail. Read it once — whether you are
-making a single API call or building a client library on top of the API.
+This page gives you a high-level map of the Fluent gRPC API before you explore
+any specific service. Familiarity with this overview will make the rest of the
+documentation easier to navigate.
 
 What this API gives you
 -----------------------
 
-The Fluent gRPC API exposes two complementary, high-level services:
+The Fluent gRPC API lets you talk to a running Fluent server from any
+programming language that supports gRPC. It is organised as a set of
+*services*, each responsible for a specific area of Fluent's functionality.
 
-- The **DataModel service** covers multiple Fluent applications, including the
-  meshing workflow and the solver object model. It organises Fluent objects as
-  a tree addressed by a *rules context* and a slash-separated *path*.
+Two of these services — the **DataModel service** and the **Settings service**
+— are the most commonly used and share a similar design. Understanding how they
+relate to each other, and what each one covers, is the best starting point.
 
-- The **Settings service** covers simulation configuration — boundary
-  conditions, solver controls, and results settings. It uses a 
-  slash-separated path hierarchy that maps directly to the Fluent settings
-  tree.
+DataModel service and Settings service
+---------------------------------------
 
-Both services follow the same two-layer pattern described below. All other
-services (Events, Field Data, Health, ApplicationRuntime, etc.) are
-single-purpose and do not expose a schema layer.
+These two services offer the same kinds of operations: you can read state,
+write state, execute commands, and query the structure of the API itself.
+What differs is *which part of Fluent* each service connects you to.
+
+**DataModel service**
+   Connects you to Fluent's object-model based applications. You choose which
+   application to work with by supplying a *rules* string when making a call.
+   Examples of supported applications include:
+
+   - ``"meshing"`` — the meshing workflow
+   - ``"workflow"`` — the guided workflow engine
+   - ``"preferences"`` — user preferences
+
+   Each application exposes its own tree of objects, parameters, and commands,
+   all addressed by a slash-separated path.
+
+**Settings service**
+   Connects you to the Fluent solver — boundary conditions, solver controls,
+   material properties, and results settings. It uses the same slash-separated
+   path style, but the tree it exposes is the solver configuration hierarchy.
+
+.. note::
+
+   The DataModel service also accepts ``"flserver"`` as a rules string, which
+   gives access to solver state. However, for all solver-related work the
+   **Settings service is strongly preferred** — it provides a cleaner,
+   more complete interface to the same data.
+
+Both services expose two complementary layers, described below.
 
 Two layers: schema and runtime
 -------------------------------
 
-Every schema-bearing service — the DataModel service and the Settings service —
-exposes two distinct layers:
+Both the DataModel service and the Settings service are structured in two
+layers that serve different purposes.
 
-.. list-table::
-   :header-rows: 1
-   :widths: 20 40 40
+**Schema layer**
+   Before reading or writing any live data, you can ask the service to describe
+   itself: what objects exist, what parameters they have, what commands are
+   available, and what types everything uses. This description — called the
+   *schema* — is static. It does not depend on a running simulation or any
+   particular solver state. It is the contract the service makes with you.
 
-   * - Layer
-     - RPC
-     - Purpose
-   * - **API schema**
-     - ``GetSchema``
-     - Returns a static, recursive description of everything that exists at a
-       given rules context or settings root: object types, parameter names and
-       types, available commands, command arguments, and help text. This is the
-       contract. It is independent of any running simulation.
-   * - **Runtime**
-     - | ``GetState`` / ``SetState`` / ``ExecuteCommand`` (DataModel)
-       | ``GetVar`` / ``SetVar`` / ``ExecuteCommand`` (Settings)
-     - Read, write, and act on live simulation state. These calls require a
-       running Fluent session.
+   This layer is most useful when you are building a client library, generating
+   code, or exploring an unfamiliar part of the API for the first time.
 
-These two layers serve different purposes and different audiences:
+**Runtime layer**
+   Once you know the paths and commands you need, you use the runtime layer to
+   read and write live simulation state, and to execute commands against a
+   running Fluent session. These calls interact directly with the solver or the
+   meshing application that is currently running.
 
-- **The API schema layer** is the starting point for anyone building a client
-  library, code generator, or application on top of the API. It answers the
-  question *"what can I do?"* without requiring a live solver.
-- **The runtime layer** is what most direct API callers interact with — once
-  they know which paths and commands exist, they call ``GetState``,
-  ``SetState``, ``GetVar``, or ``SetVar`` to read and write live state.
+   This is what most direct API callers spend most of their time with.
 
-A typical client discovery workflow looks like this:
+A typical workflow is: consult the schema once to understand the structure, then
+make runtime calls as required.
 
-.. code-block:: python
-   :caption: Python
+Other services
+--------------
 
-   # 1. Fetch the API schema — no live solver state required
-   schema_resp = dm_stub.GetSchema(
-       datamodel_se_pb2.GetSchemaRequest(rules="meshing"),
-       metadata=metadata,
-   )
+Beyond the DataModel and Settings services, the API includes several
+single-purpose services. These do not have a schema layer — they each do
+one specific thing:
 
-   # 2. Walk the schema to find the path you need
-   root = schema_resp.info
-   print("Available commands:", list(root.commands.keys()))
-   print("Available singletons:", list(root.singletons.keys()))
-
-   # 3. Call the runtime layer using the path you discovered
-   get_resp = dm_stub.GetState(
-       datamodel_se_pb2.GetStateRequest(
-           rules="meshing",
-           path="GlobalSettings/EnableCleanCAD",
-       ),
-       metadata=metadata,
-   )
-
-See :doc:`../user_guide/build_a_client` for a complete step-by-step walkthrough of both
-layers for both services.
+- **Health** — check whether the Fluent server is ready to accept calls
+- **Connection** — session management and version negotiation
+- **ApplicationRuntime** — version information, process control, journalling, and exit
+- **Events** — subscribe to solver lifecycle events and pause callbacks
+- **FieldData** — stream mesh geometry and field values
+- **Monitor** — receive live residual and report monitor data
+- **Reduction** — compute surface and zone scalar reductions (area, forces, etc.)
+- **SolutionVariable** — access per-zone solution variable arrays
+- **Transcript** — stream Fluent console output
 
 Who this documentation is for
 ------------------------------
 
-This documentation is written for two audiences.
-
 **Developers making direct API calls**
-   You want to call a specific RPC — read a setting, execute a command, stream
-   field data. Go directly to the runtime sections of the relevant service page:
-
-   - :doc:`../api/services/health` — check server readiness before any other call
-   - :doc:`../api/services/connection` — session management and version negotiation
-   - :doc:`../api/services/app_utilities` — version, process info, journal, beta flags, exit
-   - :doc:`../api/services/datamodel_se` — object-model state read/write, commands, events
-   - :doc:`../api/services/settings` — solver configuration read/write, named objects
-   - :doc:`../api/services/events` — solver lifecycle events and pause callbacks
-   - :doc:`../api/services/field_data` — mesh geometry and field value streaming
-   - :doc:`../api/services/monitor` — live residual and report monitor data
-   - :doc:`../api/services/reduction` — surface and zone scalar reductions (area, force, etc.)
-   - :doc:`../api/services/svar` — per-zone solution variable arrays
-   - :doc:`../api/services/transcript` — Fluent console output stream
+   You want to call a specific RPC to read a setting, execute a command, or
+   stream data. Go directly to the relevant service page in the
+   :doc:`../api/services/index` section. A good starting point is always the
+   Health service — confirm the server is ready before making any other call.
 
 **Developers building client libraries or applications**
    You are generating code, building a higher-level abstraction, or need to
-   enumerate everything the API exposes. Read :doc:`../user_guide/build_a_client` first,
-   paying particular attention to the API schema discovery steps. Then read
-   :doc:`../user_guide/building_on_the_api` for schema-driven code generation, dynamic
-   clients, and the difference in runtime discoverability between the two
-   schema-bearing services.
+   enumerate everything the API exposes. Start by reading
+   :doc:`../user_guide/build_a_client`, which walks through schema discovery
+   and runtime calls for both the DataModel and Settings services.
 
 Connection and authentication
 ------------------------------
@@ -121,26 +115,12 @@ All examples in this documentation share the same connection assumptions:
 
 .. include:: ../shared_example_assumptions.rst
 
-Every RPC must be accompanied by a ``metadata`` list containing the server
-password:
-
-.. code-block:: python
-   :caption: Python
-
-   import grpc
-
-   HOST = "127.0.0.1"   # Fluent server host
-   PORT = 50051          # Fluent server port
-   PASSWORD = "your-server-password"
-
-   channel = grpc.insecure_channel(f"{HOST}:{PORT}")
-   metadata = [("password", PASSWORD)]
-
-Pass ``channel`` and ``metadata`` to every stub you create. The channel
-should remain open for the lifetime of your client session.
+Every call to the API must include the server password as part of the request
+metadata. See :doc:`../user_guide/build_a_client` for the standard connection
+setup used throughout this documentation.
 
 .. tip::
 
    Always call the Health service ``Check`` RPC immediately after opening a
-   channel to confirm the server is ready before issuing any other calls.
+   connection to confirm the server is ready before issuing any other calls.
    See :doc:`../api/services/health` for details.
