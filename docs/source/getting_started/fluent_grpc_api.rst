@@ -99,14 +99,14 @@ Who this documentation is for
 **Developers making direct API calls**
    You want to call a specific RPC to read a setting, execute a command, or
    stream data. Go directly to the relevant service page in the
-   :doc:`../api/services/index` section. A good starting point is always the
-   Health service — confirm the server is ready before making any other call.
+   :doc:`../api/services/index` section, or browse the annotated Python
+   examples in :doc:`../user_guide/client_examples/index`.
 
 **Developers building client libraries or applications**
-   You are generating code, building a higher-level abstraction, or need to
-   enumerate everything the API exposes. Start by reading
-   :doc:`../user_guide/build_a_client`, which walks through schema discovery
-   and runtime calls for both the DataModel and Settings services.
+   You are generating code or building a higher-level abstraction. Start with
+   :doc:`../user_guide/build_a_client`, which explains the shared design of
+   the DataModel and Settings services and how ``GetSchema`` can be used as
+   the foundation for a fully typed generated API.
 
 Connection and authentication
 ------------------------------
@@ -116,11 +116,12 @@ All examples in this documentation share the same connection assumptions:
 .. include:: ../shared_example_assumptions.rst
 
 Every call to the API must include the server password as part of the request
-metadata. See :doc:`../user_guide/build_a_client` for the standard connection
-setup used throughout this documentation.
+metadata. See :doc:`../user_guide/client_examples/session_setup` for the
+standard connection, health-check, and session setup sequence.
 
 .. tip::
 
-   Always call the Health service ``Check`` RPC immediately after opening a
-   connection to confirm the server is ready before issuing any other calls.
-   See :doc:`../api/services/health` for details.
+   Always verify that the server is ready before issuing any simulation calls.
+   See :doc:`../user_guide/client_examples/session_setup` for how to combine
+   a connection check, a health check, and application-level queries in one
+   startup sequence.

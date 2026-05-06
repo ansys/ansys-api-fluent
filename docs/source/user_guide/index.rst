@@ -7,13 +7,15 @@ User guide
 The user guide covers practical, task-oriented workflows.
 
 :doc:`build_a_client`
-   A step-by-step guide to connecting to a live Fluent server, calling
-   ``GetSchema`` to discover available paths, reading and writing simulation
-   state, subscribing to solver events, and generating a typed client from the
-   schema.
+   How to build a minimal Fluent client using the DataModel or Settings
+   service — their shared RPC design, the differences in domain and
+   addressing, and how to use ``GetSchema`` as the foundation for a
+   fully typed generated API.
 
 :doc:`client_examples/index`
-   Runnable Python examples for every gRPC service and shared helper module.
+   Annotated Python examples for every major gRPC service, organised as
+   end-to-end narratives: session setup, DataModel and Settings workflows,
+   live solver streams, and simulation data access.
 
 .. toctree::
    :hidden:

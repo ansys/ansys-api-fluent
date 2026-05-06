@@ -1,176 +1,77 @@
-Building a Fluent client
-========================
+Building a minimal Fluent client
+=================================
 
-This guide walks through the pattern for building a client against the Fluent
-gRPC API: connecting to the server, discovering what the API exposes, reading
-and writing state, and reacting to solver events. Each step points to the
-relevant :doc:`client examples <client_examples/index>` for runnable code.
+A minimal Fluent client needs just one service. :doc:`DataModel <../api/services/datamodel_se>`
+and :doc:`Settings <../api/services/settings>` cover the full lifecycle of a
+Fluent session between them — choose the one that matches your use case:
+
+- Use **DataModel** if you are driving meshing, guided workflows, or
+  application preferences.
+- Use **Settings** if you are configuring the solver — boundary conditions,
+  physics models, or solver controls.
+
+Both services have the same design and the same core RPCs, so skills transfer
+directly. Everything else in the API — health checks, streaming, field data —
+is optional and can be added incrementally.
 
 .. note::
 
-   The ``.proto`` files in this package are language-agnostic. You can
-   generate a client for any language gRPC supports — Go, Java, C++, and
-   others. The client examples use Python for concreteness, but the RPC names
-   and message structures are the same in every language.
+   The ``.proto`` files are language-agnostic. RPC names and message structures
+   are identical whether you generate a client in Python, Go, Java, or C++.
 
-.. include:: ../shared_example_assumptions.rst
+Shared design
+-------------
 
-Overview
---------
+DataModel and Settings are deliberately mirrors of each other, which is why
+learning one immediately transfers to the other. They expose the same core RPCs:
 
-Fluent exposes two primary services for reading and writing simulation
-configuration: :doc:`DataModel <../api/services/datamodel_se>` and
-:doc:`Settings <../api/services/settings>`. They serve different domains but
-share a deliberately parallel design — the same RPC names appear in both,
-making it straightforward to transfer knowledge from one to the other.
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
 
-:doc:`DataModel <../api/services/datamodel_se>`
-   Hierarchical access to Fluent's **meshing, guided workflows, and
-   preferences**. Each call identifies the application context with a
-   **rules** string and a slash-separated **path** within it.
+   * - RPC
+     - Purpose
+   * - ``GetSchema``
+     - Return the full static structure — every path, type, command, and query.
+   * - ``GetState`` / ``SetState``
+     - Read or write the value at a path.
+   * - ``CreateObject`` / ``DeleteObject``
+     - Create or remove a named child object.
+   * - ``Rename`` / ``GetObjectNames``
+     - Rename a named object or list all names under a path.
+   * - ``ExecuteCommand`` / ``ExecuteQuery``
+     - Invoke a command or a read-only query at a path.
 
-:doc:`Settings <../api/services/settings>`
-   Hierarchical access to the **Fluent solver** — boundary conditions, solver
-   controls, model parameters, and results settings. Calls identify locations
-   with a ``PathInfo`` message carrying a **root** string (typically
-   ``"fluent"``) and a slash-separated **path**.
+Once you know how to use one service, you already understand the other.
 
-The parallel design means that once you know how to use one service you
-already understand the other. Both expose ``GetSchema``, ``GetState``,
-``SetState``, ``Rename``, ``CreateObject``, ``DeleteObject``,
-``GetObjectNames``, ``ExecuteCommand``, and ``ExecuteQuery`` with the same
-intent. The differences are in the domains they cover and a handful of
-service-specific RPCs described below.
+Differences
+-----------
 
-Step 1 — Connect and verify server health
------------------------------------------
+The services differ in **domain** and **addressing**:
 
-Before making any other call, open a gRPC channel and confirm the server is
-ready using the :doc:`Health <../api/services/health>` service ``Check`` RPC.
+- **DataModel** owns meshing, guided workflows, and preferences. Calls carry a
+  *rules* string (e.g. ``"meshing"``) and a slash-separated path.
+  It additionally provides ``UpdateDict``, ``GetAttributeValue``, ``FixState``,
+  and ``CreateCommandArguments`` / ``DeleteCommandArguments``.
 
-See the :doc:`Health client example <client_examples/health>` for code.
+- **Settings** owns the solver — boundary conditions, physics models, and
+  solver controls. Calls carry a ``PathInfo`` with a *root* string
+  (typically ``"fluent"``) and a slash-separated path.
+  It additionally provides ``GetAttrs``, ``IsWildcard``, ``GetListSize``,
+  and ``ResizeListObject``.
 
-Step 2 — Discover the schema
------------------------------
-
-Both the DataModel and Settings services expose a ``GetSchema`` RPC that
-returns the full static structure of the service — every path, type, command,
-and query available for a given Fluent version.
-
-**When to call it.** Call ``GetSchema`` once when your client initialises and
-cache the result. The schema is stable across sessions and does not reflect
-runtime state, so there is no need to re-fetch it per session.
-
-**What it returns.** The ``Schema`` message describes the object at the
-requested root, together with its children, commands, queries, and argument
-types, recursively. For the DataModel service the tree represents meshing and
-workflow objects; for the Settings service it represents solver groups and
-named-object collections such as boundary conditions.
-
-See the schema sections of the
-:doc:`DataModel client example <client_examples/datamodel_se>` and
-:doc:`Settings client example <client_examples/settings>` for code.
-
-Step 3 — Read and write state
-------------------------------
-
-The read/write RPCs have identical names in both services. The difference is in
-how paths are addressed and how values are represented.
-
-**DataModel** (meshing workflows and preferences)
-   - Address objects with a **rules** string (identifies the application) and a
-     slash-separated **path** within it.
-   - State values are carried in :doc:`Variant <../api/helpers/variant>`
-     messages, which can hold a scalar, a list, or a nested map.
-   - Use ``GetState`` / ``SetState`` for reading and writing a single path, and
-     ``UpdateDict`` to merge a partial dictionary into state without overwriting
-     unchanged keys.
-   - Use ``GetAttributeValue`` to read a single named attribute at a path
-     without fetching the entire state subtree.
-   - Use ``FixState`` when the datamodel indicates an inconsistency and the
-     solver needs to reconcile the object tree.
-
-**Settings** (solver — boundary conditions, models, controls)
-   - Address objects with a ``PathInfo`` message that carries a **root** string
-     and a slash-separated **path**.
-   - State values are carried in ``Value`` messages, which can hold a boolean,
-     integer, real, string, list, or map.
-   - Use ``GetState`` / ``SetState`` for reading and writing a single path.
-   - Use ``GetAttrs`` to retrieve metadata — type, allowed values, read-only
-     flag — at any path without a prior ``GetSchema`` call. This is useful for
-     runtime validation.
-   - Use ``IsWildcard`` to check whether a string will be interpreted as a
-     wildcard by the solver before passing it to other RPCs.
-
-**Object lifecycle — shared pattern.** Both services manage named objects
-(boundary conditions, workflow objects, etc.) through the same set of RPCs:
-``CreateObject``, ``DeleteObject``, ``Rename``, and ``GetObjectNames``. The
-request messages carry the same logical fields — a path to the parent container
-and, where applicable, a name — with the addressing convention (rules/path vs
-PathInfo) being the only structural difference. The Settings service
-additionally provides ``GetListSize`` and ``ResizeListObject`` for fixed-size
-list objects that have no DataModel equivalent.
-
-**Commands and queries — shared pattern.** Both services expose
-``ExecuteCommand`` and ``ExecuteQuery`` RPCs. Pass the path of the object, the
-name of the command or query, and any arguments. The DataModel service also
-supports ``CreateCommandArguments`` and ``DeleteCommandArguments`` for building
-up command argument objects incrementally before executing the command, which is
-useful when arguments are complex or populated in stages.
-
-See the state read/write and object lifecycle sections of the
-:doc:`DataModel client example <client_examples/datamodel_se>` and
-:doc:`Settings client example <client_examples/settings>` for code.
-
-Step 4 — React to state changes and solver events
---------------------------------------------------
-
-The two services expose complementary event mechanisms.
-
-**DataModel** provides a built-in event subscription model. Call
-``SubscribeEvents`` to register interest in specific events for a rules
-context, then call ``StreamEvents`` to open a server-side stream that delivers
-those events as they occur. Call ``UnsubscribeEvents`` to cancel a
-subscription. For coarser-grained monitoring, ``StreamStateChanges`` streams
-the full state (or a diff) whenever anything changes in the datamodel.
-
-The :doc:`Events <../api/services/events>` service covers **solver-level
-lifecycle events** — iteration completion, time-step advancement, convergence,
-and similar notifications that originate from the solver process rather than
-the datamodel. Its ``BeginStreaming`` RPC returns a server-side stream of these
-events. For deterministic per-iteration or per-time-step callbacks that pause
-and resume the solver, use ``PauseSolveFor``, ``ResumeSolve``, and
-``UnregisterPause`` on the same service.
-
-See the :doc:`DataModel client example <client_examples/datamodel_se>` and the
-:doc:`Events client example <client_examples/events>` for code.
-
-Building on the schema
+Working with the schema
 -----------------------
 
-The schema returned by ``GetSchema`` is also the foundation for generating a
-complete, typed client API at build time or startup time. The general approach
-is:
+``GetSchema`` is the starting point for any client. Call it once at startup,
+cache the result, and walk the returned ``Schema`` tree — via its ``children``,
+``commands``, and ``queries`` fields — to discover valid paths before reading
+or writing state. The schema is also the foundation for generating a fully
+typed client API: each node becomes a class, each parameter a typed property,
+and each command a method. This is exactly how PyFluent is built.
 
-1. Fetch ``GetSchema`` from a reference server, or embed the serialised
-   response as a build artefact.
-2. Walk the returned tree. For the DataModel service, each singleton or
-   named-object node becomes a class, each parameter a typed property, and each
-   command a method. For the Settings service, each group node becomes a class
-   and each leaf a typed property.
-3. Emit the generated source with path constants embedded so application code
-   never constructs path strings manually.
-4. Re-run the generator when the server version changes.
+See the schema discovery sections of :doc:`client_examples/datamodel_se` and
+:doc:`client_examples/settings` for runnable examples, and the service
+references at :doc:`../api/services/datamodel_se` and
+:doc:`../api/services/settings` for the full message definitions.
 
-This is how PyFluent is built: the ``Schema`` responses were consumed by a
-code generator that emitted the full Python class hierarchy. External developers
-can use the same approach for any language.
-
-Next steps
-----------
-
-- :doc:`../api/services/datamodel_se` — DataModel service reference
-- :doc:`../api/services/settings` — Settings service reference
-- :doc:`../api/services/events` — solver lifecycle events and pause callbacks
-- :doc:`../api/services/field_data` — streaming mesh geometry and field values
-- :doc:`../api/services/health` — Health service reference
