@@ -1,17 +1,12 @@
-DataModel
-=========
+DataModel service — Python examples
+====================================
 
-Overview
---------
+This page shows how to build a Python client for the ``DataModel`` gRPC
+service — from connecting to the server and exploring the schema, through
+reading and writing state, to a complete end-to-end meshing session.
 
-The ``DataModel`` service provides structured read/write access to Fluent's
-internal object model. It organises Fluent objects as a tree of singletons,
-named-object collections, parameters, commands, and queries all addressed by
-a **rules** string and a slash-separated **path**.
-
-The **rules** string selects which part of the DataModel API you are working
-with. Common values are ``meshing`` (the meshing workflow object model) and
-``flserver`` (the solver results and post-processing model).
+For the full message and field reference see
+:doc:`../../api/services/datamodel_se`.
 
 .. include:: ../../shared_example_assumptions.rst
 
@@ -20,76 +15,68 @@ with. Common values are ``meshing`` (the meshing workflow object model) and
 
    import grpc
    from ansys.api.fluent.v1 import datamodel_se_pb2, datamodel_se_pb2_grpc
+   from ansys.api.fluent.v1 import variant_pb2
 
    channel = grpc.insecure_channel("127.0.0.1:50051")
    metadata = [("password", "your-server-password")]
    stub = datamodel_se_pb2_grpc.DataModelStub(channel)
 
-Runtime API
------------
+The **rules** string identifies the application context for every call.
+The value to pass depends on the Fluent application you are targeting;
+``"meshing"`` selects the meshing object model.
 
-Initialization and state streaming
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Discovering the schema
+-----------------------
 
-Initialize the DataModel API for a rules context, then stream incremental or
-full-snapshot state updates as the server-side object model changes.
-
-- ``InitDatamodel(InitDatamodelRequest)`` → ``InitDatamodelResponse``
-  Request fields: ``rules: string``, ``return_state_changes: bool``
-- ``StreamStateChanges(StreamStateChangesRequest)`` → ``stream StreamStateChangesResponse``
-  Request fields: ``rules: string``, ``return_state_changes: bool``, ``diff_state: DiffState``
+Call ``GetSchema`` once at startup and cache the result. It returns the
+complete tree of paths, object types, commands, and queries available for a
+given rules context. The schema is stable for a given Fluent version and does
+not reflect runtime state.
 
 .. code-block:: python
    :caption: Python
 
-   stub.InitDatamodel(
-       datamodel_se_pb2.InitDatamodelRequest(rules="meshing", return_state_changes=False),
+   schema_resp = stub.GetSchema(
+       datamodel_se_pb2.GetSchemaRequest(rules="meshing"),
        metadata=metadata,
    )
 
-   stream = stub.StreamStateChanges(
-       datamodel_se_pb2.StreamStateChangesRequest(
-           rules="meshing",
-           return_state_changes=True,
-           diff_state=datamodel_se_pb2.DIFF_STATE_FULL,
-       ),
-       metadata=metadata,
-   )
-   for i, update in enumerate(stream):
-       print(f"Update {i}: deleted={list(update.deleted_paths)}")
-       if i >= 2:
-           break
+   def walk(node, indent=0):
+       prefix = "  " * indent
+       for name, child in node.singletons.items():
+           print(f"{prefix}{name}/")
+           walk(child, indent + 1)
+       for name, child in node.named_objects.items():
+           print(f"{prefix}{name}:<name>/")
+           walk(child, indent + 1)
+       for name in node.parameters:
+           print(f"{prefix}{name}")
+       for name in node.commands:
+           print(f"{prefix}{name}()")
 
-State read and write
-~~~~~~~~~~~~~~~~~~~~
+   walk(schema_resp.info)
 
-Read and modify state at any path. ``GetState`` and ``SetState`` work for all
-node types. ``UpdateDict`` applies a partial update to a Dict-typed parameter;
-``FixState`` lets the server correct invalid state at a path.
+The tree structure directly mirrors the slash-separated paths used in every
+other RPC call.
 
-``Variant`` is the typed value container used in all state, argument, and
-result payloads. Always call ``WhichOneof("as")`` on a returned ``Variant`` to
-identify which field is set before accessing it.
+Runtime API overview
+---------------------
 
-- ``GetState(GetStateRequest)`` → ``GetStateResponse``
-  Request fields: ``rules: string``, ``path: string``
-- ``SetState(SetStateRequest)`` → ``SetStateResponse``
-  Request fields: ``rules: string``, ``path: string``, ``state: Variant``, ``wait: bool``
-- ``UpdateDict(UpdateDictRequest)`` → ``UpdateDictResponse``
-  Request fields: ``rules: string``, ``path: string``, ``merge_dict: Variant``, ``wait: bool``, ``recursive: bool``
-- ``FixState(FixStateRequest)`` → ``FixStateResponse``
-  Request fields: ``rules: string``, ``path: string``
+Once you know the schema, the runtime RPCs follow a small, consistent set of
+patterns.
+
+**Read and write state** with ``GetState`` and ``SetState``. Values are
+carried in :doc:`Variant <../../api/helpers/variant>` messages. Use
+``UpdateDict`` to merge a partial map without overwriting untouched keys.
 
 .. code-block:: python
    :caption: Python
 
-   from ansys.api.fluent.v1 import variant_pb2
-
-   get_resp = stub.GetState(
+   resp = stub.GetState(
        datamodel_se_pb2.GetStateRequest(rules="meshing", path="GlobalSettings/EnableCleanCAD"),
        metadata=metadata,
    )
-   print("Current kind:", get_resp.state.WhichOneof("as"))
+   print(getattr(resp.state, resp.state.WhichOneof("as")))
 
    stub.SetState(
        datamodel_se_pb2.SetStateRequest(
@@ -101,66 +88,91 @@ identify which field is set before accessing it.
        metadata=metadata,
    )
 
-Object lifecycle
-~~~~~~~~~~~~~~~~
-
-Enumerate, rename, and delete named objects in the DataModel API tree.
-
-- ``GetObjectNames(GetObjectNamesRequest)`` → ``GetObjectNamesResponse``
-  Request fields: ``rules: string``, ``path: string``
-- ``Rename(RenameRequest)`` → ``RenameResponse``
-  Request fields: ``rules: string``, ``path: string``, ``new_name: string``, ``wait: bool``
-- ``DeleteObject(DeleteObjectRequest)`` → ``DeleteObjectResponse``
-  Request fields: ``rules: string``, ``path: string``, ``wait: bool``
-- ``DeleteChildObjects(DeleteChildObjectsRequest)`` → ``DeleteChildObjectsResponse``
-  Request fields: ``rules: string``, ``path: string``, oneof ``child_names`` or ``delete_all``, ``wait: bool``
+**Manage named objects** with ``CreateObject``, ``Rename``, ``DeleteObject``,
+and ``GetObjectNames``. Instance paths use ``Type:<name>`` colon notation.
 
 .. code-block:: python
    :caption: Python
 
-   names_resp = stub.GetObjectNames(
-       datamodel_se_pb2.GetObjectNamesRequest(rules="flserver", path="Case/Results/Graphics/Contour"),
+   stub.CreateObject(
+       datamodel_se_pb2.CreateObjectRequest(
+           rules="meshing", path="SomeCollection", name="my-object", wait=True,
+       ),
        metadata=metadata,
    )
-   print("Contour names:", list(names_resp.names))
+   names = stub.GetObjectNames(
+       datamodel_se_pb2.GetObjectNamesRequest(rules="meshing", path="SomeCollection"),
+       metadata=metadata,
+   ).names
+   print(list(names))
 
-   if names_resp.names:
-       old_name = names_resp.names[0]
-       stub.Rename(
-           datamodel_se_pb2.RenameRequest(
-               rules="flserver",
-               path=f"Case/Results/Graphics/Contour:{old_name}",
-               new_name=f"{old_name}-renamed",
-               wait=True,
-           ),
-           metadata=metadata,
-       )
-       stub.DeleteChildObjects(
-           datamodel_se_pb2.DeleteChildObjectsRequest(
-               rules="flserver",
-               path="Case/Results/Graphics/Contour",
-               child_names=datamodel_se_pb2.ChildNames(names=[f"{old_name}-renamed"]),
-               wait=True,
-           ),
-           metadata=metadata,
-       )
-
-Commands and queries
-~~~~~~~~~~~~~~~~~~~~
-
-Execute actions and ask computed questions at a target path. ``ExecuteCommand``
-performs a state-mutating action; ``ExecuteQuery`` returns a computed result
-without side effects.
-
-- ``ExecuteCommand(ExecuteCommandRequest)`` → ``ExecuteCommandResponse``
-  Request fields: ``rules: string``, ``path: string``, ``command: string``, ``wait: bool``, ``args: Variant``
-- ``ExecuteQuery(ExecuteQueryRequest)`` → ``ExecuteQueryResponse``
-  Request fields: ``rules: string``, ``path: string``, ``query: string``, ``args: Variant``
+**Execute commands and queries** with ``ExecuteCommand`` and
+``ExecuteQuery``. Pass arguments as a ``Variant`` map. For complex
+multi-field arguments, use ``CreateCommandArguments`` to build them
+incrementally on the server before executing.
 
 .. code-block:: python
    :caption: Python
 
-   cmd_resp = stub.ExecuteCommand(
+   stub.ExecuteCommand(
+       datamodel_se_pb2.ExecuteCommandRequest(
+           rules="meshing", path="", command="ImportGeometry", wait=True,
+           args=variant_pb2.Variant(
+               variant_map_state=variant_pb2.VariantMap(
+                   item={"FileName": variant_pb2.Variant(string_state="/data/my.scdoc")}
+               )
+           ),
+       ),
+       metadata=metadata,
+   )
+
+**React to changes** by subscribing to object-level events with
+``SubscribeEvents`` and streaming them with ``StreamEvents``. For
+coarser-grained monitoring, ``StreamStateChanges`` delivers a diff or
+full snapshot whenever the datamodel changes.
+
+End-to-end example
+-------------------
+
+The example below walks through a complete meshing session: connect,
+initialise, discover the schema, configure a setting, import a geometry
+file, verify the result, generate the mesh, and close.
+
+.. code-block:: python
+   :caption: Python
+
+   import grpc
+   from ansys.api.fluent.v1 import datamodel_se_pb2, datamodel_se_pb2_grpc, variant_pb2
+
+   channel = grpc.insecure_channel("127.0.0.1:50051")
+   metadata = [("password", "your-server-password")]
+   stub = datamodel_se_pb2_grpc.DataModelStub(channel)
+
+   # Initialise the datamodel for the meshing context.
+   stub.InitDatamodel(
+       datamodel_se_pb2.InitDatamodelRequest(rules="meshing", return_state_changes=False),
+       metadata=metadata,
+   )
+
+   # Discover what is available at the top level.
+   schema_resp = stub.GetSchema(
+       datamodel_se_pb2.GetSchemaRequest(rules="meshing"), metadata=metadata,
+   )
+   print("Top-level singletons:", list(schema_resp.info.singletons.keys()))
+
+   # Turn on clean CAD import before loading geometry.
+   stub.SetState(
+       datamodel_se_pb2.SetStateRequest(
+           rules="meshing",
+           path="GlobalSettings/EnableCleanCAD",
+           state=variant_pb2.Variant(bool_state=True),
+           wait=True,
+       ),
+       metadata=metadata,
+   )
+
+   # Import the geometry file.
+   stub.ExecuteCommand(
        datamodel_se_pb2.ExecuteCommandRequest(
            rules="meshing",
            path="",
@@ -168,140 +180,31 @@ without side effects.
            wait=True,
            args=variant_pb2.Variant(
                variant_map_state=variant_pb2.VariantMap(
-                   item={"FileName": variant_pb2.Variant(string_state=r"<file path>")}
+                   item={"FileName": variant_pb2.Variant(string_state="/data/my.scdoc")}
                )
            ),
        ),
        metadata=metadata,
    )
-   print("Result kind:", cmd_resp.result.WhichOneof("as"))
 
-Command argument lifecycle
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Some multi-step workflows require an explicit command-argument instance that
-persists between calls. Create one, populate its state via ``SetState``, then
-delete it when you are done.
-
-- ``CreateCommandArguments(CreateCommandArgumentsRequest)`` → ``CreateCommandArgumentsResponse``
-  Request fields: ``rules: string``, ``path: string``, ``command: string``
-- ``DeleteCommandArguments(DeleteCommandArgumentsRequest)`` → ``DeleteCommandArgumentsResponse``
-  Request fields: ``rules: string``, ``path: string``, ``command: string``, ``command_id: string``
-
-.. code-block:: python
-   :caption: Python
-
-   create_args_resp = stub.CreateCommandArguments(
-       datamodel_se_pb2.CreateCommandArgumentsRequest(
-           rules="meshing", path="", command="ImportGeometry",
-       ),
+   # Confirm the setting was applied.
+   resp = stub.GetState(
+       datamodel_se_pb2.GetStateRequest(rules="meshing", path="GlobalSettings/EnableCleanCAD"),
        metadata=metadata,
    )
-   command_id = create_args_resp.command_id
+   print("EnableCleanCAD:", resp.state.bool_state)
 
-   # ... populate argument state via SetState using command_id in the path ...
-
-   stub.DeleteCommandArguments(
-       datamodel_se_pb2.DeleteCommandArgumentsRequest(
-           rules="meshing", path="", command="ImportGeometry", command_id=command_id,
+   # Generate the mesh.
+   stub.ExecuteCommand(
+       datamodel_se_pb2.ExecuteCommandRequest(
+           rules="meshing", path="", command="GenerateMesh", wait=True,
+           args=variant_pb2.Variant(),
        ),
        metadata=metadata,
    )
 
-Attribute access
-~~~~~~~~~~~~~~~~
+   channel.close()
 
-Retrieve a named attribute value for example, the default value, allowed
-values, or read-only status at a specific path. ``GetSpecs`` returns the
-full member specification for a path.
-
-- ``GetAttributeValue(GetAttributeValueRequest)`` → ``GetAttributeValueResponse``
-  Request fields: ``rules: string``, ``path: string``, ``attribute: string``
-- ``GetSpecs(GetSpecsRequest)`` → ``GetSpecsResponse``
-  Request fields: ``rules: string``, ``path: string``, ``include_children: bool``
-
-.. code-block:: python
-   :caption: Python
-
-   attr_resp = stub.GetAttributeValue(
-       datamodel_se_pb2.GetAttributeValueRequest(
-           rules="meshing",
-           path="GlobalSettings/EnableCleanCAD",
-           attribute="default",
-       ),
-       metadata=metadata,
-   )
-   print("Default kind:", attr_resp.result.WhichOneof("as"))
-
-Event subscription
-~~~~~~~~~~~~~~~~~~
-
-Subscribe to object-level events creation, modification, deletion, and
-command execution then consume them as a continuous stream. Call
-``UnsubscribeEvents`` to stop receiving events for a given subscription.
-
-- ``SubscribeEvents(SubscribeEventsRequest)`` → ``SubscribeEventsResponse``
-- ``UnsubscribeEvents(UnsubscribeEventsRequest)`` → ``UnsubscribeEventsResponse``
-- ``StreamEvents(StreamEventsRequest)`` → ``stream StreamEventsResponse``
-
-.. code-block:: python
-   :caption: Python
-
-   sub_resp = stub.SubscribeEvents(
-       datamodel_se_pb2.SubscribeEventsRequest(
-           event_requests=[
-               datamodel_se_pb2.DataModelEventRequest(
-                   rules="meshing",
-                   modified_event_request=datamodel_se_pb2.ModifiedEventRequest(
-                       path="GlobalSettings/EnableCleanCAD"
-                   ),
-               )
-           ]
-       ),
-       metadata=metadata,
-   )
-   tags = [r.tag for r in sub_resp.responses]
-
-   event_stream = stub.StreamEvents(
-       datamodel_se_pb2.StreamEventsRequest(), metadata=metadata,
-   )
-   for i, event in enumerate(event_stream):
-       print(f"Event {i}: tag={event.tag}, kind={event.WhichOneof('event_response')}")
-       if i >= 2:
-           break
-
-   stub.UnsubscribeEvents(
-       datamodel_se_pb2.UnsubscribeEventsRequest(tags=tags), metadata=metadata,
-   )
-
-API schema
-----------
-
-``GetSchema`` returns the API schema for the DataModel service a complete,
-recursive description of all paths, object types, parameter types, commands,
-queries, and argument signatures that exist for a given rules context,
-independent of any running simulation.
-
-Use it when you need to enumerate what is available programmatically for
-example, to discover command names before calling ``ExecuteCommand``, or to
-build a higher-level client abstraction. See :doc:`../build_a_client` for a
-step-by-step walkthrough of schema discovery.
-
-- ``GetSchema(GetSchemaRequest)`` → ``GetSchemaResponse``
-  Request field: ``rules: string``
-
-.. code-block:: python
-   :caption: Python
-
-   schema_resp = stub.GetSchema(
-       datamodel_se_pb2.GetSchemaRequest(rules="meshing"),
-       metadata=metadata,
-   )
-   root = schema_resp.info
-   print("Top-level singletons:", list(root.singletons.keys()))
-   print("Top-level named-object types:", list(root.named_objects.keys()))
-
-.. ----------------------------------------------------------------------------
-.. The block below is generated by docs/_ext/proto_docgen.py from the matching
-.. .proto file in ansys/api/fluent/v1. Edit the proto comments to update it.
-.. ----------------------------------------------------------------------------
+For the complete message and field reference — request/response types,
+``Variant`` encoding, and the ``DiffState`` enum — see
+:doc:`../../api/services/datamodel_se`.

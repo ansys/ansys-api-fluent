@@ -28,7 +28,7 @@ What differs is *which part of Fluent* each service connects you to.
    application to work with by supplying a *rules* string when making a call.
    Examples of supported applications include:
 
-   - ``"meshing"`` — the meshing workflow
+   - ``"meshing"`` — the meshing commands and object model
    - ``"workflow"`` — the guided workflow engine
    - ``"preferences"`` — user preferences
 

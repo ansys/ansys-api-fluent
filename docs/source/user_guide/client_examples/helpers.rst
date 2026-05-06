@@ -65,5 +65,3 @@ such as centroid, force, and moment. See
 
    origin = primitives_pb2.Point(x=0.0, y=0.0, z=0.0)
    corner = primitives_pb2.Point(x=1.5, y=2.0, z=-0.5)
-
-
