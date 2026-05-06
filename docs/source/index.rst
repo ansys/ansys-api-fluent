@@ -1,25 +1,30 @@
-ansys-api-fluent documentation |version|
-=========================================
+﻿Ansys Fluent gRPC API
+=====================
 
 .. toctree::
    :hidden:
    :maxdepth: 2
 
-   getting_started/getting_started_contents
-   user_guide/user_guide_contents
-   api/api_contents
+   getting_started/index
+   user_guide/index
+   api/index
    glossary
 
-Welcome to ansys-api-fluent
-----------------------------
+This package provides the gRPC interface for Ansys Fluent with pre-generated
+Python stubs for building a client. The underlying ``.proto`` files are
+language-independent and can be used to generate native clients in C++, Go,
+Java, C#, or any other language with gRPC support.
 
-This package provides the auto-generated Python gRPC interface for Ansys Fluent v1 services.
+**New here?** Start with :ref:`getting_started` — it explains how the API is
+structured, walks you through installation, and includes examples in multiple
+languages to illustrate the language-agnostic nature of the ``.proto`` files.
 
-Use the **Getting started** section to get connected quickly and **User guide** to build your first 
-end-to-end client. The **API reference** documents every RPC, message, and enum in detail.
+**Ready to build?** Read :doc:`user_guide/build_a_client` to understand the
+DataModel and Settings services — the two you need for a minimal working client.
+Then browse the :ref:`client_examples` for annotated Python examples covering
+session setup, live solver streams, and simulation data access.
 
-Indices and tables
-==================
+**Looking up a specific service, RPC, or message?** Go straight to the
+:ref:`api_reference`.
 
-* :ref:`genindex`
-* :ref:`search`
+**Unfamiliar with a term?** See the :doc:`glossary`.

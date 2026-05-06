@@ -1,0 +1,26 @@
+.. _getting_started:
+
+===============
+Getting started
+===============
+
+This section is your entry point to the Fluent gRPC API. Read the API overview
+first to understand how the services are structured, then follow the
+installation guide to make your first calls against a running Fluent server.
+
+:doc:`fluent_grpc_api`
+   How the API is organised: the DataModel and Settings services and their
+   shared design, the other single-purpose services, path-addressing
+   conventions, and the schema versus runtime distinction.
+
+:doc:`gettingstarted`
+   Package installation, prerequisites, and your first RPC call. Includes
+   stub-generation commands and a health-check example in Python, C++, Go,
+   Java, and C# to illustrate the language-agnostic nature of the API.
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+
+   fluent_grpc_api
+   gettingstarted
