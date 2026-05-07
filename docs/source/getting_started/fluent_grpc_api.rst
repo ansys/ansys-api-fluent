@@ -2,8 +2,8 @@ The Fluent gRPC API
 ===================
 
 This page gives you a high-level map of the Fluent gRPC API before you explore
-any specific service. Familiarity with this overview will make the rest of the
-documentation easier to navigate.
+any specific service. This overview will help you navigate the rest of the
+documentation effectively.
 
 What this API gives you
 -----------------------
@@ -46,7 +46,7 @@ layers that serve different purposes.
 **Schema layer**
    Before reading or writing any live data, you can ask the service to describe
    itself: what objects exist, what parameters they have, what commands are
-   available, and what types everything uses. This description — called the
+   available, and the types of each object and parameter. This description — called the
    *schema* — is static. It does not depend on a running simulation or any
    particular solver state. It is the contract the service makes with you.
 
