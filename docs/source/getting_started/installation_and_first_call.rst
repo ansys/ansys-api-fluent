@@ -233,7 +233,6 @@ Common errors
 Next steps
 ~~~~~~~~~~
 
-- :doc:`fluent_grpc_api` — understand the overall API structure before writing more code
 - :doc:`../user_guide/build_a_client` — how the DataModel and Settings services
   work and how to use them as the foundation for a minimal client
 - :doc:`../user_guide/client_examples/index` — annotated Python examples for
