@@ -51,14 +51,22 @@ The services differ in **domain** and **addressing**:
 
 - **DataModel** owns meshing, guided workflows, and preferences. Calls carry a
   *rules* string (e.g. ``"meshing"``) and a slash-separated path.
-  It additionally provides ``UpdateDict``, ``GetAttributeValue``, ``FixState``,
-  and ``CreateCommandArguments`` / ``DeleteCommandArguments``.
+  It additionally provides ``UpdateDict``, ``GetAttributeValue``,
+  and ``CreateCommandArguments`` / ``DeleteCommandArguments``. Supported
+  rules strings are:
+
+  - ``"meshing"``
+  - ``"meshing_utilities"``
+  - ``"part_management"``
+  - ``"pm_file_management"``
+  - ``"preferences"``
+  - ``"workflow"``
+  - ``"meshing_workflow"``
 
 - **Settings** owns the solver — boundary conditions, physics models, and
   solver controls. Calls carry a ``PathInfo`` with a *root* string
   (typically ``"fluent"``) and a slash-separated path.
-  It additionally provides ``GetAttrs``, ``IsWildcard``, ``GetListSize``,
-  and ``ResizeListObject``.
+  It additionally provides ``GetAttrs``, ``IsWildcard``, and ``GetListSize``.
 
 Working with the schema
 -----------------------
@@ -68,7 +76,8 @@ cache the result, and walk the returned ``Schema`` tree — via its ``children``
 ``commands``, and ``queries`` fields — to discover valid paths before reading
 or writing state. The schema is also the foundation for generating a fully
 typed client API: each node becomes a class, each parameter a typed property,
-and each command a method. This is exactly how PyFluent is built.
+and each command a method. This is exactly how `PyFluent
+<https://github.com/ansys/pyfluent>`_ is built.
 
 See the schema discovery sections of :doc:`client_examples/datamodel_se` and
 :doc:`client_examples/settings` for runnable examples, and the service

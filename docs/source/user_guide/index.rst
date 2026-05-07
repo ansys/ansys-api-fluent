@@ -9,8 +9,8 @@ The user guide covers practical, task-oriented workflows.
 :doc:`build_a_client`
    How to build a minimal Fluent client using the DataModel or Settings
    service — their shared RPC design, the differences in domain and
-   addressing, and how to use ``GetSchema`` as the foundation for a
-   fully typed generated API.
+   addressing, and the API schema for building a fully typed generated
+   API.
 
 :doc:`client_examples/index`
    Annotated Python examples for every major gRPC service, organised as
