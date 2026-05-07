@@ -1,5 +1,5 @@
-Getting started
-===============
+Installation and First Call
+===========================
 
 This guide shows how to install the package and make your first service calls.
 For a map of the whole API, read :doc:`fluent_grpc_api` first.
@@ -16,7 +16,7 @@ Prerequisites
 
 - Python 3.10 or later
 - A running Fluent server (Ansys Fluent 27R1 or later) with its IP address,
-  port, and password to hand
+  port, and password
 
 What this package provides
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

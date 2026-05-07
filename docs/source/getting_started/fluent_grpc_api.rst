@@ -16,36 +16,24 @@ Two of these services — the **DataModel service** and the **Settings service**
 — are the most commonly used and share a similar design. Understanding how they
 relate to each other, and what each one covers, is the best starting point.
 
-DataModel service and Settings service
----------------------------------------
+DataModel and Settings service
+-------------------------------
 
 These two services offer the same kinds of operations: you can read state,
 write state, execute commands, and query the structure of the API itself.
 What differs is *which part of Fluent* each service connects you to.
 
 **DataModel service**
-   Connects you to Fluent's object-model based applications. You choose which
-   application to work with by supplying a *rules* string when making a call.
-   Examples of supported applications include:
-
-   - ``"meshing"`` — the meshing commands and object model
-   - ``"workflow"`` — the guided workflow engine
-   - ``"preferences"`` — user preferences
-
-   Each application exposes its own tree of objects, parameters, and commands,
-   all addressed by a slash-separated path.
+   Connects you to Fluent applications such as meshing,
+   workflow tasks, and user preferences. You select the target
+   application by supplying a *rules* string with each call. The exposed
+   interface follows a hierarchical, slash-separated path model for objects,
+   parameters, and commands.
 
 **Settings service**
    Connects you to the Fluent solver — boundary conditions, solver controls,
    material properties, and results settings. It uses the same slash-separated
    path style, but the tree it exposes is the solver configuration hierarchy.
-
-.. note::
-
-   The DataModel service also accepts ``"flserver"`` as a rules string, which
-   gives access to solver state. However, for all solver-related work the
-   **Settings service is strongly preferred** — it provides a cleaner,
-   more complete interface to the same data.
 
 Both services expose two complementary layers, described below.
 
@@ -105,8 +93,8 @@ Who this documentation is for
 **Developers building client libraries or applications**
    You are generating code or building a higher-level abstraction. Start with
    :doc:`../user_guide/build_a_client`, which explains the shared design of
-   the DataModel and Settings services and how ``GetSchema`` can be used as
-   the foundation for a fully typed generated API.
+   the DataModel and Settings services and the common patterns used to build
+   robust, typed client abstractions.
 
 Connection and authentication
 ------------------------------
@@ -122,6 +110,5 @@ standard connection, health-check, and session setup sequence.
 .. tip::
 
    Always verify that the server is ready before issuing any simulation calls.
-   See :doc:`../user_guide/client_examples/session_setup` for how to combine
-   a connection check, a health check, and application-level queries in one
-   startup sequence.
+   Use the :doc:`../api/services/health` service as the primary check for
+   server readiness.
