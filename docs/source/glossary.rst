@@ -8,10 +8,11 @@ Glossary
         queries, and help text returned by the ``GetSchema`` RPC. Both the
         DataModel service and the Settings service expose ``GetSchema``. Use the
         API schema to discover what is available before writing ``GetState`` or
-        ``GetVar`` calls.
+        ``SetState`` calls.
 
     Channel
-        A gRPC connection to a Fluent server. Created with
+        A `gRPC channel <https://grpc.io/docs/what-is-grpc/core-concepts/#channels>`_
+        to a Fluent server. Created with
         ``grpc.insecure_channel()`` or ``grpc.secure_channel()``.
 
     DataModel service
@@ -19,11 +20,6 @@ Glossary
         It exposes the Fluent object model as a tree of singletons, named objects,
         parameters, commands, and queries. Access it through the DataModel API.
 
-    DataModel API
-        The interface exposed by the DataModel service. A tree of named objects,
-        singletons, parameters, commands, and queries that covers the meshing and
-        solver object model. Addressed by ``rules`` context and slash-separated
-        ``path`` strings.
 
     Element values
         Field data stored at cell centers (averaged to cell centers).
@@ -33,15 +29,18 @@ Glossary
         elements or nodes.
 
     gRPC
-        A modern RPC framework using Protocol Buffers for serialization and
-        HTTP/2 for transport.
+        `gRPC <https://grpc.io/>`_ is an RPC framework that commonly uses
+        `Protocol Buffers <https://protobuf.dev/overview/>`_ for serialization
+        and HTTP/2 for transport.
 
     Message
-        A data structure defined in a ``.proto`` file. Request and response
+        A data structure defined in a
+        `.proto file <https://protobuf.dev/overview/>`_. Request and response
         messages are used with RPCs.
 
     Metadata
-        Additional key-value pairs sent with every gRPC request, typically
+        `Metadata <https://grpc.io/docs/guides/metadata/>`_ is additional
+        key-value information sent with every gRPC request, typically
         including the server password as ``[("password", PASSWORD)]``.
 
     Node values
@@ -52,20 +51,17 @@ Glossary
         definitions.
 
     Protocol Buffers
-        A language-neutral, platform-neutral method of serializing structured data.
-        Used by all Fluent v1 services.
+        `Protocol Buffers <https://protobuf.dev/overview/>`_ is a
+        language-neutral, platform-neutral method of serializing structured
+        data. It is used by all Fluent v1 services.
 
     RPC
-        Remote Procedure Call — a method on a service that can be called over gRPC.
+        `Remote Procedure Call <https://grpc.io/docs/what-is-grpc/core-concepts/#service-definition>`_
+        — a method on a service that can be called over gRPC.
 
     Service
-        A collection of related RPC operations defined in a ``.proto`` file.
-
-    Settings API
-        The interface exposed by the Settings service. A flat, slash-separated
-        path hierarchy (for example,
-        ``setup/boundary-conditions/wall/wall-1/thermal``) that maps directly
-        to Fluent solver configuration.
+        A collection of related RPC operations defined in a
+        `.proto file <https://protobuf.dev/overview/>`_.
 
     Settings service
         The ``Settings`` gRPC service (package ``ansys.api.fluent.v1.settings``).
@@ -73,14 +69,15 @@ Glossary
         Access it through the Settings API.
 
     Stream
-        A sequence of messages returned by a single RPC. Server-streaming RPCs
-        return multiple responses over time (for example, event notifications or
+        A sequence of messages returned by a single RPC.
+        `Streaming RPCs <https://grpc.io/docs/what-is-grpc/core-concepts/#rpc-life-cycle>`_
+        return multiple messages over time (for example, event notifications or
         field data chunks).
 
     Stub
-        A client object that provides methods to call remote procedures. Each
-        service has a corresponding ``*Stub`` class generated from the proto
-        definition.
+        A generated client object that provides methods to call remote
+        procedures. Each service has a corresponding ``*Stub`` class generated
+        from the proto definition.
 
     Surface
         A geometric surface in the mesh (for example, wall, inlet, outlet) where

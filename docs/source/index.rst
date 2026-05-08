@@ -20,21 +20,21 @@ contains the underlying `.proto files <https://protobuf.dev/overview/>`_,
 which are language-independent and can be used to generate native clients in
 C++, Go, Java, C#, or any other language with `gRPC <https://grpc.io/>`_ support.
 
-**Getting started**
+.. rubric:: :ref:`Getting started <getting_started>`
 
-Start with :ref:`getting_started` to understand the API structure, installation
-steps, and multi-language examples that highlight the language-agnostic nature
-of the `.proto files <https://protobuf.dev/overview/>`_.
+Start here to understand the API structure,
+installation steps, and multi-language examples that highlight the
+language-agnostic nature of the proto files.
 
-**Python client examples**
+.. rubric:: :ref:`Python client examples <client_examples>`
 
-Browse :ref:`client_examples` for the current Python examples covering client
-setup, live solver streams, and simulation data access.
+Browse the current Python examples covering
+client setup, live solver streams, and simulation data access.
 
-**API reference**
+.. rubric:: :ref:`API reference <api_reference>`
 
-Use :ref:`api_reference` to look up a specific service, RPC, or message.
+Use this section to look up a specific service, RPC, or message.
 
-**Glossary**
+.. rubric:: :doc:`Glossary <glossary>`
 
-See :doc:`glossary` for terminology used throughout the documentation.
+See this page for terminology used throughout the documentation.

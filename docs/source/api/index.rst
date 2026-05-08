@@ -17,16 +17,27 @@ referenced across services.
      - Contents
    * - :doc:`Services <services/index>`
      - The eleven gRPC services that make up the current Fluent API:
-       ``Health``, ``AppUtilities``, ``DataModelSE``, ``Settings``,
-       ``Events``, ``FieldData``, ``Monitor``, ``Reduction``, ``Svar``,
-       ``Transcript``, and ``Connection``.
+       :doc:`Health <services/health>`,
+       :doc:`ApplicationRuntime <services/app_utilities>`,
+       :doc:`DataModel <services/datamodel_se>`,
+       :doc:`Settings <services/settings>`,
+       :doc:`Events <services/events>`,
+       :doc:`FieldData <services/field_data>`,
+       :doc:`Monitor <services/monitor>`,
+       :doc:`Reduction <services/reduction>`,
+       :doc:`SolutionVariable <services/svar>`,
+       :doc:`Transcript <services/transcript>`, and
+       :doc:`Connection <services/connection>`.
    * - :doc:`Helper modules <helpers/index>`
-     - Shared protobuf message types (``Primitives``, ``SchemePointer``,
-       ``Variant``) used as fields across multiple services.
+     - Shared protobuf message types used as fields across multiple services:
+       :doc:`Primitives <helpers/primitives>`,
+       :doc:`SchemePointer <helpers/scheme_pointer>`, and
+       :doc:`Variant <helpers/variant>`.
    * - :doc:`Legacy <legacy/index>`
-     - Older services (``TextInterface``, ``SchemeInterpreter``) retained for
-       backward compatibility. Prefer the current service equivalents for new
-       work.
+     - Older services retained for backward compatibility:
+       :doc:`TextInterface <legacy/datamodel_tui>` and
+       :doc:`SchemeInterpreter <legacy/scheme_eval>`. Prefer the current
+       service equivalents for new work.
 
 .. toctree::
    :hidden:
