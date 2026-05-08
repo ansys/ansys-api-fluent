@@ -70,7 +70,7 @@ jobs:
   test:
     name: Unit tests
     needs: [build]
-    runs-on: ubuntu-latest
+    runs-on: public-ubuntu-latest-16-cores
     timeout-minutes: 60
 
     steps:
@@ -103,7 +103,7 @@ jobs:
       - name: Pull Fluent Docker image
         run: docker pull ghcr.io/ansys/fluent:${{ env.FLUENT_IMAGE_TAG }}
 
-      - name: Run integration tests
+      - name: Run unit tests
         run: python -m pytest tests/ -v
 
   release:
