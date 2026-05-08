@@ -13,12 +13,12 @@
 
 The Fluent `gRPC <https://grpc.io/>`_ API is a service-based interface for
 driving Fluent programmatically from external clients.
-This package provides pre-generated Python stubs for building clients against
-this API.
 The `repository <https://github.com/ansys-internal/ansys-api-fluent>`_
-contains the underlying `.proto files <https://protobuf.dev/overview/>`_,
+contains `.proto files <https://protobuf.dev/overview/>`_,
 which are language-independent and can be used to generate native clients in
 C++, Go, Java, C#, or any other language with `gRPC <https://grpc.io/>`_ support.
+This `package <https://pypi.org/project/ansys-api-fluent/>`_ provides pre-generated
+Python stubs for building clients against this API.
 
 Getting started
 ~~~~~~~~~~~~~~~
@@ -31,7 +31,7 @@ Python client examples
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Browse :ref:`client_examples` for the current Python examples covering
-client setup, live solver streams, and simulation data access.
+simulation setup, live solver streams, and simulation data access.
 
 API reference
 ~~~~~~~~~~~~~

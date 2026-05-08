@@ -11,39 +11,15 @@ event handling, and extraction of field and solution data for post-processing.
 These capabilities are organised as a set of *services*, each responsible for a
 specific area of functionality.
 
-This guide shows how to install the package and make your first service calls.
+What is in ansys-api-fluent
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Installation
-~~~~~~~~~~~~
-
-.. code-block:: bash
-
-   pip install ansys-api-fluent
-
-Prerequisites
-~~~~~~~~~~~~~
-
-- Python 3.10 or later
-- A running Fluent server (Ansys Fluent 27R1 or later) with its IP address,
-  port, and password
-
-What this package provides
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The package contains pre-generated Python stubs for every Fluent gRPC service.
-There is no need to run ``protoc`` — import the generated modules directly:
-
-.. code-block:: python
-   :caption: Python
-
-   from ansys.api.fluent.v1 import health_pb2, health_pb2_grpc
-   from ansys.api.fluent.v1 import datamodel_se_pb2, datamodel_se_pb2_grpc
-   from ansys.api.fluent.v1 import settings_pb2, settings_pb2_grpc
-
-The underlying ``.proto`` files are language-independent. If you need a client
-in another language, clone the `repository <https://github.com/ansys-internal/ansys-api-fluent>`_, 
-then run ``protoc`` with the appropriate gRPC plugin against the files
-in ``ansys/api/fluent/v1/``.
+The `repository <https://github.com/ansys-internal/ansys-api-fluent>`_ contains
+the ``.proto`` files that define every Fluent gRPC service, message, and enum.
+Proto files are language-independent: the same source can generate native
+clients in C++, Go, Java, C#, Python, or any other language with
+`gRPC <https://grpc.io/>`_ support. Clone the repository, then run ``protoc``
+with the appropriate gRPC plugin against the files in ``ansys/api/fluent/v1/``.
 
 .. note::
 
@@ -239,6 +215,25 @@ Common errors
   RPC call includes ``metadata=[("password", PASSWORD)]``.
 - **DEADLINE_EXCEEDED** — the timeout is too short. Increase it, especially
   for large streaming calls.
+
+Python package
+~~~~~~~~~~~~~~
+
+For Python, the stubs are pre-generated and published to
+`PyPI <https://pypi.org/project/ansys-api-fluent/>`_ — there is no
+need to run ``protoc``. Install the package and import the generated modules
+directly:
+
+.. code-block:: bash
+
+   pip install ansys-api-fluent
+
+Prerequisites
+~~~~~~~~~~~~~
+
+- Python 3.10 or later
+- A running Fluent server (Ansys Fluent 27R1 or later) with its IP address,
+  port, and password
 
 Next step
 ~~~~~~~~~

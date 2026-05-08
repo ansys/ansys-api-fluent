@@ -80,7 +80,7 @@ carried in :doc:`Variant <../../api/helpers/variant>` messages. Use
    :caption: Python
 
    resp = stub.GetState(
-       datamodel_se_pb2.GetStateRequest(rules="meshing", path="GlobalSettings/EnableCleanCAD"),
+       datamodel_se_pb2.GetStateRequest(rules="meshing", path="/GlobalSettings/EnableCleanCAD"),
        metadata=metadata,
    )
    print(getattr(resp.state, resp.state.WhichOneof("as")))
@@ -88,7 +88,7 @@ carried in :doc:`Variant <../../api/helpers/variant>` messages. Use
    stub.SetState(
        datamodel_se_pb2.SetStateRequest(
            rules="meshing",
-           path="GlobalSettings/EnableCleanCAD",
+           path="/GlobalSettings/EnableCleanCAD",
            state=variant_pb2.Variant(bool_state=True),
            wait=True,
        ),
@@ -153,7 +153,7 @@ file, verify the result, generate the mesh, and close.
    stub.SetState(
        datamodel_se_pb2.SetStateRequest(
            rules="meshing",
-           path="GlobalSettings/EnableCleanCAD",
+           path="/GlobalSettings/EnableCleanCAD",
            state=variant_pb2.Variant(bool_state=True),
            wait=True,
        ),
