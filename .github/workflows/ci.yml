@@ -11,6 +11,10 @@ on:
       
 env:
   MAIN_PYTHON_VERSION: '3.12'
+  FLUENT_IMAGE_TAG: 'v27.1.latest'
+  PYFLUENT_LAUNCH_CONTAINER: '1'
+  PYFLUENT_LAUNCH_FLUENT_TIMEOUT: '180'
+  ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
 
 jobs:
   pre-commit:
@@ -63,10 +67,49 @@ jobs:
           path: dist/
           retention-days: 7
 
+  test:
+    name: Unit tests
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      - name: Download built package
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ansys-api-fluent-artifacts
+          path: dist
+
+      - name: Install package and test dependencies
+        run: |
+          python -m pip install -U pip
+          python -m pip install dist/*.whl
+          python -m pip install ansys-fluent-core pytest grpcio
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          registry: ghcr.io
+          username: ansys-bot
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull Fluent Docker image
+        run: docker pull ghcr.io/ansys/fluent:${{ env.FLUENT_IMAGE_TAG }}
+
+      - name: Run integration tests
+        run: python -m pytest tests/ -v
+
   release:
     name: Release package to GitHub
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [build, pre-commit]
+    needs: [build, pre-commit, test]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -89,7 +132,7 @@ jobs:
   release-pypi:
     name: Release project to PyPI
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [build, pre-commit]
+    needs: [build, pre-commit, test]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -112,7 +155,7 @@ jobs:
   release-private-pypi:
     name: Release project to private PyPI
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [build, pre-commit]
+    needs: [build, pre-commit, test]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
