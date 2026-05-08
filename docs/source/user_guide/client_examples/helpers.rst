@@ -13,7 +13,7 @@ Variant
 
 ``Variant`` is the polymorphic value container used by the
 :doc:`DataModel <datamodel_se>` service for all state, argument, and
-result payloads, and by the :doc:`Reduction <reduction>` service for
+result payloads, and by the :doc:`Reduction <../../api/services/reduction>` service for
 typed results. It holds exactly one value at a time, selected by a ``oneof``
 field. Always call ``WhichOneof("as")`` on a ``Variant`` returned by the
 server before reading its value.
@@ -55,7 +55,7 @@ Point
 -----
 
 ``Point`` is a 3D Cartesian coordinate (``x``, ``y``, ``z`` as ``double``)
-used by the :doc:`Reduction <reduction>` service in geometric results
+used by the :doc:`Reduction <../../api/services/reduction>` service in geometric results
 such as centroid, force, and moment. See
 :doc:`../../api/helpers/primitives` for the full message definition.
 

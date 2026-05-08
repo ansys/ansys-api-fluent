@@ -24,6 +24,11 @@ Every RPC addresses a settings node with a ``PathInfo`` message carrying a
 **root** string and a slash-separated **path**; for the Fluent solver, pass
 ``"fluent"`` as the root.
 
+It is generally best to walk the schema first so you can confirm valid paths,
+commands, and object names before making runtime calls. However, the Settings
+service also allows direct runtime queries/commands when you already know the
+exact path to target.
+
 Discovering the schema
 -----------------------
 

@@ -1,5 +1,5 @@
 ﻿Ansys Fluent gRPC API
-=====================
+======================
 
 .. toctree::
    :hidden:
@@ -10,21 +10,31 @@
    api/index
    glossary
 
-This package provides the gRPC interface for Ansys Fluent with pre-generated
-Python stubs for building a client. The underlying ``.proto`` files are
-language-independent and can be used to generate native clients in C++, Go,
-Java, C#, or any other language with gRPC support.
 
-**New here?** Start with :ref:`getting_started` — it explains how the API is
-structured, walks you through installation, and includes examples in multiple
-languages to illustrate the language-agnostic nature of the ``.proto`` files.
+The Fluent `gRPC <https://grpc.io/>`_ API is a service-based interface for
+driving Fluent programmatically from external clients.
+This package provides pre-generated Python stubs for building clients against
+this API.
+The `repository <https://github.com/ansys-internal/ansys-api-fluent>`_
+contains the underlying `.proto files <https://protobuf.dev/overview/>`_,
+which are language-independent and can be used to generate native clients in
+C++, Go, Java, C#, or any other language with `gRPC <https://grpc.io/>`_ support.
 
-**Ready to build?** Read :doc:`user_guide/build_a_client` to understand the
-DataModel and Settings services — the two you need for a minimal working client.
-Then browse the :ref:`client_examples` for annotated Python examples covering
-session setup, live solver streams, and simulation data access.
+**Getting started**
 
-**Looking up a specific service, RPC, or message?** Go straight to the
-:ref:`api_reference`.
+Start with :ref:`getting_started` to understand the API structure, installation
+steps, and multi-language examples that highlight the language-agnostic nature
+of the `.proto files <https://protobuf.dev/overview/>`_.
 
-**Unfamiliar with a term?** See the :doc:`glossary`.
+**Python client examples**
+
+Browse :ref:`client_examples` for the current Python examples covering client
+setup, live solver streams, and simulation data access.
+
+**API reference**
+
+Use :ref:`api_reference` to look up a specific service, RPC, or message.
+
+**Glossary**
+
+See :doc:`glossary` for terminology used throughout the documentation.

@@ -25,6 +25,10 @@ The **rules** string identifies the application context for every call.
 The value to pass depends on the Fluent application you are targeting;
 ``"meshing"`` selects the meshing object model.
 
+Before making runtime calls, first walk the schema. It is the required step
+for understanding which paths, commands, and object names are valid for a
+given rules context.
+
 Discovering the schema
 -----------------------
 
@@ -59,6 +63,9 @@ not reflect runtime state.
 The tree structure directly mirrors the slash-separated paths used in every
 other RPC call.
 
+With the schema understood, you can then issue runtime state queries and
+commands against valid paths.
+
 Runtime API overview
 ---------------------
 
@@ -87,24 +94,6 @@ carried in :doc:`Variant <../../api/helpers/variant>` messages. Use
        ),
        metadata=metadata,
    )
-
-**Manage named objects** with ``CreateObject``, ``Rename``, ``DeleteObject``,
-and ``GetObjectNames``. Instance paths use ``Type:<name>`` colon notation.
-
-.. code-block:: python
-   :caption: Python
-
-   stub.CreateObject(
-       datamodel_se_pb2.CreateObjectRequest(
-           rules="meshing", path="SomeCollection", name="my-object", wait=True,
-       ),
-       metadata=metadata,
-   )
-   names = stub.GetObjectNames(
-       datamodel_se_pb2.GetObjectNamesRequest(rules="meshing", path="SomeCollection"),
-       metadata=metadata,
-   ).names
-   print(list(names))
 
 **Execute commands and queries** with ``ExecuteCommand`` and
 ``ExecuteQuery``. Pass arguments as a ``Variant`` map. For complex
