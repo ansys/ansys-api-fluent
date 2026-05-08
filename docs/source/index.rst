@@ -21,24 +21,24 @@ which are language-independent and can be used to generate native clients in
 C++, Go, Java, C#, or any other language with `gRPC <https://grpc.io/>`_ support.
 
 Getting started
----------------
+~~~~~~~~~~~~~~~
 
 Start with :ref:`getting_started` to understand the API structure,
 installation steps, and multi-language examples that highlight the
 language-agnostic nature of the proto files.
 
 Python client examples
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 Browse :ref:`client_examples` for the current Python examples covering
 client setup, live solver streams, and simulation data access.
 
 API reference
--------------
+~~~~~~~~~~~~~
 
 Use :ref:`api_reference` to look up a specific service, RPC, or message.
 
 Glossary
---------
+~~~~~~~~
 
 See :doc:`glossary` for terminology used throughout the documentation.
