@@ -582,7 +582,6 @@ exit()
 switch-to-meshing-mode()
 get-modified-state?
    </pre>
-   </details>
 
 The tree structure directly mirrors the slash-separated paths used in every
 other RPC call.
