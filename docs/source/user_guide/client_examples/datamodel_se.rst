@@ -171,7 +171,7 @@ incrementally on the server before executing.
            rules="meshing", path="", command="ImportGeometry", wait=True,
            args=variant_pb2.Variant(
                variant_map_state=variant_pb2.VariantMap(
-                   item={"FileName": variant_pb2.Variant(string_state="/data/my.scdoc")}
+                   item={"FileName": variant_pb2.Variant(string_state="<file name>.pmdb")}
                )
            ),
        ),
@@ -232,7 +232,7 @@ file, verify the result, generate the mesh, and close.
            wait=True,
            args=variant_pb2.Variant(
                variant_map_state=variant_pb2.VariantMap(
-                   item={"FileName": variant_pb2.Variant(string_state="/data/my.scdoc")}
+                   item={"FileName": variant_pb2.Variant(string_state="<file name>.pmdb")}
                )
            ),
        ),
