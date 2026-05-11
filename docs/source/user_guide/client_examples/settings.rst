@@ -64,22 +64,22 @@ reflect runtime state.
     Schema output (click to expand)
    </summary>
    <pre style="background:#2b2b2b;color:#f8f8f2;border:1px solid #444;border-radius:4px;padding:12px;margin-top:6px;overflow:auto;font-size:0.85em;line-height:1.5">
-file/
-  single-precision-coordinates?/
-  binary-legacy-files?/
-  cff-files?/
-  auto-merge-zones?/
-  convert-hanging-nodes-during-read?/
-  ... (9 more children)
-  define-macro()
-  execute-macro()
-  read-macros()
-  read()
-  read-case()
-  ... (26 more commands)
-  get-cleanup-filename?
-mesh/
-  adapt/
+   file/
+     single-precision-coordinates?/
+     binary-legacy-files?/
+     cff-files?/
+     auto-merge-zones?/
+     convert-hanging-nodes-during-read?/
+     ... (9 more children)
+     define-macro()
+     execute-macro()
+     read-macros()
+     read()
+     read-case()
+     ... (26 more commands)
+     get-cleanup-filename?
+   mesh/
+     adapt/
     refinement-criteria/
     coarsening-criteria/
     manual-refinement-criteria/
@@ -96,14 +96,14 @@ mesh/
     adapt-mesh()
     display-adaption-cells()
     list-adaption-cells()
-  geometry/
+     geometry/
     create()
     delete()
     rename()
     list()
     list-properties()
     ... (1 more commands)
-  anisotropic-adaption/
+     anisotropic-adaption/
     operations/
       coarsen?/
       refine?/
@@ -121,29 +121,29 @@ mesh/
       factor-of-cells/
     ... (3 more children)
     adapt-mesh()
-  check-before-solve?/
-  check-verbosity/
-  ... (9 more children)
-  adjacency()
-  check()
-  memory-usage()
-  mesh-info()
-  quality()
-  ... (8 more commands)
-server/
-  web-server/
+     check-before-solve?/
+     check-verbosity/
+     ... (9 more children)
+     adjacency()
+     check()
+     memory-usage()
+     mesh-info()
+     quality()
+     ... (8 more commands)
+   server/
+     web-server/
     start()
     stop()
     print-server-info()
     get-server-info?
-  grpc/
+     grpc/
     start()
     stop()
     print-address()
     print-connected-clients()
     write-or-reset-info()
-setup/
-  general/
+   setup/
+     general/
     solver/
       type/
       two-dim-space/
@@ -171,7 +171,7 @@ setup/
         ... (1 more commands)
       new-unit()
       set-unit-system()
-  models/
+     models/
     multiphase/
       model/
       hybrid-models/
@@ -288,7 +288,7 @@ setup/
         ... (1 more commands)
       ... (4 more children)
     ... (12 more children)
-  materials/
+     materials/
     database/
       database-type/
       user-db-name/
@@ -331,7 +331,7 @@ setup/
     ... (3 more children)
     list-materials()
     list-properties()
-  cell-zone-conditions/
+     cell-zone-conditions/
     fluid/
       create()
       delete()
@@ -359,7 +359,7 @@ setup/
     mrf-to-sliding-mesh()
     convert-all-solid-mrf-to-solid-motion()
     ... (4 more commands)
-  model-topology/
+     model-topology/
     parts/
       create()
       delete()
@@ -376,9 +376,9 @@ setup/
       ... (1 more commands)
     list-topology()
     reset-utl()
-  ... (10 more children)
-solution/
-  methods/
+     ... (10 more children)
+   solution/
+     methods/
     axisymmetric/
       alternative-axisymmetric-formulation?/
       axis-stabilization?/
@@ -416,7 +416,7 @@ solution/
     ... (28 more children)
     set-solution-methods-to-default()
     set-optimized-les-numerics()
-  controls/
+     controls/
     courant-number/
     p-v-controls/
       skewness-correction-itr-count/
@@ -447,7 +447,7 @@ solution/
     reset-limits()
     reset-pseudo-time-method-generic()
     ... (3 more commands)
-  report-definitions/
+     report-definitions/
     mesh/
       create()
       delete()
@@ -488,7 +488,7 @@ solution/
     compute()
     copy()
     delete-all()
-  monitor/
+     monitor/
     residual/
       equations/
         create()
@@ -567,21 +567,22 @@ solution/
       frequency/
       condition/
       check-for/
-  cell-registers/
+     cell-registers/
     create()
     delete()
     rename()
     list()
     list-properties()
     ... (1 more commands)
-  ... (3 more children)
-... (7 more children)
-list()
-list-properties()
-exit()
-switch-to-meshing-mode()
-get-modified-state?
+     ... (3 more children)
+   ... (7 more children)
+   list()
+   list-properties()
+   exit()
+   switch-to-meshing-mode()
+   get-modified-state?
    </pre>
+   </details>
 
 The tree structure directly mirrors the slash-separated paths used in every
 other RPC call.
