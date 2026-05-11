@@ -91,15 +91,7 @@ with the appropriate gRPC plugin against the files in ``ansys/api/fluent/v1/``.
 Basic pattern
 ~~~~~~~~~~~~~
 
-Every gRPC call follows the same steps: create a channel, create a stub,
-build a request, and call the RPC with the server password in the metadata.
-The health check below is the simplest possible example — and the right first
-call to make before issuing any simulation work.
-
-.. note::
-
-   The code snippets below are for illustration only and have not been
-   tested against a live server.
+The following is a simple example to fetch the health status from the server.
 
 .. tabs::
 
@@ -112,11 +104,12 @@ call to make before issuing any simulation work.
 
          channel = grpc.insecure_channel("127.0.0.1:50051")
          stub = health_pb2_grpc.HealthStub(channel)
-         resp = stub.Check(
-             health_pb2.HealthCheckRequest(),
+         request = health_pb2.HealthCheckRequest()
+         response = stub.Check(
+             request,
              metadata=[("password", "your-server-password")],
          )
-         print(f"Status: {resp.status}")
+         print(f"Status: {response.status}")
          channel.close()
 
    .. tab:: C++
@@ -207,18 +200,6 @@ call to make before issuing any simulation work.
              new CallOptions(headers: headers));
          Console.WriteLine($"Status: {resp.Status}");
          await channel.ShutdownAsync();
-
-A non-serving status means the server is not ready; further calls will fail.
-
-Common errors
-~~~~~~~~~~~~~
-
-- **UNAVAILABLE** — wrong host/port or server not running. Check the address
-  and confirm the server process is up.
-- **Authentication failure** — wrong password or missing metadata. Ensure every
-  RPC call includes ``metadata=[("password", PASSWORD)]``.
-- **DEADLINE_EXCEEDED** — the timeout is too short. Increase it, especially
-  for large streaming calls.
 
 Python package
 ~~~~~~~~~~~~~~
