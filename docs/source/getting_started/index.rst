@@ -11,14 +11,18 @@ event handling, and extraction of field and solution data for post-processing.
 These capabilities are organised as a set of *services*, each responsible for a
 specific area of functionality.
 
-What is in ansys-api-fluent
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+What is in ansys-api-fluent?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The `repository <https://github.com/ansys-internal/ansys-api-fluent>`_ contains
-the ``.proto`` files that define every Fluent gRPC service, message, and enum.
+the ``.proto`` files that define every Fluent gRPC service, method and message.
 Proto files are language-independent: the same source can generate native
 clients in C++, Go, Java, C#, Python, or any other language with
-`gRPC <https://grpc.io/>`_ support. Clone the repository, then run ``protoc``
+`gRPC <https://grpc.io/>`_ support. 
+
+Compiling proto files
+~~~~~~~~~~~~~~~~~~~~~
+Clone the repository, then run ``protoc``
 with the appropriate gRPC plugin against the files in ``ansys/api/fluent/v1/``.
 
 .. note::

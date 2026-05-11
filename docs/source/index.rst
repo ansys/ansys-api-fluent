@@ -23,22 +23,22 @@ Python stubs for building clients against this API.
 Getting started
 ~~~~~~~~~~~~~~~
 
-Start with :ref:`getting_started` to understand the API structure,
+Start with the :ref:`getting_started` to understand the API structure,
 installation steps, and multi-language examples that highlight the
 language-agnostic nature of the proto files.
 
 Python client examples
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Browse :ref:`client_examples` for the current Python examples covering
+Browse the :ref:`client_examples` which covers
 simulation setup, live solver streams, and simulation data access.
 
 API reference
 ~~~~~~~~~~~~~
 
-Use :ref:`api_reference` to look up a specific service, RPC, or message.
+Use the :ref:`api_reference` to look up a specific service, RPC, or message.
 
 Glossary
 ~~~~~~~~
 
-See :doc:`glossary` for terminology used throughout the documentation.
+See the :doc:`glossary` for terminology used throughout the documentation.
