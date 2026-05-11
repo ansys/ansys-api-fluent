@@ -64,9 +64,9 @@ not reflect runtime state.
 
    <details>
    <summary style="cursor:pointer;user-select:none;font-weight:bold;padding:4px 0">
-     ▶ Schema output (click to expand)
+    Schema output (click to expand)
    </summary>
-   <pre style="background:#f5f5f5;border:1px solid #ddd;border-radius:4px;padding:12px;margin-top:6px;overflow:auto;font-size:0.85em;line-height:1.5">
+   <pre style="background:#2b2b2b;color:#f8f8f2;border:1px solid #444;border-radius:4px;padding:12px;margin-top:6px;overflow:auto;font-size:0.85em;line-height:1.5">
    File/
      StartJournal()
      StopJournal()

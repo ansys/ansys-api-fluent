@@ -13,7 +13,8 @@ The example pages are organised by task: simulation configuration,
 session connection and management, live-stream observation, and
 simulation data access.
 
-**Configuring the simulation**
+Configuring the simulation
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`DataModel <datamodel_se>` focuses on meshing, preferences, and workflow
 objects. It covers discovering meshing paths, reading or writing workflow
@@ -26,23 +27,27 @@ result-output settings before or while solving.
 Both pages begin with schema discovery so you can identify valid paths and
 commands before modifying state.
 
-**Connecting and managing the session**
+Connecting and managing the session
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`Session setup <session_setup>` contains start-up examples used before
 service calls, including connection, readiness checks, and basic session
 management.
 
-**Observing a running simulation**
+Observing a running simulation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`Solver streams <solver_streams>` provides live streaming examples for
 runtime observation while a simulation is running.
 
-**Reading and post-processing results**
+Reading and post-processing results
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`Simulation data <simulation_data>` provides data-access examples for
 extracting and post-processing solution results.
 
-**Shared building blocks**
+Shared building blocks
+~~~~~~~~~~~~~~~~~~~~~~
 
 :doc:`Helper types <helpers>` documents the ``Variant`` and ``Point`` message
 types that appear across multiple services, with examples of how to construct
