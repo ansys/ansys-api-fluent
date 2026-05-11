@@ -241,7 +241,7 @@ file, verify the result, generate the mesh, and close.
 
    # Confirm the setting was applied.
    resp = stub.GetState(
-       datamodel_se_pb2.GetStateRequest(rules="meshing", path="GlobalSettings/EnableCleanCAD"),
+       datamodel_se_pb2.GetStateRequest(rules="meshing", path="/GlobalSettings/EnableCleanCAD"),
        metadata=metadata,
    )
    print("EnableCleanCAD:", resp.state.bool_state)
