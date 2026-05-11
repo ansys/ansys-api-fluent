@@ -34,29 +34,23 @@ def test_health_check_named_service(grpc_channel_and_metadata):
     """Check by fully-qualified service name returns a valid status or NOT_FOUND."""
     channel, metadata = grpc_channel_and_metadata
     stub = health_pb2_grpc.HealthStub(channel)
-    try:
-        response = stub.Check(
-            health_pb2.HealthCheckRequest(service=_HEALTH_SERVICE_NAME),
-            metadata=metadata,
-        )
-        assert response.status in _VALID_STATUSES
-    except grpc.RpcError as e:
-        assert e.code() in (grpc.StatusCode.NOT_FOUND, grpc.StatusCode.UNIMPLEMENTED)
+    response = stub.Check(
+        health_pb2.HealthCheckRequest(service=_HEALTH_SERVICE_NAME),
+        metadata=metadata,
+    )
+    assert response.status in _VALID_STATUSES
 
 
 def test_health_check_unknown_service(grpc_channel_and_metadata):
     """An unknown service name must produce NOT_FOUND or UNIMPLEMENTED."""
     channel, metadata = grpc_channel_and_metadata
     stub = health_pb2_grpc.HealthStub(channel)
-    try:
-        response = stub.Check(
-            health_pb2.HealthCheckRequest(service="definitely.not.real.Service"),
-            metadata=metadata,
-        )
-        # Some servers silently accept unknown names — status must still be valid.
-        assert response.status in _VALID_STATUSES
-    except grpc.RpcError as e:
-        assert e.code() in (grpc.StatusCode.NOT_FOUND, grpc.StatusCode.UNIMPLEMENTED)
+    response = stub.Check(
+        health_pb2.HealthCheckRequest(service="definitely.not.real.Service"),
+        metadata=metadata,
+    )
+    # Some servers silently accept unknown names — status must still be valid.
+    assert response.status in _VALID_STATUSES
 
 
 def test_health_check_multiple_calls_consistent(grpc_channel_and_metadata):
