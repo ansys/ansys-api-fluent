@@ -214,7 +214,7 @@ directly:
    pip install ansys-api-fluent
 
 Prerequisites
-~~~~~~~~~~~~~
+^^^^^^^^^^^^^
 
 - Python 3.10 or later
 - A running Fluent server (Ansys Fluent 27R1 or later) with its IP address,
