@@ -60,6 +60,69 @@ not reflect runtime state.
 
    walk(schema_resp.info)
 
+.. raw:: html
+
+   <details>
+   <summary style="cursor:pointer;user-select:none;font-weight:bold;padding:4px 0">
+     ▶ Schema output (click to expand)
+   </summary>
+   <pre style="background:#f5f5f5;border:1px solid #ddd;border-radius:4px;padding:12px;margin-top:6px;overflow:auto;font-size:0.85em;line-height:1.5">
+   File/
+     StartJournal()
+     StopJournal()
+     WriteCase()
+     ReadCase()
+     ReadMesh()
+     ... (2 more commands)
+   Graphics/
+     Bounds/
+       BoundZ
+       BoundX
+       BoundY
+       Selection
+       DeltaValue
+       ResetBounds()
+       SetBounds()
+     Regions/
+       DrawDead()
+       DrawAll()
+       DrawFluid()
+       DrawSolid()
+     MarkGaps()
+     ClippingPlane()
+     DrawThinVolumeRegions()
+     GetClippingZoneIDs()
+     GetVisibleDomainBounds()
+   GlobalSettings/
+     FTMRegionData/
+       AllRegionTypeList
+       AllRegionMeshMethodList
+       AllRegionOversetComponenList
+       AllOversetVolumeFillList
+       AllRegionSizeList
+       ... (9 more parameters)
+     LengthUnit
+     EnableCleanCAD
+     EnableOversetMeshing
+     UseAllowedValues
+     EnablePrimeMeshing
+     ... (9 more parameters)
+   Diagnostics/
+     Draw()
+     List()
+     Previous()
+     Next()
+     Ignore()
+     ... (9 more commands)
+   AddShellBoundaryLayerControls()
+   SizeControlsTable()
+   IdentifyDeviatedFaces()
+   IdentifyConstructionSurfaces()
+   CreateBackgroundMesh()
+   ... (78 more commands)
+   </pre>
+   </details>
+
 The tree structure directly mirrors the slash-separated paths used in every
 other RPC call.
 
