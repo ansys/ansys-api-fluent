@@ -7,6 +7,7 @@ channel and metadata are shared with every test file via the
 import pytest
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
+from ansys.fluent.core.docker.utils import get_grpc_launcher_args_for_gh_runs
 
 
 @pytest.fixture(scope="session")
@@ -16,7 +17,7 @@ def fluent_solver():
     The session is torn down (and the Fluent process exited) automatically
     after all tests have finished.
     """
-    solver = pyfluent.launch_fluent(mode="solver", cleanup_on_exit=True)
+    solver = pyfluent.launch_fluent(mode="solver", cleanup_on_exit=True, **get_grpc_launcher_args_for_gh_runs())
     import_filename = examples.download_file(
         "mixing_elbow.cas.h5", "pyfluent/mixing_elbow"
     )
@@ -48,7 +49,7 @@ def fluent_mesher():
     The session is torn down (and the Fluent process exited) automatically
     after all tests have finished.
     """
-    meshing = pyfluent.launch_fluent(mode="meshing", cleanup_on_exit=True)
+    meshing = pyfluent.launch_fluent(mode="meshing", cleanup_on_exit=True, **get_grpc_launcher_args_for_gh_runs())
     meshing.watertight()
     yield meshing
     meshing.exit()
