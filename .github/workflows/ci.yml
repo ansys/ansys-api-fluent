@@ -63,40 +63,6 @@ jobs:
           path: dist/
           retention-days: 7
 
-  docs:
-    name: Build documentation
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-        with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-
-      - name: Install documentation dependencies
-        run: |
-          python -m pip install -U pip
-          python -m pip install -r docs/requirements.txt
-
-      - name: Regenerate proto reference fragments
-        # Mirrors what the Sphinx ``proto_docgen`` extension does on
-        # ``builder-inited`` so failures surface as their own CI step.
-        run: python docs/_ext/proto_docgen.py
-
-      - name: Build documentation
-        run: |
-          cd docs
-          make clean
-          make html
-
-      - name: Upload documentation artifacts
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: ansys-api-fluent-docs
-          path: docs/_build/html/
-          retention-days: 7
-
   release:
     name: Release package to GitHub
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
