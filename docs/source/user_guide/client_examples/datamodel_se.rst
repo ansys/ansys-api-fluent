@@ -1,5 +1,5 @@
-DataModel service — Python examples
-====================================
+DataModel service
+==================
 
 This page shows how to build a Python client for the ``DataModel`` gRPC
 service — from connecting to the server and exploring the schema, through

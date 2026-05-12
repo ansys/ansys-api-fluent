@@ -1,5 +1,5 @@
-Settings service — Python examples
-====================================
+Settings service
+=================
 
 This page shows how to build a Python client for the ``Settings`` gRPC
 service — from connecting to the server and exploring the schema, through

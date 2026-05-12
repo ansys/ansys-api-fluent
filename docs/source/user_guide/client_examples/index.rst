@@ -16,9 +16,9 @@ simulation data access.
 Configuring the simulation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:doc:`DataModel <datamodel_se>` focuses on meshing, preferences, and workflow
-objects. It covers discovering meshing paths, reading or writing workflow
-state, and running meshing-side commands.
+:doc:`DataModel <datamodel_se>` focuses on meshing objects. It covers
+discovering meshing paths, reading or writing object state, and running
+meshing-side commands.
 
 :doc:`Settings <settings>` focuses on solver configuration. It covers
 configuration of boundary conditions, physics models, solver controls, and
