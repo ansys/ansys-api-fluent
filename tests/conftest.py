@@ -10,7 +10,7 @@ from ansys.fluent.core import examples
 from ansys.fluent.core.docker.utils import get_grpc_launcher_args_for_gh_runs
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def fluent_solver():
     """Launch a single Fluent solver session shared across the entire test run.
 
@@ -29,7 +29,7 @@ def fluent_solver():
     solver.exit()
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def grpc_channel_and_metadata(fluent_solver):
     """Return the gRPC channel and metadata from the shared Fluent session.
 
@@ -42,7 +42,7 @@ def grpc_channel_and_metadata(fluent_solver):
     yield connection._channel, connection._metadata
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def fluent_mesher():
     """Launch a single Fluent meshing session shared across the entire test run.
 
@@ -55,7 +55,7 @@ def fluent_mesher():
     meshing.exit()
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def grpc_channel_and_metadata_meshing(fluent_mesher):
     """Return the gRPC channel and metadata from the shared Fluent session.
 

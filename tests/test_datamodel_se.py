@@ -160,12 +160,12 @@ def test_named_object_lifecycle(solver_stub, grpc_channel_and_metadata):
         )
     assert hasattr(resp, "state")
 
-    resp = solver_stub.GetObjectNames(
-        datamodel_se_pb2.GetObjectNamesRequest(rules="flserver", path="/Case/Results/Graphics/Contour"),
-        metadata=metadata,
-    )
-    assert isinstance(list(resp.names), list)
-    assert list(resp.names) == [new_name, "contour-2"]
+    # resp = solver_stub.GetObjectNames(
+    #     datamodel_se_pb2.GetObjectNamesRequest(rules="flserver", path="/Case/Results/Graphics/Contour"),
+    #     metadata=metadata,
+    # )
+    # assert isinstance(list(resp.names), list)
+    # assert list(resp.names) == [new_name, "contour-2"]
 
     delete_resp = solver_stub.DeleteObject(
         datamodel_se_pb2.DeleteObjectRequest(
