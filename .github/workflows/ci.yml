@@ -90,8 +90,8 @@ jobs:
       - name: Install package and test dependencies
         run: |
           python -m pip install -U pip
-          python -m pip install dist/*.whl
           python -m pip install ansys-fluent-core pytest grpcio
+          python -m pip install --force-reinstall --no-deps dist/*.whl
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
