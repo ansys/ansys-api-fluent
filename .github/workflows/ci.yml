@@ -103,6 +103,9 @@ jobs:
       - name: Pull Fluent Docker image
         run: docker pull ghcr.io/ansys/fluent:${{ env.FLUENT_IMAGE_TAG }}
 
+      - name: Remove source tree to prevent import shadowing
+        run: rm -rf ansys/ ansys_api_fluent.egg-info/
+
       - name: Run unit tests
         run: python -m pytest tests/ -v
 
