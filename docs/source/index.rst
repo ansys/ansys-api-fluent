@@ -8,7 +8,6 @@
    getting_started/index
    user_guide/index
    api/index
-   glossary
 
 
 The Fluent `gRPC <https://grpc.io/>`_ API is a service-based interface for
@@ -38,7 +37,3 @@ API reference
 
 Use the :ref:`api_reference` to look up a specific service, RPC, or message.
 
-Glossary
-~~~~~~~~
-
-See the :doc:`glossary` for terminology used throughout the documentation.

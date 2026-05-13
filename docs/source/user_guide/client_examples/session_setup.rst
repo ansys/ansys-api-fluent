@@ -1,5 +1,5 @@
-﻿Session setup â€” connection, health, and application runtime
-=============================================================
+﻿Session setup — connection, health, and application runtime
+============================================================
 
 Python client examples for the ``Connection``, ``Health``, and
 ``ApplicationRuntime`` gRPC services.
@@ -41,7 +41,7 @@ before sending any other RPCs.
 .. code-block:: python
    :caption: Python
 
-   # Check with an empty service name â€” covers the server as a whole.
+   # Check with an empty service name — covers the server as a whole.
    resp = health_stub.Check(
        health_pb2.HealthCheckRequest(service=""),
        metadata=metadata,
