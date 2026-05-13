@@ -1,239 +1,18 @@
 Reading and writing simulation data
 ====================================
 
-Three services give you access to the numbers inside a running Fluent session:
-stream field values off surfaces, compute aggregated reductions, and read or
-write raw per-zone solver arrays.
+Python client examples for the ``FieldData``, ``Reduction``, and
+``SolutionVariable`` gRPC services.
 
 For the full message and field reference see :doc:`../../api/services/field_data`,
 :doc:`../../api/services/reduction`, and :doc:`../../api/services/svar`.
 
 .. include:: ../../shared_example_assumptions.rst
 
-Discovering available data
---------------------------
-
-Before streaming anything, confirm that solution data exists and enumerate the
-surfaces and fields the solver currently exposes.
-
 .. code-block:: python
    :caption: Python
 
    import grpc
-   from ansys.api.fluent.v1 import field_data_pb2, field_data_pb2_grpc
-
-   channel = grpc.insecure_channel("127.0.0.1:50051")
-   metadata = [("password", "your-server-password")]
-   stub = field_data_pb2_grpc.FieldDataStub(channel)
-
-   # Guard: only proceed if the solver has data loaded.
-   if not stub.IsDataAvailable(
-       field_data_pb2.IsDataAvailableRequest(), metadata=metadata
-   ).is_data_available:
-       raise RuntimeError("No solution data available — load a case/data first")
-
-   # Enumerate surfaces and remember their IDs.
-   surfaces = {
-       sid.id: info.surface_name
-       for info in stub.GetSurfacesInfo(
-           field_data_pb2.GetSurfacesInfoRequest(), metadata=metadata
-       ).surface_info
-       for sid in info.surface_ids
-   }
-   print("Surfaces:", surfaces)
-
-   # Enumerate available scalar fields.
-   fields = [
-       f.solver_name
-       for f in stub.GetFieldsInfo(
-           field_data_pb2.GetFieldsInfoRequest(), metadata=metadata
-       ).field_info
-   ]
-   print("Scalar fields:", fields)
-
-Streaming field data
---------------------
-
-``GetScalarField`` streams pressure or any other scalar on one or more
-surfaces. Each response chunk carries the surface ID and the array of
-nodal or cell-centre values. Use ``GetVectorField`` for velocity and
-similar vector quantities.
-
-.. code-block:: python
-   :caption: Python
-
-   first_id = next(iter(surfaces))
-
-   # Scalar field — nodal values.
-   for resp in stub.GetScalarField(
-       field_data_pb2.GetScalarFieldRequest(
-           surface_ids=[field_data_pb2.SurfaceId(id=first_id)],
-           scalar_field="pressure",
-           node_value=True,
-           boundary_values=False,
-       ),
-       metadata=metadata,
-   ):
-       sfd = resp.scalar_field_data
-       print(f"surface {sfd.surface_id.id}: {len(sfd.scalar_field.data)} pressure values")
-
-   # Vector field — velocity on the same surface.
-   for resp in stub.GetVectorField(
-       field_data_pb2.GetVectorFieldRequest(
-           surface_ids=[field_data_pb2.SurfaceId(id=first_id)],
-           vector_field="velocity",
-           node_value=True,
-       ),
-       metadata=metadata,
-   ):
-       vfd = resp.vector_field_data
-       print(f"surface {vfd.surface_id.id}: {len(vfd.vector.vector_components)} velocity vectors")
-
-Computing reductions
---------------------
-
-The ``Reduction`` service aggregates field quantities without streaming raw
-arrays. Pass surface or zone names in ``locations`` and an expression string
-for field-based operations. Scalar results come back inside a ``Variant``
-value — inspect ``WhichOneof("as")`` to get the concrete type.
-
-.. code-block:: python
-   :caption: Python
-
-   from ansys.api.fluent.v1 import reduction_pb2, reduction_pb2_grpc
-
-   rstub = reduction_pb2_grpc.ReductionStub(channel)
-
-   # Geometric queries.
-   area = rstub.Area(
-       reduction_pb2.AreaRequest(locations=["wall-inlet"]), metadata=metadata
-   )
-   print("Wall area:", area.value.double_state)
-
-   centroid = rstub.Centroid(
-       reduction_pb2.CentroidRequest(locations=["wall-inlet"]), metadata=metadata
-   )
-   c = centroid.value
-   print(f"Centroid: ({c.x:.4g}, {c.y:.4g}, {c.z:.4g})")
-
-   # Weighted average and range.
-   avg_p = rstub.AreaAve(
-       reduction_pb2.AreaAveRequest(
-           expression="AbsolutePressure", locations=["wall-inlet"]
-       ),
-       metadata=metadata,
-   )
-   print("Area-average pressure:", avg_p.value.double_state)
-
-   max_p = rstub.Maximum(
-       reduction_pb2.MaximumRequest(
-           expression="AbsolutePressure", locations=["fluid"]
-       ),
-       metadata=metadata,
-   )
-   min_p = rstub.Minimum(
-       reduction_pb2.MinimumRequest(
-           expression="AbsolutePressure", locations=["fluid"]
-       ),
-       metadata=metadata,
-   )
-   print(f"Pressure range: {min_p.value.double_state:.4e} – {max_p.value.double_state:.4e}")
-
-   # Force decomposition on a boundary.
-   fp = rstub.PressureForce(
-       reduction_pb2.PressureForceRequest(locations=["car-body"]), metadata=metadata
-   ).value
-   fv = rstub.ViscousForce(
-       reduction_pb2.ViscousForceRequest(locations=["car-body"]), metadata=metadata
-   ).value
-   print(f"Pressure force: ({fp.x:.4g}, {fp.y:.4g}, {fp.z:.4g})")
-   print(f"Viscous  force: ({fv.x:.4g}, {fv.y:.4g}, {fv.z:.4g})")
-
-Reading and writing solution variables
----------------------------------------
-
-The ``SolutionVariable`` service works at zone level rather than surface level.
-Call ``GetZonesInfo`` to discover domain and zone IDs, stream raw arrays with
-``GetSolutionVariableData``, and push modified values back with
-``SetSolutionVariableData``.
-
-.. code-block:: python
-   :caption: Python
-
-   import math
-   import numpy as np
-   from ansys.api.fluent.v1 import svar_pb2, svar_pb2_grpc
-
-   svstub = svar_pb2_grpc.SolutionVariableStub(channel)
-
-   # Discover zones.
-   zones_resp = svstub.GetZonesInfo(
-       svar_pb2.GetZonesInfoRequest(), metadata=metadata
-   )
-   for z in zones_resp.zones_info:
-       print(f"zone {z.zone_id}: {z.name} ({z.zone_type})")
-
-   # Read pressure (SV_P) on zone 12.
-   values = []
-   for msg in svstub.GetSolutionVariableData(
-       svar_pb2.GetSolutionVariableDataRequest(
-           name="SV_P", domain_id=1, zones=[12],
-           chunk_size=256 * 1024, provide_bytes_stream=False,
-       ),
-       metadata=metadata,
-   ):
-       part = msg.WhichOneof("array")
-       if part == "payload":
-           kind = msg.payload.WhichOneof("chunk")
-           if kind == "double_payload":
-               values.extend(msg.payload.double_payload.payloads)
-           elif kind == "float_payload":
-               values.extend(msg.payload.float_payload.payloads)
-   print(f"Read {len(values)} SV_P values from zone 12")
-
-   # Write a uniform pressure field back.
-   def _set_stream(name, domain_id, zone_id, data):
-       """Generator that yields the header, info, and payload messages."""
-       yield svar_pb2.SetSolutionVariableDataRequest(
-           header=svar_pb2.SolutionVariableHeader(name=name, domain_id=domain_id)
-       )
-       arr = np.asarray(data, dtype=np.float64)
-       yield svar_pb2.SetSolutionVariableDataRequest(
-           payload_info=svar_pb2.Info(
-               field_type=4,  # FIELD_TYPE_DOUBLE_ARRAY
-               field_size=arr.size,
-               zone=zone_id,
-           )
-       )
-       chunk_size = 256 * 1024 // arr.dtype.itemsize
-       for chunk in np.array_split(arr, max(1, math.ceil(arr.size / chunk_size))):
-           if chunk.size:
-               from ansys.api.fluent.v1 import field_data_pb2
-               yield svar_pb2.SetSolutionVariableDataRequest(
-                   payload=svar_pb2.Payload(
-                       double_payload=field_data_pb2.DoublePayload(payloads=chunk)
-                   )
-               )
-
-   svstub.SetSolutionVariableData(
-       _set_stream("SV_P", domain_id=1, zone_id=12,
-                   data=np.full(len(values), 101325.0)),
-       metadata=metadata,
-   )
-   print("SV_P written back to zone 12")
-
-End-to-end example
-------------------
-
-The workflow below ties the three services together: check readiness, stream a
-scalar field off a surface, compute a force reduction, and read back the
-corresponding zone-level variable.
-
-.. code-block:: python
-   :caption: Python
-
-   import grpc
-   import numpy as np
    from ansys.api.fluent.v1 import (
        field_data_pb2, field_data_pb2_grpc,
        reduction_pb2, reduction_pb2_grpc,
@@ -243,69 +22,633 @@ corresponding zone-level variable.
    channel = grpc.insecure_channel("127.0.0.1:50051")
    metadata = [("password", "your-server-password")]
 
-   fd = field_data_pb2_grpc.FieldDataStub(channel)
-   rd = reduction_pb2_grpc.ReductionStub(channel)
-   sv = svar_pb2_grpc.SolutionVariableStub(channel)
+   fd_stub = field_data_pb2_grpc.FieldDataStub(channel)
+   rd_stub = reduction_pb2_grpc.ReductionStub(channel)
+   sv_stub = svar_pb2_grpc.SolutionVariableStub(channel)
 
-   # 1. Confirm data is ready.
-   assert fd.IsDataAvailable(
-       field_data_pb2.IsDataAvailableRequest(), metadata=metadata
-   ).is_data_available, "No data loaded"
+Checking data availability
+---------------------------
 
-   # 2. Pick the first available surface.
-   info = fd.GetSurfacesInfo(
-       field_data_pb2.GetSurfacesInfoRequest(), metadata=metadata
-   ).surface_info[0]
-   sid = info.surface_ids[0].id
-   print(f"Using surface '{info.surface_name}' (id={sid})")
+``IsDataAvailable`` confirms that solution data is loaded; ``IsBoundaryValuesEnabled``
+checks whether boundary face values are exposed.
 
-   # 3. Stream pressure values off that surface.
-   pressure_values = []
-   for resp in fd.GetScalarField(
+.. code-block:: python
+   :caption: Python
+
+   resp = fd_stub.IsDataAvailable(
+       field_data_pb2.IsDataAvailableRequest(),
+       metadata=metadata,
+   )
+   print(resp.is_data_available)  # -> True
+
+   bv = fd_stub.IsBoundaryValuesEnabled(
+       field_data_pb2.IsBoundaryValuesEnabledRequest(),
+       metadata=metadata,
+   )
+   print(bv.is_boundary_values_enabled)  # -> True
+
+Enumerating surfaces
+---------------------
+
+``GetSurfacesInfo`` lists every surface the solver exposes together with its
+numeric IDs.
+
+.. code-block:: python
+   :caption: Python
+
+   resp = fd_stub.GetSurfacesInfo(
+       field_data_pb2.GetSurfacesInfoRequest(),
+       metadata=metadata,
+   )
+   for info in resp.surface_info:
+       ids = [sid.id for sid in info.surface_ids]
+       print(f"{info.surface_name}: surface_ids={ids}")
+   # -> cold-inlet: surface_ids=[1]
+   # -> hot-inlet:  surface_ids=[2]
+   # -> outlet:     surface_ids=[3]
+   # -> wall:       surface_ids=[4]
+
+Enumerating scalar and vector fields
+--------------------------------------
+
+``GetFieldsInfo`` and ``GetVectorFieldsInfo`` return the information of all
+available scalar and vector quantities.
+
+.. code-block:: python
+   :caption: Python
+
+   scalar_fields = [
+       f.solver_name
+       for f in fd_stub.GetFieldsInfo(
+           field_data_pb2.GetFieldsInfoRequest(), metadata=metadata
+       ).field_info
+   ]
+   print(scalar_fields[:4])  # -> ['pressure', 'temperature', 'velocity-magnitude', ...]
+
+   vector_fields = [
+       vf.display_name
+       for vf in fd_stub.GetVectorFieldsInfo(
+           field_data_pb2.GetVectorFieldsInfoRequest(), metadata=metadata
+       ).vector_field_info
+   ]
+   print(vector_fields[:2])  # -> ['Velocity', 'Relative Velocity']
+
+Querying field range
+---------------------
+
+``GetRange`` returns the minimum and maximum of a scalar field on a surface.
+
+.. code-block:: python
+   :caption: Python
+
+   # Use the first surface and the first scalar field discovered above.
+   surface_id = resp.surface_info[0].surface_ids[0].id
+   field_name = scalar_fields[0]
+
+   rng = fd_stub.GetRange(
+       field_data_pb2.GetRangeRequest(
+           field_name=field_name,
+           surface_ids=[field_data_pb2.SurfaceId(id=surface_id)],
+           node_value=True,
+       ),
+       metadata=metadata,
+   )
+   print(rng.minimum)  # -> 101325.0
+   print(rng.maximum)  # -> 103521.4
+
+Streaming a scalar field
+-------------------------
+
+``GetScalarField`` streams nodal or cell-centre scalar values off one or more
+surfaces; each chunk contains the surface ID and the value array.
+
+.. code-block:: python
+   :caption: Python
+
+   for resp in fd_stub.GetScalarField(
        field_data_pb2.GetScalarFieldRequest(
-           surface_ids=[field_data_pb2.SurfaceId(id=sid)],
+           surface_ids=[field_data_pb2.SurfaceId(id=surface_id)],
            scalar_field="pressure",
            node_value=True,
            boundary_values=False,
        ),
        metadata=metadata,
    ):
-       pressure_values.extend(resp.scalar_field_data.scalar_field.data)
-   arr = np.array(pressure_values)
-   print(f"Surface pressure — min: {arr.min():.4e}  max: {arr.max():.4e}  "
-         f"mean: {arr.mean():.4e}")
+       sfd = resp.scalar_field_data
+       print(f"surface {sfd.surface_id.id}: {len(sfd.scalar_field.data)} values")
+   # -> surface 1: 2048 values
 
-   # 4. Cross-check with a server-side reduction.
-   avg = rd.AreaAve(
-       reduction_pb2.AreaAveRequest(
-           expression="AbsolutePressure",
-           locations=[info.surface_name],
-       ),
-       metadata=metadata,
-   )
-   print(f"Server area-average pressure: {avg.value.double_state:.4e}")
+Streaming a vector field
+-------------------------
 
-   # 5. Read the same quantity at zone level.
-   zone_id = sv.GetZonesInfo(
-       svar_pb2.GetZonesInfoRequest(), metadata=metadata
-   ).zones_info[0].zone_id
+``GetVectorField`` streams velocity or any other vector quantity; each chunk
+contains a list of ``VectorComponent`` objects.
 
-   zone_vals = []
-   for msg in sv.GetSolutionVariableData(
-       svar_pb2.GetSolutionVariableDataRequest(
-           name="SV_P", domain_id=1, zones=[zone_id],
-           chunk_size=256 * 1024, provide_bytes_stream=False,
+.. code-block:: python
+   :caption: Python
+
+   vector_name = vector_fields[0]  # e.g. 'Velocity'
+
+   for resp in fd_stub.GetVectorField(
+       field_data_pb2.GetVectorFieldRequest(
+           surface_ids=[field_data_pb2.SurfaceId(id=surface_id)],
+           scalar_field=scalar_fields[0],
+           vector_field=vector_name,
+           node_value=True,
        ),
        metadata=metadata,
    ):
-       if msg.WhichOneof("array") == "payload":
-           kind = msg.payload.WhichOneof("chunk")
-           if kind == "double_payload":
-               zone_vals.extend(msg.payload.double_payload.payloads)
-           elif kind == "float_payload":
-               zone_vals.extend(msg.payload.float_payload.payloads)
+       vfd = resp.vector_field_data
+       print(f"surface {vfd.surface_id.id}: {len(vfd.vector.vector_components)} vectors")
+   # -> surface 1: 2048 vectors
 
-   za = np.array(zone_vals)
-   print(f"Zone SV_P — {len(za)} cells  mean: {za.mean():.4e}")
+Streaming surface geometry
+---------------------------
 
-   channel.close()
+``GetSurfaces`` streams vertex coordinates and face connectivity for a surface.
+
+.. code-block:: python
+   :caption: Python
+
+   stream = fd_stub.GetSurfaces(
+       field_data_pb2.GetSurfacesRequest(
+           surface_ids=[field_data_pb2.SurfaceId(id=surface_id)],
+           overset_mesh=False,
+       ),
+       metadata=metadata,
+   )
+   for chunk in stream:
+       print(hasattr(chunk, "surface_data"))  # -> True
+
+Bulk streaming with ``GetFields``
+-----------------------------------
+
+``GetFields`` combines surface geometry, scalar, and vector requests into a
+single server-streaming call; each chunk carries a ``WhichOneof("chunk")`` tag.
+
+.. code-block:: python
+   :caption: Python
+
+   stream = fd_stub.GetFields(
+       field_data_pb2.GetFieldsRequest(
+           provide_bytes_stream=False,
+           surface_requests=[
+               field_data_pb2.SurfaceRequest(
+                   surface_id=surface_id,
+                   provide_vertices=True,
+                   provide_faces=True,
+               )
+           ],
+           scalar_field_requests=[
+               field_data_pb2.ScalarFieldRequest(
+                   surface_id=surface_id,
+                   scalar_field_name="pressure",
+                   data_location=field_data_pb2.DATA_LOCATION_NODES,
+                   provide_boundary_values=False,
+               )
+           ],
+       ),
+       metadata=metadata,
+   )
+   valid_chunks = {"byte_payload", "double_payload", "float_payload",
+                   "long_payload", "int_payload", "payload_info"}
+   for chunk in stream:
+       chunk_type = chunk.WhichOneof("chunk")
+       if chunk_type is not None:
+           print(chunk_type in valid_chunks)  # -> True
+
+Opening a persistent field stream
+-----------------------------------
+
+``BeginFieldsStreaming`` opens a long-lived server-streaming channel; pass
+``provide_bytes_stream=True`` to receive raw bytes instead of typed messages.
+
+.. code-block:: python
+   :caption: Python
+
+   stream = fd_stub.BeginFieldsStreaming(
+       field_data_pb2.BeginFieldsStreamingRequest(
+           chunk_size=262144,
+           provide_bytes_stream=False,
+       ),
+       metadata=metadata,
+   )
+   print(stream is not None)  # -> True
+   stream.cancel()
+
+   # Raw-bytes variant.
+   byte_stream = fd_stub.BeginFieldsStreaming(
+       field_data_pb2.BeginFieldsStreamingRequest(
+           chunk_size=262144,
+           provide_bytes_stream=True,
+       ),
+       metadata=metadata,
+   )
+   print(byte_stream is not None)  # -> True
+   byte_stream.cancel()
+
+Streaming pathlines
+--------------------
+
+``GetPathlinesField`` integrates particle tracks forward or backward from
+release surfaces and streams the result.
+
+.. code-block:: python
+   :caption: Python
+
+   stream = fd_stub.GetPathlinesField(
+       field_data_pb2.GetPathlinesFieldRequest(
+           release_froms=[field_data_pb2.SurfaceId(id=surface_id)],
+           field1="pressure",
+           node_value=True,
+           steps=100,
+           step_size=1.0,
+           skip=0,
+           reverse=False,
+       ),
+       metadata=metadata,
+   )
+   print(stream is not None)  # -> True
+   stream.cancel()
+
+Geometric reductions
+---------------------
+
+``Area``, ``Centroid``, and ``Volume`` return surface area, the area-weighted
+centroid, and volume of named zones.
+
+.. code-block:: python
+   :caption: Python
+
+   area = rd_stub.Area(
+       reduction_pb2.AreaRequest(locations=["cold-inlet", "outlet"]),
+       metadata=metadata,
+   )
+   print(area.value.double_state > 0)  # -> True
+
+   centroid = rd_stub.Centroid(
+       reduction_pb2.CentroidRequest(locations=["cold-inlet", "outlet"]),
+       metadata=metadata,
+   )
+   c = centroid.value
+   print(isinstance(c.x, float))  # -> True
+   print(f"centroid: ({c.x:.4g}, {c.y:.4g}, {c.z:.4g})")
+   # -> centroid: (0.2208, 0.0, 0.1016)
+
+   vol = rd_stub.Volume(
+       reduction_pb2.VolumeRequest(locations=["elbow-fluid"]),
+       metadata=metadata,
+   )
+   print(vol.value.double_state > 0)  # -> True
+
+Statistical reductions
+-----------------------
+
+``Count``, ``CountIf``, ``Minimum``, and ``Maximum`` aggregate element counts
+and field extrema; ``CountIf`` accepts a Boolean expression to filter elements.
+
+.. code-block:: python
+   :caption: Python
+
+   count = rd_stub.Count(
+       reduction_pb2.CountRequest(locations=["cold-inlet", "outlet"]),
+       metadata=metadata,
+   )
+   print(count.value.int64_state > 0)  # -> True
+
+   count_if = rd_stub.CountIf(
+       reduction_pb2.CountIfRequest(
+           expression="AbsolutePressure > 0[Pa]",
+           locations=["cold-inlet", "outlet"],
+       ),
+       metadata=metadata,
+   )
+   print(count_if.value.int64_state >= 0)             # -> True
+   print(count_if.value.int64_state <=
+         count.value.int64_state)                     # -> True
+
+   lo = rd_stub.Minimum(
+       reduction_pb2.MinimumRequest(
+           expression="AbsolutePressure", locations=["elbow-fluid"]
+       ),
+       metadata=metadata,
+   )
+   hi = rd_stub.Maximum(
+       reduction_pb2.MaximumRequest(
+           expression="AbsolutePressure", locations=["elbow-fluid"]
+       ),
+       metadata=metadata,
+   )
+   print(lo.value.double_state <= hi.value.double_state)  # -> True
+
+Surface-weighted averages and integrals
+----------------------------------------
+
+``AreaAve`` and ``AreaInt`` compute area-weighted statistics; ``AreaInt``
+equals ``AreaAve`` × ``Area`` to within rounding.
+
+.. code-block:: python
+   :caption: Python
+
+   area_ave = rd_stub.AreaAve(
+       reduction_pb2.AreaAveRequest(
+           expression="AbsolutePressure",
+           locations=["cold-inlet", "outlet"],
+       ),
+       metadata=metadata,
+   )
+   print(area_ave.value.double_state)  # -> 101534.7
+
+   area_int = rd_stub.AreaInt(
+       reduction_pb2.AreaIntRequest(
+           expression="AbsolutePressure",
+           locations=["cold-inlet", "outlet"],
+       ),
+       metadata=metadata,
+   )
+   print(area_int.value.double_state)  # -> 0.8712  (Pa·m²)
+
+Mass-flow averages and integrals
+---------------------------------
+
+``MassFlowAve``, ``MassFlowAveAbs``, and ``MassFlowInt`` weight values by the
+local mass flux instead of area.
+
+.. code-block:: python
+   :caption: Python
+
+   mf_ave = rd_stub.MassFlowAve(
+       reduction_pb2.MassFlowAveRequest(
+           expression="AbsolutePressure",
+           locations=["cold-inlet", "outlet"],
+       ),
+       metadata=metadata,
+   )
+   print(mf_ave.value.double_state)  # -> 101472.3
+
+   mf_ave_abs = rd_stub.MassFlowAveAbs(
+       reduction_pb2.MassFlowAveAbsRequest(
+           expression="AbsolutePressure",
+           locations=["cold-inlet", "outlet"],
+       ),
+       metadata=metadata,
+   )
+   print(mf_ave_abs.value.double_state)  # -> 101472.3
+
+   mf_int = rd_stub.MassFlowInt(
+       reduction_pb2.MassFlowIntRequest(
+           expression="AbsolutePressure",
+           locations=["cold-inlet", "outlet"],
+       ),
+       metadata=metadata,
+   )
+   print(mf_int.value.double_state)  # -> 0.0423  (Pa·kg/s)
+
+Volume-weighted averages and integrals
+---------------------------------------
+
+``VolumeAve`` and ``VolumeInt`` aggregate field quantities over cell-zone
+volumes; the average always lies between ``Minimum`` and ``Maximum``.
+
+.. code-block:: python
+   :caption: Python
+
+   vol_ave = rd_stub.VolumeAve(
+       reduction_pb2.VolumeAveRequest(
+           expression="AbsolutePressure",
+           locations=["elbow-fluid"],
+       ),
+       metadata=metadata,
+   )
+   print(lo.value.double_state
+         <= vol_ave.value.double_state
+         <= hi.value.double_state)   # -> True
+
+   vol_int = rd_stub.VolumeInt(
+       reduction_pb2.VolumeIntRequest(
+           expression="AbsolutePressure",
+           locations=["elbow-fluid"],
+       ),
+       metadata=metadata,
+   )
+   print(vol_int.value.double_state > 0)  # -> True
+
+Mass averages and integrals
+-----------------------------
+
+``MassAve`` and ``MassInt`` weight values by the local cell mass.
+
+.. code-block:: python
+   :caption: Python
+
+   mass_ave = rd_stub.MassAve(
+       reduction_pb2.MassAveRequest(
+           expression="AbsolutePressure",
+           locations=["elbow-fluid"],
+       ),
+       metadata=metadata,
+   )
+   print(mass_ave.value.double_state > 0)  # -> True
+
+   mass_int = rd_stub.MassInt(
+       reduction_pb2.MassIntRequest(
+           expression="AbsolutePressure",
+           locations=["elbow-fluid"],
+       ),
+       metadata=metadata,
+   )
+   print(mass_int.value.double_state > 0)  # -> True
+
+Force decomposition
+--------------------
+
+``Force`` equals the sum of ``PressureForce`` and ``ViscousForce`` on any
+boundary zone; ``Moment`` returns the moment vector.
+
+.. code-block:: python
+   :caption: Python
+
+   fp = rd_stub.PressureForce(
+       reduction_pb2.PressureForceRequest(locations=["cold-inlet", "outlet"]),
+       metadata=metadata,
+   ).value
+   fv = rd_stub.ViscousForce(
+       reduction_pb2.ViscousForceRequest(locations=["cold-inlet", "outlet"]),
+       metadata=metadata,
+   ).value
+   tf = rd_stub.Force(
+       reduction_pb2.ForceRequest(locations=["cold-inlet", "outlet"]),
+       metadata=metadata,
+   ).value
+   print(f"pressure force: ({fp.x:.4g}, {fp.y:.4g}, {fp.z:.4g})")
+   # -> pressure force: (-0.0231, 0.0, 1.452)
+   print(f"viscous  force: ({fv.x:.4g}, {fv.y:.4g}, {fv.z:.4g})")
+   # -> viscous  force: (-0.0012, 0.0, 0.0034)
+   print(f"total    force: ({tf.x:.4g}, {tf.y:.4g}, {tf.z:.4g})")
+   # -> total    force: (-0.0243, 0.0, 1.455)
+
+   moment = rd_stub.Moment(
+       reduction_pb2.MomentRequest(
+           expression="AbsolutePressure",
+           locations=["cold-inlet", "outlet"],
+       ),
+       metadata=metadata,
+   )
+   m = moment.value
+   print(f"moment: ({m.x:.4g}, {m.y:.4g}, {m.z:.4g})")
+   # -> moment: (0.0, -0.2341, 0.0)
+
+Conditional sums
+-----------------
+
+``Sum`` integrates an expression weighted by a field; ``SumIf`` restricts
+integration to elements matching a Boolean condition.
+
+.. code-block:: python
+   :caption: Python
+
+   total = rd_stub.Sum(
+       reduction_pb2.SumRequest(
+           expression="AbsolutePressure",
+           locations=["cold-inlet", "outlet"],
+           weight="Area",
+       ),
+       metadata=metadata,
+   )
+   print(total.value.double_state > 0)  # -> True
+
+   conditional = rd_stub.SumIf(
+       reduction_pb2.SumIfRequest(
+           expression="AbsolutePressure",
+           condition="AbsolutePressure > 0[Pa]",
+           locations=["cold-inlet", "outlet"],
+           weight="Area",
+       ),
+       metadata=metadata,
+   )
+   print(conditional.value.double_state >= 0)                         # -> True
+   print(conditional.value.double_state <= total.value.double_state)  # -> True
+
+Discovering zones and solution variables
+-----------------------------------------
+
+``GetZonesInfo`` enumerates every domain and zone; ``GetSolutionVariableInfo``
+lists the solution variables (and their field types) available on a given zone.
+
+.. code-block:: python
+   :caption: Python
+
+   zones_resp = sv_stub.GetZonesInfo(
+       svar_pb2.GetZonesInfoRequest(),
+       metadata=metadata,
+   )
+   # Inspect domains.
+   for d in zones_resp.domains_info:
+       print(f"domain {d.domain_id}: {d.name}")
+   # -> domain 1: mixture
+
+   # Inspect zones.
+   for z in zones_resp.zones_info:
+       print(f"zone {z.zone_id}: {z.name}  type={z.thread_type}")
+   # -> zone 2: elbow-fluid  type=THREAD_TYPE_CELL
+   # -> zone 3: cold-inlet   type=THREAD_TYPE_FACE
+   # -> zone 4: outlet       type=THREAD_TYPE_FACE
+
+   # Find the first cell zone.
+   cell_zone = next(
+       z for z in zones_resp.zones_info
+       if z.thread_type == svar_pb2.THREAD_TYPE_CELL
+   )
+   print(cell_zone.zone_id)  # -> 2
+
+   # List solution variables on that zone.
+   svar_resp = sv_stub.GetSolutionVariableInfo(
+       svar_pb2.GetSolutionVariableInfoRequest(
+           domain_id=1,
+           zone_id=cell_zone.zone_id,
+       ),
+       metadata=metadata,
+   )
+   names = [sv.name for sv in svar_resp.svars_info]
+   print("SV_P" in names)   # -> True
+   print(names[:4])          # -> ['SV_P', 'SV_T', 'SV_U', 'SV_V']
+
+Reading solution variable data
+--------------------------------
+
+``GetSolutionVariableData`` streams raw per-cell arrays; the first response
+chunk is always a ``payload_info`` frame describing size and type, followed by
+``payload`` frames.
+
+.. code-block:: python
+   :caption: Python
+
+   from ansys.api.fluent.v1 import field_data_pb2 as fd_pb2
+
+   stream = sv_stub.GetSolutionVariableData(
+       svar_pb2.GetSolutionVariableDataRequest(
+           chunk_size=256 * 1024,
+           provide_bytes_stream=False,
+           name="SV_P",
+           domain_id=1,
+           zones=[cell_zone.zone_id],
+       ),
+       metadata=metadata,
+   )
+
+   values = []
+   for chunk in stream:
+       part = chunk.WhichOneof("array")
+       if part == "payload_info":
+           print(f"zone {chunk.payload_info.zone}: "
+                 f"{chunk.payload_info.field_size} cells")
+           # -> zone 2: 14756 cells
+       elif part == "payload":
+           payload_type = chunk.payload.WhichOneof("chunk")
+           if payload_type == "double_payload":
+               values.extend(chunk.payload.double_payload.payloads)
+           elif payload_type == "float_payload":
+               values.extend(chunk.payload.float_payload.payloads)
+
+   print(len(values))  # -> 14756
+
+Writing solution variable data
+--------------------------------
+
+``SetSolutionVariableData`` accepts a client-streaming call; yield a header
+frame, then a ``payload_info`` frame, then one or more payload frames.
+
+.. code-block:: python
+   :caption: Python
+
+   def _set_stream(name, domain_id, zone_id, data, chunk_size=256 * 1024):
+       """Yield the header, info, and payload messages for a write call."""
+       yield svar_pb2.SetSolutionVariableDataRequest(
+           header=svar_pb2.SolutionVariableHeader(name=name, domain_id=domain_id)
+       )
+       yield svar_pb2.SetSolutionVariableDataRequest(
+           payload_info=svar_pb2.Info(
+               field_type=fd_pb2.FIELD_TYPE_DOUBLE_ARRAY,
+               field_size=len(data),
+               zone=zone_id,
+           )
+       )
+       item_size = 8  # float64
+       max_per_chunk = max(1, chunk_size // item_size)
+       for start in range(0, len(data), max_per_chunk):
+           chunk = data[start : start + max_per_chunk]
+           yield svar_pb2.SetSolutionVariableDataRequest(
+               payload=svar_pb2.Payload(
+                   double_payload=fd_pb2.DoublePayload(payloads=chunk)
+               )
+           )
+
+   # Write the values read above back unchanged.
+   resp = sv_stub.SetSolutionVariableData(
+       _set_stream("SV_P", domain_id=1, zone_id=cell_zone.zone_id, data=values),
+       metadata=metadata,
+   )
+   print(isinstance(resp, svar_pb2.SetSolutionVariableDataResponse))  # -> True
+
+For the full API reference see :doc:`../../api/services/field_data`,
+:doc:`../../api/services/reduction`, and :doc:`../../api/services/svar`.

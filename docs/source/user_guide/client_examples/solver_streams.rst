@@ -1,190 +1,17 @@
 Solver output streams — events, monitors, and transcript
 =========================================================
 
-Three services push live data from Fluent to your client over gRPC server-side
-streams. Use them together to observe a running simulation without polling:
-
-- **Transcript** — raw console output, line by line.
-- **Events** — typed notifications for solver lifecycle milestones (iterations,
-  time steps, convergence, pause/resume, data-model changes, and more).
-- **Monitor** — per-iteration or per-time-step y-axis samples for every
-  residual and solution monitor registered with the solver.
+Python client examples for the ``Transcript``, ``Events``, and ``Monitor``
+gRPC services.
 
 For the full message and field reference see :doc:`../../api/services/transcript`,
 :doc:`../../api/services/events`, and :doc:`../../api/services/monitor`.
 
 .. include:: ../../shared_example_assumptions.rst
 
-Transcript
-----------
-
-``Transcript.BeginStreaming`` opens a persistent stream that yields one
-``TranscriptResponse`` per line (or chunk) of Fluent console output.
-Run it in a daemon thread so your main logic is not blocked.
-
 .. code-block:: python
    :caption: Python
 
-   import threading
-   import grpc
-   from ansys.api.fluent.v1 import transcript_pb2, transcript_pb2_grpc
-
-   channel = grpc.insecure_channel("127.0.0.1:50051")
-   metadata = [("password", "your-server-password")]
-   stub = transcript_pb2_grpc.TranscriptStub(channel)
-
-   stop = threading.Event()
-
-   def _read_transcript():
-       stream = stub.BeginStreaming(
-           transcript_pb2.TranscriptRequest(), metadata=metadata
-       )
-       for resp in stream:
-           if stop.is_set():
-               break
-           print(resp.transcript, end="", flush=True)
-
-   t = threading.Thread(target=_read_transcript, daemon=True)
-   t.start()
-
-   # ... do other work, then signal the thread when done ...
-   stop.set()
-
-Events
-------
-
-``Events.BeginStreaming`` yields ``BeginStreamingResponse`` messages. Each
-response carries exactly one event in its ``oneof as`` union. Call
-``WhichOneof("as")`` to identify the active field, then read its payload.
-
-.. code-block:: python
-   :caption: Python
-
-   import grpc
-   from ansys.api.fluent.v1 import events_pb2, events_pb2_grpc
-
-   channel = grpc.insecure_channel("127.0.0.1:50051")
-   metadata = [("password", "your-server-password")]
-   stub = events_pb2_grpc.EventsStub(channel)
-
-   stream = stub.BeginStreaming(
-       events_pb2.BeginStreamingRequest(), metadata=metadata
-   )
-
-   for resp in stream:
-       kind = resp.WhichOneof("as")
-
-       if kind == "iteration_ended_event":
-           print(f"iteration {resp.iteration_ended_event.index} complete")
-       elif kind == "progress_event":
-           ev = resp.progress_event
-           print(f"  {ev.percent_complete:.1f}%  {ev.message}")
-       elif kind == "calculations_ended_event":
-           print("Solver finished")
-           break
-       elif kind == "error_event":
-           raise RuntimeError(resp.error_event.message)
-
-Pausing the solver at each iteration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Use ``PauseSolveFor`` to register a pause trigger, perform work while the
-solver is paused, then call ``ResumeSolve`` to continue. Cancel the
-registration with ``CancelPauseSolve`` when you no longer need it.
-
-.. code-block:: python
-   :caption: Python
-
-   # Register a pause after every iteration.
-   reg = stub.PauseSolveFor(
-       events_pb2.PauseSolveForRequest(
-           solution_event=events_pb2.SOLUTION_EVENT_ITERATION
-       ),
-       metadata=metadata,
-   )
-   registration_id = reg.registration_id
-
-   # The solver will pause after each iteration; resume it from the event stream.
-   for resp in stream:
-       if resp.WhichOneof("as") == "calculations_paused_event":
-           print("Paused — doing per-iteration work...")
-           # ... inspect solution, write checkpoint, etc. ...
-           stub.ResumeSolve(
-               events_pb2.ResumeSolveRequest(registration_id=registration_id),
-               metadata=metadata,
-           )
-
-   # Remove the pause registration when done.
-   stub.CancelPauseSolve(
-       events_pb2.CancelPauseSolveRequest(registration_id=registration_id),
-       metadata=metadata,
-   )
-
-Monitors
---------
-
-Call ``Monitor.GetMonitors`` first to discover what monitor sets are
-registered, then open a ``BeginStreaming`` call to receive live samples.
-Each ``StreamingResponse`` contains one ``XAxisData`` point (iteration or
-time index) and one or more ``MonitorData`` y-values.
-
-.. code-block:: python
-   :caption: Python
-
-   import grpc
-   from ansys.api.fluent.v1 import monitor_pb2, monitor_pb2_grpc
-
-   channel = grpc.insecure_channel("127.0.0.1:50051")
-   metadata = [("password", "your-server-password")]
-   stub = monitor_pb2_grpc.MonitorStub(channel)
-
-   # Discover available monitor sets.
-   monitors_resp = stub.GetMonitors(
-       monitor_pb2.GetMonitorsRequest(), metadata=metadata
-   )
-   for ms in monitors_resp.monitor_sets:
-       print(f"{ms.name}: {ms.monitors}")
-
-   # Stream all monitor data until the solver finishes.
-   try:
-       for sample in stub.BeginStreaming(
-           monitor_pb2.StreamingRequest(), metadata=metadata
-       ):
-           x = sample.x_axis_data
-           for y in sample.y_axis_values:
-               print(f"iter={x.x_axis_index}  {y.name}={y.value:.4e}")
-   except grpc.RpcError as err:
-       if err.code() == grpc.StatusCode.OUT_OF_RANGE:
-           print("Solver finished — stream closed normally")
-       else:
-           raise
-
-To receive only a named subset of monitors, pass a ``MonitorFilter``:
-
-.. code-block:: python
-   :caption: Python
-
-   filt = monitor_pb2.MonitorFilter(
-       monitor_names=["continuity", "x-velocity", "energy"]
-   )
-   for sample in stub.BeginStreaming(
-       monitor_pb2.StreamingRequest(filters=[filt]), metadata=metadata
-   ):
-       x = sample.x_axis_data
-       for y in sample.y_axis_values:
-           print(f"iter={x.x_axis_index}  {y.name}={y.value:.4e}")
-
-End-to-end example
-------------------
-
-The example below runs all three streams concurrently: transcript in a
-background thread, events decoded in a second thread, and monitor data
-read on the main thread until the solver exits.
-
-.. code-block:: python
-   :caption: Python
-
-   import threading
    import grpc
    from ansys.api.fluent.v1 import (
        events_pb2, events_pb2_grpc,
@@ -192,54 +19,360 @@ read on the main thread until the solver exits.
        transcript_pb2, transcript_pb2_grpc,
    )
 
-   HOST, PORT, PASSWORD = "127.0.0.1", 50051, "your-server-password"
+   channel = grpc.insecure_channel("127.0.0.1:50051")
+   metadata = [("password", "your-server-password")]
 
-   channel = grpc.insecure_channel(f"{HOST}:{PORT}")
-   metadata = [("password", PASSWORD)]
-   stop = threading.Event()
-
-   # --- Transcript thread ---------------------------------------------------
-   def _transcript():
-       stub = transcript_pb2_grpc.TranscriptStub(channel)
-       for resp in stub.BeginStreaming(
-           transcript_pb2.TranscriptRequest(), metadata=metadata
-       ):
-           if stop.is_set():
-               break
-           print("[console]", resp.transcript, end="", flush=True)
-
-   # --- Events thread -------------------------------------------------------
-   def _events():
-       stub = events_pb2_grpc.EventsStub(channel)
-       for resp in stub.BeginStreaming(
-           events_pb2.BeginStreamingRequest(), metadata=metadata
-       ):
-           if stop.is_set():
-               break
-           kind = resp.WhichOneof("as")
-           if kind == "iteration_ended_event":
-               print(f"[event] iteration {resp.iteration_ended_event.index} done")
-           elif kind == "error_event":
-               print(f"[event] ERROR: {resp.error_event.message}")
-           elif kind == "calculations_ended_event":
-               print("[event] calculations ended")
-               stop.set()
-
-   threading.Thread(target=_transcript, daemon=True).start()
-   threading.Thread(target=_events, daemon=True).start()
-
-   # --- Monitor data on main thread -----------------------------------------
+   transcript_stub = transcript_pb2_grpc.TranscriptStub(channel)
+   events_stub = events_pb2_grpc.EventsStub(channel)
    monitor_stub = monitor_pb2_grpc.MonitorStub(channel)
+
+Opening a transcript stream
+-----------------------------
+
+``Transcript.BeginStreaming`` opens a server-streaming call; each response
+carries one line (or chunk) of Fluent console output in ``resp.transcript``.
+
+.. code-block:: python
+   :caption: Python
+
+   stream = transcript_stub.BeginStreaming(
+       transcript_pb2.TranscriptRequest(),
+       metadata=metadata,
+   )
+   print(stream is not None)  # -> True
+   stream.cancel()
+
+Opening two independent transcript streams
+-------------------------------------------
+
+Multiple simultaneous ``BeginStreaming`` calls return independent stream
+objects and can be cancelled separately.
+
+.. code-block:: python
+   :caption: Python
+
+   stream1 = transcript_stub.BeginStreaming(
+       transcript_pb2.TranscriptRequest(), metadata=metadata
+   )
+   stream2 = transcript_stub.BeginStreaming(
+       transcript_pb2.TranscriptRequest(), metadata=metadata
+   )
+   print(stream1 is not stream2)  # -> True
+   stream1.cancel()
+   stream2.cancel()
+
+Cancelling a transcript stream
+--------------------------------
+
+Cancelling a stream and then iterating it raises ``grpc.StatusCode.CANCELLED``
+or ``StopIteration`` — both are normal.
+
+.. code-block:: python
+   :caption: Python
+
+   stream = transcript_stub.BeginStreaming(
+       transcript_pb2.TranscriptRequest(),
+       metadata=metadata,
+   )
+   stream.cancel()
+
    try:
-       for sample in monitor_stub.BeginStreaming(
-           monitor_pb2.StreamingRequest(), metadata=metadata
-       ):
-           x = sample.x_axis_data
-           for y in sample.y_axis_values:
-               print(f"[monitor] iter={x.x_axis_index}  {y.name}={y.value:.4e}")
-   except grpc.RpcError as err:
-       if err.code() != grpc.StatusCode.OUT_OF_RANGE:
-           raise
-   finally:
-       stop.set()
-       channel.close()
+       next(iter(stream))
+   except grpc.RpcError as e:
+       print(e.code() == grpc.StatusCode.CANCELLED)  # -> True
+   except StopIteration:
+       pass  # also acceptable
+
+Opening an event stream
+------------------------
+
+``Events.BeginStreaming`` opens a server-streaming call; each response carries
+exactly one event in its ``oneof as`` union.
+
+.. code-block:: python
+   :caption: Python
+
+   stream = events_stub.BeginStreaming(
+       events_pb2.BeginStreamingRequest(),
+       metadata=metadata,
+   )
+   print(stream is not None)  # -> True
+   stream.cancel()
+
+Decoding event types
+---------------------
+
+Call ``WhichOneof("as")`` on each response to identify the event and then
+access its payload fields.
+
+.. code-block:: python
+   :caption: Python
+
+   valid_event_fields = {
+       "pre_read_case_event", "case_read_event",
+       "pre_initialize_event", "initialized_event",
+       "pre_read_data_event", "data_read_event",
+       "iteration_started_event", "iteration_ended_event",
+       "timestep_started_event", "timestep_ended_event",
+       "calculations_started_event", "calculations_ended_event",
+       "report_definition_changed_event", "plot_set_changed_event",
+       "residual_plot_changed_event", "clear_settings_done_event",
+       "auto_pause_event", "calculations_paused_event",
+       "calculations_resumed_event", "progress_event",
+       "error_event", "command_completed_event",
+       "data_model_changed_event", "solver_time_estimate_event",
+       "client_execute_event",
+   }
+
+   stream = events_stub.BeginStreaming(
+       events_pb2.BeginStreamingRequest(),
+       metadata=metadata,
+   )
+   for resp in stream:
+       kind = resp.WhichOneof("as")
+       if kind is not None:
+           print(kind in valid_event_fields)  # -> True
+       if kind == "iteration_ended_event":
+           print(resp.iteration_ended_event.index)    # -> 1
+       elif kind == "progress_event":
+           ev = resp.progress_event
+           print(ev.percent_complete, ev.message)     # -> 12.5  'Solving...'
+       elif kind == "solver_time_estimate_event":
+           ev = resp.solver_time_estimate_event
+           print(ev.hours, ev.minutes, ev.seconds)   # -> 0  2  34.5
+       elif kind == "error_event":
+           print(resp.error_event.message)            # -> 'Diverged'
+       break
+   stream.cancel()
+
+Registering a pause trigger
+-----------------------------
+
+``PauseSolveFor`` registers a pause that fires after each iteration or time
+step; it returns a unique ``registration_id``.
+
+.. code-block:: python
+   :caption: Python
+
+   reg = events_stub.PauseSolveFor(
+       events_pb2.PauseSolveForRequest(
+           solution_event=events_pb2.SOLUTION_EVENT_ITERATION
+       ),
+       metadata=metadata,
+   )
+   print(isinstance(reg.registration_id, int))  # -> True
+   print(reg.registration_id > 0)               # -> True
+
+   # Register a second trigger — IDs must be distinct.
+   reg2 = events_stub.PauseSolveFor(
+       events_pb2.PauseSolveForRequest(
+           solution_event=events_pb2.SOLUTION_EVENT_ITERATION
+       ),
+       metadata=metadata,
+   )
+   print(reg.registration_id != reg2.registration_id)  # -> True
+
+Registering a time-step pause trigger
+---------------------------------------
+
+``SOLUTION_EVENT_TIME_STEP`` fires at the end of each time step in a
+transient simulation.
+
+.. code-block:: python
+   :caption: Python
+
+   ts_reg = events_stub.PauseSolveFor(
+       events_pb2.PauseSolveForRequest(
+           solution_event=events_pb2.SOLUTION_EVENT_TIME_STEP
+       ),
+       metadata=metadata,
+   )
+   print(ts_reg.registration_id > 0)  # -> True
+
+Cancelling a pause registration
+---------------------------------
+
+``CancelPauseSolve`` removes a previously registered pause trigger.
+
+.. code-block:: python
+   :caption: Python
+
+   cancel_resp = events_stub.CancelPauseSolve(
+       events_pb2.CancelPauseSolveRequest(
+           registration_id=reg.registration_id
+       ),
+       metadata=metadata,
+   )
+   print(cancel_resp is not None)  # -> True
+
+   # Clean up the other registrations.
+   events_stub.CancelPauseSolve(
+       events_pb2.CancelPauseSolveRequest(registration_id=reg2.registration_id),
+       metadata=metadata,
+   )
+   events_stub.CancelPauseSolve(
+       events_pb2.CancelPauseSolveRequest(registration_id=ts_reg.registration_id),
+       metadata=metadata,
+   )
+
+Resuming the solver
+--------------------
+
+``ResumeSolve`` unpauses a session that was suspended by a ``PauseSolveFor``
+registration; passing an unknown ID is accepted without raising an error.
+
+.. code-block:: python
+   :caption: Python
+
+   events_stub.ResumeSolve(
+       events_pb2.ResumeSolveRequest(registration_id=999999999),
+       metadata=metadata,
+   )
+
+Discovering monitor sets
+-------------------------
+
+``GetMonitors`` enumerates every monitor set registered with the solver,
+including its name, type, x-axis type, update frequency, and unit metadata.
+
+.. code-block:: python
+   :caption: Python
+
+   resp = monitor_stub.GetMonitors(
+       monitor_pb2.GetMonitorsRequest(),
+       metadata=metadata,
+   )
+   for ms in resp.monitor_sets:
+       print(ms.name)       # -> 'residuals'
+       print(ms.monitors)   # -> ['continuity', 'x-velocity', 'energy']
+       print(ms.frequency)  # -> 1
+       print(ms.type in {
+           monitor_pb2.MONITOR_TYPE_RESIDUAL,
+           monitor_pb2.MONITOR_TYPE_SOLUTION,
+           monitor_pb2.MONITOR_TYPE_UNSPECIFIED,
+       })                   # -> True
+       print(ms.axis in {
+           monitor_pb2.XAXIS_TYPE_ITERATION,
+           monitor_pb2.XAXIS_TYPE_TIME,
+           monitor_pb2.XAXIS_TYPE_UNSPECIFIED,
+       })                   # -> True
+
+Validating monitor set metadata
+---------------------------------
+
+Every monitor set must have a non-empty name, at least one monitor entry,
+and a non-negative frequency; ``unit_info.factor`` is non-negative when set.
+
+.. code-block:: python
+   :caption: Python
+
+   # Two consecutive calls must return identical monitor set names.
+   resp1 = monitor_stub.GetMonitors(
+       monitor_pb2.GetMonitorsRequest(), metadata=metadata
+   )
+   resp2 = monitor_stub.GetMonitors(
+       monitor_pb2.GetMonitorsRequest(), metadata=metadata
+   )
+   names1 = sorted(ms.name for ms in resp1.monitor_sets)
+   names2 = sorted(ms.name for ms in resp2.monitor_sets)
+   print(names1 == names2)  # -> True
+
+   for ms in resp1.monitor_sets:
+       print(len(ms.name) > 0)         # -> True
+       print(len(ms.monitors) > 0)     # -> True
+       print(ms.frequency >= 0)        # -> True
+       if ms.unit_info.unit:
+           print(ms.unit_info.factor >= 0)  # -> True
+
+Opening a monitor stream
+-------------------------
+
+``Monitor.BeginStreaming`` streams live y-axis samples; each response contains
+an ``XAxisData`` point and one or more ``MonitorData`` entries.
+
+.. code-block:: python
+   :caption: Python
+
+   stream = monitor_stub.BeginStreaming(
+       monitor_pb2.StreamingRequest(),
+       metadata=metadata,
+   )
+   print(stream is not None)  # -> True
+   stream.cancel()
+
+Reading monitor samples
+------------------------
+
+Each ``StreamingResponse`` exposes ``x_axis_data`` (index and type) and
+``y_axis_values`` (name + float value per monitored quantity).
+
+.. code-block:: python
+   :caption: Python
+
+   stream = monitor_stub.BeginStreaming(
+       monitor_pb2.StreamingRequest(),
+       metadata=metadata,
+   )
+   sample = next(iter(stream))
+   stream.cancel()
+
+   print(hasattr(sample, "x_axis_data"))                 # -> True
+   print(sample.x_axis_data.x_axis_type in {
+       monitor_pb2.XAXIS_TYPE_ITERATION,
+       monitor_pb2.XAXIS_TYPE_TIME,
+       monitor_pb2.XAXIS_TYPE_UNSPECIFIED,
+   })                                                     # -> True
+   for y in sample.y_axis_values:
+       print(len(y.name) > 0)                            # -> True
+       print(isinstance(y.value, float))                 # -> True
+       print(f"{y.name} = {y.value:.4e}")
+   # -> continuity = 9.8765e-03
+   # -> x-velocity = 4.3210e-04
+   # -> energy     = 1.2345e-06
+
+Filtering the monitor stream
+------------------------------
+
+Pass a ``MonitorFilter`` with ``x_axis_type`` to receive only iteration- or
+time-based samples.
+
+.. code-block:: python
+   :caption: Python
+
+   stream = monitor_stub.BeginStreaming(
+       monitor_pb2.StreamingRequest(
+           filters=[
+               monitor_pb2.MonitorFilter(
+                   x_axis_type=monitor_pb2.XAXIS_TYPE_ITERATION
+               )
+           ]
+       ),
+       metadata=metadata,
+   )
+   print(stream is not None)  # -> True
+   stream.cancel()
+
+Cancelling a monitor stream
+-----------------------------
+
+Cancelling a monitor stream and then iterating it raises
+``grpc.StatusCode.CANCELLED`` or ``StopIteration`` — both are normal.
+
+.. code-block:: python
+   :caption: Python
+
+   stream = monitor_stub.BeginStreaming(
+       monitor_pb2.StreamingRequest(),
+       metadata=metadata,
+   )
+   stream.cancel()
+
+   try:
+       next(iter(stream))
+   except grpc.RpcError as e:
+       print(e.code() == grpc.StatusCode.CANCELLED)  # -> True
+   except StopIteration:
+       pass  # also acceptable
+
+For the full API reference see :doc:`../../api/services/transcript`,
+:doc:`../../api/services/events`, and :doc:`../../api/services/monitor`.

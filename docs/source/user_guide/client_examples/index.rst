@@ -4,54 +4,49 @@
 Python client examples
 ======================
 
-This section is organised into working Python example pages for the major
-services in ``ansys.api.fluent.v1``. Each page focuses on runnable snippets for
-that service area, while full message and field listings are in the
-:ref:`api_reference`.
-
-The example pages are organised by task: simulation configuration,
-session connection and management, live-stream observation, and
-simulation data access.
-
-Configuring the simulation
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-:doc:`DataModel <datamodel_se>` focuses on meshing objects. It covers
-discovering meshing paths, reading or writing object state, and running
-meshing-side commands.
-
-:doc:`Settings <settings>` focuses on solver configuration. It covers
-configuration of boundary conditions, physics models, solver controls, and
-result-output settings before or while solving.
-
-Both pages begin with schema discovery so you can identify valid paths and
-commands before modifying state.
+Runnable code examples for the major services in ``ansys.api.fluent.v1``.
+Full message and field listings are in the :ref:`api_reference`.
 
 Connecting and managing the session
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:doc:`Session setup <session_setup>` contains start-up examples used before
-service calls, including connection, readiness checks, and basic session
-management.
+:doc:`Session setup <session_setup>` — health checks, version negotiation,
+product and build info, process info, app mode, beta features, and Python
+journalling via the ``Health``, ``Connection``, and ``AppUtilities`` services.
+
+Configuring the simulation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:doc:`DataModel <datamodel_se>` — schema discovery, reading and writing
+object state, parameter attributes, commands, command arguments, and event
+and state-change streaming via the ``DataModel`` service (meshing context).
+
+:doc:`Settings <settings>` — schema discovery, reading and writing solver
+settings, named-object management, list sizes, commands, queries, and wildcard
+checks via the ``Settings`` service (solver context).
 
 Observing a running simulation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:doc:`Solver streams <solver_streams>` provides live streaming examples for
-runtime observation while a simulation is running.
+:doc:`Solver streams <solver_streams>` — opening, reading, filtering, and
+cancelling live streams for console output (``Transcript``), typed solver
+lifecycle events (``Events``), and per-iteration monitor samples (``Monitor``);
+also covers pause/resume registration.
 
 Reading and post-processing results
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:doc:`Simulation data <simulation_data>` provides data-access examples for
-extracting and post-processing solution results.
+:doc:`Simulation data <simulation_data>` — field data availability, surface
+and field enumeration, scalar and vector field streaming, geometric and
+statistical reductions, force decomposition, conditional sums, and
+solution-variable read/write via ``FieldData``, ``Reduction``, and
+``SolutionVariable``.
 
 Shared building blocks
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-:doc:`Helper types <helpers>` documents the ``Variant`` and ``Point`` message
-types that appear across multiple services, with examples of how to construct
-and unpack them.
+:doc:`Helper types <helpers>` — constructing and unpacking the ``Variant`` and
+``Point`` messages used across multiple services.
 
 .. toctree::
    :hidden:

@@ -1,9 +1,7 @@
 DataModel service
 ==================
 
-This page shows how to build a Python client for the ``DataModel`` gRPC
-service — from connecting to the server and exploring the schema, through
-reading and writing state, to a complete end-to-end meshing session.
+Python client examples for the ``DataModel`` gRPC service.
 
 For the full message and field reference see
 :doc:`../../api/services/datamodel_se`.
@@ -21,21 +19,14 @@ For the full message and field reference see
    metadata = [("password", "your-server-password")]
    stub = datamodel_se_pb2_grpc.DataModelStub(channel)
 
-The **rules** string identifies the application context for every call.
-The value to pass depends on the Fluent application you are targeting;
-``"meshing"`` selects the meshing object model.
-
-Before making runtime calls, first walk the schema. It is the required step
-for understanding which paths, commands, and object names are valid for a
-given rules context.
+The **rules** string selects the application context. All examples on this
+page use ``"meshing"``.
 
 Discovering the schema
 -----------------------
 
-Call ``GetSchema`` once at startup and cache the result. It returns the
-complete tree of paths, object types, commands, and queries available for a
-given rules context. The schema is stable for a given Fluent version and does
-not reflect runtime state.
+``GetSchema`` returns the static tree of objects, commands, queries, and
+parameters — walk it to discover valid paths before making runtime calls.
 
 .. code-block:: python
    :caption: Python
@@ -123,139 +114,220 @@ not reflect runtime state.
    </pre>
    </details>
 
-The tree structure directly mirrors the slash-separated paths used in every
-other RPC call.
 
-With the schema understood, you can then issue runtime state queries and
-commands against valid paths.
-
-Runtime API overview
----------------------
-
-Once you know the schema, the runtime RPCs follow a small, consistent set of
-patterns.
-
-**Read and write state** with ``GetState`` and ``SetState``. Values are
-carried in :doc:`Variant <../../api/helpers/variant>` messages. Use
-``UpdateDict`` to merge a partial map without overwriting untouched keys.
+Initialising the datamodel
+---------------------------
 
 .. code-block:: python
    :caption: Python
 
-   resp = stub.GetState(
-       datamodel_se_pb2.GetStateRequest(rules="meshing", path="/GlobalSettings/EnableCleanCAD"),
+   resp = stub.InitDatamodel(
+       datamodel_se_pb2.InitDatamodelRequest(
+           rules="meshing",
+           return_state_changes=False,
+       ),
        metadata=metadata,
    )
-   print(getattr(resp.state, resp.state.WhichOneof("as")))
 
+Reading and writing state
+--------------------------
+
+``GetState`` returns a :doc:`Variant <../../api/helpers/variant>`; ``SetState``
+writes one back.
+
+.. code-block:: python
+   :caption: Python
+
+   # Read a boolean parameter.
+   resp = stub.GetState(
+       datamodel_se_pb2.GetStateRequest(
+           rules="meshing",
+           path="/GlobalSettings/EnableCleanCAD",
+       ),
+       metadata=metadata,
+   )
+   current = resp.state.bool_state
+   print(current)  # -> False  (or True, depending on server state)
+
+   # Write the opposite value.
    stub.SetState(
        datamodel_se_pb2.SetStateRequest(
            rules="meshing",
            path="/GlobalSettings/EnableCleanCAD",
-           state=variant_pb2.Variant(bool_state=True),
-           wait=True,
+           state=variant_pb2.Variant(bool_state=not current),
        ),
        metadata=metadata,
    )
 
-**Execute commands and queries** with ``ExecuteCommand`` and
-``ExecuteQuery``. Pass arguments as a ``Variant`` map. For complex
-multi-field arguments, use ``CreateCommandArguments`` to build them
-incrementally on the server before executing.
+   # Restore the original.
+   stub.SetState(
+       datamodel_se_pb2.SetStateRequest(
+           rules="meshing",
+           path="/GlobalSettings/EnableCleanCAD",
+           state=variant_pb2.Variant(bool_state=current),
+       ),
+       metadata=metadata,
+   )
+
+Reading parameter attributes
+-----------------------------
+
+``GetAttributeValue`` returns metadata about a parameter such as its default,
+allowed values, or whether it is read-only or active.
 
 .. code-block:: python
    :caption: Python
 
-   stub.ExecuteCommand(
-       datamodel_se_pb2.ExecuteCommandRequest(
-           rules="meshing", path="", command="ImportGeometry", wait=True,
-           args=variant_pb2.Variant(
-               variant_map_state=variant_pb2.VariantMap(
-                   item={"FileName": variant_pb2.Variant(string_state="<file name>.pmdb")}
-               )
-           ),
+   resp = stub.GetAttributeValue(
+       datamodel_se_pb2.GetAttributeValueRequest(
+           rules="meshing",
+           path="/GlobalSettings/EnableCleanCAD",
+           attribute="default",
        ),
        metadata=metadata,
    )
+   print(resp.result.bool_state)  # -> False
 
-**React to changes** by subscribing to object-level events with
-``SubscribeEvents`` and streaming them with ``StreamEvents``. For
-coarser-grained monitoring, ``StreamStateChanges`` delivers a diff or
-full snapshot whenever the datamodel changes.
-
-End-to-end example
+Executing commands
 -------------------
 
-The example below walks through a complete meshing session: connect,
-initialise, discover the schema, configure a setting, import a geometry
-file, verify the result, generate the mesh, and close.
+``ExecuteCommand`` runs a command on the server; pass arguments as a
+``Variant`` map.
 
 .. code-block:: python
    :caption: Python
 
-   import grpc
-   from ansys.api.fluent.v1 import datamodel_se_pb2, datamodel_se_pb2_grpc, variant_pb2
-
-   channel = grpc.insecure_channel("127.0.0.1:50051")
-   metadata = [("password", "your-server-password")]
-   stub = datamodel_se_pb2_grpc.DataModelStub(channel)
-
-   # Initialise the datamodel for the meshing context.
-   stub.InitDatamodel(
-       datamodel_se_pb2.InitDatamodelRequest(rules="meshing", return_state_changes=False),
-       metadata=metadata,
-   )
-
-   # Discover what is available at the top level.
-   schema_resp = stub.GetSchema(
-       datamodel_se_pb2.GetSchemaRequest(rules="meshing"), metadata=metadata,
-   )
-   print("Top-level singletons:", list(schema_resp.info.singletons.keys()))
-
-   # Turn on clean CAD import before loading geometry.
-   stub.SetState(
-       datamodel_se_pb2.SetStateRequest(
-           rules="meshing",
-           path="/GlobalSettings/EnableCleanCAD",
-           state=variant_pb2.Variant(bool_state=True),
-           wait=True,
-       ),
-       metadata=metadata,
-   )
-
-   # Import the geometry file.
    stub.ExecuteCommand(
        datamodel_se_pb2.ExecuteCommandRequest(
            rules="meshing",
            path="",
            command="ImportGeometry",
-           wait=True,
            args=variant_pb2.Variant(
                variant_map_state=variant_pb2.VariantMap(
-                   item={"FileName": variant_pb2.Variant(string_state="<file name>.pmdb")}
+                   item={"FileName": variant_pb2.Variant(string_state="mixing_elbow.pmdb")}
                )
            ),
        ),
        metadata=metadata,
    )
 
-   # Confirm the setting was applied.
-   resp = stub.GetState(
-       datamodel_se_pb2.GetStateRequest(rules="meshing", path="/GlobalSettings/EnableCleanCAD"),
+Building command arguments incrementally
+-----------------------------------------
+
+``CreateCommandArguments`` creates a server-side argument object so you can
+set individual fields before calling ``ExecuteCommand``.
+
+.. code-block:: python
+   :caption: Python
+
+   # Allocate an argument object on the server.
+   create_resp = stub.CreateCommandArguments(
+       datamodel_se_pb2.CreateCommandArgumentsRequest(
+           rules="meshing",
+           path="",
+           command="ImportGeometry",
+       ),
        metadata=metadata,
    )
-   print("EnableCleanCAD:", resp.state.bool_state)
+   command_id = create_resp.command_id
+   print(command_id)  # -> '3f2a1b...'  (a non-empty server-assigned string)
 
-   # Generate the mesh.
-   stub.ExecuteCommand(
-       datamodel_se_pb2.ExecuteCommandRequest(
-           rules="meshing", path="", command="GenerateMesh", wait=True,
-           args=variant_pb2.Variant(),
+   # ... populate fields via SetState using the command_id path ...
+
+   # Clean up without executing.
+   stub.DeleteCommandArguments(
+       datamodel_se_pb2.DeleteCommandArgumentsRequest(
+           rules="meshing",
+           path="",
+           command="ImportGeometry",
+           command_id=command_id,
        ),
        metadata=metadata,
    )
 
-   channel.close()
+Subscribing to and streaming events
+-------------------------------------
+
+``SubscribeEvents`` registers interest in specific datamodel changes;
+``StreamEvents`` delivers them as a server-streaming call. Unsubscribe when done.
+
+.. code-block:: python
+   :caption: Python
+
+   # Subscribe to modifications on a specific path.
+   sub_resp = stub.SubscribeEvents(
+       datamodel_se_pb2.SubscribeEventsRequest(
+           event_requests=[
+               datamodel_se_pb2.DataModelEventRequest(
+                   rules="meshing",
+                   modified_event_request=datamodel_se_pb2.ModifiedEventRequest(
+                       path="/GlobalSettings/EnableCleanCAD"
+                   ),
+               )
+           ]
+       ),
+       metadata=metadata,
+   )
+   tags = [r.tag for r in sub_resp.responses]
+   print(tags)  # -> ['<uuid>']  (one non-empty tag per subscription)
+
+   # Open the event stream and read a few events.
+   stream = stub.StreamEvents(
+       datamodel_se_pb2.StreamEventsRequest(),
+       metadata=metadata,
+   )
+   count = 0
+   for event in stream:
+       print(event.tag)  # -> '<uuid>' matching one of the subscribed tags
+       count += 1
+       if count >= 3:
+           break
+   stream.cancel()
+
+   # Unsubscribe.
+   unsub_resp = stub.UnsubscribeEvents(
+       datamodel_se_pb2.UnsubscribeEventsRequest(tags=tags),
+       metadata=metadata,
+   )
+   for r in unsub_resp.responses:
+       print(r.status)  # -> SUBSCRIPTION_STATUS_UNSUBSCRIBED
+
+Streaming state changes
+------------------------
+
+``StreamStateChanges`` delivers a snapshot or diff of the datamodel whenever
+it changes. Use ``DIFF_STATE_FULL`` for a complete snapshot or
+``DIFF_STATE_NOCOMMANDS`` for a lighter diff without command metadata.
+
+.. code-block:: python
+   :caption: Python
+
+   # Full snapshot on every change.
+   stream = stub.StreamStateChanges(
+       datamodel_se_pb2.StreamStateChangesRequest(
+           rules="meshing",
+           return_state_changes=True,
+           diff_state=datamodel_se_pb2.DIFF_STATE_FULL,
+       ),
+       metadata=metadata,
+   )
+   first = next(iter(stream))
+   stream.cancel()
+   print(list(first.deleted_paths))  # -> []  (empty list when nothing has been deleted)
+   print(list(first.events))         # -> []  (empty list when no events fired)
+
+   # Lighter diff without command metadata.
+   stream = stub.StreamStateChanges(
+       datamodel_se_pb2.StreamStateChangesRequest(
+           rules="meshing",
+           return_state_changes=True,
+           diff_state=datamodel_se_pb2.DIFF_STATE_NOCOMMANDS,
+       ),
+       metadata=metadata,
+   )
+   first = next(iter(stream))
+   stream.cancel()
+   assert hasattr(first, "state")
 
 For the complete message and field reference — request/response types,
 ``Variant`` encoding, and the ``DiffState`` enum — see
