@@ -1,4 +1,4 @@
-﻿Ansys Fluent gRPC API
+Ansys Fluent gRPC API
 ======================
 
 .. toctree::
@@ -9,31 +9,19 @@
    user_guide/index
    api/index
 
+The Ansys Fluent gRPC API exposes services and RPC methods for driving Fluent
+programmatically from external clients. The
+`repository <https://github.com/ansys-internal/ansys-api-fluent>`_ contains the
+language-agnostic `.proto files <https://protobuf.dev/overview/>`_ used to
+generate clients in C++, Go, Java, C#, Python, and other languages with
+`gRPC <https://grpc.io/>`_ support. The
+`Python package <https://pypi.org/project/ansys-api-fluent/>`_ provides
+pre-generated Python stubs for building Python clients.
 
-The Fluent `gRPC <https://grpc.io/>`_ API is a service-based interface for
-driving Fluent programmatically from external clients.
-The `repository <https://github.com/ansys-internal/ansys-api-fluent>`_
-contains `.proto files <https://protobuf.dev/overview/>`_,
-which are language-independent and can be used to generate native clients in
-C++, Go, Java, C#, or any other language with `gRPC <https://grpc.io/>`_ support.
-This `package <https://pypi.org/project/ansys-api-fluent/>`_ provides pre-generated
-Python stubs for building clients against this API.
-
-Getting started
-~~~~~~~~~~~~~~~
-
-Start with the :ref:`getting_started` to understand the API structure,
-installation steps, and multi-language examples that highlight the
-language-agnostic nature of the proto files.
-
-Python client examples
-~~~~~~~~~~~~~~~~~~~~~~
-
-Browse the :ref:`client_examples` which covers
-simulation setup, live solver streams, and simulation data access.
-
-API reference
-~~~~~~~~~~~~~
-
-Use the :ref:`api_reference` to look up a specific service, RPC, or message.
-
+- :ref:`getting_started` provides an overview of the API structure, installation
+  steps, proto compilation, and a minimal multi-language example.
+- :ref:`user_guide` provides task-oriented Python client examples for session
+  setup, configuration workflows, live solver streams, and simulation data
+  access.
+- :ref:`api_reference` documents every service, RPC method, and request/response
+  message in detail.

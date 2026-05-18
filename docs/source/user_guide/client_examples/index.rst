@@ -7,6 +7,12 @@ Python client examples
 Runnable code examples for the major services in ``ansys.api.fluent.v1``.
 Full message and field listings are in the :ref:`api_reference`.
 
+For the two generic configuration services, the workflow is the same: use
+``GetSchema`` to discover the service shape first, then call the relevant RPC
+methods to read state, write state, run commands, or issue queries. Use
+``DataModel`` for meshing-oriented object trees and ``Settings`` for
+solver-oriented paths.
+
 Connecting and managing the session
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -19,11 +25,11 @@ Configuring the simulation
 
 :doc:`DataModel <datamodel_se>` — schema discovery, reading and writing
 object state, parameter attributes, commands, command arguments, and event
-and state-change streaming via the ``DataModel`` service (meshing context).
+and state-change streaming via the meshing-oriented ``DataModel`` service.
 
 :doc:`Settings <settings>` — schema discovery, reading and writing solver
-settings, named-object management, list sizes, commands, queries, and wildcard
-checks via the ``Settings`` service (solver context).
+state, named-object management, list sizes, commands, queries, and wildcard
+checks via the solver-oriented ``Settings`` service.
 
 Observing a running simulation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

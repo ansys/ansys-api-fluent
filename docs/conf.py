@@ -10,15 +10,13 @@ sys.path.insert(0, os.path.abspath("_ext"))
 
 from ansys_sphinx_theme import ansys_favicon
 
-project = "ansys-api-fluent"
+project = "Ansys Fluent gRPC API"
 copyright = "(c) 2026 ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
 
-from ansys.api.fluent._version import __version__
-
-release = __version__
-version = __version__
+release = ""
+version = ""
 
 extensions = [
     "sphinx.ext.autodoc",
@@ -45,6 +43,7 @@ exclude_patterns = [
 ]
 
 html_theme = "ansys_sphinx_theme"
+html_title = project
 html_static_path = ["source/_static"]
 html_favicon = ansys_favicon
 
