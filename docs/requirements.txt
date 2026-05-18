@@ -1,0 +1,8 @@
+sphinx>=7.2.6
+ansys-sphinx-theme
+sphinx-copybutton
+sphinx-tabs
+# Required by docs/_ext/proto_docgen.py to compile .proto files into a
+# FileDescriptorSet during the Sphinx build.
+grpcio-tools
+protobuf
