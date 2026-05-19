@@ -1,4 +1,4 @@
-﻿Ansys Fluent gRPC API
+Ansys Fluent gRPC API
 ======================
 
 .. toctree::
