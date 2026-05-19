@@ -4,18 +4,16 @@
 Getting Started
 ===============
 
-The Fluent gRPC API lets you drive a running Fluent server from any
-programming language that supports gRPC to perform meshing,
-physics and case setup, solution control, solver execution, live monitoring,
-event handling, and extraction of field and solution data for post-processing.
-These capabilities are organised as a set of *services*, each responsible for a
-specific area of functionality.
+The Fluent gRPC API exposes a set of services and RPC methods for driving a
+running Fluent server from any language with gRPC support. Each service covers
+a specific area of functionality such as case setup, solver control, live
+monitoring, or field-data extraction.
 
-What is in ansys-api-fluent?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Repository contents
+~~~~~~~~~~~~~~~~~~~
 
 The `repository <https://github.com/ansys-internal/ansys-api-fluent>`_ contains
-the ``.proto`` files that define every Fluent gRPC service, method and message.
+the ``.proto`` files that define every Fluent gRPC service, method, and message.
 Proto files are language-independent: the same source can generate native
 clients in C++, Go, Java, C#, Python, or any other language with
 `gRPC <https://grpc.io/>`_ support.
