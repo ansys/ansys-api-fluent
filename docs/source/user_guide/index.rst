@@ -14,6 +14,7 @@ Browse the :ref:`client_examples` for runnable code covering session setup,
 simulation configuration, live solver streams, and simulation data access.
 
 .. toctree::
+   :hidden:
    :maxdepth: 1
 
    client_examples/index
