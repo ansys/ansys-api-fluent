@@ -12,7 +12,7 @@ Connecting and managing the session
 
 See :doc:`session_setup` for health checks, version negotiation, product and
 build info, process info, app mode, beta features, and Python journalling via
-the ``Health``, ``Connection``, and ``AppUtilities`` services.
+the ``Health``, ``Connection``, and ``ApplicationRuntime`` services.
 
 Configuring the simulation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
