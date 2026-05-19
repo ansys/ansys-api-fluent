@@ -18,7 +18,7 @@ The `repository <https://github.com/ansys-internal/ansys-api-fluent>`_ contains
 the ``.proto`` files that define every Fluent gRPC service, method and message.
 Proto files are language-independent: the same source can generate native
 clients in C++, Go, Java, C#, Python, or any other language with
-`gRPC <https://grpc.io/>`_ support. 
+`gRPC <https://grpc.io/>`_ support.
 
 Compiling proto files
 ~~~~~~~~~~~~~~~~~~~~~
