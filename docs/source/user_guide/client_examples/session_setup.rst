@@ -1,4 +1,4 @@
-﻿Session setup — connection, health, and application runtime
+Session setup — connection, health, and application runtime
 ============================================================
 
 Python client examples for the ``Connection``, ``Health``, and
