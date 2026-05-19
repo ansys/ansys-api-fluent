@@ -196,7 +196,7 @@ Enabling beta features
 -----------------------
 
 ``IsBetaEnabled`` queries the current state; ``EnableBeta`` activates beta
-features for the session â€” the change persists until the server restarts.
+features for the session — the change persists until the server restarts.
 
 .. code-block:: python
    :caption: Python
