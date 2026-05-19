@@ -238,11 +238,7 @@ ends recording and returns the journal as a string (when no file name was given)
    # Stop and retrieve the recorded journal string.
    stop_resp = app_stub.StopPythonJournal(
        app_utilities_pb2.StopPythonJournalRequest(
-           journal_id=(
-               start_resp.journal_id
-               if start_resp.HasField("journal_id")
-               else None
-           )
+           journal_id=start_resp.journal_id
        ),
        metadata=metadata,
    )
