@@ -1,8 +1,6 @@
 .. _user_guide:
 
 ==========
-User guide
-==========
 
 The user guide covers practical, task-oriented workflows.
 
@@ -35,3 +33,8 @@ Choose an entry point based on the task you are working on:
    :maxdepth: 2
 
    client_examples/index
+User Guide
+
+.. note::
+
+   This section is a placeholder and has not been written yet.

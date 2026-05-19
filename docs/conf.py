@@ -3,10 +3,12 @@
 import os
 import sys
 
+DOCS_DIR = os.path.abspath(os.path.dirname(__file__))
+
 # Add the ansys-api-fluent package to the path
-sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(0, os.path.abspath(os.path.join(DOCS_DIR, "..")))
 # Make the local Sphinx extensions importable
-sys.path.insert(0, os.path.abspath("_ext"))
+sys.path.insert(0, os.path.abspath(os.path.join(DOCS_DIR, "_ext")))
 
 from ansys_sphinx_theme import ansys_favicon
 

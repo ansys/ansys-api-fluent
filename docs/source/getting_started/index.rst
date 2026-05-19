@@ -1,8 +1,6 @@
 .. _getting_started:
 
 ===============
-Getting started
-===============
 
 The Fluent gRPC API lets you drive a running Fluent server from any
 programming language that supports gRPC to perform meshing,
@@ -225,3 +223,8 @@ Next step
 
 - :doc:`../user_guide/client_examples/index` — annotated Python examples for
   every service
+Getting Started
+
+.. note::
+
+   This section is a placeholder and has not been written yet.
