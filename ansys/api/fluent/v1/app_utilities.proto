@@ -44,6 +44,11 @@ service ApplicationRuntime {
 
   // Changes the application's current working directory.
   rpc SetWorkingDirectory(SetWorkingDirectoryRequest) returns (SetWorkingDirectoryResponse);
+
+  // Sets the session idle timeout in minutes.
+  // When the session has been idle for the specified number of minutes, Fluent will save and exit.
+  // Pass 0 to disable the idle timeout.
+  rpc SetIdleTimeout(SetIdleTimeoutRequest) returns (SetIdleTimeoutResponse);
 }
 
 // Request to retrieve product version information.
@@ -183,6 +188,18 @@ message SetWorkingDirectoryRequest {
 
 // Result of setting the working directory.
 message SetWorkingDirectoryResponse {
+}
+
+// Requests to set the session idle timeout.
+message SetIdleTimeoutRequest {
+  // Idle timeout duration in minutes.
+  // When the session has been idle for this many minutes, Fluent will save and exit.
+  // Pass 0 to disable the idle timeout.
+  int32 timeout_in_minutes = 1;
+}
+
+// Result of setting the idle timeout.
+message SetIdleTimeoutResponse {
 }
 
 // Application operating mode.
