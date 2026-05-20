@@ -6,6 +6,8 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.app_utilities;
 
+import "google/protobuf/duration.proto";
+
 // ApplicationRuntime service provides operations that span the Fluent application lifecycle but do not belong
 // to a domain-specific service. Typical uses include retrieving version and build metadata, managing
 // feature flags, and controlling application startup and shutdown.
@@ -44,6 +46,11 @@ service ApplicationRuntime {
 
   // Changes the application's current working directory.
   rpc SetWorkingDirectory(SetWorkingDirectoryRequest) returns (SetWorkingDirectoryResponse);
+
+  // Sets the session idle timeout.
+  // When the session has been idle for the specified duration, Fluent will exit.
+  // Pass a zero duration to disable the idle timeout.
+  rpc SetIdleTimeout(SetIdleTimeoutRequest) returns (SetIdleTimeoutResponse);
 }
 
 // Request to retrieve product version information.
@@ -183,6 +190,18 @@ message SetWorkingDirectoryRequest {
 
 // Result of setting the working directory.
 message SetWorkingDirectoryResponse {
+}
+
+// Requests to set the session idle timeout.
+message SetIdleTimeoutRequest {
+  // Idle timeout duration.
+  // When the session has been idle for this duration, Fluent will exit.
+  // Pass a zero duration to disable the idle timeout.
+  google.protobuf.Duration timeout = 1;
+}
+
+// Result of setting the idle timeout.
+message SetIdleTimeoutResponse {
 }
 
 // Application operating mode.
