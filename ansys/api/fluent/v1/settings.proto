@@ -6,7 +6,9 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.settings;
 
-// Settings service provides RPCs for reading and writing the Fluent settings hierarchy.
+// Settings service provides RPCs for reading, writing, and commanding the Fluent
+// solver settings hierarchy. It operates exclusively on the solver: every PathInfo
+// must use root="fluent".
 service Settings {
   /* Return the API schema for the settings hierarchy, describing object types, children, commands, queries, and arguments. */
   rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse);
