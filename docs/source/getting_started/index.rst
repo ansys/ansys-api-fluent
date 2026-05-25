@@ -1,22 +1,57 @@
 .. _getting_started:
 
 ===============
-Getting Started
+Getting started
 ===============
 
-The Fluent gRPC API exposes a set of services and RPC methods for driving a
-running Fluent server from any language with gRPC support. Each service covers
-a specific area of functionality such as case setup, solver control, live
-monitoring, or field-data extraction.
+Introduction
+~~~~~~~~~~~~
 
-Repository contents
-~~~~~~~~~~~~~~~~~~~
+You can use Fluent's gRPC interface to drive your simulations from any
+gRPC-compatible language. Through a set of neatly segregated services, you can
+perform meshing, solver setup and execution, live monitoring, field-data
+extraction, and more.
 
-The `repository <https://github.com/ansys-internal/ansys-api-fluent>`_ contains
-the ``.proto`` files that define every Fluent gRPC service, method, and message.
-Proto files are language-independent: the same source can generate native
-clients in C++, Go, Java, C#, Python, or any other language with
-`gRPC <https://grpc.io/>`_ support.
+Below, you'll find the prerequisites for setting up the gRPC interface,
+instructions for getting everything installed, and guidance on building and
+using your gRPC client code.
+
+Getting the proto files
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``.proto`` files that define every Fluent gRPC service, method, and message
+are available in the
+`ansys-api-fluent repository <https://github.com/ansys-internal/ansys-api-fluent>`_.
+
+Prerequisites
+~~~~~~~~~~~~~
+
+Before compiling the ``.proto`` files you need:
+
+- A Protocol Buffers compiler (``protoc``) on your ``PATH``, at a version
+  compatible with the repository's ``.proto`` files.
+- A language-specific `gRPC <https://grpc.io/>`_ plug-in or toolchain:
+
+  - **Python** – ``grpcio-tools`` (``pip install grpcio-tools``), which bundles
+    ``protoc`` and the Python plug-in.
+  - **C++** – ``grpc_cpp_plugin`` and a C++ toolchain.
+  - **Go** – Go toolchain plus ``protoc-gen-go`` and ``protoc-gen-go-grpc``.
+  - **Java** – JDK and the ``protoc-gen-grpc-java`` plug-in.
+  - **C#** – ``grpc_csharp_plugin``, or the ``Grpc.Tools`` NuGet package for
+    MSBuild integration.
+
+Ensure ``protoc`` and any ``protoc-gen-*`` plug-ins are on ``PATH``, or pass
+``--plugin=protoc-gen-<lang>=<path>`` explicitly when invoking ``protoc``.
+
+.. note::
+
+   - The examples show the same core step (invoking the Protocol Buffers
+     compiler) but rely on different language plug-ins. The Python example uses
+     the ``python -m grpc_tools.protoc`` wrapper, which bundles ``protoc`` and
+     the Python plug-in together.
+   - If you target Windows with Visual Studio, ensure the necessary native build
+     tools and SDKs (C++ build tools, .NET SDK, and so on) are installed and
+     available in your development environment.
 
 Compiling proto files
 ~~~~~~~~~~~~~~~~~~~~~
@@ -26,7 +61,10 @@ with the appropriate gRPC plugin against the files in ``ansys/api/fluent/v1/``.
 .. note::
 
    The commands below are illustrative. Exact flags and plugin paths vary
-   by platform and installed toolchain.
+   by platform and installed toolchain. Each command compiles a single
+   ``.proto`` file (``health.proto`` is used as an example); repeat the
+   invocation for each service, or pass multiple ``.proto`` files in one call,
+   to generate stubs for the full API.
 
 .. tabs::
 
@@ -86,10 +124,16 @@ with the appropriate gRPC plugin against the files in ``ansys/api/fluent/v1/``.
              --plugin=protoc-gen-grpc=grpc_csharp_plugin \
              ansys/api/fluent/v1/health.proto
 
-Basic pattern
-~~~~~~~~~~~~~
+Making a service call
+~~~~~~~~~~~~~~~~~~~~~
 
-The following is a simple example to fetch the health status from the server.
+The examples below fetch the health status from a running Fluent server.
+Before running them, ensure you have:
+
+- A running Fluent server (Ansys Fluent 27R1 or later)
+- Its IP address, port, and password
+
+The following snippets illustrate the common pattern across languages.
 
 .. tabs::
 
@@ -199,24 +243,17 @@ The following is a simple example to fetch the health status from the server.
          Console.WriteLine($"Status: {resp.Status}");
          await channel.ShutdownAsync();
 
-Python package
-~~~~~~~~~~~~~~
+Python package (Python 3.10+)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For Python, the stubs are pre-generated and published to
-`PyPI <https://pypi.org/project/ansys-api-fluent/>`_ — there is no
-need to run ``protoc``. Install the package and import the generated modules
-directly:
+Python stubs are pre-generated and published to
+`PyPI <https://pypi.org/project/ansys-api-fluent/>`_ which provides a ready-made
+alternative to compiling the proto files to Python yourself. Install the Python
+package and import the generated modules directly:
 
 .. code-block:: bash
 
    pip install ansys-api-fluent
-
-Prerequisites
-^^^^^^^^^^^^^
-
-- Python 3.10 or later
-- A running Fluent server (Ansys Fluent 27R1 or later) with its IP address,
-  port, and password
 
 Next step
 ~~~~~~~~~
