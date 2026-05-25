@@ -3,8 +3,8 @@ DataModel service
 
 Python client examples for the ``DataModel`` gRPC service.
 
-For the full message and field reference see
-:doc:`../../api/services/datamodel_se`.
+See :doc:`../../api/services/datamodel_se`
+for this service's complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
 
