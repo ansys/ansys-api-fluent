@@ -8,7 +8,9 @@ package ansys.api.fluent.v1.field_data;
 
 // FieldData service provides RPCs for retrieving field and surface data from Fluent simulations.
 service FieldData {
-  // Initiate field data streaming; send GetFieldsRequest messages on the stream to specify which fields to retrieve.
+  // Configure and initiate a server-streaming field data session. The request sets the chunk
+  // size and encoding format (bytes or typed arrays); the server streams BeginFieldsStreamingResponse
+  // chunks back until all requested field data has been delivered.
   rpc BeginFieldsStreaming(BeginFieldsStreamingRequest) returns (stream BeginFieldsStreamingResponse) {}
 
   // Retrieve multiple field types (scalar, vector, surface geometry) in a single request.
