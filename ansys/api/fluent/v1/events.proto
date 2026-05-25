@@ -10,8 +10,8 @@ import "ansys/api/fluent/v1/scheme_pointer.proto";
 
 // Events service provides streaming of solver and workflow events to clients.
 service Events {
-  // Begins streaming of events; the server sends a stream of
-  // `BeginStreamingResponse` messages until the stream is closed.
+  // Stream solver events to the client; the server sends BeginStreamingResponse
+  // messages until the stream is cancelled.
   rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse);
 
   // The following three RPCs support synchronous client-side callbacks triggered by solution events
@@ -24,13 +24,14 @@ service Events {
   //
   // This mechanism is useful when a client must perform an action at deterministic points in the solve.
 
-  // The solver pauses when a selected solution event occurs.
+  // Register a solution-event pause trigger; the solver pauses when the selected event
+  // occurs and waits until the client calls ResumeSolve.
   rpc PauseSolveFor(PauseSolveForRequest) returns (PauseSolveForResponse);
 
-  // Resumes solver execution after a pause triggered by a solution event.
+  // Resume solver execution after it was paused by a PauseSolveFor trigger.
   rpc ResumeSolve(ResumeSolveRequest) returns (ResumeSolveResponse);
 
-  // Unregisters a prior pause-on-solution-event registration.
+  // Unregister a pause trigger previously registered with PauseSolveFor.
   rpc CancelPauseSolve(CancelPauseSolveRequest) returns (CancelPauseSolveResponse);
 }
 
@@ -125,7 +126,7 @@ message AutoPauseEvent {
 
 // Event during solution progress.
 message ProgressEvent {
-  string message = 1;           // Progress Message.
+  string message = 1;           // Progress message text.
   sint32 percent_complete = 2;  // Percent completed.
 }
 
@@ -156,12 +157,11 @@ enum SolutionEvent {
   SOLUTION_EVENT_TIME_STEP = 2;
 }
 
-// Request to begin streaming events.
+// Request to begin streaming solver events.
 message BeginStreamingRequest {
 }
 
-// Registers interest in a specific solution event. When the event occurs, the solver pauses and waits
-// until the client explicitly resumes it.
+// Request to register a solution-event pause trigger.
 // protolint:disable:next MESSAGE_NAMES_EXCLUDE_PREPOSITIONS
 message PauseSolveForRequest {
   // Solution event that triggers a pause.
@@ -175,23 +175,23 @@ message PauseSolveForResponse {
   int64 registration_id = 1;
 }
 
-// Resumes from a pause on solution event.
+// Request to resume solver execution after a PauseSolveFor trigger.
 message ResumeSolveRequest {
   // Identifier of the registration to resume.
   int64 registration_id = 1;
 }
 
-// Result of resuming.
+// Response for ResumeSolve.
 message ResumeSolveResponse {
 }
 
-// Unregisters from pause on solution events.
+// Request to unregister a PauseSolveFor trigger.
 message CancelPauseSolveRequest {
   // Identifier of the registration to unregister.
   int64 registration_id = 1;
 }
 
-// Result of unregistering.
+// Response for CancelPauseSolve.
 message CancelPauseSolveResponse {
 }
 

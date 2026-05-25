@@ -222,8 +222,8 @@ message StaticInfo {
   string help = 5;
 }
 
-// Response containing the static info for the requested path.
+// Response for GetStaticInfo.
 message GetStaticInfoResponse {
-  // Static information for the requested path.
+  // Static schema information for the requested path.
   StaticInfo info = 1;
 }

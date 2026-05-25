@@ -10,51 +10,51 @@ import "ansys/api/fluent/v1/primitives.proto";
 
 import "ansys/api/fluent/v1/variant.proto";
 
-// Reduction service provides operations for computing reduction operations on field data
+// Reduction service provides RPCs for computing scalar reductions over field data.
 service Reduction {
-  // Area computes the total area of specified surfaces
+  // Compute the total area of the specified surfaces.
   rpc Area(AreaRequest) returns (AreaResponse) {}
-  // AreaAve computes the area-weighted average of an expression over specified surfaces
+  // Compute the area-weighted average of an expression over the specified surfaces.
   rpc AreaAve(AreaAveRequest) returns (AreaAveResponse) {}
-  // AreaInt computes the area integral of an expression over specified surfaces
+  // Compute the area integral of an expression over the specified surfaces.
   rpc AreaInt(AreaIntRequest) returns (AreaIntResponse) {}
-  // Centroid computes the geometric centroid of specified surfaces
+  // Compute the geometric centroid of the specified surfaces.
   rpc Centroid(CentroidRequest) returns (CentroidResponse) {}
-  // Count computes the number of cells/faces in specified locations
+  // Count the number of cells or faces at the specified locations.
   rpc Count(CountRequest) returns (CountResponse) {}
-  // CountIf computes the number of cells/faces where a condition is true
+  // Count the number of cells or faces at the specified locations where the condition expression is true.
   rpc CountIf(CountIfRequest) returns (CountIfResponse) {}
-  // Force computes the total force (pressure + viscous) on specified surfaces
+  // Compute the total force (pressure and viscous) on the specified surfaces.
   rpc Force(ForceRequest) returns (ForceResponse) {}
-  // MassAve computes the mass-weighted average of an expression
+  // Compute the mass-weighted average of an expression over the specified cell zones.
   rpc MassAve(MassAveRequest) returns (MassAveResponse) {}
-  // MassFlowAve computes the mass-flow-weighted average of an expression
+  // Compute the mass-flow-weighted average of an expression over the specified surfaces.
   rpc MassFlowAve(MassFlowAveRequest) returns (MassFlowAveResponse) {}
-  // MassFlowAveAbs computes the mass-flow-weighted average using absolute mass flow
+  // Compute the mass-flow-weighted average using absolute mass flow values.
   rpc MassFlowAveAbs(MassFlowAveAbsRequest) returns (MassFlowAveAbsResponse) {}
-  // MassFlowInt computes the mass flow integral of an expression
+  // Compute the mass flow integral of an expression over the specified surfaces.
   rpc MassFlowInt(MassFlowIntRequest) returns (MassFlowIntResponse) {}
-  // MassInt computes the mass integral of an expression
+  // Compute the mass integral of an expression over the specified cell zones.
   rpc MassInt(MassIntRequest) returns (MassIntResponse) {}
-  // Maximum computes the maximum value of an expression over specified locations
+  // Compute the maximum value of an expression over the specified locations.
   rpc Maximum(MaximumRequest) returns (MaximumResponse) {}
-  // Minimum computes the minimum value of an expression over specified locations
+  // Compute the minimum value of an expression over the specified locations.
   rpc Minimum(MinimumRequest) returns (MinimumResponse) {}
-  // PressureForce computes the pressure force on specified surfaces
+  // Compute the pressure force on the specified surfaces.
   rpc PressureForce(PressureForceRequest) returns (PressureForceResponse) {}
-  // ViscousForce computes the viscous force on specified surfaces
+  // Compute the viscous force on the specified surfaces.
   rpc ViscousForce(ViscousForceRequest) returns (ViscousForceResponse) {}
-  // Volume computes the total volume of specified cell zones
+  // Compute the total volume of the specified cell zones.
   rpc Volume(VolumeRequest) returns (VolumeResponse) {}
-  // VolumeAve computes the volume-weighted average of an expression
+  // Compute the volume-weighted average of an expression over the specified cell zones.
   rpc VolumeAve(VolumeAveRequest) returns (VolumeAveResponse) {}
-  // VolumeInt computes the volume integral of an expression
+  // Compute the volume integral of an expression over the specified cell zones.
   rpc VolumeInt(VolumeIntRequest) returns (VolumeIntResponse) {}
-  // Moment computes the moment about the origin for specified surfaces
+  // Compute the moment about the origin for the specified surfaces.
   rpc Moment(MomentRequest) returns (MomentResponse) {}
-  // Sum computes the weighted sum of an expression over specified locations
+  // Compute the weighted sum of an expression over the specified locations.
   rpc Sum(SumRequest) returns (SumResponse) {}
-  // SumIf computes the conditional weighted sum of an expression
+  // Compute the weighted sum of an expression where the condition is true over the specified locations.
   rpc SumIf(SumIfRequest) returns (SumIfResponse) {}
 }
 

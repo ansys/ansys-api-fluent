@@ -10,13 +10,13 @@ import "ansys/api/fluent/v1/field_data.proto";
 
 // SolutionVariable service provides RPCs for retrieving and setting solution variable data and metadata.
 service SolutionVariable {
-  // Retrieves domain and zone metadata.
+  // Retrieve domain and zone metadata.
   rpc GetZonesInfo(GetZonesInfoRequest) returns (GetZonesInfoResponse);
-  // Retrieves solution metadata for a domain and zone.
+  // Retrieve solution variable metadata for a domain and zone.
   rpc GetSolutionVariableInfo(GetSolutionVariableInfoRequest) returns (GetSolutionVariableInfoResponse);
-  // Streams data chunks for the requested solution variable.
+  // Retrieve solution variable data, streamed in chunks.
   rpc GetSolutionVariableData(GetSolutionVariableDataRequest) returns (stream GetSolutionVariableDataResponse);
-  // Streams data to set values for a given solution variable.
+  // Set solution variable data by streaming data chunks to the server.
   rpc SetSolutionVariableData(stream SetSolutionVariableDataRequest) returns (SetSolutionVariableDataResponse);
 }
 

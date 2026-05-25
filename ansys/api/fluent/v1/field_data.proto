@@ -6,54 +6,54 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.field_data;
 
-// FieldData service provides operations for retrieving field data from Fluent simulations
+// FieldData service provides RPCs for retrieving field and surface data from Fluent simulations.
 service FieldData {
-  // BeginFieldsStreaming initiates streaming of field data
+  // Initiate field data streaming; send GetFieldsRequest messages on the stream to specify which fields to retrieve.
   rpc BeginFieldsStreaming(BeginFieldsStreamingRequest) returns (stream BeginFieldsStreamingResponse) {}
 
-  // GetFields retrieves multiple types of fields (scalar, vector, surfaces) in a single request
+  // Retrieve multiple field types (scalar, vector, surface geometry) in a single request.
   rpc GetFields(GetFieldsRequest) returns (stream GetFieldsResponse);
 
-  // GetRange retrieves the scalar field range (min/max values)
+  // Return the minimum and maximum values of a scalar field over the specified surfaces.
   rpc GetRange(GetRangeRequest) returns (GetRangeResponse) {}
 
-  // GetSurfacesInfo retrieves information about available surfaces
+  // Return metadata for the available surfaces.
   rpc GetSurfacesInfo(GetSurfacesInfoRequest) returns (GetSurfacesInfoResponse) {}
 
-  // GetVectorFieldsInfo retrieves information about available vector fields
+  // Return metadata for the available vector fields.
   rpc GetVectorFieldsInfo(GetVectorFieldsInfoRequest) returns (GetVectorFieldsInfoResponse) {}
 
-  // GetFieldsInfo retrieves information about available scalar fields
+  // Return metadata for the available scalar fields.
   rpc GetFieldsInfo(GetFieldsInfoRequest) returns (GetFieldsInfoResponse) {}
 
-  // GetSurfaces retrieves surface geometry data
+  // Retrieve surface geometry data (vertices, faces, centroids, and normals) for the specified surfaces.
   rpc GetSurfaces(GetSurfacesRequest) returns (stream GetSurfacesResponse) {}
 
-  // GetScalarField retrieves scalar field data on surfaces
+  // Retrieve scalar field data for the specified surfaces.
   rpc GetScalarField(GetScalarFieldRequest) returns (stream GetScalarFieldResponse) {}
 
-  // GetVectorField retrieves vector field data on surfaces
+  // Retrieve vector field data for the specified surfaces.
   rpc GetVectorField(GetVectorFieldRequest) returns (stream GetVectorFieldResponse) {}
 
-  // GetPathlinesField retrieves pathlines field data for particle tracking visualization
+  // Retrieve pathlines field data for particle tracking visualization.
   rpc GetPathlinesField(GetPathlinesFieldRequest) returns (stream GetPathlinesFieldResponse) {}
 
-  // GetParticleTracksField retrieves particle tracks field data
+  // Retrieve particle track field data.
   rpc GetParticleTracksField(GetParticleTracksFieldRequest) returns (stream GetParticleTracksFieldResponse) {}
 
-  // IsBoundaryValuesEnabled checks if boundary values are enabled
+  // Return whether boundary values are enabled.
   rpc IsBoundaryValuesEnabled(IsBoundaryValuesEnabledRequest) returns (IsBoundaryValuesEnabledResponse) {}
 
-  // GetSolverMeshNodesDouble retrieves solver mesh nodes with double precision coordinates
+  // Retrieve solver mesh nodes with double-precision coordinates.
   rpc GetSolverMeshNodesDouble(GetSolverMeshNodesRequest) returns (stream GetSolverMeshNodesDoubleResponse) {}
 
-  // GetSolverMeshNodesFloat retrieves solver mesh nodes with float precision coordinates
+  // Retrieve solver mesh nodes with single-precision floating-point coordinates.
   rpc GetSolverMeshNodesFloat(GetSolverMeshNodesRequest) returns (stream GetSolverMeshNodesFloatResponse) {}
 
-  // GetSolverMeshElements retrieves solver mesh elements (cells)
+  // Retrieve solver mesh elements (cells).
   rpc GetSolverMeshElements(GetSolverMeshElementsRequest) returns (stream GetSolverMeshElementsResponse) {}
 
-  // Returns whether solution data is currently available.
+  // Return whether solution data is currently available.
   rpc IsDataAvailable(IsDataAvailableRequest) returns (IsDataAvailableResponse) {}
 }
 
@@ -180,7 +180,7 @@ message BeginFieldsStreamingResponse {
 message SurfaceRequest {
   uint64 surface_id = 1;            // Surface id.
   bool overset_mesh = 2;            // Provide overset mesh.
-  bool provide_vertices = 3;        // Provide vectices.
+  bool provide_vertices = 3;        // Provide vertices.
   bool provide_faces = 4;           // Provide face to vertex connectivity.
   bool provide_faces_centroid = 5;  // Provide face centroids.
   bool provide_faces_normal = 6;    // Provide face normals.

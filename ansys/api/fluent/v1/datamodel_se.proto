@@ -8,47 +8,47 @@ package ansys.api.fluent.v1.datamodel_se;
 
 import "ansys/api/fluent/v1/variant.proto";
 
-// DataModel service provides operations for managing Fluent datamodel state and events
+// DataModel service provides RPCs for managing Fluent datamodel state and events.
 service DataModel {
-  // StreamStateChanges starts streaming datamodel state changes and events
+  // Stream datamodel state changes and events.
   rpc StreamStateChanges(StreamStateChangesRequest) returns (stream StreamStateChangesResponse) {}
-  // InitDatamodel initializes the datamodel with specified rules
+  // Initialize the datamodel for the specified rules context.
   rpc InitDatamodel(InitDatamodelRequest) returns (InitDatamodelResponse) {}
-  // GetState retrieves the current state at a specified path
+  // Return the current state at the specified path.
   rpc GetState(GetStateRequest) returns (GetStateResponse) {}
-  // SetState sets the state at a specified path
+  // Set the state at the specified path.
   rpc SetState(SetStateRequest) returns (SetStateResponse) {}
-  // UpdateDict merges a dictionary into the state at a specified path
+  // Merge a dictionary of values into the state at the specified path.
   rpc UpdateDict(UpdateDictRequest) returns (UpdateDictResponse) {}
-  // CreateObject creates a new named object at a specified path
+  // Create a new named object at the specified path.
   rpc CreateObject(CreateObjectRequest) returns (CreateObjectResponse) {}
-  // DeleteObject deletes an object at a specified path
+  // Delete the object at the specified path.
   rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse) {}
-  // GetAttributeValue retrieves the value of a specific attribute
+  // Return the value of a named attribute for the object at the specified path.
   rpc GetAttributeValue(GetAttributeValueRequest) returns (GetAttributeValueResponse) {}
-  // ExecuteCommand executes a command on a datamodel object
+  // Execute a command on the datamodel object at the specified path.
   rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse) {}
-  // ExecuteQuery executes a query on a datamodel object
+  // Execute a query on the datamodel object at the specified path and return the result.
   rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse) {}
-  // CreateCommandArguments creates command arguments for a specific command
+  // Create a command arguments object for the specified command.
   rpc CreateCommandArguments(CreateCommandArgumentsRequest) returns (CreateCommandArgumentsResponse) {}
-  // DeleteCommandArguments deletes previously created command arguments
+  // Delete a previously created command arguments object.
   rpc DeleteCommandArguments(DeleteCommandArgumentsRequest) returns (DeleteCommandArgumentsResponse) {}
-  // GetSchema retrieves static information about the datamodel structure
+  // Return the API schema describing the structure of the datamodel.
   rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse) {}
-  // Rename renames a datamodel object
+  // Rename the datamodel object at the specified path.
   rpc Rename(RenameRequest) returns (RenameResponse) {}
-  // FixState fixes the state of a datamodel object to ensure consistency
+  // Fix the state of the datamodel object at the specified path to ensure internal consistency.
   rpc FixState(FixStateRequest) returns (FixStateResponse) {}
-  // GetObjectNames retrieves the names of objects at a specified path
+  // Return the names of all objects at the specified path.
   rpc GetObjectNames(GetObjectNamesRequest) returns (GetObjectNamesResponse) {}
-  // DeleteChildObjects deletes child objects from a parent object
+  // Delete all child objects of the parent object at the specified path.
   rpc DeleteChildObjects(DeleteChildObjectsRequest) returns (DeleteChildObjectsResponse) {}
-  // SubscribeEvents subscribes to datamodel events
+  // Subscribe to one or more datamodel events.
   rpc SubscribeEvents(SubscribeEventsRequest) returns (SubscribeEventsResponse) {}
-  // UnsubscribeEvents unsubscribes from previously subscribed datamodel events
+  // Unsubscribe from previously subscribed datamodel events.
   rpc UnsubscribeEvents(UnsubscribeEventsRequest) returns (UnsubscribeEventsResponse) {}
-  // StreamEvents starts streaming previously subscribed datamodel events
+  // Stream previously subscribed datamodel events.
   rpc StreamEvents(StreamEventsRequest) returns (stream StreamEventsResponse) {}
 }
 
@@ -221,7 +221,7 @@ message DeleteCommandArgumentsResponse {
 message CommandArg {
   string type = 1;                                             // The type of the argument
   string name = 2;                                             // The name of the argument
-  Schema info = 3;                                             // Static information about the argument
+  Schema info = 3;                                             // The schema information for this argument.
   string help_string = 4;                                      // Help text for the argument
   map<string, ansys.api.fluent.v1.variant.Variant> attrs = 5;  // Additional attributes for the argument
   string doc_string = 6;                                       // Documentation string for the argument
@@ -234,7 +234,7 @@ message CommandInfo {
   string doc_string = 3;         // Documentation string for the command
 }
 
-// Schema contains comprehensive static information about datamodel objects
+// Schema contains the static API description of datamodel objects, including types, parameters, commands, and queries.
 message Schema {
   map<string, Schema> named_objects = 1;                        // Named objects within this object
   map<string, Schema> singletons = 2;                           // Singleton objects within this object
@@ -248,14 +248,14 @@ message Schema {
   map<string, ansys.api.fluent.v1.variant.Variant> attrs = 10;  // Additional attributes for this object
 }
 
-// GetSchemaRequest is the request message for retrieving static information
+// GetSchemaRequest is the request message for GetSchema.
 message GetSchemaRequest {
-  string rules = 1;  // The rules context for the static info query
+  string rules = 1;  // The rules context for the schema query.
 }
 
-// GetSchemaResponse is the response message containing static information
+// GetSchemaResponse is the response message for GetSchema.
 message GetSchemaResponse {
-  Schema info = 1;  // The static information for the datamodel
+  Schema info = 1;  // The API schema for the datamodel.
 }
 
 // CreatedEventRequest is used to subscribe to object creation events
