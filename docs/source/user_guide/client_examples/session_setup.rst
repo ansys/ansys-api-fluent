@@ -4,8 +4,9 @@ Session setup — connection, health, and application runtime
 Python client examples for the ``Connection``, ``Health``, and
 ``ApplicationRuntime`` gRPC services.
 
-For message and field references see :doc:`../../api/services/connection`,
-:doc:`../../api/services/health`, and :doc:`../../api/services/app_utilities`.
+See :doc:`../../api/services/connection`, :doc:`../../api/services/health`,
+and :doc:`../../api/services/app_utilities`
+for these services' complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
 

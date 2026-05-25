@@ -3,8 +3,10 @@ Helper types
 
 The ``ansys.api.fluent.v1`` package includes two shared protobuf message
 types that appear as value types in request and response messages across
-multiple services. Full message and field definitions are in the API reference:
-:doc:`../../api/helpers/variant` and :doc:`../../api/helpers/primitives`.
+multiple services.
+
+See :doc:`../../api/helpers/variant` and :doc:`../../api/helpers/primitives`
+for the complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
 

@@ -31,7 +31,7 @@ parameters — walk it to discover valid paths before making runtime calls.
 .. code-block:: python
    :caption: Python
 
-   schema_resp = stub.GetSchema(
+   schema_response = stub.GetSchema(
        datamodel_se_pb2.GetSchemaRequest(rules="meshing"),
        metadata=metadata,
    )
@@ -49,7 +49,7 @@ parameters — walk it to discover valid paths before making runtime calls.
        for name in node.commands:
            print(f"{prefix}{name}()")
 
-   walk(schema_resp.info)
+   walk(schema_response.info)
 
 .. raw:: html
 
@@ -115,41 +115,24 @@ parameters — walk it to discover valid paths before making runtime calls.
    </details>
 
 
-Initialising the datamodel
----------------------------
-
-.. code-block:: python
-   :caption: Python
-
-   resp = stub.InitDatamodel(
-       datamodel_se_pb2.InitDatamodelRequest(
-           rules="meshing",
-           return_state_changes=False,
-       ),
-       metadata=metadata,
-   )
-
 Reading and writing state
 --------------------------
 
-``GetState`` returns a :doc:`Variant <../../api/helpers/variant>`; ``SetState``
-writes one back.
-
 .. code-block:: python
    :caption: Python
 
-   # Read a boolean parameter.
-   resp = stub.GetState(
+   # Fetch a current boolean value.
+   state_response = stub.GetState(
        datamodel_se_pb2.GetStateRequest(
            rules="meshing",
            path="/GlobalSettings/EnableCleanCAD",
        ),
        metadata=metadata,
    )
-   current = resp.state.bool_state
-   print(current)  # -> False  (or True, depending on server state)
+   current = state_response.state.bool_state  # use .string_state, .int_state, etc. for other types
+   print(current)  # prints the current value as a bool
 
-   # Write the opposite value.
+   # Modify the value at the same path.
    stub.SetState(
        datamodel_se_pb2.SetStateRequest(
            rules="meshing",
@@ -159,7 +142,7 @@ writes one back.
        metadata=metadata,
    )
 
-   # Restore the original.
+   # Restore the original value.
    stub.SetState(
        datamodel_se_pb2.SetStateRequest(
            rules="meshing",
@@ -169,16 +152,17 @@ writes one back.
        metadata=metadata,
    )
 
-Reading parameter attributes
------------------------------
+Querying attributes
+--------------------
 
-``GetAttributeValue`` returns metadata about a parameter such as its default,
-allowed values, or whether it is read-only or active.
+``GetAttributeValue`` provides access to metadata, including constraints
+(range/min‑max, allowed/enumerated values), mutability (read-only/writable),
+availability (active/disabled), and default values.
 
 .. code-block:: python
    :caption: Python
 
-   resp = stub.GetAttributeValue(
+   attribute_response = stub.GetAttributeValue(
        datamodel_se_pb2.GetAttributeValueRequest(
            rules="meshing",
            path="/GlobalSettings/EnableCleanCAD",
@@ -186,13 +170,13 @@ allowed values, or whether it is read-only or active.
        ),
        metadata=metadata,
    )
-   print(resp.result.bool_state)  # -> False
+   print(attribute_response.result.bool_state)  # -> False
 
 Executing commands
 -------------------
 
-``ExecuteCommand`` runs a command on the server; pass arguments as a
-``Variant`` map.
+You can pass command arguments as a ``Variant`` map.
+``ExecuteCommand`` executes the specified server-side command.
 
 .. code-block:: python
    :caption: Python
@@ -200,7 +184,7 @@ Executing commands
    stub.ExecuteCommand(
        datamodel_se_pb2.ExecuteCommandRequest(
            rules="meshing",
-           path="",
+           path="/",
            command="ImportGeometry",
            args=variant_pb2.Variant(
                variant_map_state=variant_pb2.VariantMap(
@@ -221,16 +205,15 @@ set individual fields before calling ``ExecuteCommand``.
    :caption: Python
 
    # Allocate an argument object on the server.
-   create_resp = stub.CreateCommandArguments(
+   create_response = stub.CreateCommandArguments(
        datamodel_se_pb2.CreateCommandArgumentsRequest(
            rules="meshing",
-           path="",
+           path="/",
            command="ImportGeometry",
        ),
        metadata=metadata,
    )
-   command_id = create_resp.command_id
-   print(command_id)  # -> '3f2a1b...'  (a non-empty server-assigned string)
+   command_id = create_response.command_id
 
    # ... populate fields via SetState using the command_id path ...
 
@@ -238,24 +221,25 @@ set individual fields before calling ``ExecuteCommand``.
    stub.DeleteCommandArguments(
        datamodel_se_pb2.DeleteCommandArgumentsRequest(
            rules="meshing",
-           path="",
+           path="/",
            command="ImportGeometry",
            command_id=command_id,
        ),
        metadata=metadata,
    )
 
-Subscribing to and streaming events
--------------------------------------
+Subscribing to, streaming, and unsubscribing from events
+----------------------------------------------------------
 
 ``SubscribeEvents`` registers interest in specific datamodel changes;
-``StreamEvents`` delivers them as a server-streaming call. Unsubscribe when done.
+``StreamEvents`` delivers them as a server-streaming call;
+``UnsubscribeEvents`` cancels the subscriptions when done.
 
 .. code-block:: python
    :caption: Python
 
    # Subscribe to modifications on a specific path.
-   sub_resp = stub.SubscribeEvents(
+   subscribe_response = stub.SubscribeEvents(
        datamodel_se_pb2.SubscribeEventsRequest(
            event_requests=[
                datamodel_se_pb2.DataModelEventRequest(
@@ -268,28 +252,31 @@ Subscribing to and streaming events
        ),
        metadata=metadata,
    )
-   tags = [r.tag for r in sub_resp.responses]
-   print(tags)  # -> ['<uuid>']  (one non-empty tag per subscription)
+   tags = [r.tag for r in subscribe_response.responses]
+   # tags is a list of UUIDs — hold on to them; they are needed to unsubscribe.
 
-   # Open the event stream and read a few events.
+   # Stream events — events arrive only when something else modifies the
+   # subscribed path on the server (e.g. another client or a running solver).
    stream = stub.StreamEvents(
        datamodel_se_pb2.StreamEventsRequest(),
        metadata=metadata,
    )
    count = 0
    for event in stream:
-       print(event.tag)  # -> '<uuid>' matching one of the subscribed tags
+       mod = event.modified_event_response
+       print(mod.path)   # -> '/GlobalSettings/EnableCleanCAD'
+       print(mod.value)  # -> Variant carrying the updated value
        count += 1
        if count >= 3:
            break
    stream.cancel()
 
    # Unsubscribe.
-   unsub_resp = stub.UnsubscribeEvents(
+   unsubscribe_response = stub.UnsubscribeEvents(
        datamodel_se_pb2.UnsubscribeEventsRequest(tags=tags),
        metadata=metadata,
    )
-   for r in unsub_resp.responses:
+   for r in unsubscribe_response.responses:
        print(r.status)  # -> SUBSCRIPTION_STATUS_UNSUBSCRIBED
 
 Streaming state changes
@@ -311,10 +298,10 @@ it changes. Use ``DIFF_STATE_FULL`` for a complete snapshot or
        ),
        metadata=metadata,
    )
-   first = next(iter(stream))
+   first_response = next(iter(stream))
    stream.cancel()
-   print(list(first.deleted_paths))  # -> []  (empty list when nothing has been deleted)
-   print(list(first.events))         # -> []  (empty list when no events fired)
+   print(list(first_response.deleted_paths))  # -> []  (empty list when nothing has been deleted)
+   print(list(first_response.events))         # -> []  (empty list when no events fired)
 
    # Lighter diff without command metadata.
    stream = stub.StreamStateChanges(
@@ -325,10 +312,8 @@ it changes. Use ``DIFF_STATE_FULL`` for a complete snapshot or
        ),
        metadata=metadata,
    )
-   first = next(iter(stream))
+   first_response = next(iter(stream))
    stream.cancel()
-   assert hasattr(first, "state")
+   assert hasattr(first_response, "state")
 
-For the complete message and field reference — request/response types,
-``Variant`` encoding, and the ``DiffState`` enum — see
-:doc:`../../api/services/datamodel_se`.
+See :doc:`../../api/services/datamodel_se` for the complete reference material.

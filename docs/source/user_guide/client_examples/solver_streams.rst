@@ -4,8 +4,9 @@ Solver output streams — events, monitors, and transcript
 Python client examples for the ``Transcript``, ``Events``, and ``Monitor``
 gRPC services.
 
-For the full message and field reference see :doc:`../../api/services/transcript`,
-:doc:`../../api/services/events`, and :doc:`../../api/services/monitor`.
+See :doc:`../../api/services/transcript`, :doc:`../../api/services/events`,
+and :doc:`../../api/services/monitor`
+for these services' complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
 

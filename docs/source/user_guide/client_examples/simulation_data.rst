@@ -4,8 +4,9 @@ Reading and writing simulation data
 Python client examples for the ``FieldData``, ``Reduction``, and
 ``SolutionVariable`` gRPC services.
 
-For the full message and field reference see :doc:`../../api/services/field_data`,
-:doc:`../../api/services/reduction`, and :doc:`../../api/services/svar`.
+See :doc:`../../api/services/field_data`, :doc:`../../api/services/reduction`,
+and :doc:`../../api/services/svar`
+for these services' complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
 

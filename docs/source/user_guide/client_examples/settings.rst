@@ -3,8 +3,8 @@ Settings service
 
 Python client examples for the ``Settings`` gRPC service.
 
-For the full message and field reference see
-:doc:`../../api/services/settings`.
+See :doc:`../../api/services/settings`
+for this service's complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
 
