@@ -22,9 +22,9 @@ for these services' complete reference material.
 
    channel = grpc.insecure_channel("127.0.0.1:50051")
    metadata = [("password", "your-server-password")]
-   conn_stub   = connection_pb2_grpc.ConnectionStub(channel)
+   connection_stub = connection_pb2_grpc.ConnectionStub(channel)
    health_stub = health_pb2_grpc.HealthStub(channel)
-   app_stub    = app_utilities_pb2_grpc.ApplicationRuntimeStub(channel)
+   app_utilities_stub = app_utilities_pb2_grpc.ApplicationRuntimeStub(channel)
 
 .. note::
 
@@ -43,20 +43,20 @@ before sending any other RPCs.
    :caption: Python
 
    # Check with an empty service name — covers the server as a whole.
-   resp = health_stub.Check(
+   health_response = health_stub.Check(
        health_pb2.HealthCheckRequest(service=""),
        metadata=metadata,
    )
-   print(resp.status)  # -> HealthCheckResponse.SERVING_STATUS_SERVING
+   print(health_response.status)  # -> HealthCheckResponse.SERVING_STATUS_SERVING
 
    # Check by fully-qualified service name.
-   resp = health_stub.Check(
+   health_response = health_stub.Check(
        health_pb2.HealthCheckRequest(
            service="ansys.api.fluent.v1.health.Health"
        ),
        metadata=metadata,
    )
-   print(resp.status in {
+   print(health_response.status in {
        health_pb2.HealthCheckResponse.SERVING_STATUS_SERVING,
        health_pb2.HealthCheckResponse.SERVING_STATUS_NOT_SERVING,
        health_pb2.HealthCheckResponse.SERVING_STATUS_SERVICE_UNKNOWN,
@@ -79,7 +79,7 @@ to confirm the server accepted the version and password.
 .. code-block:: python
    :caption: Python
 
-   stream = conn_stub.Connect(
+   stream = connection_stub.Connect(
        connection_pb2.ConnectRequest(
            request_type=connection_pb2.ConnectRequest.REQUEST_TYPE_CONNECT,
            password="your-server-password",
@@ -89,22 +89,22 @@ to confirm the server accepted the version and password.
    )
    print(stream is not None)  # -> True
 
-   first = next(iter(stream))
+   first_response = next(iter(stream))
    stream.cancel()
-   print(hasattr(first, "error_code"))  # -> True
-   print(first.error_code)              # -> CONNECTION_ERROR_NONE
+   print(hasattr(first_response, "error_code"))  # -> True
+   print(first_response.error_code)              # -> CONNECTION_ERROR_NONE
 
    # Connecting without specifying a version is also accepted.
-   stream = conn_stub.Connect(
+   stream = connection_stub.Connect(
        connection_pb2.ConnectRequest(
            request_type=connection_pb2.ConnectRequest.REQUEST_TYPE_CONNECT,
            password="your-server-password",
        ),
        metadata=metadata,
    )
-   first = next(iter(stream))
+   first_response = next(iter(stream))
    stream.cancel()
-   print(first.error_code in {
+   print(first_response.error_code in {
        connection_pb2.CONNECTION_ERROR_NONE,
        connection_pb2.CONNECTION_ERROR_UNSPECIFIED,
        connection_pb2.CONNECTION_ERROR_VERSION_MISMATCH,
@@ -119,13 +119,13 @@ running Fluent build.
 .. code-block:: python
    :caption: Python
 
-   ver = app_stub.GetProductVersion(
+   version_response = app_utilities_stub.GetProductVersion(
        app_utilities_pb2.GetProductVersionRequest(),
        metadata=metadata,
    )
-   print(ver.major)  # -> 27
-   print(ver.minor)  # -> 1
-   print(ver.patch)  # -> 0  (or higher for a patched build)
+   print(version_response.major)  # -> 27
+   print(version_response.minor)  # -> 1
+   print(version_response.patch)  # -> 0  (or higher for a patched build)
 
 Reading build information
 --------------------------
@@ -136,14 +136,14 @@ and branch of the running binary.
 .. code-block:: python
    :caption: Python
 
-   info = app_stub.GetBuildInfo(
+   build_info = app_utilities_stub.GetBuildInfo(
        app_utilities_pb2.GetBuildInfoRequest(),
        metadata=metadata,
    )
-   print(len(info.build_time) > 0)     # -> True  (e.g. '2025-01-15T10:30:00')
-   print(info.build_id > 0)            # -> True
-   print(len(info.vcs_revision) > 0)   # -> True  (e.g. 'abc123def')
-   print(len(info.vcs_branch) > 0)     # -> True  (e.g. 'main')
+   print(len(build_info.build_time) > 0)     # -> True  (e.g. '2025-01-15T10:30:00')
+   print(build_info.build_id > 0)            # -> True
+   print(len(build_info.vcs_revision) > 0)   # -> True  (e.g. 'abc123def')
+   print(len(build_info.vcs_branch) > 0)     # -> True  (e.g. 'main')
 
 Reading process information
 -----------------------------
@@ -154,20 +154,20 @@ PID, and working directory of the respective Fluent processes.
 .. code-block:: python
    :caption: Python
 
-   ctrl = app_stub.GetControllerProcessInfo(
+   controller_process_info = app_utilities_stub.GetControllerProcessInfo(
        app_utilities_pb2.GetControllerProcessInfoRequest(),
        metadata=metadata,
    )
-   print(ctrl.hostname)           # -> 'compute-node-01'
-   print(ctrl.process_id)         # -> 12345  (an integer PID)
-   print(ctrl.working_directory)  # -> '/scratch/my_project'
+   print(controller_process_info.hostname)           # -> 'compute-node-01'
+   print(controller_process_info.process_id)         # -> 12345  (an integer PID)
+   print(controller_process_info.working_directory)  # -> '/scratch/my_project'
 
-   solver = app_stub.GetSolverProcessInfo(
+   solver_process_info = app_utilities_stub.GetSolverProcessInfo(
        app_utilities_pb2.GetSolverProcessInfoRequest(),
        metadata=metadata,
    )
-   print(solver.process_id > 0)        # -> True
-   print(len(solver.hostname) > 0)     # -> True
+   print(solver_process_info.process_id > 0)        # -> True
+   print(len(solver_process_info.hostname) > 0)     # -> True
 
 Reading the application mode
 ------------------------------
@@ -178,11 +178,11 @@ solver session, or a specialised variant.
 .. code-block:: python
    :caption: Python
 
-   mode_resp = app_stub.GetAppMode(
+   app_mode_response = app_utilities_stub.GetAppMode(
        app_utilities_pb2.GetAppModeRequest(),
        metadata=metadata,
    )
-   print(mode_resp.app_mode)  # -> APP_MODE_SOLVER  (or APP_MODE_MESHING, etc.)
+   print(app_mode_response.app_mode)  # -> APP_MODE_SOLVER  (or APP_MODE_MESHING, etc.)
 
    valid_modes = {
        app_utilities_pb2.APP_MODE_UNSPECIFIED,
@@ -191,7 +191,7 @@ solver session, or a specialised variant.
        app_utilities_pb2.APP_MODE_SOLVER_ICING,
        app_utilities_pb2.APP_MODE_SOLVER_AERO,
    }
-   print(mode_resp.app_mode in valid_modes)  # -> True
+   print(app_mode_response.app_mode in valid_modes)  # -> True
 
 Enabling beta features
 -----------------------
@@ -202,22 +202,22 @@ features for the session — the change persists until the server restarts.
 .. code-block:: python
    :caption: Python
 
-   resp = app_stub.IsBetaEnabled(
+   beta_status_response = app_utilities_stub.IsBetaEnabled(
        app_utilities_pb2.IsBetaEnabledRequest(),
        metadata=metadata,
    )
-   print(isinstance(resp.is_beta_enabled, bool))  # -> True
+   print(isinstance(beta_status_response.is_beta_enabled, bool))  # -> True
 
-   app_stub.EnableBeta(
+   app_utilities_stub.EnableBeta(
        app_utilities_pb2.EnableBetaRequest(),
        metadata=metadata,
    )
 
-   resp = app_stub.IsBetaEnabled(
+   beta_status_response = app_utilities_stub.IsBetaEnabled(
        app_utilities_pb2.IsBetaEnabledRequest(),
        metadata=metadata,
    )
-   print(resp.is_beta_enabled)  # -> True
+   print(beta_status_response.is_beta_enabled)  # -> True
 
 Recording a Python journal
 ---------------------------
@@ -229,7 +229,7 @@ ends recording and returns the journal as a string (when no file name was given)
    :caption: Python
 
    # Start an in-memory journal (no file name).
-   start_resp = app_stub.StartPythonJournal(
+   start_response = app_utilities_stub.StartPythonJournal(
        app_utilities_pb2.StartPythonJournalRequest(),
        metadata=metadata,
    )
@@ -237,14 +237,13 @@ ends recording and returns the journal as a string (when no file name was given)
    # --- perform simulation work here ---
 
    # Stop and retrieve the recorded journal string.
-   stop_resp = app_stub.StopPythonJournal(
+   stop_response = app_utilities_stub.StopPythonJournal(
        app_utilities_pb2.StopPythonJournalRequest(
-           journal_id=start_resp.journal_id
+           journal_id=start_response.journal_id
        ),
        metadata=metadata,
    )
-   print(isinstance(stop_resp.journal_str, str))  # -> True
+   print(isinstance(stop_response.journal_str, str))  # -> True
 
-For the complete message and field reference see
-:doc:`../../api/services/connection`, :doc:`../../api/services/health`, and
-:doc:`../../api/services/app_utilities`.
+See :doc:`../../api/services/connection`, :doc:`../../api/services/health`,
+and :doc:`../../api/services/app_utilities` for the complete reference material.

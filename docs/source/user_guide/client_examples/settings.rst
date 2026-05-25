@@ -36,12 +36,12 @@ it to confirm valid paths before making runtime calls.
 .. code-block:: python
    :caption: Python
 
-   schema_resp = stub.GetSchema(
+   schema_response = stub.GetSchema(
        settings_pb2.GetSchemaRequest(root="fluent"),
        metadata=metadata,
    )
-   print(schema_resp.info.type)           # -> 'group'
-   print(len(schema_resp.info.children))  # -> 10  (number of top-level nodes)
+   print(schema_response.info.type)           # -> 'group'
+   print(len(schema_response.info.children))  # -> 10  (number of top-level nodes)
 
    def walk(node, indent=0):
        prefix = "  " * indent
@@ -53,14 +53,14 @@ it to confirm valid paths before making runtime calls.
        for qry in node.queries:
            print(f"{prefix}{qry.name}?")
 
-   walk(schema_resp.info)
+   walk(schema_response.info)
 
    # Request only specific attributes on a sub-tree.
-   resp = stub.GetSchema(
+   schema_response = stub.GetSchema(
        settings_pb2.GetSchemaRequest(root="fluent", optional_attrs=["type"]),
        metadata=metadata,
    )
-   assert resp.info is not None
+   assert schema_response.info is not None
 
 .. raw:: html
 
@@ -134,20 +134,20 @@ Reading and writing state
        return None
 
    # Read a scalar parameter.
-   resp = stub.GetState(
+   state_response = stub.GetState(
        settings_pb2.GetStateRequest(
            path_info=path("/setup/general/operating-conditions/operating-pressure")
        ),
        metadata=metadata,
    )
-   print(value_to_python(resp.value))  # -> 101325.0
+   print(value_to_python(state_response.value))  # -> 101325.0
 
    # Read the energy model map.
-   resp = stub.GetState(
+   state_response = stub.GetState(
        settings_pb2.GetStateRequest(path_info=path("/setup/models/energy")),
        metadata=metadata,
    )
-   print(value_to_python(resp.value))  # -> {'enabled': True, 'viscous-dissipation': False, ...}
+   print(value_to_python(state_response.value))  # -> {'enabled': True, 'viscous-dissipation': False, ...}
 
 ``SetState`` writes a ``Value`` back; the integer roundtrip below confirms the
 write is reflected by a subsequent ``GetState``.
@@ -185,8 +185,8 @@ write is reflected by a subsequent ``GetState``.
        metadata=metadata,
    )
 
-Reading parameter attributes
------------------------------
+Querying attributes
+--------------------
 
 ``GetAttrs`` returns type, active status, and read-only flag without a prior
 ``GetSchema`` call; pass ``recursive=True`` to include child nodes.
@@ -195,7 +195,7 @@ Reading parameter attributes
    :caption: Python
 
    # Read specific attributes for a single node.
-   resp = stub.GetAttrs(
+   attrs_response = stub.GetAttrs(
        settings_pb2.GetAttrsRequest(
            path_info=path("/setup/models/energy/enabled"),
            attrs=["type", "active?", "read-only?"],
@@ -203,13 +203,13 @@ Reading parameter attributes
        ),
        metadata=metadata,
    )
-   assert resp.values.WhichOneof("value") == "value_map"
-   for attr, val in resp.values.value_map.m.items():
+   assert attrs_response.values.WhichOneof("value") == "value_map"
+   for attr, val in attrs_response.values.value_map.m.items():
        print(f"{attr}: {value_to_python(val)}")
    # 'type': 'boolean', 'active?': True, 'read-only?': False
 
    # Recursive read — populates group_children for every child node.
-   resp = stub.GetAttrs(
+   attrs_response = stub.GetAttrs(
        settings_pb2.GetAttrsRequest(
            path_info=path("/setup/models"),
            attrs=["type"],
@@ -217,7 +217,7 @@ Reading parameter attributes
        ),
        metadata=metadata,
    )
-   print(len(resp.group_children))  # -> > 4
+   print(len(attrs_response.group_children))  # -> > 4
 
 Managing named objects
 -----------------------
@@ -241,11 +241,11 @@ manage collections such as graphics contours under ``/results/graphics/contour``
    )
 
    # List all names.
-   resp = stub.GetObjectNames(
+   objects = stub.GetObjectNames(
        settings_pb2.GetObjectNamesRequest(path_info=OBJ_PATH),
        metadata=metadata,
    )
-   print(list(resp.names))  # -> ['contour-1', 'contour-2']
+   print(list(objects.names))  # -> ['contour-1', 'contour-2']
 
    # Rename contour-1.
    stub.Rename(
@@ -257,11 +257,11 @@ manage collections such as graphics contours under ``/results/graphics/contour``
        metadata=metadata,
    )
 
-   resp = stub.GetObjectNames(
+   objects = stub.GetObjectNames(
        settings_pb2.GetObjectNamesRequest(path_info=OBJ_PATH),
        metadata=metadata,
    )
-   print(list(resp.names))  # -> ['contour-renamed', 'contour-2']
+   print(list(objects.names))  # -> ['contour-renamed', 'contour-2']
 
    # Delete both objects.
    for name in ("contour-renamed", "contour-2"):
@@ -270,11 +270,11 @@ manage collections such as graphics contours under ``/results/graphics/contour``
            metadata=metadata,
        )
 
-   resp = stub.GetObjectNames(
+   objects = stub.GetObjectNames(
        settings_pb2.GetObjectNamesRequest(path_info=OBJ_PATH),
        metadata=metadata,
    )
-   print(list(resp.names))  # -> []
+   print(list(objects.names))  # -> []
 
 ``GetObjectNames`` works on any named-object path, including boundary
 conditions; ``GetListSize`` returns the current count for list settings.
@@ -283,22 +283,22 @@ conditions; ``GetListSize`` returns the current count for list settings.
    :caption: Python
 
    # Named objects under a boundary-condition path.
-   resp = stub.GetObjectNames(
+   objects = stub.GetObjectNames(
        settings_pb2.GetObjectNamesRequest(
            path_info=path("/setup/boundary-conditions/wall")
        ),
        metadata=metadata,
    )
-   print(list(resp.names))  # -> ['wall', ...]  (names of existing wall BCs)
+   print(list(objects.names))  # -> ['wall', ...]  (names of existing wall BCs)
 
    # Size of a list setting.
-   resp = stub.GetListSize(
+   list_size_response = stub.GetListSize(
        settings_pb2.GetListSizeRequest(
            path_info=path("/results/graphics/lighting/lights")
        ),
        metadata=metadata,
    )
-   print(resp.size)  # -> 0  (or more if lights have been configured)
+   print(list_size_response.size)  # -> 0  (or more if lights have been configured)
 
 Executing commands
 -------------------
@@ -309,7 +309,7 @@ Executing commands
 .. code-block:: python
    :caption: Python
 
-   resp = stub.ExecuteCommand(
+   command_response = stub.ExecuteCommand(
        settings_pb2.ExecuteCommandRequest(
            path_info=path("/solution/run-calculation"),
            command="iterate",
@@ -321,7 +321,7 @@ Executing commands
        ),
        metadata=metadata,
    )
-   assert hasattr(resp, "reply")
+   assert hasattr(command_response, "reply")
 
 Executing queries
 ------------------
@@ -331,7 +331,7 @@ Executing queries
 .. code-block:: python
    :caption: Python
 
-   resp = stub.ExecuteQuery(
+   query_response = stub.ExecuteQuery(
        settings_pb2.ExecuteQueryRequest(
            path_info=path("/setup/models/system-coupling"),
            query="get-tensor-type",
@@ -339,7 +339,7 @@ Executing queries
        ),
        metadata=metadata,
    )
-   print(value_to_python(resp.reply))  # -> 'symmetric'  (or None)
+   print(value_to_python(query_response.reply))  # -> 'symmetric'  (or None)
 
 Checking wildcards
 -------------------
@@ -351,16 +351,14 @@ passing it to other RPCs.
    :caption: Python
 
    for token in ("*", "?", "cold-inlet", ""):
-       resp = stub.IsWildcard(
+       wildcard_response = stub.IsWildcard(
            settings_pb2.IsWildcardRequest(input=token),
            metadata=metadata,
        )
-       print(f"{token!r:15} -> is_wildcard={resp.is_wildcard}")
+       print(f"{token!r:15} -> is_wildcard={wildcard_response.is_wildcard}")
    # '*'             -> is_wildcard=True
    # '?'             -> is_wildcard=True  (or False, depending on Fluent version)
    # 'cold-inlet'    -> is_wildcard=False
    # ''              -> is_wildcard=False
 
-For the complete message and field reference — request/response types,
-the ``Value`` and ``Schema`` message structures, and ``GetAttrs`` — see
-:doc:`../../api/services/settings`.
+See :doc:`../../api/services/settings` for the complete reference material.
