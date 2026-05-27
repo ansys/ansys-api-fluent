@@ -33,7 +33,7 @@ service TextInterface {
   // Batch multiple getters into a single request.
   rpc CompositeGet(CompositeGetRequest) returns (CompositeGetResponse);
 
-  // Retrieve static (schema-like) information under the specified path.
+  // Retrieve schema information under the specified path.
   rpc GetStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse);
 }
 
@@ -224,6 +224,6 @@ message StaticInfo {
 
 // Response for GetStaticInfo.
 message GetStaticInfoResponse {
-  // Static schema information for the requested path.
+  // Schema information for the requested path.
   StaticInfo info = 1;
 }

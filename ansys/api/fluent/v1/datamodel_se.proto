@@ -36,7 +36,7 @@ service DataModel {
   rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse) {}
   // Create a command arguments object for the specified command.
   rpc CreateCommandArguments(CreateCommandArgumentsRequest) returns (CreateCommandArgumentsResponse) {}
-  // Delete a previously created command arguments object.
+  // Delete a created command arguments object.
   rpc DeleteCommandArguments(DeleteCommandArgumentsRequest) returns (DeleteCommandArgumentsResponse) {}
   // Return the API schema describing the structure of the datamodel.
   rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse) {}
@@ -50,9 +50,9 @@ service DataModel {
   rpc DeleteChildObjects(DeleteChildObjectsRequest) returns (DeleteChildObjectsResponse) {}
   // Subscribe to one or more datamodel events.
   rpc SubscribeEvents(SubscribeEventsRequest) returns (SubscribeEventsResponse) {}
-  // Unsubscribe from previously subscribed datamodel events.
+  // Unsubscribe from subscribed datamodel events.
   rpc UnsubscribeEvents(UnsubscribeEventsRequest) returns (UnsubscribeEventsResponse) {}
-  // Stream previously subscribed datamodel events.
+  // Stream subscribed datamodel events.
   rpc StreamEvents(StreamEventsRequest) returns (stream StreamEventsResponse) {}
 }
 
