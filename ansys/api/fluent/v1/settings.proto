@@ -123,7 +123,7 @@ message GetSchemaResponse {
 
 // GetStateRequest is the request message for GetState.
 message GetStateRequest {
-  PathInfo path_info = 1;  // The path to the varaible whose state to retrieve.
+  PathInfo path_info = 1;  // The path to the variable whose state to retrieve.
 }
 
 // GetStateResponse is the response message for GetState.
@@ -133,7 +133,7 @@ message GetStateResponse {
 
 // SetStateRequest is the request message for SetState.
 message SetStateRequest {
-  PathInfo path_info = 1;  // The path to the varaible to set.
+  PathInfo path_info = 1;  // The path to the variable to set.
   Value value = 2;         // The new state to set.
 }
 
