@@ -83,7 +83,7 @@ message SolutionVariableInfo {
 // Request to retrieve solution variable data, possibly streamed in chunks.
 message GetSolutionVariableDataRequest {
   uint32 chunk_size = 1;          // Chunk size.
-  bool provide_bytes_stream = 2;  // Bytes are streamed if true.
+  bool provide_bytes_stream = 2;  // Whether to stream bytes.
   string name = 3;                // Solution variable Name.
   uint32 domain_id = 4;           // Domain ID.
   repeated uint64 zones = 5;      // List of zone IDs.

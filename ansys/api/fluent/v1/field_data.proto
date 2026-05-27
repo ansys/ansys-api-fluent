@@ -155,7 +155,7 @@ message GetFieldsResponse {
  */
 message BeginFieldsStreamingRequest {
   uint32 chunk_size = 1;          // Chunk size in bytes.
-  bool provide_bytes_stream = 2;  // Bytes are streamed if true
+  bool provide_bytes_stream = 2;  // Whether to stream bytes
 }
 
 /**
@@ -181,11 +181,11 @@ message BeginFieldsStreamingResponse {
  */
 message SurfaceRequest {
   uint64 surface_id = 1;            // Surface id.
-  bool overset_mesh = 2;            // Provide overset mesh.
-  bool provide_vertices = 3;        // Provide vertices.
-  bool provide_faces = 4;           // Provide face-to-vertex connectivity.
-  bool provide_faces_centroid = 5;  // Provide face centroids.
-  bool provide_faces_normal = 6;    // Provide face normals.
+  bool overset_mesh = 2;            // Whether to include overset mesh.
+  bool provide_vertices = 3;        // Whether to provide vertices.
+  bool provide_faces = 4;           // Whether to provide face-to-vertex connectivity.
+  bool provide_faces_centroid = 5;  // Whether to provide face centroids.
+  bool provide_faces_normal = 6;    // Whether to provide face normals.
 }
 
 // DataLocation specifies where data is located in the mesh
@@ -202,7 +202,7 @@ message ScalarFieldRequest {
   uint64 surface_id = 1;             // Surface id for scalar field.
   string scalar_field_name = 2;      // Scalar field name.
   DataLocation data_location = 3;    // Scalar Field location (Nodes/Elements).
-  bool provide_boundary_values = 4;  // Provide boundary values.
+  bool provide_boundary_values = 4;  // Whether to provide boundary values.
 }
 
 /**
@@ -220,13 +220,13 @@ message PathlinesFieldRequest {
   uint64 surface_id = 1;                 // Surface id for pathlines.
   string field = 2;                      // Scalar Field name.
   string additional_field = 3;           // Any additional scalar field if required for pathlines.
-  bool provide_particle_time_field = 4;  // Provide particle time field.
+  bool provide_particle_time_field = 4;  // Whether to provide particle time field.
   DataLocation data_location = 5;        // Scalar Field location (Nodes/Elements).
   sint32 steps = 6;                      // Pathlines step count.
   double step_size = 7;                  // Pathlines step size.
   sint32 skip = 8;                       // Pathlines skip count.
-  bool reverse = 9;                      // Flag to plot pathlines in reverse direction.
-  bool accuracy_control_enabled = 10;    // Pathlines accuracy control flag.
+  bool reverse = 9;                      // Whether to trace pathlines in reverse direction.
+  bool accuracy_control_enabled = 10;    // Whether to enable pathlines accuracy control.
   double tolerance = 11;                 // Pathlines tolerance.
   sint32 coarsen = 12;                   // Pathlines coarsen value.
   string velocity_domain = 13;           // Pathlines velocity domain.
@@ -240,7 +240,7 @@ message PathlinesFieldRequest {
  */
 message GetFieldsRequest {
   uint32 chunk_size = 1;                                        // Chunk size in bytes.
-  bool provide_bytes_stream = 2;                                // Bytes are streamed if true
+  bool provide_bytes_stream = 2;                                // Whether to stream bytes
   repeated SurfaceRequest surface_requests = 3;                 // Surface request.
   repeated ScalarFieldRequest scalar_field_requests = 4;        // Scalar field request.
   repeated VectorFieldRequest vector_field_requests = 5;        // Vector field request.
