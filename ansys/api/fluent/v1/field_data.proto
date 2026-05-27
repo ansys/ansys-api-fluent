@@ -183,7 +183,7 @@ message SurfaceRequest {
   uint64 surface_id = 1;            // Surface id.
   bool overset_mesh = 2;            // Provide overset mesh.
   bool provide_vertices = 3;        // Provide vertices.
-  bool provide_faces = 4;           // Provide face to vertex connectivity.
+  bool provide_faces = 4;           // Provide face-to-vertex connectivity.
   bool provide_faces_centroid = 5;  // Provide face centroids.
   bool provide_faces_normal = 6;    // Provide face normals.
 }
