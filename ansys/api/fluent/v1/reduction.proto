@@ -10,7 +10,7 @@ import "ansys/api/fluent/v1/primitives.proto";
 
 import "ansys/api/fluent/v1/variant.proto";
 
-// Reduction service provides RPCs for computing scalar reductions over field data.
+// Reduction service provides RPCs for computing reductions over field data.
 service Reduction {
   // Compute the total area of the specified surfaces.
   rpc Area(AreaRequest) returns (AreaResponse) {}

@@ -7,13 +7,13 @@ syntax = "proto3";
 package ansys.api.fluent.v1.settings;
 
 // Settings service provides RPCs for reading, writing, and commanding the Fluent
-// solver settings hierarchy. It operates exclusively on the solver: every PathInfo
-// must use root="fluent".
+// solver settings hierarchy. The caller must explicitly use root="fluent" within
+// every PathInfo message.
 service Settings {
   /* Return the API schema for the settings hierarchy, describing object types, children, commands, queries, and arguments. */
   rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse);
 
-  /* Return the current state of the settings object at the specified path. */
+  /* Return the state of the settings object at the specified path. */
   rpc GetState(GetStateRequest) returns (GetStateResponse);
 
   /* Update the state of the settings object at the specified path. */
@@ -112,8 +112,8 @@ message Schema {
 
 // GetSchemaRequest is the request message for GetSchema.
 message GetSchemaRequest {
-  string root = 1;                     // The root of the settings tree to retrieve the schema for.
-  repeated string optional_attrs = 2;  // Optional attribute names to include in the schema response.
+  string root = 1;                     // Root path of the settings tree whose schema will be returned.
+  repeated string optional_attrs = 2;  // Optional attributes to include in the returned schema.
 }
 
 // GetSchemaResponse is the response message for GetSchema.
@@ -123,18 +123,18 @@ message GetSchemaResponse {
 
 // GetStateRequest is the request message for GetState.
 message GetStateRequest {
-  PathInfo path_info = 1;  // The path to the settings object whose current state to retrieve.
+  PathInfo path_info = 1;  // The path to the varaible whose state to retrieve.
 }
 
 // GetStateResponse is the response message for GetState.
 message GetStateResponse {
-  Value value = 1;  // The current state of the settings object at the requested path.
+  Value value = 1;  // The state of the requested variable.
 }
 
 // SetStateRequest is the request message for SetState.
 message SetStateRequest {
-  PathInfo path_info = 1;  // The path to the settings object whose state to update.
-  Value value = 2;         // The new state for the settings object.
+  PathInfo path_info = 1;  // The path to the varaible to set.
+  Value value = 2;         // The new state to set.
 }
 
 // SetStateResponse is the response message for SetState.
