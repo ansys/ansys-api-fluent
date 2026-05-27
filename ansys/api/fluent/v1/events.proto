@@ -126,8 +126,11 @@ message AutoPauseEvent {
 
 // Event during solution progress.
 message ProgressEvent {
-  string message = 1;           // Progress message text.
-  sint32 percent_complete = 2;  // Percent completed.
+  string message = 1;            // Progress message text.
+  // Estimated solution progress, expressed as a percentage (0–100).
+  // This value is an estimate of the solution run progress only and does
+  // not apply to other operations.
+  sint32 percent_complete = 2;   // Percent completed.
 }
 
 // Event estimating remaining solver time.
@@ -230,8 +233,7 @@ message BeginStreamingResponse {
     CalculationsPausedEvent calculations_paused_event = 18;             // Calculations paused.
     CalculationsResumedEvent calculations_resumed_event = 19;           // Calculations resumed.
 
-    // Fraction of operation completed.
-    ProgressEvent progress_event = 20;                        // Progress update.
+    ProgressEvent progress_event = 20;                        // Solver progress.
     ErrorEvent error_event = 21;                              // Fatal error encountered.
     CommandCompletedEvent command_completed_event = 22;       // Command completed.
     DataModelChangedEvent data_model_changed_event = 23;      // Data model changed.
