@@ -10,8 +10,7 @@ import "ansys/api/fluent/v1/scheme_pointer.proto";
 
 // Events service provides streaming of solver and workflow events to clients.
 service Events {
-  // Streams solver events to the client; the server sends BeginStreamingResponse
-  // messages until the client cancels the stream.
+  // Streams solver events to the client.
   rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse);
 
   // The following three methods support synchronous client-side callbacks triggered by solution events
