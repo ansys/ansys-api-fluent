@@ -13,8 +13,10 @@ import "ansys/api/fluent/v1/variant.proto";
 // in each request selects the target feature area.
 // Supported rules contexts are: "meshing", "meshing_utilities", "part_management",
 // "pm_file_management", "preferences", "workflow", "solver_workflow", and "meshing_workflow".
+// Note: StreamStateChanges is not supported for the "meshing_workflow" context.
 service DataModel {
   // Streams datamodel state changes and events.
+  // This method is not supported for the "meshing_workflow" rules context.
   rpc StreamStateChanges(StreamStateChangesRequest) returns (stream StreamStateChangesResponse) {}
   // Initializes the datamodel for the specified rules context.
   rpc InitDatamodel(InitDatamodelRequest) returns (InitDatamodelResponse) {}
