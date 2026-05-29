@@ -8,54 +8,54 @@ package ansys.api.fluent.v1.field_data;
 
 // FieldData service provides methods for retrieving field and surface data from Fluent simulations.
 service FieldData {
-  // Configure and initiate a server-streaming field data session. The request sets the chunk
+  // Configures and initiates a server-streaming field data session. The request sets the chunk
   // size and encoding format (bytes or typed arrays); the server streams BeginFieldsStreamingResponse
   // chunks back until all requested field data has been delivered.
   rpc BeginFieldsStreaming(BeginFieldsStreamingRequest) returns (stream BeginFieldsStreamingResponse) {}
 
-  // Retrieve multiple field types (scalar, vector, surface geometry) in a single request.
+  // Retrieves multiple field types (scalar, vector, surface geometry) in a single request.
   rpc GetFields(GetFieldsRequest) returns (stream GetFieldsResponse);
 
-  // Return the minimum and maximum values of a scalar field over the specified surfaces.
+  // Returns the minimum and maximum values of a scalar field over the specified surfaces.
   rpc GetRange(GetRangeRequest) returns (GetRangeResponse) {}
 
-  // Return metadata for the available surfaces.
+  // Returns metadata for the available surfaces.
   rpc GetSurfacesInfo(GetSurfacesInfoRequest) returns (GetSurfacesInfoResponse) {}
 
-  // Return metadata for the available vector fields.
+  // Returns metadata for the available vector fields.
   rpc GetVectorFieldsInfo(GetVectorFieldsInfoRequest) returns (GetVectorFieldsInfoResponse) {}
 
-  // Return metadata for the available scalar fields.
+  // Returns metadata for the available scalar fields.
   rpc GetFieldsInfo(GetFieldsInfoRequest) returns (GetFieldsInfoResponse) {}
 
-  // Retrieve surface geometry data (vertices, faces, centroids, and normals) for the specified surfaces.
+  // Retrieves surface geometry data (vertices, faces, centroids, and normals) for the specified surfaces.
   rpc GetSurfaces(GetSurfacesRequest) returns (stream GetSurfacesResponse) {}
 
-  // Retrieve scalar field data for the specified surfaces.
+  // Retrieves scalar field data for the specified surfaces.
   rpc GetScalarField(GetScalarFieldRequest) returns (stream GetScalarFieldResponse) {}
 
-  // Retrieve vector field data for the specified surfaces.
+  // Retrieves vector field data for the specified surfaces.
   rpc GetVectorField(GetVectorFieldRequest) returns (stream GetVectorFieldResponse) {}
 
-  // Retrieve pathlines field data for particle tracking visualization.
+  // Retrieves pathlines field data for particle tracking visualization.
   rpc GetPathlinesField(GetPathlinesFieldRequest) returns (stream GetPathlinesFieldResponse) {}
 
-  // Retrieve particle track field data.
+  // Retrieves particle track field data.
   rpc GetParticleTracksField(GetParticleTracksFieldRequest) returns (stream GetParticleTracksFieldResponse) {}
 
-  // Return whether boundary values are enabled.
+  // Checks whether boundary values are enabled.
   rpc IsBoundaryValuesEnabled(IsBoundaryValuesEnabledRequest) returns (IsBoundaryValuesEnabledResponse) {}
 
-  // Retrieve solver mesh nodes with double-precision coordinates.
+  // Retrieves solver mesh nodes with double-precision coordinates.
   rpc GetSolverMeshNodesDouble(GetSolverMeshNodesRequest) returns (stream GetSolverMeshNodesDoubleResponse) {}
 
-  // Retrieve solver mesh nodes with single-precision floating-point coordinates.
+  // Retrieves solver mesh nodes with single-precision floating-point coordinates.
   rpc GetSolverMeshNodesFloat(GetSolverMeshNodesRequest) returns (stream GetSolverMeshNodesFloatResponse) {}
 
-  // Retrieve solver mesh elements (cells).
+  // Retrieves solver mesh elements (cells).
   rpc GetSolverMeshElements(GetSolverMeshElementsRequest) returns (stream GetSolverMeshElementsResponse) {}
 
-  // Return whether solution data is currently available.
+  // Checks whether solution data is currently available.
   rpc IsDataAvailable(IsDataAvailableRequest) returns (IsDataAvailableResponse) {}
 }
 
@@ -155,7 +155,7 @@ message GetFieldsResponse {
  */
 message BeginFieldsStreamingRequest {
   uint32 chunk_size = 1;          // Chunk size in bytes.
-  bool provide_bytes_stream = 2;  // Whether to stream bytes
+  bool provide_bytes_stream = 2;  // If true, streams bytes; if false, streams typed arrays (int/long/float/double).
 }
 
 /**
@@ -182,10 +182,10 @@ message BeginFieldsStreamingResponse {
 message SurfaceRequest {
   uint64 surface_id = 1;            // Surface id.
   bool overset_mesh = 2;            // Whether to include overset mesh.
-  bool provide_vertices = 3;        // Whether to provide vertices.
-  bool provide_faces = 4;           // Whether to provide face-to-vertex connectivity.
-  bool provide_faces_centroid = 5;  // Whether to provide face centroids.
-  bool provide_faces_normal = 6;    // Whether to provide face normals.
+  bool provide_vertices = 3;        // If true, vertices are included.
+  bool provide_faces = 4;           // If true, face-to-vertex connectivity is included.
+  bool provide_faces_centroid = 5;  // If true, face centroids are included.
+  bool provide_faces_normal = 6;    // If true, face normals are included.
 }
 
 // DataLocation specifies where data is located in the mesh
@@ -202,7 +202,7 @@ message ScalarFieldRequest {
   uint64 surface_id = 1;             // Surface id for scalar field.
   string scalar_field_name = 2;      // Scalar field name.
   DataLocation data_location = 3;    // Scalar Field location (Nodes/Elements).
-  bool provide_boundary_values = 4;  // Whether to provide boundary values.
+  bool provide_boundary_values = 4;  // If true, includes boundary values.
 }
 
 /**
@@ -225,8 +225,8 @@ message PathlinesFieldRequest {
   sint32 steps = 6;                      // Pathlines step count.
   double step_size = 7;                  // Pathlines step size.
   sint32 skip = 8;                       // Pathlines skip count.
-  bool reverse = 9;                      // Whether to trace pathlines in reverse direction.
-  bool accuracy_control_enabled = 10;    // Whether to enable pathlines accuracy control.
+  bool reverse = 9;                      // If true, traces pathlines in reverse direction; if false, traces forward.
+  bool accuracy_control_enabled = 10;    // If true, enables pathlines accuracy control.
   double tolerance = 11;                 // Pathlines tolerance.
   sint32 coarsen = 12;                   // Pathlines coarsen value.
   string velocity_domain = 13;           // Pathlines velocity domain.
@@ -240,7 +240,7 @@ message PathlinesFieldRequest {
  */
 message GetFieldsRequest {
   uint32 chunk_size = 1;                                        // Chunk size in bytes.
-  bool provide_bytes_stream = 2;                                // Whether to stream bytes
+  bool provide_bytes_stream = 2;                                // If true, streams bytes; if false, streams typed arrays (int/long/float/double).
   repeated SurfaceRequest surface_requests = 3;                 // Surface request.
   repeated ScalarFieldRequest scalar_field_requests = 4;        // Scalar field request.
   repeated VectorFieldRequest vector_field_requests = 5;        // Vector field request.
@@ -290,7 +290,7 @@ message SurfaceId {
 // GetSurfacesRequest is the request message for retrieving surface geometry
 message GetSurfacesRequest {
   repeated SurfaceId surface_ids = 1;         // The surface IDs to retrieve
-  bool overset_mesh = 2;                      // Whether to include overset mesh data
+  bool overset_mesh = 2;                      // If true, includes overset mesh data.
   DataStampingInfo data_stamping_info = 3;    // Data stamping information
   repeated SurfaceId available_surfaces = 4;  // Available surfaces for validation
 }
@@ -399,11 +399,11 @@ message GetSurfacesInfoResponse {
 message GetScalarFieldRequest {
   repeated SurfaceId surface_ids = 1;              // The surface IDs to retrieve data for
   string scalar_field = 2;                         // The scalar field name
-  bool node_value = 3;                             // Whether to get node values (vs element values)
+  bool node_value = 3;                             // If true, returns node values; if false, returns element values.
   DataStampingInfo data_stamping_info = 4;         // Data stamping information
   repeated SurfaceId available_surfaces = 5;       // Available surfaces for validation
   repeated SurfaceId available_scalar_fields = 6;  // Available scalar fields for validation
-  bool boundary_values = 7;                        // Whether to include boundary values
+  bool boundary_values = 7;                        // If true, includes boundary values.
 }
 
 // GlobalRange contains the global minimum and maximum values
@@ -464,7 +464,7 @@ message GetScalarFieldResponse {
 message GetVectorFieldRequest {
   repeated SurfaceId surface_ids = 1;  // The surface IDs to retrieve data for
   string scalar_field = 2;             // The scalar field name for coloring
-  bool node_value = 3;                 // Whether to get node values (vs element values)
+  bool node_value = 3;                 // If true, returns node values; if false, returns element values.
   string vector_field = 4;             // The vector field name
 
   DataStampingInfo data_stamping_info = 6;         // Data stamping information
@@ -512,15 +512,15 @@ message GetPathlinesFieldRequest {
   repeated SurfaceId release_froms = 1;      // Surface IDs to release particles from
   string field1 = 2;                         // Primary scalar field for visualization
   string field2 = 3;                         // Secondary scalar field for visualization
-  bool node_value = 4;                       // Whether to use node values
+  bool node_value = 4;                       // If true, uses node values; if false, uses element values.
   sint32 steps = 5;                          // Number of pathline steps
   double step_size = 6;                      // Step size for pathline integration
   sint32 skip = 8;                           // Number of particles to skip
-  bool reverse = 9;                          // Whether to trace pathlines in reverse
-  bool accuracy_control_enabled = 10;        // Whether accuracy control is enabled
+  bool reverse = 9;                          // If true, traces pathlines in reverse direction; if false, traces forward.
+  bool accuracy_control_enabled = 10;        // If true, enables accuracy control for pathline integration.
   double tolerance = 11;                     // Tolerance for accuracy control
   sint32 coarsen = 12;                       // Coarsening factor for pathlines
-  string zone = 13 [deprecated = true];      // Deprecated: use zones instead
+  string zone = 13 [deprecated = true];      // Deprecated. Use zones instead.
   string velocity_domain = 14;               // Velocity domain for pathline calculation
   DataStampingInfo data_stamping_info = 15;  // Data stamping information
   repeated string zones = 16;                // Zones for pathline calculation
@@ -564,7 +564,7 @@ message GetPathlinesFieldResponse {
 message ParticleTracksFilter {
   string field = 1;              // Field name to filter on
   GlobalRange filter_range = 2;  // Range of values to filter
-  bool inside_range = 3;         // Whether to include particles inside (true) or outside (false) the range
+  bool inside_range = 3;         // If true, includes particles inside the range; if false, includes those outside.
 }
 
 // GetParticleTracksFieldRequest is the request message for retrieving particle track data
@@ -574,13 +574,13 @@ message GetParticleTracksFieldRequest {
   string field2 = 3;                         // Scalar field for sphere size or ribbon twist
   string field3 = 4;                         // Vector field for visualization
   string vector_field = 5;                   // Vector field name
-  bool node_value = 6;                       // Whether to use node values
+  bool node_value = 6;                       // If true, uses node values; if false, uses element values.
   sint32 skip = 7;                           // Number of particles to skip
   sint32 single_stream_id = 8;               // If >= 0, track only this stream ID; if < 0, track all streams
   sint32 coarsen = 9;                        // Coarsening factor for particle tracks
-  bool free_stream_particles = 10;           // Whether to include free stream particles
-  bool wall_film_particles = 11;             // Whether to include wall film particles
-  bool pdf_particles = 12;                   // Whether to include PDF particles
+  bool free_stream_particles = 10;           // If true, includes free stream particles.
+  bool wall_film_particles = 11;             // If true, includes wall film particles.
+  bool pdf_particles = 12;                   // If true, includes PDF particles.
   ParticleTracksFilter filter = 13;          // Filter for particle tracks
   DataStampingInfo data_stamping_info = 14;  // Data stamping information
 }

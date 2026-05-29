@@ -10,15 +10,15 @@ import "ansys/api/fluent/v1/scheme_pointer.proto";
 
 // SchemeInterpreter service provides Scheme language evaluation capabilities.
 service SchemeInterpreter {
-  // Evaluate a Scheme pointer and return the result. Deprecated: use SchemeEval instead.
+  // Evaluates a Scheme pointer and returns the result. Deprecated. Use SchemeEval instead.
   rpc Eval(ansys.api.fluent.v1.scheme_pointer.SchemePointer) returns (ansys.api.fluent.v1.scheme_pointer.SchemePointer) {
     option deprecated = true;
   }
-  // Evaluate a Scheme expression and return the result.
+  // Evaluates a Scheme expression and returns the result.
   rpc SchemeEval(SchemeEvalRequest) returns (SchemeEvalResponse);
-  // Execute one or more commands and return the combined output.
+  // Executes one or more commands and returns the combined output.
   rpc Exec(ExecRequest) returns (ExecResponse);
-  // Evaluate a Scheme expression supplied as a string and return the result.
+  // Evaluates a Scheme expression supplied as a string and returns the result.
   rpc StringEval(StringEvalRequest) returns (StringEvalResponse);
 }
 
@@ -26,9 +26,9 @@ service SchemeInterpreter {
 message ExecRequest {
   // command is a repeated field containing command arguments or lines to execute.
   repeated string commands = 1;
-  // wait indicates whether to wait for the command to complete.
+  // If true, waits for the command to complete before returning.
   bool wait = 2;
-  // silent indicates whether to suppress printing the input command.
+  // If true, suppresses printing the input command to the transcript.
   bool silent = 3;
 }
 

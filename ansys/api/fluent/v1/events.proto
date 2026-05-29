@@ -10,8 +10,8 @@ import "ansys/api/fluent/v1/scheme_pointer.proto";
 
 // Events service provides streaming of solver and workflow events to clients.
 service Events {
-  // Stream solver events to the client; the server sends BeginStreamingResponse
-  // messages until the stream is cancelled.
+  // Streams solver events to the client; the server sends BeginStreamingResponse
+  // messages until the client cancels the stream.
   rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse);
 
   // The following three methods support synchronous client-side callbacks triggered by solution events
@@ -24,14 +24,14 @@ service Events {
   //
   // This mechanism is useful when a client must perform an action at deterministic points in the solve.
 
-  // Register a solution-event pause trigger; the solver pauses when the selected event
+  // Registers a solution-event pause trigger; the solver pauses when the selected event
   // occurs and waits until the client calls ResumeSolve.
   rpc PauseSolveFor(PauseSolveForRequest) returns (PauseSolveForResponse);
 
-  // Resume solver execution after it was paused by a PauseSolveFor trigger.
+  // Resumes solver execution after it was paused by a PauseSolveFor trigger.
   rpc ResumeSolve(ResumeSolveRequest) returns (ResumeSolveResponse);
 
-  // Unregister a pause trigger previously registered with PauseSolveFor.
+  // Unregisters a pause trigger previously registered with PauseSolveFor.
   rpc CancelPauseSolve(CancelPauseSolveRequest) returns (CancelPauseSolveResponse);
 }
 

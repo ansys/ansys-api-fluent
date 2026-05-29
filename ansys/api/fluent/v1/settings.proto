@@ -10,43 +10,43 @@ package ansys.api.fluent.v1.settings;
 // solver settings hierarchy. The caller must explicitly use root="fluent" within
 // every PathInfo message.
 service Settings {
-  /* Return the API schema for the settings hierarchy, describing object types, children, commands, queries, and arguments. */
+  /* Returns the API schema for the settings hierarchy, describing object types, children, commands, queries, and arguments. */
   rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse);
 
-  /* Return the state of the settings object at the specified path. */
+  /* Returns the state of the settings object at the specified path. */
   rpc GetState(GetStateRequest) returns (GetStateResponse);
 
-  /* Update the state of the settings object at the specified path. */
+  /* Updates the state of the settings object at the specified path. */
   rpc SetState(SetStateRequest) returns (SetStateResponse);
 
-  /* Rename the named object at the specified path. */
+  /* Renames the named object at the specified path. */
   rpc Rename(RenameRequest) returns (RenameResponse);
 
-  /* Create a new named object at the specified path. */
+  /* Creates a new named object at the specified path. */
   rpc CreateObject(CreateObjectRequest) returns (CreateObjectResponse);
 
-  /* Delete the named object at the specified path. */
+  /* Deletes the named object at the specified path. */
   rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse);
 
-  /* Return the names of all named objects at the specified path. */
+  /* Returns the names of all named objects at the specified path. */
   rpc GetObjectNames(GetObjectNamesRequest) returns (GetObjectNamesResponse);
 
-  /* Return the number of elements in the list object at the specified path. */
+  /* Returns the number of elements in the list object at the specified path. */
   rpc GetListSize(GetListSizeRequest) returns (GetListSizeResponse);
 
-  /* Resize the list object at the specified path. */
+  /* Resizes the list object at the specified path. */
   rpc ResizeListObject(ResizeListObjectRequest) returns (ResizeListObjectResponse);
 
-  /* Execute the named command on the settings object at the specified path. */
+  /* Executes the named command on the settings object at the specified path. */
   rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse);
 
-  /* Execute the named query on the settings object at the specified path and return the result. */
+  /* Executes the named query on the settings object at the specified path and returns the result. */
   rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse);
 
-  /* Return named attributes of the settings object at the specified path. */
+  /* Returns named attributes of the settings object at the specified path. */
   rpc GetAttrs(GetAttrsRequest) returns (GetAttrsResponse);
 
-  /* Return whether the provided string is treated as a wildcard by the solver. */
+  /* Checks whether the provided string is treated as a wildcard by the solver. */
   rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
 }
 
@@ -230,7 +230,7 @@ message ExecuteQueryResponse {
 message GetAttrsRequest {
   PathInfo path_info = 1;     // The path to the object to retrieve attributes from
   repeated string attrs = 2;  // The list of attribute names to retrieve
-  bool recursive = 3;         // Whether to retrieve attributes recursively from child objects
+  bool recursive = 3;         // If true, retrieves attributes recursively from child objects.
 }
 
 // AttrInfoMap represents a named entry in attribute information maps

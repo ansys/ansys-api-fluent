@@ -35,7 +35,7 @@ service ApplicationRuntime {
   // Stops a Python journal recording session.
   rpc StopPythonJournal(StopPythonJournalRequest) returns (StopPythonJournalResponse);
 
-  // Returns whether beta/experimental features are enabled for this session.
+  // Checks whether beta/experimental features are enabled for this session.
   rpc IsBetaEnabled(IsBetaEnabledRequest) returns (IsBetaEnabledResponse);
 
   // Enables beta/experimental features for this session.

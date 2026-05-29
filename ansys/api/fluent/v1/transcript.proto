@@ -10,7 +10,7 @@ option objc_class_prefix = "HLW";
 
 // Transcript service provides streaming of solver transcript output to clients.
 service Transcript {
-  // Stream transcript output from the solver.
+  // Streams transcript output from the solver.
   rpc BeginStreaming(TranscriptRequest) returns (stream TranscriptResponse);
 }
 
