@@ -12,14 +12,23 @@ import "ansys/api/fluent/v1/variant.proto";
 // meshing, workflow, preferences, and other specific areas. The rules string
 // in each request selects the target feature area.
 // Supported rules contexts are:
-// - meshing_workflow: The most up-to-date, intuitive exposure of meshing workflow.
-// - meshing_utilities: Meshing queries and other utilities.
-// - solver_workflow: Solver workflows.
-// - preferences: Fluent preferences in both meshing and solution mode.
-// - workflow: Legacy exposure of the workflow component of meshing_workflow.
-// - meshing: Legacy exposure of the meshing component of meshing_workflow.
-// - part_management: Legacy exposure of the part_management component of meshing_workflow.
-// - pm_file_management: Legacy exposure of the part_management file management component of meshing_workflow.
+//
+// - ``meshing_workflow``: The most up-to-date, intuitive exposure of meshing workflow.
+//
+// - ``meshing_utilities``: Meshing queries and other utilities.
+//
+// - ``solver_workflow``: Solver workflows.
+//
+// - ``preferences``: Fluent preferences in both meshing and solution mode.
+//
+// - ``workflow``: Legacy exposure of the workflow component of ``meshing_workflow``.
+//
+// - ``meshing``: Legacy exposure of the meshing component of ``meshing_workflow``.
+//
+// - ``part_management``: Legacy exposure of the part management component of ``meshing_workflow``.
+//
+// - ``pm_file_management``: Legacy exposure of the part management - file-management component
+//   of ``meshing_workflow``.
 //
 // Note: StreamStateChanges is not supported for the "meshing_workflow" context.
 service DataModel {
