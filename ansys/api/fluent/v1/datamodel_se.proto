@@ -21,14 +21,14 @@ import "ansys/api/fluent/v1/variant.proto";
 //
 // - ``preferences``: Fluent preferences in both meshing and solution mode.
 //
-// - ``workflow``: Legacy exposure of the workflow component of ``meshing_workflow``.
+// - ``workflow``: Legacy exposure of the workflow component of meshing workflow.
 //
-// - ``meshing``: Legacy exposure of the meshing component of ``meshing_workflow``.
+// - ``meshing``: Legacy exposure of the meshing component of meshing workflow.
 //
-// - ``part_management``: Legacy exposure of the part management component of ``meshing_workflow``.
+// - ``part_management``: Legacy exposure of the part management component of meshing workflow.
 //
 // - ``pm_file_management``: Legacy exposure of the part management - file-management component
-//   of ``meshing_workflow``.
+//   of meshing workflow.
 //
 // Note: StreamStateChanges is not supported for the "meshing_workflow" context.
 service DataModel {
