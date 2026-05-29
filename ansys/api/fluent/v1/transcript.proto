@@ -10,8 +10,7 @@ option objc_class_prefix = "HLW";
 
 // Transcript service provides streaming of solver transcript output to clients.
 service Transcript {
-  // Stream transcript output from the solver; the server sends TranscriptResponse
-  // messages until the client cancels the stream.
+  // Stream transcript output from the solver.
   rpc BeginStreaming(TranscriptRequest) returns (stream TranscriptResponse);
 }
 
@@ -20,10 +19,7 @@ message TranscriptRequest {
 }
 
 // Response message containing a chunk of transcript text.
-// Each chunk is flushed by the server either when a newline character is written
-// (character-by-character output) or immediately when a string is written.
 message TranscriptResponse {
-  // A chunk of transcript text. May contain a partial line, a complete line
-  // ending with '\n', or multiple lines depending on how the solver wrote the output.
+  // A chunk of transcript text, where each line is separated by a newline character.
   string transcript = 1;
 }

@@ -6,7 +6,7 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.field_data;
 
-// FieldData service provides RPCs for retrieving field and surface data from Fluent simulations.
+// FieldData service provides methods for retrieving field and surface data from Fluent simulations.
 service FieldData {
   // Configure and initiate a server-streaming field data session. The request sets the chunk
   // size and encoding format (bytes or typed arrays); the server streams BeginFieldsStreamingResponse
