@@ -8,11 +8,11 @@ package ansys.api.fluent.v1.datamodel_se;
 
 import "ansys/api/fluent/v1/variant.proto";
 
-// DataModel service provides RPCs for managing Fluent datamodel state and events.
-// It is used exclusively with meshing-mode rules contexts; the rules string in each
-// request selects the target datamodel. Supported rules contexts are "meshing",
-// "meshing_utilities", "part_management", "pm_file_management", "preferences",
-// "workflow", and "meshing_workflow".
+// DataModel service provides a way to access some Fluent features like
+// meshing, workflow, preferences, and other specific areas. The rules string
+// in each request selects the target feature area.
+// Supported rules contexts are: "meshing", "meshing_utilities", "part_management",
+// "pm_file_management", "preferences", "workflow", "solver_workflow", and "meshing_workflow".
 service DataModel {
   // Stream datamodel state changes and events.
   rpc StreamStateChanges(StreamStateChangesRequest) returns (stream StreamStateChangesResponse) {}

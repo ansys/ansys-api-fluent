@@ -14,7 +14,7 @@ service Events {
   // messages until the stream is cancelled.
   rpc BeginStreaming(BeginStreamingRequest) returns (stream BeginStreamingResponse);
 
-  // The following three RPCs support synchronous client-side callbacks triggered by solution events
+  // The following three methods support synchronous client-side callbacks triggered by solution events
   // (for example, per-iteration or per-time-step).
   //
   // Conceptually:
