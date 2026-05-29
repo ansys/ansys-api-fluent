@@ -27,8 +27,7 @@ import "ansys/api/fluent/v1/variant.proto";
 //
 // - ``part_management``: Legacy exposure of the part management component of meshing workflow.
 //
-// - ``pm_file_management``: Legacy exposure of the part management - file-management component
-//   of meshing workflow.
+// - ``pm_file_management``: Legacy exposure of the part management - file-management component of meshing workflow.
 //
 // Note: StreamStateChanges is not supported for the "meshing_workflow" context.
 service DataModel {
