@@ -30,10 +30,10 @@ message HealthCheckResponse {
   ServingStatus status = 1;
 }
 
-// Health service provides RPCs to query and watch service health.
+// Health service provides methods to query and watch service health.
 service Health {
-  // If the requested service is unknown, the call will fail with status
-  // NOT_FOUND.
+  // Returns the current serving status of the specified service.
+  // If the requested service is unknown, the call will fail with status NOT_FOUND.
   rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
 
   // Performs a watch for the serving status of the requested service.

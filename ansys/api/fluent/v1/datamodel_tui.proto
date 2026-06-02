@@ -8,32 +8,32 @@ package ansys.api.fluent.v1.datamodel_tui;
 
 import "google/protobuf/struct.proto";
 
-// TextInterface service provides an API for interacting with the Fluent TUI datamodel.
+// TextInterface service provides methods for interacting with the Fluent TUI datamodel.
 service TextInterface {
-  // Subscribe to changes for one or more paths.
+  // Subscribes to changes for one or more paths.
   // The server streams notifications as changes occur.
   rpc NotifyChanges(NotifyChangesRequest) returns (stream NotifyChangesResponse);
 
-  // Get a specific attribute value for an object identified by path.
+  // Returns a specific attribute value for an object identified by path.
   rpc GetAttributeValue(GetAttributeValueRequest)
       returns (GetAttributeValueResponse);
 
-  // Get the current state at the specified path.
+  // Returns the current state at the specified path.
   rpc GetState(GetStateRequest) returns (GetStateResponse);
 
-  // Set the state at the specified path.
+  // Sets the state at the specified path.
   rpc SetState(SetStateRequest) returns (SetStateResponse);
 
-  // Execute a command under the specified path.
+  // Executes a command under the specified path.
   rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse);
 
-  // Execute a query under the specified path.
+  // Executes a query under the specified path.
   rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse);
 
-  // Batch multiple getters into a single request.
+  // Batches multiple getters into a single request.
   rpc CompositeGet(CompositeGetRequest) returns (CompositeGetResponse);
 
-  // Retrieve static (schema-like) information under the specified path.
+  // Retrieves schema information under the specified path.
   rpc GetStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse);
 }
 
@@ -222,8 +222,8 @@ message StaticInfo {
   string help = 5;
 }
 
-// Response containing the static info for the requested path.
+// Response for GetStaticInfo.
 message GetStaticInfoResponse {
-  // Static information for the requested path.
+  // Schema information for the requested path.
   StaticInfo info = 1;
 }

@@ -83,16 +83,43 @@ def _build_comment_index(file_proto: descriptor_pb2.FileDescriptorProto) -> dict
 
 
 def _clean_comment(text: str) -> str:
-    """Normalize comment text into a single-paragraph RST-safe string."""
+    """Normalize comment text while preserving paragraph/list structure."""
     if not text:
         return ""
     lines = [ln.strip().lstrip("*").strip() for ln in text.splitlines()]
-    lines = [ln for ln in lines if ln]
-    result = " ".join(lines)
+
+    # Preserve intentional blank lines (for paragraph and list separation),
+    # but collapse runs of multiple blanks to a single blank line.
+    cleaned: list[str] = []
+    prev_blank = False
+    for ln in lines:
+        is_blank = not ln
+        if is_blank:
+            if not prev_blank:
+                cleaned.append("")
+            prev_blank = True
+        else:
+            cleaned.append(ln)
+            prev_blank = False
+
+    # Trim leading/trailing blank lines.
+    while cleaned and cleaned[0] == "":
+        cleaned.pop(0)
+    while cleaned and cleaned[-1] == "":
+        cleaned.pop()
+
+    result = "\n".join(cleaned)
     # Re-encode to UTF-8 replacing any characters that cannot be represented
     # (e.g. lone surrogates from protoc SourceCodeInfo) so write_text never
     # raises UnicodeEncodeError.
     return result.encode("utf-8", errors="replace").decode("utf-8")
+
+
+def _indent_block(text: str, prefix: str = "   ") -> list[str]:
+    """Indent a possibly multi-line block for use in definition-list bodies."""
+    if not text:
+        return [f"{prefix}—"]
+    return [f"{prefix}{ln}" if ln else "" for ln in text.splitlines()]
 
 
 # ---------------------------------------------------------------------------
@@ -275,7 +302,7 @@ def _emit_service(
         out.append(f"   :Response: {response_ref}")
         if method_doc:
             out.append("")
-            out.append(f"   {method_doc}")
+            out.extend(_indent_block(method_doc, "   "))
         out.append("")
 
 
@@ -333,7 +360,7 @@ def _emit_message(
             type_repr = _render_field_type(field, type_index)
             # Term: ``field_name`` (N) : [qualifiers] type
             out.append(f"``{field.name}`` ({field.number}) : {prefix}{type_repr}")
-            out.append(f"   {field_doc}" if field_doc else "   —")
+            out.extend(_indent_block(field_doc, "   "))
             out.append("")
 
     # Nested enums.
@@ -396,7 +423,7 @@ def _emit_enum(
     for value_idx, value in enumerate(enum.value):
         value_doc = _clean_comment(comments.get(path_prefix + (2, value_idx), ""))
         out.append(f"``{value.name}`` ({value.number})")
-        out.append(f"   {value_doc}" if value_doc else "   —")
+        out.extend(_indent_block(value_doc, "   "))
         out.append("")
 
 
