@@ -8,7 +8,7 @@ package ansys.api.fluent.v1.app_utilities;
 
 import "google/protobuf/duration.proto";
 
-// ApplicationRuntime service provides operations that span the Fluent application lifecycle but do not belong
+// ApplicationRuntime service provides methods that span the Fluent application lifecycle but do not belong
 // to a domain-specific service. Typical uses include retrieving version and build metadata, managing
 // feature flags, and controlling application startup and shutdown.
 service ApplicationRuntime {
@@ -35,7 +35,7 @@ service ApplicationRuntime {
   // Stops a Python journal recording session.
   rpc StopPythonJournal(StopPythonJournalRequest) returns (StopPythonJournalResponse);
 
-  // Returns whether beta/experimental features are enabled for this session.
+  // Checks whether beta/experimental features are enabled for this session.
   rpc IsBetaEnabled(IsBetaEnabledRequest) returns (IsBetaEnabledResponse);
 
   // Enables beta/experimental features for this session.
