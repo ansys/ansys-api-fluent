@@ -131,7 +131,7 @@ The examples below fetch the health status from a running Fluent server.
 Before running them, ensure you have:
 
 - A running Fluent server (Ansys Fluent 27R1 or later)
-- Its IP address, port, and password
+- Its address and password
 
 .. note::
 
