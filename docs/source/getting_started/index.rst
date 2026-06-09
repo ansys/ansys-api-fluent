@@ -7,14 +7,15 @@ Getting started
 Introduction
 ~~~~~~~~~~~~
 
-You can use Fluent's gRPC interface to drive your simulations from any
-gRPC-compatible language. Through a set of neatly segregated services, you can
+You can use gRPC to drive your Fluent simulations from any
+language that supports gRPC. A suite of neatly segregated services allows you to
 perform meshing, solver setup and execution, live monitoring, field-data
 extraction, and more.
 
-Below, you'll find the prerequisites for setting up the gRPC interface,
-instructions for getting everything installed, and guidance on building and
-using your gRPC client code.
+Fluent's gRPC server is built in — you only need to set
+up the client layer. Below, you'll find the prerequisites for setting up your
+gRPC client, instructions for getting everything installed, and guidance on
+building and using your gRPC client code.
 
 Getting the proto files
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,22 +46,21 @@ Ensure ``protoc`` and any ``protoc-gen-*`` plug-ins are on ``PATH``, or pass
 
 .. note::
 
-   - The examples show the same core step (invoking the Protocol Buffers
-     compiler) but rely on different language plug-ins. The Python example uses
-     the ``python -m grpc_tools.protoc`` wrapper, which bundles ``protoc`` and
-     the Python plug-in together.
-   - If you target Windows with Visual Studio, ensure the necessary native build
-     tools and SDKs (C++ build tools, .NET SDK, and so on) are installed and
-     available in your development environment.
+   Each example shows the same core step (using the protocol
+   compiler) but relies on a different language plug-in. The Python example uses
+   the ``python -m grpc_tools.protoc`` wrapper, which bundles ``protoc`` and
+   the Python plug-in together.
 
 Compiling proto files
 ~~~~~~~~~~~~~~~~~~~~~
-Clone the repository, then run ``protoc``
-with the appropriate gRPC plugin against the files in ``ansys/api/fluent/v1/``.
+
+Clone the `ansys-api-fluent <https://github.com/ansys-internal/ansys-api-fluent>`_
+repository, then run ``protoc``
+with the appropriate gRPC plug-in against the files in ``ansys/api/fluent/v1/``.
 
 .. note::
 
-   The commands below are illustrative. Exact flags and plugin paths vary
+   The commands below are illustrative. Exact flags and plug-in paths vary
    by platform and installed toolchain. Each command compiles a single
    ``.proto`` file (``health.proto`` is used as an example); repeat the
    invocation for each service, or pass multiple ``.proto`` files in one call,
@@ -132,6 +132,15 @@ Before running them, ensure you have:
 
 - A running Fluent server (Ansys Fluent 27R1 or later)
 - Its IP address, port, and password
+
+.. note::
+
+   When Fluent starts its gRPC server, it writes the connection details to a
+   server info file. Launch Fluent with the ``-sifile=<file>``
+   argument to specify where that file is written. The file contains two
+   lines in order: the IP address and port, and the password. Read those
+   values from the file and substitute them for ``127.0.0.1``, ``50051``, and
+   ``your-server-password`` in the examples below.
 
 The following snippets illustrate the common pattern across languages.
 
