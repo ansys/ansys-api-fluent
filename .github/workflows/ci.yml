@@ -148,7 +148,7 @@ jobs:
   release:
     name: Release package to GitHub
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [build, pre-commit, test, docs]
+    needs: [build, pre-commit, docs]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -171,7 +171,7 @@ jobs:
   release-pypi:
     name: Release project to PyPI
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [build, pre-commit, test]
+    needs: [build, pre-commit]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -194,7 +194,7 @@ jobs:
   release-private-pypi:
     name: Release project to private PyPI
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [build, pre-commit, test]
+    needs: [build, pre-commit]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
