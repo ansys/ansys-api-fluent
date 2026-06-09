@@ -1,9 +1,20 @@
 .. _user_guide:
 
 ==========
-User Guide
+User guide
 ==========
 
-.. note::
+The user guide covers practical, task-oriented workflows for building Python
+clients against the Fluent gRPC API.
 
-   This section is a placeholder and has not been written yet.
+Python client examples
+~~~~~~~~~~~~~~~~~~~~~~
+
+Browse the :ref:`client_examples` for runnable code covering session setup,
+simulation configuration, live solver streams, and simulation data access.
+
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+
+   client_examples/index
