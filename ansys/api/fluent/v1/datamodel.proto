@@ -4,7 +4,7 @@
 
 syntax = "proto3";
 
-package ansys.api.fluent.v1.datamodel_se;
+package ansys.api.fluent.v1.datamodel;
 
 import "ansys/api/fluent/v1/variant.proto";
 
