@@ -14,8 +14,8 @@ for this service's complete reference material.
    import grpc
    from ansys.api.fluent.v1 import settings_pb2, settings_pb2_grpc
 
-   channel = grpc.insecure_channel("127.0.0.1:50051")
-   metadata = [("password", "your-server-password")]
+   channel = grpc.insecure_channel("<server-address>")
+   metadata = [("password", "<password>")]
    stub = settings_pb2_grpc.SettingsStub(channel)
 
 Every RPC addresses a settings node via a ``PathInfo`` message; pass

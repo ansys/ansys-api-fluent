@@ -173,9 +173,9 @@ The following snippets illustrate the common pattern across languages.
 
          int main() {
              auto channel = grpc::CreateChannel(
-                 "127.0.0.1:50051", grpc::InsecureChannelCredentials());
+                 "<server-address>", grpc::InsecureChannelCredentials());
              grpc::ClientContext ctx;
-             ctx.AddMetadata("password", "your-server-password");
+             ctx.AddMetadata("password", "<password>");
              auto stub = ansys::api::fluent::v1::Health::NewStub(channel);
              ansys::api::fluent::v1::HealthCheckRequest req;
              ansys::api::fluent::v1::HealthCheckResponse resp;
@@ -200,11 +200,11 @@ The following snippets illustrate the common pattern across languages.
          )
 
          func main() {
-             conn, _ := grpc.Dial("127.0.0.1:50051",
+             conn, _ := grpc.Dial("<server-address>",
                  grpc.WithTransportCredentials(insecure.NewCredentials()))
              defer conn.Close()
              ctx := metadata.AppendToOutgoingContext(
-                 context.Background(), "password", "your-server-password")
+                 context.Background(), "password", "<password>")
              resp, err := pb.NewHealthClient(conn).Check(ctx, &pb.HealthCheckRequest{})
              if err != nil {
                  log.Fatal(err)
@@ -224,9 +224,9 @@ The following snippets illustrate the common pattern across languages.
              public static void main(String[] args) {
                  Metadata headers = new Metadata();
                  headers.put(Metadata.Key.of("password",
-                     Metadata.ASCII_STRING_MARSHALLER), "your-server-password");
+                     Metadata.ASCII_STRING_MARSHALLER), "<password>");
                  ManagedChannel channel = ManagedChannelBuilder
-                     .forAddress("127.0.0.1", 50051).usePlaintext().build();
+                     .forAddress("<server-address>").usePlaintext().build();
                  HealthGrpc.HealthBlockingStub stub =
                      MetadataUtils.attachHeaders(
                          HealthGrpc.newBlockingStub(channel), headers);
@@ -244,8 +244,8 @@ The following snippets illustrate the common pattern across languages.
          using Grpc.Core;
          using Ansys.Api.Fluent.V1;
 
-         var channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
-         var headers = new Metadata { { "password", "your-server-password" } };
+         var channel = new Channel("<server-address>", ChannelCredentials.Insecure);
+         var headers = new Metadata { { "password", "<password>" } };
          var client = new Health.HealthClient(channel);
          var resp = client.Check(new HealthCheckRequest(),
              new CallOptions(headers: headers));

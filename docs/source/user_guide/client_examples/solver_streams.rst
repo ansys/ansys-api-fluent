@@ -20,8 +20,8 @@ for these services' complete reference material.
        transcript_pb2, transcript_pb2_grpc,
    )
 
-   channel = grpc.insecure_channel("127.0.0.1:50051")
-   metadata = [("password", "your-server-password")]
+   channel = grpc.insecure_channel("<server-address>")
+   metadata = [("password", "<password>")]
 
    transcript_stub = transcript_pb2_grpc.TranscriptStub(channel)
    events_stub = events_pb2_grpc.EventsStub(channel)

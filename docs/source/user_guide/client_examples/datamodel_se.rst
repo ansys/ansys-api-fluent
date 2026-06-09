@@ -15,8 +15,8 @@ for this service's complete reference material.
    from ansys.api.fluent.v1 import datamodel_se_pb2, datamodel_se_pb2_grpc
    from ansys.api.fluent.v1 import variant_pb2
 
-   channel = grpc.insecure_channel("127.0.0.1:50051")
-   metadata = [("password", "your-server-password")]
+   channel = grpc.insecure_channel("<server-address>")
+   metadata = [("password", "<password>")]
    stub = datamodel_se_pb2_grpc.DataModelStub(channel)
 
 The **rules** string selects the application context. All examples on this

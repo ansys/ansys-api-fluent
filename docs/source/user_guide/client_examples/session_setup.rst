@@ -20,8 +20,8 @@ for these services' complete reference material.
        app_utilities_pb2, app_utilities_pb2_grpc,
    )
 
-   channel = grpc.insecure_channel("127.0.0.1:50051")
-   metadata = [("password", "your-server-password")]
+   channel = grpc.insecure_channel("<server-address>")
+   metadata = [("password", "<password>")]
    connection_stub = connection_pb2_grpc.ConnectionStub(channel)
    health_stub = health_pb2_grpc.HealthStub(channel)
    app_utilities_stub = app_utilities_pb2_grpc.ApplicationRuntimeStub(channel)

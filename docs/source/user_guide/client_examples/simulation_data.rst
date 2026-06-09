@@ -20,8 +20,8 @@ for these services' complete reference material.
        svar_pb2, svar_pb2_grpc,
    )
 
-   channel = grpc.insecure_channel("127.0.0.1:50051")
-   metadata = [("password", "your-server-password")]
+   channel = grpc.insecure_channel("<server-address>")
+   metadata = [("password", "<password>")]
 
    field_data_stub = field_data_pb2_grpc.FieldDataStub(channel)
    reduction_stub = reduction_pb2_grpc.ReductionStub(channel)
