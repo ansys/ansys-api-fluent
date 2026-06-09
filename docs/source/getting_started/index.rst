@@ -139,7 +139,7 @@ Before running them, ensure you have:
    server info file. Launch Fluent with the ``-sifile=<file>``
    argument to specify where that file is written. The file contains two
    lines in order: the server address and the password. Read those
-   values from the file and substitute them for ``127.0.0.1``, ``50051``, and
+   values from the file and substitute them for ``<server-address>`` and
    ``your-server-password`` in the examples below.
 
 The following snippets illustrate the common pattern across languages.
