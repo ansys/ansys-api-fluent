@@ -138,7 +138,7 @@ Before running them, ensure you have:
    When Fluent starts its gRPC server, it writes the connection details to a
    server info file. Launch Fluent with the ``-sifile=<file>``
    argument to specify where that file is written. The file contains two
-   lines in order: the IP address and port, and the password. Read those
+   lines in order: the server address and the password. Read those
    values from the file and substitute them for ``127.0.0.1``, ``50051``, and
    ``your-server-password`` in the examples below.
 
