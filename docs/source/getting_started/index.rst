@@ -158,7 +158,7 @@ The following snippets illustrate the common pattern across languages.
          request = health_pb2.HealthCheckRequest()
          response = stub.Check(
              request,
-             metadata=[("password", "your-server-password")],
+             metadata=[("password", "<password>")],
          )
          print(f"Status: {response.status}")
          channel.close()
