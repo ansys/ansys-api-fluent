@@ -4,8 +4,9 @@ Solver output streams — events, monitors, and transcript
 Python client examples for the ``Transcript``, ``Events``, and ``Monitor``
 gRPC services.
 
-For the full message and field reference see :doc:`../../api/services/transcript`,
-:doc:`../../api/services/events`, and :doc:`../../api/services/monitor`.
+See :doc:`../../api/services/transcript`, :doc:`../../api/services/events`,
+and :doc:`../../api/services/monitor`
+for these services' complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
 
@@ -19,8 +20,8 @@ For the full message and field reference see :doc:`../../api/services/transcript
        transcript_pb2, transcript_pb2_grpc,
    )
 
-   channel = grpc.insecure_channel("127.0.0.1:50051")
-   metadata = [("password", "your-server-password")]
+   channel = grpc.insecure_channel("<server-address>")
+   metadata = [("password", "<password>")]
 
    transcript_stub = transcript_pb2_grpc.TranscriptStub(channel)
    events_stub = events_pb2_grpc.EventsStub(channel)
@@ -128,20 +129,20 @@ access its payload fields.
        events_pb2.BeginStreamingRequest(),
        metadata=metadata,
    )
-   for resp in stream:
-       kind = resp.WhichOneof("as")
+   for event_response in stream:
+       kind = event_response.WhichOneof("as")
        if kind is not None:
            print(kind in valid_event_fields)  # -> True
        if kind == "iteration_ended_event":
-           print(resp.iteration_ended_event.index)    # -> 1
+           print(event_response.iteration_ended_event.index)    # -> 1
        elif kind == "progress_event":
-           ev = resp.progress_event
-           print(ev.percent_complete, ev.message)     # -> 12.5  'Solving...'
+           progress_event_data = event_response.progress_event
+           print(progress_event_data.percent_complete, progress_event_data.message)     # -> 12.5  'Solving...'
        elif kind == "solver_time_estimate_event":
-           ev = resp.solver_time_estimate_event
-           print(ev.hours, ev.minutes, ev.seconds)   # -> 0  2  34.5
+           time_estimate_event = event_response.solver_time_estimate_event
+           print(time_estimate_event.hours, time_estimate_event.minutes, time_estimate_event.seconds)   # -> 0  2  34.5
        elif kind == "error_event":
-           print(resp.error_event.message)            # -> 'Diverged'
+           print(event_response.error_event.message)            # -> 'Diverged'
        break
    stream.cancel()
 
@@ -154,23 +155,23 @@ step; it returns a unique ``registration_id``.
 .. code-block:: python
    :caption: Python
 
-   reg = events_stub.PauseSolveFor(
+   pause_registration = events_stub.PauseSolveFor(
        events_pb2.PauseSolveForRequest(
            solution_event=events_pb2.SOLUTION_EVENT_ITERATION
        ),
        metadata=metadata,
    )
-   print(isinstance(reg.registration_id, int))  # -> True
-   print(reg.registration_id > 0)               # -> True
+   print(isinstance(pause_registration.registration_id, int))  # -> True
+   print(pause_registration.registration_id > 0)               # -> True
 
    # Register a second trigger — IDs must be distinct.
-   reg2 = events_stub.PauseSolveFor(
+   second_pause_registration = events_stub.PauseSolveFor(
        events_pb2.PauseSolveForRequest(
            solution_event=events_pb2.SOLUTION_EVENT_ITERATION
        ),
        metadata=metadata,
    )
-   print(reg.registration_id != reg2.registration_id)  # -> True
+   print(pause_registration.registration_id != second_pause_registration.registration_id)  # -> True
 
 Registering a time-step pause trigger
 ---------------------------------------
@@ -181,13 +182,13 @@ transient simulation.
 .. code-block:: python
    :caption: Python
 
-   ts_reg = events_stub.PauseSolveFor(
+   timestep_pause_registration = events_stub.PauseSolveFor(
        events_pb2.PauseSolveForRequest(
            solution_event=events_pb2.SOLUTION_EVENT_TIME_STEP
        ),
        metadata=metadata,
    )
-   print(ts_reg.registration_id > 0)  # -> True
+   print(timestep_pause_registration.registration_id > 0)  # -> True
 
 Cancelling a pause registration
 ---------------------------------
@@ -197,21 +198,21 @@ Cancelling a pause registration
 .. code-block:: python
    :caption: Python
 
-   cancel_resp = events_stub.CancelPauseSolve(
+   cancel_response = events_stub.CancelPauseSolve(
        events_pb2.CancelPauseSolveRequest(
-           registration_id=reg.registration_id
+           registration_id=pause_registration.registration_id
        ),
        metadata=metadata,
    )
-   print(cancel_resp is not None)  # -> True
+   print(cancel_response is not None)  # -> True
 
    # Clean up the other registrations.
    events_stub.CancelPauseSolve(
-       events_pb2.CancelPauseSolveRequest(registration_id=reg2.registration_id),
+       events_pb2.CancelPauseSolveRequest(registration_id=second_pause_registration.registration_id),
        metadata=metadata,
    )
    events_stub.CancelPauseSolve(
-       events_pb2.CancelPauseSolveRequest(registration_id=ts_reg.registration_id),
+       events_pb2.CancelPauseSolveRequest(registration_id=timestep_pause_registration.registration_id),
        metadata=metadata,
    )
 
@@ -238,11 +239,11 @@ including its name, type, x-axis type, update frequency, and unit metadata.
 .. code-block:: python
    :caption: Python
 
-   resp = monitor_stub.GetMonitors(
+   monitors_response = monitor_stub.GetMonitors(
        monitor_pb2.GetMonitorsRequest(),
        metadata=metadata,
    )
-   for ms in resp.monitor_sets:
+   for ms in monitors_response.monitor_sets:
        print(ms.name)       # -> 'residuals'
        print(ms.monitors)   # -> ['continuity', 'x-velocity', 'energy']
        print(ms.frequency)  # -> 1
@@ -267,17 +268,17 @@ and a non-negative frequency; ``unit_info.factor`` is non-negative when set.
    :caption: Python
 
    # Two consecutive calls must return identical monitor set names.
-   resp1 = monitor_stub.GetMonitors(
+   first_monitors_response = monitor_stub.GetMonitors(
        monitor_pb2.GetMonitorsRequest(), metadata=metadata
    )
-   resp2 = monitor_stub.GetMonitors(
+   second_monitors_response = monitor_stub.GetMonitors(
        monitor_pb2.GetMonitorsRequest(), metadata=metadata
    )
-   names1 = sorted(ms.name for ms in resp1.monitor_sets)
-   names2 = sorted(ms.name for ms in resp2.monitor_sets)
+   names1 = sorted(ms.name for ms in first_monitors_response.monitor_sets)
+   names2 = sorted(ms.name for ms in second_monitors_response.monitor_sets)
    print(names1 == names2)  # -> True
 
-   for ms in resp1.monitor_sets:
+   for ms in first_monitors_response.monitor_sets:
        print(len(ms.name) > 0)         # -> True
        print(len(ms.monitors) > 0)     # -> True
        print(ms.frequency >= 0)        # -> True
@@ -374,5 +375,5 @@ Cancelling a monitor stream and then iterating it raises
    except StopIteration:
        pass  # also acceptable
 
-For the full API reference see :doc:`../../api/services/transcript`,
-:doc:`../../api/services/events`, and :doc:`../../api/services/monitor`.
+See :doc:`../../api/services/transcript`, :doc:`../../api/services/events`,
+and :doc:`../../api/services/monitor` for the complete reference material.

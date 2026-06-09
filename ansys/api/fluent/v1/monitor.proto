@@ -8,10 +8,10 @@ package ansys.api.fluent.v1.monitor;
 
 // Monitor service for querying monitor metadata and streaming monitor data.
 service Monitor {
-  // Get monitor set definitions (names and properties such as labels and title).
+  // Returns monitor set definitions (names and properties such as labels and title).
   rpc GetMonitors(GetMonitorsRequest) returns (GetMonitorsResponse);
 
-  // Begin streaming monitor data (x-values and corresponding y-values).
+  // Begins streaming monitor data (x-values and corresponding y-values).
   rpc BeginStreaming(StreamingRequest) returns (stream StreamingResponse);
 }
 

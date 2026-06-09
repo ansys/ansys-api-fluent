@@ -6,50 +6,51 @@ syntax = "proto3";
 
 package ansys.api.fluent.v1.settings;
 
-// Settings service provides operations for managing and querying Fluent settings objects
+// Settings service provides methods for reading, writing, and commanding the Fluent
+// solver settings hierarchy. The caller must explicitly use root="fluent" within
+// every PathInfo message.
 service Settings {
-  /* Static info about objects (type, children, commands, arguments,
-     object-type) in a recursive manner. */
+  /* Returns the API schema for the settings hierarchy, describing object types, children, commands, queries, and arguments. */
   rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse);
 
-  /* Get the value of a path */
+  /* Returns the state of the settings object at the specified path. */
   rpc GetState(GetStateRequest) returns (GetStateResponse);
 
-  /* Set the value of a path */
+  /* Updates the state of the settings object at the specified path. */
   rpc SetState(SetStateRequest) returns (SetStateResponse);
 
-  /* Rename an object */
+  /* Renames the named object at the specified path. */
   rpc Rename(RenameRequest) returns (RenameResponse);
 
-  /* Create a new named object */
+  /* Creates a new named object at the specified path. */
   rpc CreateObject(CreateObjectRequest) returns (CreateObjectResponse);
 
-  /* Delete a named object */
+  /* Deletes the named object at the specified path. */
   rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse);
 
-  /* Get the current list of object names */
+  /* Returns the names of all named objects at the specified path. */
   rpc GetObjectNames(GetObjectNamesRequest) returns (GetObjectNamesResponse);
 
-  /* Get the number of elements in a list object */
+  /* Returns the number of elements in the list object at the specified path. */
   rpc GetListSize(GetListSizeRequest) returns (GetListSizeResponse);
 
-  /* Resize a list object */
+  /* Resizes the list object at the specified path. */
   rpc ResizeListObject(ResizeListObjectRequest) returns (ResizeListObjectResponse);
 
-  /* Execute a command */
+  /* Executes the named command on the settings object at the specified path. */
   rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse);
 
-  /* Execute a query */
+  /* Executes the named query on the settings object at the specified path and returns the result. */
   rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse);
 
-  /* Attribute access */
+  /* Returns named attributes of the settings object at the specified path. */
   rpc GetAttrs(GetAttrsRequest) returns (GetAttrsResponse);
 
-  /* Returns whether the provided string is considered a wildcard by the solver application's syntax */
+  /* Checks whether the provided string is treated as a wildcard by the solver. */
   rpc IsWildcard(IsWildcardRequest) returns (IsWildcardResponse);
 }
 
-// Value represents the value of an object -- return value of GetState
+// Value represents the state of a settings object, as returned by GetState and accepted by SetState.
 message Value {
   // ValueList represents a list of Value objects
   message ValueList {
@@ -69,75 +70,74 @@ message Value {
   };
 }
 
-// PathInfo represents the location of an object in the settings hierarchy
+// PathInfo represents the location of a settings object in the hierarchy.
 message PathInfo {
-  string root = 1;  // The root of the settings tree
-  string path = 2;  // The path to the object from the root
+  string root = 1;  // The root of the settings tree.
+  string path = 2;  // The path to the object from the root.
 }
 
-// SchemaMap represents a named entry in static information maps
+// SchemaMap represents a named entry in the settings API schema.
 message SchemaMap {
-  string name = 1;   // The name of the entry
-  Schema value = 2;  // The static information associated with this entry
+  string name = 1;   // The name of the entry.
+  Schema value = 2;  // The schema information for this entry.
 }
 
-// Schema contains comprehensive static information about a settings object
+// Schema contains the static API description of a settings object, including its type, children, commands, and queries.
 message Schema {
-  // Type of the current object e.g. group, named-object.
+  // Type identifier for the current object (for example, "group" or "named-object").
   string type = 1;
-  // Children of current object.
+  // Children of the current object.
   repeated SchemaMap children = 2;
-  // Commands available for current object.
+  // Commands available for the current object.
   repeated SchemaMap commands = 3;
-  // Arguments associated with the current command/query object.
+  // Arguments associated with the current command or query object.
   repeated SchemaMap arguments = 4;
-  // Class template for named object instance.
+  // Class template for a named-object instance.
   Schema object_type = 5;
-  // Help string for the current object.
+  // Help text for the current object.
   string help = 6;
-  // Boolean indicating if the current object has list of allowed values.
+  // True if the current object restricts its value to an allowed-values list.
   bool has_allowed_values = 7;
-  // Boolean indicating if the named object instances of the children of the current object
-  // can be exposed as the named object instances of current object itself. E.g. boundary_conditions.
+  // True if named-object instances of child objects are also accessible on this object (for example, on boundary_conditions).
   bool include_child_named_objects = 8;
-  // Size of the list objects with fixed size.
+  // Fixed size of the list object; zero for variable-length lists.
   int32 list_size = 9;
-  // Boolean indicating if an instance can be created by the user for the current named-object.
+  // True if the user can create new instances of this named object.
   bool user_creatable = 10;
-  // Queries available for current object.
+  // Queries available for the current object.
   repeated SchemaMap queries = 11;
-  // File purpose string for the current command object.
+  // Additional attributes for the current object.
   map<string, Value> attrs = 12;
 }
 
-// GetSchemaRequest is the request message for retrieving static information
+// GetSchemaRequest is the request message for GetSchema.
 message GetSchemaRequest {
-  string root = 1;                     // The root path to retrieve static information from
-  repeated string optional_attrs = 2;  // Optional attributes to be returned in the static info.
+  string root = 1;                     // Root path of the settings tree whose schema will be returned.
+  repeated string optional_attrs = 2;  // Optional attributes to include in the returned schema.
 }
 
-// GetSchemaResponse is the response message containing static information
+// GetSchemaResponse is the response message for GetSchema.
 message GetSchemaResponse {
-  Schema info = 1;  // The static information for the requested object
+  Schema info = 1;  // The API schema for the requested settings tree root.
 }
 
-// GetStateRequest is the request message for retrieving a variable value
+// GetStateRequest is the request message for GetState.
 message GetStateRequest {
-  PathInfo path_info = 1;  // The path to the variable to retrieve
+  PathInfo path_info = 1;  // The path to the variable whose state to retrieve.
 }
 
-// GetStateResponse is the response message containing the variable value
+// GetStateResponse is the response message for GetState.
 message GetStateResponse {
-  Value value = 1;  // The value of the requested variable
+  Value value = 1;  // The state of the requested variable.
 }
 
-// SetStateRequest is the request message for setting a variable value
+// SetStateRequest is the request message for SetState.
 message SetStateRequest {
-  PathInfo path_info = 1;  // The path to the variable to set
-  Value value = 2;         // The new value to set
+  PathInfo path_info = 1;  // The path to the variable to set.
+  Value value = 2;         // The new state to set.
 }
 
-// SetStateResponse is the response message for a set variable operation
+// SetStateResponse is the response message for SetState.
 message SetStateResponse {
 }
 
@@ -230,7 +230,7 @@ message ExecuteQueryResponse {
 message GetAttrsRequest {
   PathInfo path_info = 1;     // The path to the object to retrieve attributes from
   repeated string attrs = 2;  // The list of attribute names to retrieve
-  bool recursive = 3;         // Whether to retrieve attributes recursively from child objects
+  bool recursive = 3;         // If true, retrieves attributes recursively from child objects.
 }
 
 // AttrInfoMap represents a named entry in attribute information maps
@@ -245,12 +245,12 @@ message GetAttrsResponse {
   repeated AttrInfoMap group_children = 2;  // Attribute information for child objects (when recursive is true)
 }
 
-// Checks if a string is a wildcard.
+// IsWildcardRequest is the request message for IsWildcard.
 message IsWildcardRequest {
-  string input = 1;  // Input string to evaluate.
+  string input = 1;  // The string to test.
 }
 
-// Indicates whether the input is a wildcard.
+// IsWildcardResponse is the response message for IsWildcard.
 message IsWildcardResponse {
-  bool is_wildcard = 1;  // True if the input string is a wildcard per solver application syntax.
+  bool is_wildcard = 1;  // True if the input string is treated as a wildcard by the solver.
 }

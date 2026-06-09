@@ -3,8 +3,10 @@ Helper types
 
 The ``ansys.api.fluent.v1`` package includes two shared protobuf message
 types that appear as value types in request and response messages across
-multiple services. Full message and field definitions are in the API reference:
-:doc:`../../api/helpers/variant` and :doc:`../../api/helpers/primitives`.
+multiple services.
+
+See :doc:`../../api/helpers/variant` and :doc:`../../api/helpers/primitives`
+for the complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
 
@@ -23,16 +25,16 @@ server before reading its value.
    from ansys.api.fluent.v1 import variant_pb2
 
    # Scalar values
-   bool_var   = variant_pb2.Variant(bool_state=True)
-   int_var    = variant_pb2.Variant(int64_state=42)
-   double_var = variant_pb2.Variant(double_state=3.14)
-   str_var    = variant_pb2.Variant(string_state="hello")
+   bool_variant   = variant_pb2.Variant(bool_state=True)
+   int_variant    = variant_pb2.Variant(int64_state=42)
+   double_variant = variant_pb2.Variant(double_state=3.14)
+   string_variant = variant_pb2.Variant(string_state="hello")
 
    # Vector values
-   double_vec = variant_pb2.Variant(
+   double_vector = variant_pb2.Variant(
        double_vector_state=variant_pb2.DoubleVector(items=[1.0, 2.0, 3.0])
    )
-   str_vec = variant_pb2.Variant(
+   string_vector = variant_pb2.Variant(
        string_vector_state=variant_pb2.StringVector(items=["a", "b", "c"])
    )
 

@@ -8,47 +8,69 @@ package ansys.api.fluent.v1.datamodel_se;
 
 import "ansys/api/fluent/v1/variant.proto";
 
-// DataModel service provides operations for managing Fluent datamodel state and events
+// DataModel service provides a way to access some Fluent features like
+// meshing, workflow, preferences, and other specific areas. The rules string
+// in each request selects the target feature area.
+// Supported rules contexts are:
+//
+// - ``meshing_workflow``: The most up-to-date, intuitive exposure of meshing workflow.
+//
+// - ``meshing_utilities``: Meshing queries and other utilities.
+//
+// - ``solver_workflow``: Solver workflows.
+//
+// - ``preferences``: Fluent preferences in both meshing and solution mode.
+//
+// - ``workflow``: Legacy exposure of the workflow component of meshing workflow.
+//
+// - ``meshing``: Legacy exposure of the meshing component of meshing workflow.
+//
+// - ``part_management``: Legacy exposure of the part management component of meshing workflow.
+//
+// - ``pm_file_management``: Legacy exposure of the part management - file-management component of meshing workflow.
+//
+// Note: StreamStateChanges is not supported for the "meshing_workflow" context.
 service DataModel {
-  // StreamStateChanges starts streaming datamodel state changes and events
+  // Streams datamodel state changes and events.
+  // This method is not supported for the "meshing_workflow" rules context.
   rpc StreamStateChanges(StreamStateChangesRequest) returns (stream StreamStateChangesResponse) {}
-  // InitDatamodel initializes the datamodel with specified rules
+  // Initializes the datamodel for the specified rules context.
   rpc InitDatamodel(InitDatamodelRequest) returns (InitDatamodelResponse) {}
-  // GetState retrieves the current state at a specified path
+  // Returns the current state at the specified path.
   rpc GetState(GetStateRequest) returns (GetStateResponse) {}
-  // SetState sets the state at a specified path
+  // Sets the state at the specified path.
   rpc SetState(SetStateRequest) returns (SetStateResponse) {}
-  // UpdateDict merges a dictionary into the state at a specified path
+  // Merges a dictionary of values into the state at the specified path.
   rpc UpdateDict(UpdateDictRequest) returns (UpdateDictResponse) {}
-  // CreateObject creates a new named object at a specified path
+  // Creates a new named object at the specified path.
   rpc CreateObject(CreateObjectRequest) returns (CreateObjectResponse) {}
-  // DeleteObject deletes an object at a specified path
+  // Deletes the object at the specified path.
   rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse) {}
-  // GetAttributeValue retrieves the value of a specific attribute
+  // Returns the value of a named attribute for the object at the specified path.
   rpc GetAttributeValue(GetAttributeValueRequest) returns (GetAttributeValueResponse) {}
-  // ExecuteCommand executes a command on a datamodel object
+  // Executes a command on the datamodel object at the specified path.
   rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse) {}
-  // ExecuteQuery executes a query on a datamodel object
+  // Executes a query on the datamodel object at the specified path and returns the result.
   rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse) {}
-  // CreateCommandArguments creates command arguments for a specific command
+  // Creates a command arguments object for the specified command.
   rpc CreateCommandArguments(CreateCommandArgumentsRequest) returns (CreateCommandArgumentsResponse) {}
-  // DeleteCommandArguments deletes previously created command arguments
+  // Deletes a created command arguments object.
   rpc DeleteCommandArguments(DeleteCommandArgumentsRequest) returns (DeleteCommandArgumentsResponse) {}
-  // GetSchema retrieves static information about the datamodel structure
+  // Returns the API schema describing the structure of the datamodel.
   rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse) {}
-  // Rename renames a datamodel object
+  // Renames the datamodel object at the specified path.
   rpc Rename(RenameRequest) returns (RenameResponse) {}
-  // FixState fixes the state of a datamodel object to ensure consistency
+  // Fixes the state of the datamodel object at the specified path to ensure internal consistency.
   rpc FixState(FixStateRequest) returns (FixStateResponse) {}
-  // GetObjectNames retrieves the names of objects at a specified path
+  // Returns the names of all objects at the specified path.
   rpc GetObjectNames(GetObjectNamesRequest) returns (GetObjectNamesResponse) {}
-  // DeleteChildObjects deletes child objects from a parent object
+  // Deletes all child objects of the parent object at the specified path.
   rpc DeleteChildObjects(DeleteChildObjectsRequest) returns (DeleteChildObjectsResponse) {}
-  // SubscribeEvents subscribes to datamodel events
+  // Subscribes to one or more datamodel events.
   rpc SubscribeEvents(SubscribeEventsRequest) returns (SubscribeEventsResponse) {}
-  // UnsubscribeEvents unsubscribes from previously subscribed datamodel events
+  // Unsubscribes from subscribed datamodel events.
   rpc UnsubscribeEvents(UnsubscribeEventsRequest) returns (UnsubscribeEventsResponse) {}
-  // StreamEvents starts streaming previously subscribed datamodel events
+  // Streams subscribed datamodel events.
   rpc StreamEvents(StreamEventsRequest) returns (stream StreamEventsResponse) {}
 }
 
@@ -62,7 +84,7 @@ enum DiffState {
 // StreamStateChangesRequest is the request message for initiating state streaming
 message StreamStateChangesRequest {
   string rules = 1;               // The rules context for the streaming operation
-  bool return_state_changes = 2;  // Whether to return state changes in the stream
+  bool return_state_changes = 2;  // If true, returns state changes in the stream.
   DiffState diff_state = 3;       // The level of detail for state differences
 }
 
@@ -101,7 +123,7 @@ message SetStateRequest {
   string rules = 1;                               // The rules context for the state update
   string path = 2;                                // The path where state should be set
   ansys.api.fluent.v1.variant.Variant state = 3;  // The new state to set
-  bool wait = 4;                                  // Whether to wait for the operation to complete
+  bool wait = 4;                                  // If true, waits for the operation to complete before returning.
 }
 
 // SetStateResponse is the response message containing the updated state
@@ -115,8 +137,8 @@ message UpdateDictRequest {
   string rules = 1;                                    // The rules context for the update
   string path = 2;                                     // The path to the dictionary to update
   ansys.api.fluent.v1.variant.Variant merge_dict = 3;  // The dictionary values to merge
-  bool wait = 4;                                       // Whether to wait for the operation to complete
-  bool recursive = 5;                                  // Whether to update recursively
+  bool wait = 4;                                       // If true, waits for the operation to complete before returning.
+  bool recursive = 5;                                  // If true, updates recursively.
 }
 
 // UpdateDictResponse is the response message containing the updated state
@@ -130,7 +152,7 @@ message CreateObjectRequest {
   string rules = 1;  // The rules context for the creation
   string path = 2;   // The path to the parent object
   string name = 3;   // The name of the new object to create
-  bool wait = 4;     // Whether to wait for the operation to complete
+  bool wait = 4;     // If true, waits for the operation to complete before returning.
 }
 
 // CreateObjectResponse is the response message after creating a new named object
@@ -143,7 +165,7 @@ message CreateObjectResponse {
 message DeleteObjectRequest {
   string rules = 1;  // The rules context for the deletion
   string path = 2;   // The path to the object to delete
-  bool wait = 3;     // Whether to wait for the operation to complete
+  bool wait = 3;     // If true, waits for the operation to complete before returning.
 }
 
 // DeleteObjectResponse is the response message after deleting an object
@@ -169,7 +191,7 @@ message ExecuteCommandRequest {
   string rules = 1;                              // The rules context for command execution
   string path = 2;                               // The path to the object with the command
   string command = 3;                            // The name of the command to execute
-  bool wait = 4;                                 // Whether to wait for the command to complete
+  bool wait = 4;                                 // If true, waits for the command to complete before returning.
   ansys.api.fluent.v1.variant.Variant args = 5;  // Arguments to pass to the command
 }
 
@@ -221,7 +243,7 @@ message DeleteCommandArgumentsResponse {
 message CommandArg {
   string type = 1;                                             // The type of the argument
   string name = 2;                                             // The name of the argument
-  Schema info = 3;                                             // Static information about the argument
+  Schema info = 3;                                             // The schema information for this argument.
   string help_string = 4;                                      // Help text for the argument
   map<string, ansys.api.fluent.v1.variant.Variant> attrs = 5;  // Additional attributes for the argument
   string doc_string = 6;                                       // Documentation string for the argument
@@ -234,7 +256,7 @@ message CommandInfo {
   string doc_string = 3;         // Documentation string for the command
 }
 
-// Schema contains comprehensive static information about datamodel objects
+// Schema contains the static API description of datamodel objects, including types, parameters, commands, and queries.
 message Schema {
   map<string, Schema> named_objects = 1;                        // Named objects within this object
   map<string, Schema> singletons = 2;                           // Singleton objects within this object
@@ -248,14 +270,14 @@ message Schema {
   map<string, ansys.api.fluent.v1.variant.Variant> attrs = 10;  // Additional attributes for this object
 }
 
-// GetSchemaRequest is the request message for retrieving static information
+// GetSchemaRequest is the request message for GetSchema.
 message GetSchemaRequest {
-  string rules = 1;  // The rules context for the static info query
+  string rules = 1;  // The rules context for the schema query.
 }
 
-// GetSchemaResponse is the response message containing static information
+// GetSchemaResponse is the response message for GetSchema.
 message GetSchemaResponse {
-  Schema info = 1;  // The static information for the datamodel
+  Schema info = 1;  // The API schema for the datamodel.
 }
 
 // CreatedEventRequest is used to subscribe to object creation events
@@ -418,7 +440,7 @@ message RenameRequest {
   string rules = 1;     // The rules context for the rename operation
   string path = 2;      // The path to the object to rename
   string new_name = 3;  // The new name for the object
-  bool wait = 4;        // Whether to wait for the operation to complete
+  bool wait = 4;        // If true, waits for the operation to complete before returning.
 }
 
 // RenameResponse is the response message after renaming an object
@@ -449,9 +471,9 @@ message DeleteChildObjectsRequest {
   string path = 2;   // The path to the parent object
   oneof var {
     ChildNames child_names = 3;  // Specific child names to delete
-    bool delete_all = 4;         // Whether to delete all child objects
+    bool delete_all = 4;         // If true, deletes all child objects.
   }
-  bool wait = 5;  // Whether to wait for the operation to complete
+  bool wait = 5;  // If true, waits for the operation to complete before returning.
 }
 
 // DeleteChildObjectsResponse is the response message after deleting child objects
