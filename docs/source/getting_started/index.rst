@@ -140,7 +140,7 @@ Before running them, ensure you have:
    argument to specify where that file is written. The file contains two
    lines in order: the server address and the password. Read those
    values from the file and substitute them for ``<server-address>`` and
-   ``your-server-password`` in the examples below.
+   ``<password>`` in the examples below.
 
 The following snippets illustrate the common pattern across languages.
 
