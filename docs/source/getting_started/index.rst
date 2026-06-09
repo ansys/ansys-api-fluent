@@ -153,7 +153,7 @@ The following snippets illustrate the common pattern across languages.
          import grpc
          from ansys.api.fluent.v1 import health_pb2, health_pb2_grpc
 
-         channel = grpc.insecure_channel("127.0.0.1:50051")
+         channel = grpc.insecure_channel("<server-address>")
          stub = health_pb2_grpc.HealthStub(channel)
          request = health_pb2.HealthCheckRequest()
          response = stub.Check(
