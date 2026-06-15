@@ -225,5 +225,5 @@ message Schema {
 // Response for GetSchema.
 message GetSchemaResponse {
   // Schema information for the requested path.
-  GetSchema info = 1;
+  Schema info = 1;
 }
