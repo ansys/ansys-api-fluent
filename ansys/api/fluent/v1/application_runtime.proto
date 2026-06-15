@@ -4,7 +4,7 @@
 
 syntax = "proto3";
 
-package ansys.api.fluent.v1.app_utilities;
+package ansys.api.fluent.v1.application_runtime;
 
 import "google/protobuf/duration.proto";
 

@@ -4,7 +4,7 @@
 
 syntax = "proto3";
 
-package ansys.api.fluent.v1.scheme_eval;
+package ansys.api.fluent.v1.scheme_interpreter;
 
 import "ansys/api/fluent/v1/scheme_pointer.proto";
 

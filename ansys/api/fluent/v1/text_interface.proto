@@ -4,7 +4,7 @@
 
 syntax = "proto3";
 
-package ansys.api.fluent.v1.datamodel_tui;
+package ansys.api.fluent.v1.text_interface;
 
 import "google/protobuf/struct.proto";
 

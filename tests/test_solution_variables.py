@@ -9,7 +9,7 @@ import math
 import pytest
 import grpc
 
-from ansys.api.fluent.v1 import field_data_pb2, svar_pb2, svar_pb2_grpc
+from ansys.api.fluent.v1 import field_data_pb2, solution_variable_pb2, solution_variable_pb2_grpc
 
 _DOMAIN_ID = 1
 _CHUNK_SIZE = 256 * 1024
@@ -22,7 +22,7 @@ _PRESSURE_SVAR = "SV_P"
 @pytest.fixture(scope="module")
 def stub(grpc_channel_and_metadata):
     channel, _ = grpc_channel_and_metadata
-    return svar_pb2_grpc.SolutionVariableStub(channel)
+    return solution_variable_pb2_grpc.SolutionVariableStub(channel)
 
 
 # ---------------------------------------------------------------------------
@@ -34,7 +34,7 @@ def zones_info(stub, grpc_channel_and_metadata):
     """Return list[ZoneInfo] from GetZonesInfo."""
     _, metadata = grpc_channel_and_metadata
     resp = stub.GetZonesInfo(
-        svar_pb2.GetZonesInfoRequest(),
+        solution_variable_pb2.GetZonesInfoRequest(),
         metadata=metadata,
     )
     return list(resp.zones_info)
@@ -44,7 +44,7 @@ def zones_info(stub, grpc_channel_and_metadata):
 def first_cell_zone(zones_info):
     """Return the first cell-thread zone, or skip if none exists."""
     zone = next(
-        (z for z in zones_info if z.thread_type == svar_pb2.THREAD_TYPE_CELL),
+        (z for z in zones_info if z.thread_type == solution_variable_pb2.THREAD_TYPE_CELL),
         None,
     )
     if zone is None:
@@ -57,7 +57,7 @@ def svars_info(stub, grpc_channel_and_metadata, first_cell_zone):
     """Return list[SolutionVariableInfo] for the first cell zone."""
     _, metadata = grpc_channel_and_metadata
     resp = stub.GetSolutionVariableInfo(
-        svar_pb2.GetSolutionVariableInfoRequest(
+        solution_variable_pb2.GetSolutionVariableInfoRequest(
             domain_id=_DOMAIN_ID,
             zone_id=first_cell_zone.zone_id,
         ),
@@ -75,13 +75,13 @@ def _build_set_stream(name, domain_id, zone_id, values, chunk_size=_CHUNK_SIZE):
     import struct
 
     # Header frame.
-    yield svar_pb2.SetSolutionVariableDataRequest(
-        header=svar_pb2.SolutionVariableHeader(name=name, domain_id=domain_id)
+    yield solution_variable_pb2.SetSolutionVariableDataRequest(
+        header=solution_variable_pb2.SolutionVariableHeader(name=name, domain_id=domain_id)
     )
 
     # Payload info frame.
-    yield svar_pb2.SetSolutionVariableDataRequest(
-        payload_info=svar_pb2.Info(
+    yield solution_variable_pb2.SetSolutionVariableDataRequest(
+        payload_info=solution_variable_pb2.Info(
             field_type=field_data_pb2.FIELD_TYPE_DOUBLE_ARRAY,
             field_size=len(values),
             zone=zone_id,
@@ -93,8 +93,8 @@ def _build_set_stream(name, domain_id, zone_id, values, chunk_size=_CHUNK_SIZE):
     max_per_chunk = max(1, chunk_size // item_size)
     for start in range(0, len(values), max_per_chunk):
         chunk = values[start : start + max_per_chunk]
-        yield svar_pb2.SetSolutionVariableDataRequest(
-            payload=svar_pb2.Payload(
+        yield solution_variable_pb2.SetSolutionVariableDataRequest(
+            payload=solution_variable_pb2.Payload(
                 double_payload=field_data_pb2.DoublePayload(payloads=chunk)
             )
         )
@@ -104,7 +104,7 @@ def test_get_zones_info_returns_response(stub, grpc_channel_and_metadata):
     """GetZonesInfo must return a response without error."""
     _, metadata = grpc_channel_and_metadata
     resp = stub.GetZonesInfo(
-        svar_pb2.GetZonesInfoRequest(),
+        solution_variable_pb2.GetZonesInfoRequest(),
         metadata=metadata,
     )
     assert hasattr(resp, "domains_info")
@@ -115,7 +115,7 @@ def test_get_zones_info_has_at_least_one_domain(stub, grpc_channel_and_metadata)
     """GetZonesInfo must return at least one domain."""
     _, metadata = grpc_channel_and_metadata
     resp = stub.GetZonesInfo(
-        svar_pb2.GetZonesInfoRequest(),
+        solution_variable_pb2.GetZonesInfoRequest(),
         metadata=metadata,
     )
     assert len(resp.domains_info) > 0
@@ -125,7 +125,7 @@ def test_get_zones_info_domains_have_name_and_id(stub, grpc_channel_and_metadata
     """Every DomainInfo must have a non-empty name and a positive domain_id."""
     _, metadata = grpc_channel_and_metadata
     resp = stub.GetZonesInfo(
-        svar_pb2.GetZonesInfoRequest(),
+        solution_variable_pb2.GetZonesInfoRequest(),
         metadata=metadata,
     )
     for domain in resp.domains_info:
@@ -147,7 +147,7 @@ def test_get_zones_info_zones_have_name_and_id(zones_info):
 
 def test_get_zones_info_zones_have_valid_thread_type(zones_info):
     """Every ZoneInfo must have a thread_type of CELL or FACE (not UNSPECIFIED)."""
-    valid = {svar_pb2.THREAD_TYPE_CELL, svar_pb2.THREAD_TYPE_FACE}
+    valid = {solution_variable_pb2.THREAD_TYPE_CELL, solution_variable_pb2.THREAD_TYPE_FACE}
     for zone in zones_info:
         assert zone.thread_type in valid, (
             f"Zone '{zone.name}' has UNSPECIFIED thread_type"
@@ -156,7 +156,7 @@ def test_get_zones_info_zones_have_valid_thread_type(zones_info):
 
 def test_get_zones_info_has_cell_zone(zones_info):
     """At least one zone must be a cell zone."""
-    cell_zones = [z for z in zones_info if z.thread_type == svar_pb2.THREAD_TYPE_CELL]
+    cell_zones = [z for z in zones_info if z.thread_type == solution_variable_pb2.THREAD_TYPE_CELL]
     assert len(cell_zones) > 0, "No cell zones found"
 
 
@@ -176,7 +176,7 @@ def test_get_solution_variable_info_returns_response(
     """GetSolutionVariableInfo must return a response for a valid domain/zone."""
     _, metadata = grpc_channel_and_metadata
     resp = stub.GetSolutionVariableInfo(
-        svar_pb2.GetSolutionVariableInfoRequest(
+        solution_variable_pb2.GetSolutionVariableInfoRequest(
             domain_id=_DOMAIN_ID,
             zone_id=first_cell_zone.zone_id,
         ),
@@ -233,7 +233,7 @@ def test_get_solution_variable_data_opens_stream(
     """GetSolutionVariableData must open a server-streaming call without error."""
     _, metadata = grpc_channel_and_metadata
     stream = stub.GetSolutionVariableData(
-        svar_pb2.GetSolutionVariableDataRequest(
+        solution_variable_pb2.GetSolutionVariableDataRequest(
             chunk_size=_CHUNK_SIZE,
             provide_bytes_stream=False,
             name=_PRESSURE_SVAR,
@@ -252,7 +252,7 @@ def test_get_solution_variable_data_first_chunk_is_payload_info(
     """The first response chunk must be a payload_info frame describing the data."""
     _, metadata = grpc_channel_and_metadata
     stream = stub.GetSolutionVariableData(
-        svar_pb2.GetSolutionVariableDataRequest(
+        solution_variable_pb2.GetSolutionVariableDataRequest(
             chunk_size=_CHUNK_SIZE,
             provide_bytes_stream=False,
             name=_PRESSURE_SVAR,
@@ -274,7 +274,7 @@ def test_get_solution_variable_data_payload_info_has_valid_zone(
     """The payload_info frame must report the correct zone_id and a positive field_size."""
     _, metadata = grpc_channel_and_metadata
     stream = stub.GetSolutionVariableData(
-        svar_pb2.GetSolutionVariableDataRequest(
+        solution_variable_pb2.GetSolutionVariableDataRequest(
             chunk_size=_CHUNK_SIZE,
             provide_bytes_stream=False,
             name=_PRESSURE_SVAR,
@@ -296,7 +296,7 @@ def test_get_solution_variable_data_chunks_have_valid_array_type(
     """All response chunks must carry either payload or payload_info as the oneof type."""
     _, metadata = grpc_channel_and_metadata
     stream = stub.GetSolutionVariableData(
-        svar_pb2.GetSolutionVariableDataRequest(
+        solution_variable_pb2.GetSolutionVariableDataRequest(
             chunk_size=_CHUNK_SIZE,
             provide_bytes_stream=False,
             name=_PRESSURE_SVAR,
@@ -321,7 +321,7 @@ def test_get_solution_variable_data_payload_chunks_have_typed_data(
     """Payload frames must contain data in one of the known numeric chunk types."""
     _, metadata = grpc_channel_and_metadata
     stream = stub.GetSolutionVariableData(
-        svar_pb2.GetSolutionVariableDataRequest(
+        solution_variable_pb2.GetSolutionVariableDataRequest(
             chunk_size=_CHUNK_SIZE,
             provide_bytes_stream=False,
             name=_PRESSURE_SVAR,
@@ -353,7 +353,7 @@ def test_get_solution_variable_data_byte_stream_mode(
     """GetSolutionVariableData with provide_bytes_stream=True must open without error."""
     _, metadata = grpc_channel_and_metadata
     stream = stub.GetSolutionVariableData(
-        svar_pb2.GetSolutionVariableDataRequest(
+        solution_variable_pb2.GetSolutionVariableDataRequest(
             chunk_size=_CHUNK_SIZE,
             provide_bytes_stream=True,
             name=_PRESSURE_SVAR,
@@ -376,7 +376,7 @@ def test_set_solution_variable_data_roundtrip(
     # --- Read original values ---
     original_values = []
     stream = stub.GetSolutionVariableData(
-        svar_pb2.GetSolutionVariableDataRequest(
+        solution_variable_pb2.GetSolutionVariableDataRequest(
             chunk_size=_CHUNK_SIZE,
             provide_bytes_stream=False,
             name=_PRESSURE_SVAR,
@@ -418,7 +418,7 @@ def test_set_solution_variable_data_returns_response(
 
     # Read to get size.
     stream = stub.GetSolutionVariableData(
-        svar_pb2.GetSolutionVariableDataRequest(
+        solution_variable_pb2.GetSolutionVariableDataRequest(
             chunk_size=_CHUNK_SIZE,
             provide_bytes_stream=False,
             name=_PRESSURE_SVAR,
@@ -451,4 +451,4 @@ def test_set_solution_variable_data_returns_response(
         ),
         metadata=metadata,
     )
-    assert isinstance(resp, svar_pb2.SetSolutionVariableDataResponse)
+    assert isinstance(resp, solution_variable_pb2.SetSolutionVariableDataResponse)
