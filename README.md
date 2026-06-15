@@ -35,6 +35,19 @@ Python 3.7, so to improve your build time, use Python 3.7 when building the
 wheel.
 
 
+#### Build Documentation
+
+To build the documentation locally, install the documentation dependencies and run make:
+
+```bash
+pip install -r requirements/requirements_docs.txt
+cd docs
+make html
+```
+
+The built HTML documentation will be in ``docs/_build/html/``. Open ``index.html`` in a web browser to view it.
+
+
 #### Manual Deployment
 
 After building the packages, manually deploy them with:

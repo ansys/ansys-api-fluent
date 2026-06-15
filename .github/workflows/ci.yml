@@ -125,7 +125,7 @@ jobs:
       - name: Install documentation dependencies
         run: |
           python -m pip install -U pip
-          python -m pip install -r docs/requirements.txt
+          python -m pip install -r requirements/requirements_docs.txt
 
       - name: Regenerate proto reference fragments
         # Mirrors what the Sphinx ``proto_docgen`` extension does on
