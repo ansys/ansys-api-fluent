@@ -101,12 +101,10 @@ message InitializedEvent {
 
 // Event when a report definition changes.
 message ReportDefinitionChangedEvent {
-  string report_definition_name = 1;  // Name of the report definition that changed.
 }
 
 // Event when a plot set changes.
 message PlotSetChangedEvent {
-  string plot_set_name = 1;  // Name of the plot set that changed.
 }
 
 // Event when residual plot settings change.

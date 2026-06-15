@@ -34,7 +34,7 @@ service TextInterface {
   rpc CompositeGet(CompositeGetRequest) returns (CompositeGetResponse);
 
   // Retrieves schema information under the specified path.
-  rpc GetStaticInfo(GetStaticInfoRequest) returns (GetStaticInfoResponse);
+  rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse);
 }
 
 // Request to subscribe to change notifications for one or more paths.
@@ -204,26 +204,26 @@ message CompositeGetResponse {
 }
 
 // Request to retrieve static (schema-like) info for a node.
-message GetStaticInfoRequest {
+message GetSchemaRequest {
   // Datamodel node path.
   string path = 1;
 }
 
-// Static (schema-like) information for a datamodel node.
-message StaticInfo {
+// Schema contains the static API description of objects, including types, parameters, commands, and queries.
+message Schema {
   // Child menus available under this node.
-  map<string, StaticInfo> menus = 1;
+  map<string, Schema> menus = 1;
 
   // Commands available under this node.
-  map<string, StaticInfo> commands = 2;
+  map<string, Schema> commands = 2;
 
   // Human-readable help for this node.
   // Field number 5 is preserved for backward compatibility.
   string help = 5;
 }
 
-// Response for GetStaticInfo.
-message GetStaticInfoResponse {
+// Response for GetSchema.
+message GetSchemaResponse {
   // Schema information for the requested path.
-  StaticInfo info = 1;
+  GetSchema info = 1;
 }

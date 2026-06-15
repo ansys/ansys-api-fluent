@@ -34,8 +34,6 @@ service DataModel {
   // Streams datamodel state changes and events.
   // This method is not supported for the "meshing_workflow" rules context.
   rpc StreamStateChanges(StreamStateChangesRequest) returns (stream StreamStateChangesResponse) {}
-  // Initializes the datamodel for the specified rules context.
-  rpc InitDatamodel(InitDatamodelRequest) returns (InitDatamodelResponse) {}
   // Returns the current state at the specified path.
   rpc GetState(GetStateRequest) returns (GetStateResponse) {}
   // Sets the state at the specified path.
@@ -93,18 +91,6 @@ message StreamStateChangesResponse {
   ansys.api.fluent.v1.variant.Variant state = 1;  // The current state or state changes
   repeated string deleted_paths = 2;              // Paths of deleted objects
   repeated string events = 3;                     // Events that occurred
-}
-
-// InitDatamodelRequest is the request message for initializing the datamodel
-message InitDatamodelRequest {
-  string rules = 1;               // The rules context for initialization
-  bool return_state_changes = 2;  // Whether to return state changes
-}
-
-// InitDatamodelResponse is the response message containing the initialized datamodel state
-message InitDatamodelResponse {
-  ansys.api.fluent.v1.variant.Variant state = 1;  // The initialized state
-  repeated string deleted_paths = 2;              // Paths of deleted objects during initialization
 }
 
 // GetStateRequest is the request message for retrieving state
