@@ -17,8 +17,8 @@ the ``Health``, ``Connection``, and ``ApplicationRuntime`` services.
 Configuring the simulation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use :doc:`datamodel_se` to discover the schema, then read and write object
-state, run commands, and stream events via the meshing-oriented ``DataModel``
+Use :doc:`object_model` to discover the schema, then read and write object
+state, run commands, and stream events via the meshing-oriented ``ObjectModel``
 service.
 
 Use :doc:`settings` to discover the schema, then read and write solver state,
@@ -51,7 +51,7 @@ See :doc:`helpers` for constructing and unpacking the ``Variant`` and
    :maxdepth: 2
 
    session_setup
-   datamodel_se
+   object_model
    settings
    solver_streams
    simulation_data

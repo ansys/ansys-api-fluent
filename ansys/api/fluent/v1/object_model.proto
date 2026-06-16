@@ -4,11 +4,11 @@
 
 syntax = "proto3";
 
-package ansys.api.fluent.v1.datamodel;
+package ansys.api.fluent.v1.object_model;
 
 import "ansys/api/fluent/v1/variant.proto";
 
-// DataModel service provides a way to access some Fluent features like
+// ObjectModel service provides a way to access some Fluent features like
 // meshing, workflow, preferences, and other specific areas. The rules string
 // in each request selects the target feature area.
 // Supported rules contexts are:
@@ -30,8 +30,8 @@ import "ansys/api/fluent/v1/variant.proto";
 // - ``pm_file_management``: Legacy exposure of the part management - file-management component of meshing workflow.
 //
 // Note: StreamStateChanges is not supported for the "meshing_workflow" context.
-service DataModel {
-  // Streams datamodel state changes and events.
+service ObjectModel {
+  // Streams state changes and events.
   // This method is not supported for the "meshing_workflow" rules context.
   rpc StreamStateChanges(StreamStateChangesRequest) returns (stream StreamStateChangesResponse) {}
   // Returns the current state at the specified path.
@@ -46,29 +46,29 @@ service DataModel {
   rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse) {}
   // Returns the value of a named attribute for the object at the specified path.
   rpc GetAttributeValue(GetAttributeValueRequest) returns (GetAttributeValueResponse) {}
-  // Executes a command on the datamodel object at the specified path.
+  // Executes a command on the object at the specified path.
   rpc ExecuteCommand(ExecuteCommandRequest) returns (ExecuteCommandResponse) {}
-  // Executes a query on the datamodel object at the specified path and returns the result.
+  // Executes a query on the object at the specified path and returns the result.
   rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse) {}
   // Creates a command arguments object for the specified command.
   rpc CreateCommandArguments(CreateCommandArgumentsRequest) returns (CreateCommandArgumentsResponse) {}
   // Deletes a created command arguments object.
   rpc DeleteCommandArguments(DeleteCommandArgumentsRequest) returns (DeleteCommandArgumentsResponse) {}
-  // Returns the API schema describing the structure of the datamodel.
+  // Returns the API schema describing the structure of the object model.
   rpc GetSchema(GetSchemaRequest) returns (GetSchemaResponse) {}
-  // Renames the datamodel object at the specified path.
+  // Renames the object at the specified path.
   rpc Rename(RenameRequest) returns (RenameResponse) {}
-  // Fixes the state of the datamodel object at the specified path to ensure internal consistency.
+  // Fixes the state of the object at the specified path to ensure internal consistency.
   rpc FixState(FixStateRequest) returns (FixStateResponse) {}
   // Returns the names of all objects at the specified path.
   rpc GetObjectNames(GetObjectNamesRequest) returns (GetObjectNamesResponse) {}
   // Deletes all child objects of the parent object at the specified path.
   rpc DeleteChildObjects(DeleteChildObjectsRequest) returns (DeleteChildObjectsResponse) {}
-  // Subscribes to one or more datamodel events.
+  // Subscribes to one or more events.
   rpc SubscribeEvents(SubscribeEventsRequest) returns (SubscribeEventsResponse) {}
-  // Unsubscribes from subscribed datamodel events.
+  // Unsubscribes from subscribed events.
   rpc UnsubscribeEvents(UnsubscribeEventsRequest) returns (UnsubscribeEventsResponse) {}
-  // Streams subscribed datamodel events.
+  // Streams subscribed events.
   rpc StreamEvents(StreamEventsRequest) returns (stream StreamEventsResponse) {}
 }
 
@@ -242,7 +242,7 @@ message CommandInfo {
   string doc_string = 3;         // Documentation string for the command
 }
 
-// Schema contains the static API description of datamodel objects, including types, parameters, commands, and queries.
+// Schema contains the static API description of objects, including types, parameters, commands, and queries.
 message Schema {
   map<string, Schema> named_objects = 1;                        // Named objects within this object
   map<string, Schema> singletons = 2;                           // Singleton objects within this object
@@ -263,7 +263,7 @@ message GetSchemaRequest {
 
 // GetSchemaResponse is the response message for GetSchema.
 message GetSchemaResponse {
-  Schema info = 1;  // The API schema for the datamodel.
+  Schema info = 1;  // The API schema for the object model.
 }
 
 // CreatedEventRequest is used to subscribe to object creation events
@@ -307,8 +307,8 @@ message CommandExecutedEventRequest {
   string command = 2 [deprecated = true];  // name of the command, deprecated since Fluent 2025 R2
 }
 
-// DataModelEventRequest is a request to subscribe to specific datamodel events
-message DataModelEventRequest {
+// ObjectModelEventRequest is a request to subscribe to specific events
+message ObjectModelEventRequest {
   string rules = 1;  // The rules context for the event subscription
   oneof event_request {
     CreatedEventRequest created_event_request = 2;                                    // Subscribe to creation events
@@ -323,7 +323,7 @@ message DataModelEventRequest {
 
 // SubscribeEventsRequest is the request message for subscribing to events
 message SubscribeEventsRequest {
-  repeated DataModelEventRequest event_requests = 1;  // The list of event subscriptions to register
+  repeated ObjectModelEventRequest event_requests = 1;  // The list of event subscriptions to register
 }
 
 // SubscriptionStatus indicates the status of an event subscription
