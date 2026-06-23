@@ -1,9 +1,9 @@
-DataModel service
+ObjectModel service
 ==================
 
-Python client examples for the ``DataModel`` gRPC service.
+Python client examples for the ``ObjectModel`` gRPC service.
 
-See :doc:`../../api/services/datamodel_se`
+See :doc:`../../api/services/object_model`
 for this service's complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
@@ -12,12 +12,12 @@ for this service's complete reference material.
    :caption: Python
 
    import grpc
-   from ansys.api.fluent.v1 import datamodel_se_pb2, datamodel_se_pb2_grpc
+   from ansys.api.fluent.v1 import object_model_pb2, object_model_pb2_grpc
    from ansys.api.fluent.v1 import variant_pb2
 
    channel = grpc.insecure_channel("<server-address>")
    metadata = [("password", "<password>")]
-   stub = datamodel_se_pb2_grpc.DataModelStub(channel)
+   stub = object_model_pb2_grpc.ObjectModelStub(channel)
 
 The **rules** string selects the application context. All examples on this
 page use ``"meshing"``.
@@ -32,7 +32,7 @@ parameters — walk it to discover valid paths before making runtime calls.
    :caption: Python
 
    schema_response = stub.GetSchema(
-       datamodel_se_pb2.GetSchemaRequest(rules="meshing"),
+       object_model_se_pb2.GetSchemaRequest(rules="meshing"),
        metadata=metadata,
    )
 
@@ -123,7 +123,7 @@ Reading and writing state
 
    # Fetch a current boolean value.
    state_response = stub.GetState(
-       datamodel_se_pb2.GetStateRequest(
+       object_model_se_pb2.GetStateRequest(
            rules="meshing",
            path="/GlobalSettings/EnableCleanCAD",
        ),
@@ -134,7 +134,7 @@ Reading and writing state
 
    # Modify the value at the same path.
    stub.SetState(
-       datamodel_se_pb2.SetStateRequest(
+       object_model_se_pb2.SetStateRequest(
            rules="meshing",
            path="/GlobalSettings/EnableCleanCAD",
            state=variant_pb2.Variant(bool_state=not current),
@@ -144,7 +144,7 @@ Reading and writing state
 
    # Restore the original value.
    stub.SetState(
-       datamodel_se_pb2.SetStateRequest(
+       object_model_se_pb2.SetStateRequest(
            rules="meshing",
            path="/GlobalSettings/EnableCleanCAD",
            state=variant_pb2.Variant(bool_state=current),
@@ -163,7 +163,7 @@ availability (active/disabled), and default values.
    :caption: Python
 
    attribute_response = stub.GetAttributeValue(
-       datamodel_se_pb2.GetAttributeValueRequest(
+       object_model_se_pb2.GetAttributeValueRequest(
            rules="meshing",
            path="/GlobalSettings/EnableCleanCAD",
            attribute="default",
@@ -182,7 +182,7 @@ You can pass command arguments as a ``Variant`` map.
    :caption: Python
 
    stub.ExecuteCommand(
-       datamodel_se_pb2.ExecuteCommandRequest(
+       object_model_se_pb2.ExecuteCommandRequest(
            rules="meshing",
            path="/",
            command="ImportGeometry",
@@ -206,7 +206,7 @@ set individual fields before calling ``ExecuteCommand``.
 
    # Allocate an argument object on the server.
    create_response = stub.CreateCommandArguments(
-       datamodel_se_pb2.CreateCommandArgumentsRequest(
+       object_model_se_pb2.CreateCommandArgumentsRequest(
            rules="meshing",
            path="/",
            command="ImportGeometry",
@@ -219,7 +219,7 @@ set individual fields before calling ``ExecuteCommand``.
 
    # Clean up without executing.
    stub.DeleteCommandArguments(
-       datamodel_se_pb2.DeleteCommandArgumentsRequest(
+       object_model_se_pb2.DeleteCommandArgumentsRequest(
            rules="meshing",
            path="/",
            command="ImportGeometry",
@@ -231,7 +231,7 @@ set individual fields before calling ``ExecuteCommand``.
 Subscribing to, streaming, and unsubscribing from events
 ----------------------------------------------------------
 
-``SubscribeEvents`` registers interest in specific datamodel changes;
+``SubscribeEvents`` registers interest in specific object model changes;
 ``StreamEvents`` delivers them as a server-streaming call;
 ``UnsubscribeEvents`` cancels the subscriptions when done.
 
@@ -240,11 +240,11 @@ Subscribing to, streaming, and unsubscribing from events
 
    # Subscribe to modifications on a specific path.
    subscribe_response = stub.SubscribeEvents(
-       datamodel_se_pb2.SubscribeEventsRequest(
+       object_model_se_pb2.SubscribeEventsRequest(
            event_requests=[
-               datamodel_se_pb2.DataModelEventRequest(
+               object_model_se_pb2.ObjectModelEventRequest(
                    rules="meshing",
-                   modified_event_request=datamodel_se_pb2.ModifiedEventRequest(
+                   modified_event_request=object_model_se_pb2.ModifiedEventRequest(
                        path="/GlobalSettings/EnableCleanCAD"
                    ),
                )
@@ -258,7 +258,7 @@ Subscribing to, streaming, and unsubscribing from events
    # Stream events — events arrive only when something else modifies the
    # subscribed path on the server (e.g. another client or a running solver).
    stream = stub.StreamEvents(
-       datamodel_se_pb2.StreamEventsRequest(),
+       object_model_se_pb2.StreamEventsRequest(),
        metadata=metadata,
    )
    count = 0
@@ -273,7 +273,7 @@ Subscribing to, streaming, and unsubscribing from events
 
    # Unsubscribe.
    unsubscribe_response = stub.UnsubscribeEvents(
-       datamodel_se_pb2.UnsubscribeEventsRequest(tags=tags),
+       object_model_se_pb2.UnsubscribeEventsRequest(tags=tags),
        metadata=metadata,
    )
    for r in unsubscribe_response.responses:
@@ -282,7 +282,7 @@ Subscribing to, streaming, and unsubscribing from events
 Streaming state changes
 ------------------------
 
-``StreamStateChanges`` delivers a snapshot or diff of the datamodel whenever
+``StreamStateChanges`` delivers a snapshot or diff of the object model whenever
 it changes. Use ``DIFF_STATE_FULL`` for a complete snapshot or
 ``DIFF_STATE_NOCOMMANDS`` for a lighter diff without command metadata.
 
@@ -291,10 +291,10 @@ it changes. Use ``DIFF_STATE_FULL`` for a complete snapshot or
 
    # Full snapshot on every change.
    stream = stub.StreamStateChanges(
-       datamodel_se_pb2.StreamStateChangesRequest(
+       object_model_se_pb2.StreamStateChangesRequest(
            rules="meshing",
            return_state_changes=True,
-           diff_state=datamodel_se_pb2.DIFF_STATE_FULL,
+           diff_state=object_model_se_pb2.DIFF_STATE_FULL,
        ),
        metadata=metadata,
    )
@@ -305,10 +305,10 @@ it changes. Use ``DIFF_STATE_FULL`` for a complete snapshot or
 
    # Lighter diff without command metadata.
    stream = stub.StreamStateChanges(
-       datamodel_se_pb2.StreamStateChangesRequest(
+       object_model_se_pb2.StreamStateChangesRequest(
            rules="meshing",
            return_state_changes=True,
-           diff_state=datamodel_se_pb2.DIFF_STATE_NOCOMMANDS,
+           diff_state=object_model_se_pb2.DIFF_STATE_NOCOMMANDS,
        ),
        metadata=metadata,
    )
@@ -316,4 +316,4 @@ it changes. Use ``DIFF_STATE_FULL`` for a complete snapshot or
    stream.cancel()
    assert hasattr(first_response, "state")
 
-See :doc:`../../api/services/datamodel_se` for the complete reference material.
+See :doc:`../../api/services/object_model` for the complete reference material.

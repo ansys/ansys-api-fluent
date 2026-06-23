@@ -1,4 +1,4 @@
-"""Tests for the Fluent DataModel gRPC service (v1).
+"""Tests for the Fluent ObjectModel gRPC service (v1).
 
 All tests share the single Fluent session started by the ``grpc_channel_and_metadata``
 session fixture in ``conftest.py``.
@@ -8,45 +8,32 @@ import grpc
 import pytest
 from ansys.fluent.core import examples
 
-from ansys.api.fluent.v1 import datamodel_pb2, datamodel_pb2_grpc, variant_pb2
+from ansys.api.fluent.v1 import object_model_pb2, object_model_pb2_grpc, variant_pb2
 
 _RULES = "meshing"
 _VALID_SUBSCRIPTION_STATUSES = {
-    datamodel_pb2.SUBSCRIPTION_STATUS_UNSPECIFIED,
-    datamodel_pb2.SUBSCRIPTION_STATUS_SUBSCRIBED,
-    datamodel_pb2.SUBSCRIPTION_STATUS_UNSUBSCRIBED,
+    object_model_pb2.SUBSCRIPTION_STATUS_UNSPECIFIED,
+    object_model_pb2.SUBSCRIPTION_STATUS_SUBSCRIBED,
+    object_model_pb2.SUBSCRIPTION_STATUS_UNSUBSCRIBED,
 }
 
 
 @pytest.fixture(scope="module")
 def stub(grpc_channel_and_metadata_meshing):
     channel, _ = grpc_channel_and_metadata_meshing
-    return datamodel_pb2_grpc.DataModelStub(channel)
+    return object_model_pb2_grpc.ObjectModelStub(channel)
 
 @pytest.fixture(scope="module")
 def solver_stub(grpc_channel_and_metadata):
     channel, _ = grpc_channel_and_metadata
-    return datamodel_pb2_grpc.DataModelStub(channel)
-
-
-def test_init_datamodel_returns_response(stub, grpc_channel_and_metadata_meshing):
-    """InitDatamodel must return a response with a state field."""
-    _, metadata = grpc_channel_and_metadata_meshing
-    resp = stub.InitDatamodel(
-        datamodel_pb2.InitDatamodelRequest(
-            rules=_RULES, return_state_changes=False
-        ),
-        metadata=metadata,
-    )
-    assert hasattr(resp, "state")
-    assert isinstance(list(resp.deleted_paths), list)
+    return object_model_pb2_grpc.ObjectModelStub(channel)
 
 
 def test_get_schema_returns_info(stub, grpc_channel_and_metadata_meshing):
     """GetSchema must return a Schema info object."""
     _, metadata = grpc_channel_and_metadata_meshing
     resp = stub.GetSchema(
-        datamodel_pb2.GetSchemaRequest(rules=_RULES),
+        object_model_pb2.GetSchemaRequest(rules=_RULES),
         metadata=metadata,
     )
     assert hasattr(resp, "info")
@@ -57,7 +44,7 @@ def test_get_state_known_path_returns_variant(stub, grpc_channel_and_metadata_me
     """GetState on a known sub-path must return a Variant."""
     _, metadata = grpc_channel_and_metadata_meshing
     resp = stub.GetState(
-        datamodel_pb2.GetStateRequest(
+        object_model_pb2.GetStateRequest(
             rules=_RULES, path="/GlobalSettings/EnableCleanCAD"
         ),
         metadata=metadata,
@@ -72,13 +59,13 @@ def test_set_state_bool_roundtrip(stub, grpc_channel_and_metadata_meshing):
     path = "/GlobalSettings/EnableCleanCAD"
     # Read original value.
     orig = stub.GetState(
-        datamodel_pb2.GetStateRequest(rules=_RULES, path=path),
+        object_model_pb2.GetStateRequest(rules=_RULES, path=path),
         metadata=metadata,
     ).state.bool_state
 
     # Write the opposite value.
     stub.SetState(
-        datamodel_pb2.SetStateRequest(
+        object_model_pb2.SetStateRequest(
             rules=_RULES,
             path=path,
             state=variant_pb2.Variant(bool_state=not orig),
@@ -89,14 +76,14 @@ def test_set_state_bool_roundtrip(stub, grpc_channel_and_metadata_meshing):
 
     # Read back.
     new_val = stub.GetState(
-        datamodel_pb2.GetStateRequest(rules=_RULES, path=path),
+        object_model_pb2.GetStateRequest(rules=_RULES, path=path),
         metadata=metadata,
     ).state.bool_state
     assert new_val == (not orig)
 
     # Restore.
     stub.SetState(
-        datamodel_pb2.SetStateRequest(
+        object_model_pb2.SetStateRequest(
             rules=_RULES,
             path=path,
             state=variant_pb2.Variant(bool_state=orig),
@@ -110,7 +97,7 @@ def test_get_attribute_value_returns_result(stub, grpc_channel_and_metadata_mesh
     """GetAttributeValue must return a result Variant."""
     _, metadata = grpc_channel_and_metadata_meshing
     resp = stub.GetAttributeValue(
-        datamodel_pb2.GetAttributeValueRequest(
+        object_model_pb2.GetAttributeValueRequest(
             rules=_RULES,
             path="/GlobalSettings/EnableCleanCAD",
             attribute="default",
@@ -127,7 +114,7 @@ def test_named_object_lifecycle(solver_stub, grpc_channel_and_metadata):
     obj_path = "/Case/Results/Graphics/Contour"
     obj_name = "contour-1"
     create_resp = solver_stub.CreateObject(
-        datamodel_pb2.CreateObjectRequest(
+        object_model_pb2.CreateObjectRequest(
             rules="flserver", path=obj_path, name=obj_name
         ),
         metadata=metadata,
@@ -135,7 +122,7 @@ def test_named_object_lifecycle(solver_stub, grpc_channel_and_metadata):
     assert hasattr(create_resp, "state")
 
     create_resp = solver_stub.CreateObject(
-        datamodel_pb2.CreateObjectRequest(
+        object_model_pb2.CreateObjectRequest(
             rules="flserver", path=obj_path, name="contour-2"
         ),
         metadata=metadata,
@@ -143,7 +130,7 @@ def test_named_object_lifecycle(solver_stub, grpc_channel_and_metadata):
     assert hasattr(create_resp, "state")
 
     resp = solver_stub.GetObjectNames(
-        datamodel_pb2.GetObjectNamesRequest(rules="flserver", path="/Case/Results/Graphics/Contour"),
+        object_model_pb2.GetObjectNamesRequest(rules="flserver", path="/Case/Results/Graphics/Contour"),
         metadata=metadata,
     )
     assert isinstance(list(resp.names), list)
@@ -151,7 +138,7 @@ def test_named_object_lifecycle(solver_stub, grpc_channel_and_metadata):
 
     new_name = "contour-renamed"
     resp = solver_stub.Rename(
-            datamodel_pb2.RenameRequest(
+            object_model_pb2.RenameRequest(
                 rules="flserver",
                 path=f"{obj_path}:{obj_name}",
                 new_name=new_name,
@@ -161,14 +148,14 @@ def test_named_object_lifecycle(solver_stub, grpc_channel_and_metadata):
     assert hasattr(resp, "state")
 
     # resp = solver_stub.GetObjectNames(
-    #     datamodel_pb2.GetObjectNamesRequest(rules="flserver", path="/Case/Results/Graphics/Contour"),
+    #     object_model_pb2.GetObjectNamesRequest(rules="flserver", path="/Case/Results/Graphics/Contour"),
     #     metadata=metadata,
     # )
     # assert isinstance(list(resp.names), list)
     # assert list(resp.names) == [new_name, "contour-2"]
 
     delete_resp = solver_stub.DeleteObject(
-        datamodel_pb2.DeleteObjectRequest(
+        object_model_pb2.DeleteObjectRequest(
             rules="flserver", path=f"{obj_path}:{new_name}", wait=True
         ),
         metadata=metadata,
@@ -176,7 +163,7 @@ def test_named_object_lifecycle(solver_stub, grpc_channel_and_metadata):
     assert hasattr(delete_resp, "state")
 
     resp = solver_stub.GetObjectNames(
-        datamodel_pb2.GetObjectNamesRequest(rules="flserver", path="/Case/Results/Graphics/Contour"),
+        object_model_pb2.GetObjectNamesRequest(rules="flserver", path="/Case/Results/Graphics/Contour"),
         metadata=metadata,
     )
     assert isinstance(list(resp.names), list)
@@ -184,7 +171,7 @@ def test_named_object_lifecycle(solver_stub, grpc_channel_and_metadata):
 
     # Clean -up
     delete_resp = solver_stub.DeleteObject(
-        datamodel_pb2.DeleteObjectRequest(
+        object_model_pb2.DeleteObjectRequest(
             rules="flserver", path=f"{obj_path}:contour-2", wait=True
         ),
         metadata=metadata,
@@ -192,7 +179,7 @@ def test_named_object_lifecycle(solver_stub, grpc_channel_and_metadata):
     assert hasattr(delete_resp, "state")
 
     resp = solver_stub.GetObjectNames(
-        datamodel_pb2.GetObjectNamesRequest(rules="flserver", path="/Case/Results/Graphics/Contour"),
+        object_model_pb2.GetObjectNamesRequest(rules="flserver", path="/Case/Results/Graphics/Contour"),
         metadata=metadata,
     )
     assert isinstance(list(resp.names), list)
@@ -203,7 +190,7 @@ def test_create_and_delete_command_arguments(stub, grpc_channel_and_metadata_mes
     """CreateCommandArguments must return a command_id; DeleteCommandArguments must clean it up."""
     _, metadata = grpc_channel_and_metadata_meshing
     create_resp = stub.CreateCommandArguments(
-        datamodel_pb2.CreateCommandArgumentsRequest(
+        object_model_pb2.CreateCommandArgumentsRequest(
             rules=_RULES, path="", command="ImportGeometry"
         ),
         metadata=metadata,
@@ -212,7 +199,7 @@ def test_create_and_delete_command_arguments(stub, grpc_channel_and_metadata_mes
     assert len(create_resp.command_id) > 0
 
     stub.DeleteCommandArguments(
-        datamodel_pb2.DeleteCommandArgumentsRequest(
+        object_model_pb2.DeleteCommandArgumentsRequest(
             rules=_RULES,
             path="",
             command="ImportGeometry",
@@ -236,7 +223,7 @@ def test_execute_command_returns_response(stub, grpc_channel_and_metadata_meshin
             )
         )
     resp = stub.ExecuteCommand(
-        datamodel_pb2.ExecuteCommandRequest(
+        object_model_pb2.ExecuteCommandRequest(
             rules=_RULES,
             path="",
             command="ImportGeometry",
@@ -253,11 +240,11 @@ def test_subscribe_and_unsubscribe_events(stub, grpc_channel_and_metadata_meshin
     """SubscribeEvents must return subscription tags; UnsubscribeEvents must remove them."""
     _, metadata = grpc_channel_and_metadata_meshing
     sub_resp = stub.SubscribeEvents(
-        datamodel_pb2.SubscribeEventsRequest(
+        object_model_pb2.SubscribeEventsRequest(
             event_requests=[
-                datamodel_pb2.DataModelEventRequest(
+                object_model_pb2.ObjectModelEventRequest(
                     rules=_RULES,
-                    modified_event_request=datamodel_pb2.ModifiedEventRequest(
+                    modified_event_request=object_model_pb2.ModifiedEventRequest(
                         path="/GlobalSettings/EnableCleanCAD"
                     ),
                 )
@@ -269,14 +256,14 @@ def test_subscribe_and_unsubscribe_events(stub, grpc_channel_and_metadata_meshin
     tags = [r.tag for r in sub_resp.responses]
     assert all(len(t) > 0 for t in tags)
     for r in sub_resp.responses:
-        assert r.status == datamodel_pb2.SUBSCRIPTION_STATUS_SUBSCRIBED
+        assert r.status == object_model_pb2.SUBSCRIPTION_STATUS_SUBSCRIBED
 
     unsub_resp = stub.UnsubscribeEvents(
-        datamodel_pb2.UnsubscribeEventsRequest(tags=tags),
+        object_model_pb2.UnsubscribeEventsRequest(tags=tags),
         metadata=metadata,
     )
     for r in unsub_resp.responses:
-        assert r.status == datamodel_pb2.SUBSCRIPTION_STATUS_UNSUBSCRIBED
+        assert r.status == object_model_pb2.SUBSCRIPTION_STATUS_UNSUBSCRIBED
 
 
 def test_stream_events_can_be_cancelled(stub, grpc_channel_and_metadata_meshing):
@@ -284,11 +271,11 @@ def test_stream_events_can_be_cancelled(stub, grpc_channel_and_metadata_meshing)
     _, metadata = grpc_channel_and_metadata_meshing
     # Subscribe first so there is at least one active subscription.
     sub_resp = stub.SubscribeEvents(
-        datamodel_pb2.SubscribeEventsRequest(
+        object_model_pb2.SubscribeEventsRequest(
             event_requests=[
-                datamodel_pb2.DataModelEventRequest(
+                object_model_pb2.ObjectModelEventRequest(
                     rules=_RULES,
-                    modified_event_request=datamodel_pb2.ModifiedEventRequest(
+                    modified_event_request=object_model_pb2.ModifiedEventRequest(
                         path="/GlobalSettings/EnableCleanCAD"
                     ),
                 )
@@ -299,14 +286,14 @@ def test_stream_events_can_be_cancelled(stub, grpc_channel_and_metadata_meshing)
     tags = [r.tag for r in sub_resp.responses]
 
     stream = stub.StreamEvents(
-        datamodel_pb2.StreamEventsRequest(), metadata=metadata
+        object_model_pb2.StreamEventsRequest(), metadata=metadata
     )
     assert stream is not None
     stream.cancel()
 
     # Cleanup subscriptions.
     stub.UnsubscribeEvents(
-        datamodel_pb2.UnsubscribeEventsRequest(tags=tags),
+        object_model_pb2.UnsubscribeEventsRequest(tags=tags),
         metadata=metadata,
     )
 
@@ -315,10 +302,10 @@ def test_stream_state_changes_returns_stream(stub, grpc_channel_and_metadata_mes
     """StreamStateChanges must open a server-streaming iterator."""
     _, metadata = grpc_channel_and_metadata_meshing
     stream = stub.StreamStateChanges(
-        datamodel_pb2.StreamStateChangesRequest(
+        object_model_pb2.StreamStateChangesRequest(
             rules=_RULES,
             return_state_changes=True,
-            diff_state=datamodel_pb2.DIFF_STATE_FULL,
+            diff_state=object_model_pb2.DIFF_STATE_FULL,
         ),
         metadata=metadata,
     )
@@ -331,10 +318,10 @@ def test_stream_state_changes_first_response_has_state(stub, grpc_channel_and_me
     _, metadata = grpc_channel_and_metadata_meshing
     try:
         stream = stub.StreamStateChanges(
-            datamodel_pb2.StreamStateChangesRequest(
+            object_model_pb2.StreamStateChangesRequest(
                 rules=_RULES,
                 return_state_changes=True,
-                diff_state=datamodel_pb2.DIFF_STATE_NOCOMMANDS,
+                diff_state=object_model_pb2.DIFF_STATE_NOCOMMANDS,
             ),
             metadata=metadata,
         )
