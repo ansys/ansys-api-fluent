@@ -16,14 +16,14 @@ work.
 
    * - Page
      - Proto file
-   * - :doc:`TextInterface <datamodel_tui>`
-     - ``datamodel_tui.proto``
-   * - :doc:`SchemeInterpreter <scheme_eval>`
-     - ``scheme_eval.proto``
+   * - :doc:`TextInterface <text_interface>`
+     - ``text_interface.proto``
+   * - :doc:`SchemeInterpreter <scheme_interpreter>`
+     - ``scheme_interpreter.proto``
 
 .. toctree::
    :hidden:
    :maxdepth: 1
 
-   datamodel_tui
-   scheme_eval
+   text_interface
+   scheme_interpreter

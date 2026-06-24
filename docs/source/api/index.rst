@@ -18,14 +18,14 @@ referenced across services.
    * - :doc:`Services <services/index>`
      - The eleven gRPC services that make up the current Fluent API:
        :doc:`Health <services/health>`,
-       :doc:`ApplicationRuntime <services/app_utilities>`,
-       :doc:`DataModel <services/datamodel_se>`,
+       :doc:`ApplicationRuntime <services/application_runtime>`,
+       :doc:`DataModel <services/object_model>`,
        :doc:`Settings <services/settings>`,
        :doc:`Events <services/events>`,
        :doc:`FieldData <services/field_data>`,
        :doc:`Monitor <services/monitor>`,
        :doc:`Reduction <services/reduction>`,
-       :doc:`SolutionVariable <services/svar>`,
+       :doc:`SolutionVariable <services/solution_variable>`,
        :doc:`Transcript <services/transcript>`, and
        :doc:`Connection <services/connection>`.
    * - :doc:`Helper modules <helpers/index>`
@@ -35,8 +35,8 @@ referenced across services.
        :doc:`Variant <helpers/variant>`.
    * - :doc:`Legacy <legacy/index>`
      - Older services retained for backward compatibility:
-       :doc:`TextInterface <legacy/datamodel_tui>` and
-       :doc:`SchemeInterpreter <legacy/scheme_eval>`. Prefer the current
+       :doc:`TextInterface <legacy/text_interface>` and
+       :doc:`SchemeInterpreter <legacy/scheme_interpreter>`. Prefer the current
        service equivalents for new work.
 
 .. toctree::
