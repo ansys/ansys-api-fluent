@@ -166,7 +166,7 @@ message GetProcessorCountRequest {
 // Contains the application processor count.
 message GetProcessorCountResponse {
   // Current application processor count.
-  int64 processor_count = 1;
+  uint64 processor_count = 1;
 }
 
 // Request to retrieve the application UI mode.
@@ -212,7 +212,7 @@ message GetGPUConfigResponse {
 // Wrapper message to hold a collection of GPU device IDs.
 message GpuIdList {
   // List of integer IDs corresponding to the allocated GPUs.
-  repeated int32 gpu_ids = 1;
+  repeated uint32 gpu_ids = 1;
 }
 
 // Initiates a Python journal recording session.
