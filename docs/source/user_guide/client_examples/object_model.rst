@@ -1,5 +1,5 @@
 ObjectModel service
-==================
+====================
 
 Python client examples for the ``ObjectModel`` gRPC service.
 

@@ -14,7 +14,7 @@ Variant
 -------
 
 ``Variant`` is the polymorphic value container used by the
-:doc:`DataModel <datamodel_se>` service for all state, argument, and
+:doc:`ObjectModel <../../api/services/object_model>` service for all state, argument, and
 result payloads, and by the :doc:`Reduction <../../api/services/reduction>` service for
 typed results. It holds exactly one value at a time, selected by a ``oneof``
 field. Always call ``WhichOneof("as")`` on a ``Variant`` returned by the

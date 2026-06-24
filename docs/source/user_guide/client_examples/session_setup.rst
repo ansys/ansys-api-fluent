@@ -5,7 +5,7 @@ Python client examples for the ``Connection``, ``Health``, and
 ``ApplicationRuntime`` gRPC services.
 
 See :doc:`../../api/services/connection`, :doc:`../../api/services/health`,
-and :doc:`../../api/services/app_utilities`
+and :doc:`../../api/services/application_runtime`
 for these services' complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
@@ -24,7 +24,7 @@ for these services' complete reference material.
    metadata = [("password", "<password>")]
    connection_stub = connection_pb2_grpc.ConnectionStub(channel)
    health_stub = health_pb2_grpc.HealthStub(channel)
-   app_utilities_stub = application_runtime_pb2_grpc.ApplicationRuntimeStub(channel)
+   application_runtime_stub = application_runtime_pb2_grpc.ApplicationRuntimeStub(channel)
 
 .. note::
 
@@ -119,7 +119,7 @@ running Fluent build.
 .. code-block:: python
    :caption: Python
 
-   version_response = app_utilities_stub.GetProductVersion(
+   version_response = application_runtime_stub.GetProductVersion(
        application_runtime_pb2.GetProductVersionRequest(),
        metadata=metadata,
    )
@@ -136,7 +136,7 @@ and branch of the running binary.
 .. code-block:: python
    :caption: Python
 
-   build_info = app_utilities_stub.GetBuildInfo(
+   build_info = application_runtime_stub.GetBuildInfo(
        application_runtime_pb2.GetBuildInfoRequest(),
        metadata=metadata,
    )
@@ -154,7 +154,7 @@ PID, and working directory of the respective Fluent processes.
 .. code-block:: python
    :caption: Python
 
-   controller_process_info = app_utilities_stub.GetControllerProcessInfo(
+   controller_process_info = application_runtime_stub.GetControllerProcessInfo(
        application_runtime_pb2.GetControllerProcessInfoRequest(),
        metadata=metadata,
    )
@@ -162,7 +162,7 @@ PID, and working directory of the respective Fluent processes.
    print(controller_process_info.process_id)         # -> 12345  (an integer PID)
    print(controller_process_info.working_directory)  # -> '/scratch/my_project'
 
-   solver_process_info = app_utilities_stub.GetSolverProcessInfo(
+   solver_process_info = application_runtime_stub.GetSolverProcessInfo(
        application_runtime_pb2.GetSolverProcessInfoRequest(),
        metadata=metadata,
    )
@@ -178,7 +178,7 @@ solver session, or a specialised variant.
 .. code-block:: python
    :caption: Python
 
-   app_mode_response = app_utilities_stub.GetAppMode(
+   app_mode_response = application_runtime_stub.GetAppMode(
        application_runtime_pb2.GetAppModeRequest(),
        metadata=metadata,
    )
@@ -202,18 +202,18 @@ features for the session — the change persists until the server restarts.
 .. code-block:: python
    :caption: Python
 
-   beta_status_response = app_utilities_stub.IsBetaEnabled(
+   beta_status_response = application_runtime_stub.IsBetaEnabled(
        application_runtime_pb2.IsBetaEnabledRequest(),
        metadata=metadata,
    )
    print(isinstance(beta_status_response.is_beta_enabled, bool))  # -> True
 
-   app_utilities_stub.EnableBeta(
+   application_runtime_stub.EnableBeta(
        application_runtime_pb2.EnableBetaRequest(),
        metadata=metadata,
    )
 
-   beta_status_response = app_utilities_stub.IsBetaEnabled(
+   beta_status_response = application_runtime_stub.IsBetaEnabled(
        application_runtime_pb2.IsBetaEnabledRequest(),
        metadata=metadata,
    )
@@ -229,7 +229,7 @@ ends recording and returns the journal as a string (when no file name was given)
    :caption: Python
 
    # Start an in-memory journal (no file name).
-   start_response = app_utilities_stub.StartPythonJournal(
+   start_response = application_runtime_stub.StartPythonJournal(
        application_runtime_pb2.StartPythonJournalRequest(),
        metadata=metadata,
    )
@@ -237,7 +237,7 @@ ends recording and returns the journal as a string (when no file name was given)
    # --- perform simulation work here ---
 
    # Stop and retrieve the recorded journal string.
-   stop_response = app_utilities_stub.StopPythonJournal(
+   stop_response = application_runtime_stub.StopPythonJournal(
        application_runtime_pb2.StopPythonJournalRequest(
            journal_id=start_response.journal_id
        ),
@@ -246,4 +246,4 @@ ends recording and returns the journal as a string (when no file name was given)
    print(isinstance(stop_response.journal_str, str))  # -> True
 
 See :doc:`../../api/services/connection`, :doc:`../../api/services/health`,
-and :doc:`../../api/services/app_utilities` for the complete reference material.
+and :doc:`../../api/services/application_runtime` for the complete reference material.
