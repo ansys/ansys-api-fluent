@@ -4,4 +4,4 @@
 TextInterface
 =============
 
-.. include:: ../_generated/datamodel_tui.rst
+.. include:: ../_generated/text_interface.rst

@@ -4,4 +4,4 @@
 SchemeInterpreter
 =================
 
-.. include:: ../_generated/scheme_eval.rst
+.. include:: ../_generated/scheme_interpreter.rst
