@@ -28,6 +28,24 @@ service ApplicationRuntime {
   // Returns the current application mode (for example, meshing or solver).
   rpc GetAppMode(GetAppModeRequest) returns (GetAppModeResponse);
 
+  // Returns the current application dimension (for example, 2d or 3d).
+  rpc GetAppDimension(GetAppDimensionRequest) returns (GetAppDimensionResponse);
+
+  // Returns the current application precision (for example, single or double).
+  rpc GetAppPrecision(GetAppPrecisionRequest) returns (GetAppPrecisionResponse);
+
+  // Returns the current application processor count.
+  rpc GetAppProcessorCount(GetAppProcessorCountRequest) returns (GetAppProcessorCountResponse);
+
+  // Returns the current application UI mode.
+  rpc GetAppUIMode(GetAppUIModeRequest) returns (GetAppUIModeResponse);
+
+  // Returns the current application graphics driver.
+  rpc GetAppGraphicsDriver(GetAppGraphicsDriverRequest) returns (GetAppGraphicsDriverResponse);
+
+  // Returns the current application GPU configuration.
+  rpc GetAppGPUConfig(GetAppGPUConfigRequest) returns (GetAppGPUConfigResponse);
+
   // Starts a Python journal recording session.
   // If a journal file name is provided, the journal is written to that file.
   rpc StartPythonJournal(StartPythonJournalRequest) returns (StartPythonJournalResponse);
@@ -119,6 +137,82 @@ message GetAppModeRequest {
 message GetAppModeResponse {
   // Current application mode.
   AppMode app_mode = 1;
+}
+
+// Request to retrieve the application dimension.
+message GetAppDimensionRequest {
+}
+
+// Contains the application dimension.
+message GetAppDimensionResponse {
+  // Current application dimension.
+  AppDimension app_dimension = 1;
+}
+
+// Request to retrieve the application precision.
+message GetAppPrecisionRequest {
+}
+
+// Contains the application precision.
+message GetAppPrecisionResponse {
+  // Current application precision.
+  AppPrecision app_precision = 1;
+}
+
+// Request to retrieve the application processor count.
+message GetAppProcessorCountRequest {
+}
+
+// Contains the application processor count.
+message GetAppProcessorCountResponse {
+  // Current application processor count.
+  int64 app_processor_count = 1;
+}
+
+// Request to retrieve the application UI mode.
+message GetAppUIModeRequest {
+}
+
+// Contains the application UI mode.
+message GetAppUIModeResponse {
+  // Current application UI mode.
+  AppUIMode app_ui_mode = 1;
+}
+
+// Request to retrieve the application graphics driver.
+message GetAppGraphicsDriverRequest {
+}
+
+// Contains the application graphics driver details.
+message GetAppGraphicsDriverResponse {
+  oneof driver {
+    // Current Windows application graphics driver.
+    AppWindowsGraphicsDriver app_windows_graphics_driver = 1;
+
+    // Current Linux application graphics driver.
+    AppLinuxGraphicsDriver app_linux_graphics_driver = 2;
+  }
+}
+
+// Request to retrieve the application GPU configuration.
+message GetAppGPUConfigRequest {
+}
+
+// Contains the application GPU configuration details.
+message GetAppGPUConfigResponse {
+  oneof config {
+    // True when the GPUs are allocated automatically based on availability.
+    bool auto_allocate = 1;
+
+    // A list of specific GPU device IDs explicitly allocated to the application.
+    GpuIdList specific_gpu_ids = 2;
+  }
+}
+
+// Wrapper message to hold a collection of GPU device IDs.
+message GpuIdList {
+  // List of integer IDs corresponding to the allocated GPUs.
+  repeated int32 gpu_ids = 1;
 }
 
 // Initiates a Python journal recording session.
@@ -216,4 +310,74 @@ enum AppMode {
   APP_MODE_SOLVER_ICING = 3;
   // Solver aero mode.
   APP_MODE_SOLVER_AERO = 4;
+}
+
+// Application operating dimension.
+enum AppDimension {
+  // Unspecified application dimension.
+  APP_DIMENSION_UNSPECIFIED = 0;
+  // Two dimensional.
+  APP_DIMENSION_TWO = 1;
+  // Three dimensional.
+  APP_DIMENSION_THREE = 2;
+}
+
+// Application operating precision.
+enum AppPrecision {
+  // Unspecified application precision.
+  APP_PRECISION_UNSPECIFIED = 0;
+  // Single precision.
+  APP_PRECISION_SINGLE = 1;
+  // Double precision.
+  APP_PRECISION_DOUBLE = 2;
+}
+
+// Application UI mode.
+enum AppUIMode {
+  // Unspecified application UI mode.
+  APP_UI_MODE_UNSPECIFIED = 0;
+  // No gui or graphics UI mode.
+  APP_UI_MODE_NO_GUI_OR_GRAPHICS = 1;
+  // No graphics UI mode.
+  APP_UI_MODE_NO_GRAPHICS = 2;
+  // No gui UI mode.
+  APP_UI_MODE_NO_GUI = 3;
+  // Hidden gui UI mode.
+  APP_UI_MODE_HIDDEN_GUI = 4;
+  // Gui UI mode.
+  APP_UI_MODE_GUI = 5;
+}
+
+// Application graphics driver (Linux specific).
+enum AppLinuxGraphicsDriver {
+  // Unspecified graphics driver.
+  APP_LINUX_GRAPHICS_DRIVER_UNSPECIFIED = 0;
+  // Null graphics driver.
+  APP_LINUX_GRAPHICS_DRIVER_NULL = 1;
+  // X11 graphics driver.
+  APP_LINUX_GRAPHICS_DRIVER_X11 = 2;
+  // OpenGL2 graphics driver.
+  APP_LINUX_GRAPHICS_DRIVER_OPENGL2 = 3;
+  // OpenGL graphics driver.
+  APP_LINUX_GRAPHICS_DRIVER_OPENGL = 4;
+  // Automatically choose graphics driver.
+  APP_LINUX_GRAPHICS_DRIVER_AUTO = 5;
+}
+
+// Application graphics driver (Windows specific).
+enum AppWindowsGraphicsDriver {
+  // Unspecified graphics driver.
+  APP_WINDOWS_GRAPHICS_DRIVER_UNSPECIFIED = 0;
+  // Null graphics driver.
+  APP_WINDOWS_GRAPHICS_DRIVER_NULL = 1;
+  // MSW graphics driver.
+  APP_WINDOWS_GRAPHICS_DRIVER_MSW = 2;
+  // DX11 graphics driver.
+  APP_WINDOWS_GRAPHICS_DRIVER_DX11 = 3;
+  // OpenGL2 graphics driver.
+  APP_WINDOWS_GRAPHICS_DRIVER_OPENGL2 = 4;
+  // OpenGL graphics driver.
+  APP_WINDOWS_GRAPHICS_DRIVER_OPENGL = 5;
+  // Automatically choose graphics driver.
+  APP_WINDOWS_GRAPHICS_DRIVER_AUTO = 6;
 }
