@@ -5,7 +5,7 @@ Python client examples for the ``FieldData``, ``Reduction``, and
 ``SolutionVariable`` gRPC services.
 
 See :doc:`../../api/services/field_data`, :doc:`../../api/services/reduction`,
-and :doc:`../../api/services/svar`
+and :doc:`../../api/services/solution_variable`
 for these services' complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
@@ -17,7 +17,7 @@ for these services' complete reference material.
    from ansys.api.fluent.v1 import (
        field_data_pb2, field_data_pb2_grpc,
        reduction_pb2, reduction_pb2_grpc,
-       svar_pb2, svar_pb2_grpc,
+       solution_variable_pb2, solution_variable_grpc,
    )
 
    channel = grpc.insecure_channel("<server-address>")
@@ -25,7 +25,7 @@ for these services' complete reference material.
 
    field_data_stub = field_data_pb2_grpc.FieldDataStub(channel)
    reduction_stub = reduction_pb2_grpc.ReductionStub(channel)
-   solution_variable_stub = svar_pb2_grpc.SolutionVariableStub(channel)
+   solution_variable_stub = solution_variable_grpc.SolutionVariableStub(channel)
 
 Checking data availability
 ---------------------------
@@ -540,7 +540,7 @@ lists the solution variables (and their field types) available on a given zone.
    :caption: Python
 
    zones_info_response = solution_variable_stub.GetZonesInfo(
-       svar_pb2.GetZonesInfoRequest(),
+       solution_variable_pb2.GetZonesInfoRequest(),
        metadata=metadata,
    )
    # Inspect domains.
@@ -558,13 +558,13 @@ lists the solution variables (and their field types) available on a given zone.
    # Find the first cell zone.
    cell_zone = next(
        z for z in zones_info_response.zones_info
-       if z.thread_type == svar_pb2.THREAD_TYPE_CELL
+       if z.thread_type == solution_variable_pb2.THREAD_TYPE_CELL
    )
    print(cell_zone.zone_id)  # -> 2
 
    # List solution variables on that zone.
    svar_info_response = solution_variable_stub.GetSolutionVariableInfo(
-       svar_pb2.GetSolutionVariableInfoRequest(
+       solution_variable_pb2.GetSolutionVariableInfoRequest(
            domain_id=1,
            zone_id=cell_zone.zone_id,
        ),
@@ -587,7 +587,7 @@ chunk is always a ``payload_info`` frame describing size and type, followed by
    from ansys.api.fluent.v1 import field_data_pb2 as fd_pb2
 
    stream = solution_variable_stub.GetSolutionVariableData(
-       svar_pb2.GetSolutionVariableDataRequest(
+       solution_variable_pb2.GetSolutionVariableDataRequest(
            chunk_size=256 * 1024,
            provide_bytes_stream=False,
            name="SV_P",
@@ -624,11 +624,11 @@ frame, then a ``payload_info`` frame, then one or more payload frames.
 
    def _set_stream(name, domain_id, zone_id, data, chunk_size=256 * 1024):
        """Yield the header, info, and payload messages for a write call."""
-       yield svar_pb2.SetSolutionVariableDataRequest(
-           header=svar_pb2.SolutionVariableHeader(name=name, domain_id=domain_id)
+       yield solution_variable_pb2.SetSolutionVariableDataRequest(
+           header=solution_variable_pb2.SolutionVariableHeader(name=name, domain_id=domain_id)
        )
-       yield svar_pb2.SetSolutionVariableDataRequest(
-           payload_info=svar_pb2.Info(
+       yield solution_variable_pb2.SetSolutionVariableDataRequest(
+           payload_info=solution_variable_pb2.Info(
                field_type=fd_pb2.FIELD_TYPE_DOUBLE_ARRAY,
                field_size=len(data),
                zone=zone_id,
@@ -638,8 +638,8 @@ frame, then a ``payload_info`` frame, then one or more payload frames.
        max_per_chunk = max(1, chunk_size // item_size)
        for start in range(0, len(data), max_per_chunk):
            chunk = data[start : start + max_per_chunk]
-           yield svar_pb2.SetSolutionVariableDataRequest(
-               payload=svar_pb2.Payload(
+           yield solution_variable_pb2.SetSolutionVariableDataRequest(
+               payload=solution_variable_pb2.Payload(
                    double_payload=fd_pb2.DoublePayload(payloads=chunk)
                )
            )
@@ -649,7 +649,7 @@ frame, then a ``payload_info`` frame, then one or more payload frames.
        _set_stream("SV_P", domain_id=1, zone_id=cell_zone.zone_id, data=values),
        metadata=metadata,
    )
-   print(isinstance(set_svar_response, svar_pb2.SetSolutionVariableDataResponse))  # -> True
+   print(isinstance(set_svar_response, solution_variable_pb2.SetSolutionVariableDataResponse))  # -> True
 
 See :doc:`../../api/services/field_data`, :doc:`../../api/services/reduction`,
-and :doc:`../../api/services/svar` for the complete reference material.
+and :doc:`../../api/services/solution_variable` for the complete reference material.
