@@ -136,7 +136,7 @@ message GetModeRequest {
 // Contains the application mode.
 message GetModeResponse {
   // Current application mode.
-  Mode app_mode = 1;
+  Mode mode = 1;
 }
 
 // Request to retrieve the application dimension.
@@ -146,7 +146,7 @@ message GetDimensionRequest {
 // Contains the application dimension.
 message GetDimensionResponse {
   // Current application dimension.
-  Dimension app_dimension = 1;
+  Dimension dimension = 1;
 }
 
 // Request to retrieve the application precision.
@@ -156,7 +156,7 @@ message GetPrecisionRequest {
 // Contains the application precision.
 message GetPrecisionResponse {
   // Current application precision.
-  Precision app_precision = 1;
+  Precision precision = 1;
 }
 
 // Request to retrieve the application processor count.
@@ -166,7 +166,7 @@ message GetProcessorCountRequest {
 // Contains the application processor count.
 message GetProcessorCountResponse {
   // Current application processor count.
-  int64 app_processor_count = 1;
+  int64 processor_count = 1;
 }
 
 // Request to retrieve the application UI mode.
@@ -176,7 +176,7 @@ message GetUIModeRequest {
 // Contains the application UI mode.
 message GetUIModeResponse {
   // Current application UI mode.
-  UIMode app_ui_mode = 1;
+  UIMode ui_mode = 1;
 }
 
 // Request to retrieve the application graphics driver.
@@ -187,10 +187,10 @@ message GetGraphicsDriverRequest {
 message GetGraphicsDriverResponse {
   oneof driver {
     // Current Windows application graphics driver.
-    WindowsGraphicsDriver app_windows_graphics_driver = 1;
+    WindowsGraphicsDriver windows_graphics_driver = 1;
 
     // Current Linux application graphics driver.
-    LinuxGraphicsDriver app_linux_graphics_driver = 2;
+    LinuxGraphicsDriver linux_graphics_driver = 2;
   }
 }
 
