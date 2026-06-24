@@ -4,4 +4,4 @@
 SolutionVariable
 ================
 
-.. include:: ../_generated/svar.rst
+.. include:: ../_generated/solution_variable.rst
