@@ -81,8 +81,8 @@ def test_get_solver_process_info_returns_response(stub, grpc_channel_and_metadat
 def test_get_app_mode_returns_valid_mode(stub, grpc_channel_and_metadata):
     """App mode must be one of the known enum values."""
     _, metadata = grpc_channel_and_metadata
-    resp = stub.GetAppMode(
-        application_runtime_pb2.GetAppModeRequest(), metadata=metadata
+    resp = stub.GetMode(
+        application_runtime_pb2.GetModeRequest(), metadata=metadata
     )
     assert resp.mode in _VALID_APP_MODES
     assert resp.mode != application_runtime_pb2.MODE_UNSPECIFIED
