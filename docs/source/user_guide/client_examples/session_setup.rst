@@ -5,7 +5,7 @@ Python client examples for the ``Connection``, ``Health``, and
 ``ApplicationRuntime`` gRPC services.
 
 See :doc:`../../api/services/connection`, :doc:`../../api/services/health`,
-and :doc:`../../api/services/app_utilities`
+and :doc:`../../api/services/application_runtime`
 for these services' complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
@@ -17,14 +17,14 @@ for these services' complete reference material.
    from ansys.api.fluent.v1 import (
        connection_pb2, connection_pb2_grpc,
        health_pb2, health_pb2_grpc,
-       app_utilities_pb2, app_utilities_pb2_grpc,
+       application_runtime_pb2, application_runtime_pb2_grpc,
    )
 
    channel = grpc.insecure_channel("<server-address>")
    metadata = [("password", "<password>")]
    connection_stub = connection_pb2_grpc.ConnectionStub(channel)
    health_stub = health_pb2_grpc.HealthStub(channel)
-   app_utilities_stub = app_utilities_pb2_grpc.ApplicationRuntimeStub(channel)
+   application_runtime_stub = application_runtime_pb2_grpc.ApplicationRuntimeStub(channel)
 
 .. note::
 
@@ -119,8 +119,8 @@ running Fluent build.
 .. code-block:: python
    :caption: Python
 
-   version_response = app_utilities_stub.GetProductVersion(
-       app_utilities_pb2.GetProductVersionRequest(),
+   version_response = application_runtime_stub.GetProductVersion(
+       application_runtime_pb2.GetProductVersionRequest(),
        metadata=metadata,
    )
    print(version_response.major)  # -> 27
@@ -136,8 +136,8 @@ and branch of the running binary.
 .. code-block:: python
    :caption: Python
 
-   build_info = app_utilities_stub.GetBuildInfo(
-       app_utilities_pb2.GetBuildInfoRequest(),
+   build_info = application_runtime_stub.GetBuildInfo(
+       application_runtime_pb2.GetBuildInfoRequest(),
        metadata=metadata,
    )
    print(len(build_info.build_time) > 0)     # -> True  (e.g. '2025-01-15T10:30:00')
@@ -154,16 +154,16 @@ PID, and working directory of the respective Fluent processes.
 .. code-block:: python
    :caption: Python
 
-   controller_process_info = app_utilities_stub.GetControllerProcessInfo(
-       app_utilities_pb2.GetControllerProcessInfoRequest(),
+   controller_process_info = application_runtime_stub.GetControllerProcessInfo(
+       application_runtime_pb2.GetControllerProcessInfoRequest(),
        metadata=metadata,
    )
    print(controller_process_info.hostname)           # -> 'compute-node-01'
    print(controller_process_info.process_id)         # -> 12345  (an integer PID)
    print(controller_process_info.working_directory)  # -> '/scratch/my_project'
 
-   solver_process_info = app_utilities_stub.GetSolverProcessInfo(
-       app_utilities_pb2.GetSolverProcessInfoRequest(),
+   solver_process_info = application_runtime_stub.GetSolverProcessInfo(
+       application_runtime_pb2.GetSolverProcessInfoRequest(),
        metadata=metadata,
    )
    print(solver_process_info.process_id > 0)        # -> True
@@ -178,18 +178,18 @@ solver session, or a specialised variant.
 .. code-block:: python
    :caption: Python
 
-   app_mode_response = app_utilities_stub.GetAppMode(
-       app_utilities_pb2.GetAppModeRequest(),
+   app_mode_response = application_runtime_stub.GetAppMode(
+       application_runtime_pb2.GetAppModeRequest(),
        metadata=metadata,
    )
    print(app_mode_response.app_mode)  # -> APP_MODE_SOLVER  (or APP_MODE_MESHING, etc.)
 
    valid_modes = {
-       app_utilities_pb2.APP_MODE_UNSPECIFIED,
-       app_utilities_pb2.APP_MODE_MESHING,
-       app_utilities_pb2.APP_MODE_SOLVER,
-       app_utilities_pb2.APP_MODE_SOLVER_ICING,
-       app_utilities_pb2.APP_MODE_SOLVER_AERO,
+       application_runtime_pb2.APP_MODE_UNSPECIFIED,
+       application_runtime_pb2.APP_MODE_MESHING,
+       application_runtime_pb2.APP_MODE_SOLVER,
+       application_runtime_pb2.APP_MODE_SOLVER_ICING,
+       application_runtime_pb2.APP_MODE_SOLVER_AERO,
    }
    print(app_mode_response.app_mode in valid_modes)  # -> True
 
@@ -202,19 +202,19 @@ features for the session — the change persists until the server restarts.
 .. code-block:: python
    :caption: Python
 
-   beta_status_response = app_utilities_stub.IsBetaEnabled(
-       app_utilities_pb2.IsBetaEnabledRequest(),
+   beta_status_response = application_runtime_stub.IsBetaEnabled(
+       application_runtime_pb2.IsBetaEnabledRequest(),
        metadata=metadata,
    )
    print(isinstance(beta_status_response.is_beta_enabled, bool))  # -> True
 
-   app_utilities_stub.EnableBeta(
-       app_utilities_pb2.EnableBetaRequest(),
+   application_runtime_stub.EnableBeta(
+       application_runtime_pb2.EnableBetaRequest(),
        metadata=metadata,
    )
 
-   beta_status_response = app_utilities_stub.IsBetaEnabled(
-       app_utilities_pb2.IsBetaEnabledRequest(),
+   beta_status_response = application_runtime_stub.IsBetaEnabled(
+       application_runtime_pb2.IsBetaEnabledRequest(),
        metadata=metadata,
    )
    print(beta_status_response.is_beta_enabled)  # -> True
@@ -229,16 +229,16 @@ ends recording and returns the journal as a string (when no file name was given)
    :caption: Python
 
    # Start an in-memory journal (no file name).
-   start_response = app_utilities_stub.StartPythonJournal(
-       app_utilities_pb2.StartPythonJournalRequest(),
+   start_response = application_runtime_stub.StartPythonJournal(
+       application_runtime_pb2.StartPythonJournalRequest(),
        metadata=metadata,
    )
 
    # --- perform simulation work here ---
 
    # Stop and retrieve the recorded journal string.
-   stop_response = app_utilities_stub.StopPythonJournal(
-       app_utilities_pb2.StopPythonJournalRequest(
+   stop_response = application_runtime_stub.StopPythonJournal(
+       application_runtime_pb2.StopPythonJournalRequest(
            journal_id=start_response.journal_id
        ),
        metadata=metadata,
@@ -246,4 +246,4 @@ ends recording and returns the journal as a string (when no file name was given)
    print(isinstance(stop_response.journal_str, str))  # -> True
 
 See :doc:`../../api/services/connection`, :doc:`../../api/services/health`,
-and :doc:`../../api/services/app_utilities` for the complete reference material.
+and :doc:`../../api/services/application_runtime` for the complete reference material.
