@@ -18,10 +18,10 @@ with the messages and enums declared in the same proto file.
      - Proto file
    * - :doc:`Health <health>`
      - ``health.proto``
-   * - :doc:`ApplicationRuntime <app_utilities>`
-     - ``app_utilities.proto``
-   * - :doc:`DataModel <datamodel_se>`
-     - ``datamodel_se.proto``
+   * - :doc:`ApplicationRuntime <application_runtime>`
+     - ``application_runtime.proto``
+   * - :doc:`DataModel <object_model>`
+     - ``object_model.proto``
    * - :doc:`Settings <settings>`
      - ``settings.proto``
    * - :doc:`Events <events>`
@@ -32,8 +32,8 @@ with the messages and enums declared in the same proto file.
      - ``monitor.proto``
    * - :doc:`Reduction <reduction>`
      - ``reduction.proto``
-   * - :doc:`SolutionVariable <svar>`
-     - ``svar.proto``
+   * - :doc:`SolutionVariable <solution_variable>`
+     - ``solution_variable.proto``
    * - :doc:`Transcript <transcript>`
      - ``transcript.proto``
    * - :doc:`Connection <connection>`
@@ -44,13 +44,13 @@ with the messages and enums declared in the same proto file.
    :maxdepth: 1
 
    health
-   app_utilities
-   datamodel_se
+   application_runtime
+   object_model
    settings
    events
    field_data
    monitor
    reduction
-   svar
+   solution_variable
    transcript
    connection
