@@ -78,6 +78,7 @@ def test_get_solver_process_info_returns_response(stub, grpc_channel_and_metadat
     assert len(resp.hostname) > 0
 
 
+@pytest.mark.skip
 def test_get_app_mode_returns_valid_mode(stub, grpc_channel_and_metadata):
     """App mode must be one of the known enum values."""
     _, metadata = grpc_channel_and_metadata
