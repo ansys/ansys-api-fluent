@@ -1,4 +1,4 @@
 pytest
 pytest-timeout
 grpcio
-ansys-fluent-core==0.40.dev1
+ansys-fluent-core==0.41.dev1
