@@ -106,8 +106,21 @@ message Schema {
   bool user_creatable = 10;
   // Queries available for the current object.
   repeated SchemaMap queries = 11;
-  // Additional attributes for the current object.
-  map<string, Value> attrs = 12;
+
+  string return_type = 12;                 // Return type of the current command or query object.
+  string deprecated_version = 13;          // Version in which the current object was deprecated.
+  string api_exposure_level = 14;          // API exposure level of the current object.
+  repeated string child_aliases = 15;      // Aliases for child objects of the current object.
+  repeated string command_aliases = 16;    // Aliases for commands of the current object.
+  repeated string query_aliases = 17;      // Aliases for queries of the current object.
+  repeated string arguments_aliases = 18;  // Aliases for arguments of the current object.
+  OptionalAttrs optional_attrs = 19;       // Optional information for the current object, retrieved based on GetSchemaRequest.optional_attrs.
+}
+
+// OptionalAttrs contains optional information for a settings object, as requested in GetSchemaRequest.optional_attrs.
+message OptionalAttrs {
+  repeated string allowed_values = 1;  // List of allowed values for the current object.
+  bool has_migration_adapter = 2;      // True if the current object has a migration adapter.
 }
 
 // GetSchemaRequest is the request message for GetSchema.
