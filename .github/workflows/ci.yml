@@ -146,8 +146,9 @@ jobs:
           path: docs/_build/html/
           retention-days: 7
   
-  deploy-docs:
+  deploy-docs-release:
     name: "Upload release documentation"
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: write
