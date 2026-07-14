@@ -15,6 +15,7 @@ env:
   PYFLUENT_LAUNCH_CONTAINER: '1'
   PYFLUENT_LAUNCH_FLUENT_TIMEOUT: '180'
   ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
+  DOCUMENTATION_CNAME: 'ansys-api-fluent.fluent.docs.pyansys.com'
 
 jobs:
   pre-commit:
@@ -143,7 +144,23 @@ jobs:
         with:
           name: ansys-api-fluent-docs
           path: docs/_build/html/
-          retention-days: 7  
+          retention-days: 7
+  
+  deploy-docs:
+    name: "Upload release documentation"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: [ docs ]
+    steps:
+      - name: "Deploy the stable documentation"
+        uses: ansys/actions/doc-deploy-stable@121c9de9bee9692173780696d4a39964f20b9cfa3 # v10.1.5
+        with:
+          doc-artifact-name: "ansys-api-fluent-docs"
+          cname: ${{ env.DOCUMENTATION_CNAME }}
+          token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
+          bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
+          bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}
 
   release:
     name: Release package to GitHub
