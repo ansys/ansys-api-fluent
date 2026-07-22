@@ -14,7 +14,13 @@ for this service's complete reference material.
    import grpc
    from ansys.api.fluent.v1 import settings_pb2, settings_pb2_grpc
 
-   channel = grpc.insecure_channel("<server-address>")
+   channel = grpc.insecure_channel(
+       "<server-address>",
+       options=[
+           ("grpc.max_receive_message_length", 32 * 1024 * 1024),
+           ("grpc.max_send_message_length", 32 * 1024 * 1024),
+       ],
+   )
    metadata = [("password", "<password>")]
    stub = settings_pb2_grpc.SettingsStub(channel)
 
