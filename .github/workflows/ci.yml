@@ -148,6 +148,7 @@ jobs:
   
   deploy-docs-release:
     name: "Upload developer documentation to GitHub Pages"
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
