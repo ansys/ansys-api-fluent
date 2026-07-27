@@ -15,7 +15,7 @@ env:
   PYFLUENT_LAUNCH_CONTAINER: '1'
   PYFLUENT_LAUNCH_FLUENT_TIMEOUT: '180'
   ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
-  DOCUMENTATION_CNAME: 'ansys-api-fluent.fluent.docs.pyansys.com'
+  DOCUMENTATION_CNAME: 'https://ansys-internal.github.io/ansys-api-fluent/'
 
 jobs:
   pre-commit:
@@ -148,7 +148,6 @@ jobs:
   
   deploy-docs-release:
     name: "Upload release documentation"
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: write
