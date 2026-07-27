@@ -147,7 +147,7 @@ jobs:
           retention-days: 7
   
   deploy-docs-release:
-    name: "Upload release documentation"
+    name: "Upload developer documentation to GitHub Pages"
     runs-on: ubuntu-latest
     permissions:
       contents: write
