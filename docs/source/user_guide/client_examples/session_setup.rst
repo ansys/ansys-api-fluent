@@ -94,7 +94,7 @@ to confirm the server accepted the version and password.
    print(hasattr(first_response, "error_code"))  # -> True
    print(first_response.error_code)              # -> CONNECTION_ERROR_NONE
 
-   # Connecting without specifying a version is also accepted.
+   # Connecting without specifying a version.
    stream = connection_stub.Connect(
        connection_pb2.ConnectRequest(
            request_type=connection_pb2.ConnectRequest.REQUEST_TYPE_CONNECT,
@@ -104,11 +104,7 @@ to confirm the server accepted the version and password.
    )
    first_response = next(iter(stream))
    stream.cancel()
-   print(first_response.error_code in {
-       connection_pb2.CONNECTION_ERROR_NONE,
-       connection_pb2.CONNECTION_ERROR_UNSPECIFIED,
-       connection_pb2.CONNECTION_ERROR_VERSION_MISMATCH,
-   })  # -> True
+   print(first_response.error_code == connection_pb2.CONNECTION_ERROR_UNKNOWN)  # -> True
 
 Reading the product version
 -----------------------------
