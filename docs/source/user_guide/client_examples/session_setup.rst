@@ -94,7 +94,7 @@ to confirm the server accepted the version and password.
    print(hasattr(first_response, "error_code"))  # -> True
    print(first_response.error_code)              # -> CONNECTION_ERROR_NONE
 
-   # Connecting without specifying a version is also accepted.
+   # Connecting without specifying a version.
    stream = connection_stub.Connect(
        connection_pb2.ConnectRequest(
            request_type=connection_pb2.ConnectRequest.REQUEST_TYPE_CONNECT,
@@ -104,11 +104,7 @@ to confirm the server accepted the version and password.
    )
    first_response = next(iter(stream))
    stream.cancel()
-   print(first_response.error_code in {
-       connection_pb2.CONNECTION_ERROR_NONE,
-       connection_pb2.CONNECTION_ERROR_UNSPECIFIED,
-       connection_pb2.CONNECTION_ERROR_VERSION_MISMATCH,
-   })  # -> True
+   print(first_response.error_code == connection_pb2.CONNECTION_ERROR_UNKNOWN)  # -> True
 
 Reading the product version
 -----------------------------
@@ -172,26 +168,26 @@ PID, and working directory of the respective Fluent processes.
 Reading the application mode
 ------------------------------
 
-``GetAppMode`` identifies whether Fluent is running as a meshing session,
+``GetMode`` identifies whether Fluent is running as a meshing session,
 solver session, or a specialised variant.
 
 .. code-block:: python
    :caption: Python
 
-   app_mode_response = application_runtime_stub.GetAppMode(
-       application_runtime_pb2.GetAppModeRequest(),
+   app_mode_response = application_runtime_stub.GetMode(
+       application_runtime_pb2.GetModeRequest(),
        metadata=metadata,
    )
-   print(app_mode_response.app_mode)  # -> APP_MODE_SOLVER  (or APP_MODE_MESHING, etc.)
+   print(app_mode_response.mode)  # -> MODE_SOLVER  (or MODE_MESHING, etc.)
 
    valid_modes = {
-       application_runtime_pb2.APP_MODE_UNSPECIFIED,
-       application_runtime_pb2.APP_MODE_MESHING,
-       application_runtime_pb2.APP_MODE_SOLVER,
-       application_runtime_pb2.APP_MODE_SOLVER_ICING,
-       application_runtime_pb2.APP_MODE_SOLVER_AERO,
+       application_runtime_pb2.MODE_UNSPECIFIED,
+       application_runtime_pb2.MODE_MESHING,
+       application_runtime_pb2.MODE_SOLVER,
+       application_runtime_pb2.MODE_SOLVER_ICING,
+       application_runtime_pb2.MODE_SOLVER_AERO,
    }
-   print(app_mode_response.app_mode in valid_modes)  # -> True
+   print(app_mode_response.mode in valid_modes)  # -> True
 
 Enabling beta features
 -----------------------
