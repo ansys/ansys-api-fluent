@@ -17,7 +17,7 @@ for these services' complete reference material.
    from ansys.api.fluent.v1 import (
        field_data_pb2, field_data_pb2_grpc,
        reduction_pb2, reduction_pb2_grpc,
-       solution_variable_pb2, solution_variable_grpc,
+       solution_variable_pb2, solution_variable_pb2_grpc,
    )
 
    channel = grpc.insecure_channel("<server-address>")
@@ -25,7 +25,7 @@ for these services' complete reference material.
 
    field_data_stub = field_data_pb2_grpc.FieldDataStub(channel)
    reduction_stub = reduction_pb2_grpc.ReductionStub(channel)
-   solution_variable_stub = solution_variable_grpc.SolutionVariableStub(channel)
+    solution_variable_stub = solution_variable_pb2_grpc.SolutionVariableStub(channel)
 
 Checking data availability
 ---------------------------
