@@ -14,7 +14,15 @@ for this service's complete reference material.
    import grpc
    from ansys.api.fluent.v1 import settings_pb2, settings_pb2_grpc
 
-   channel = grpc.insecure_channel("<server-address>")
+   channel = grpc.insecure_channel(
+       "<server-address>",
+       options=[
+           # Defaults are 4 MiB receive / unlimited send. Raise the receive
+           # cap so large responses (e.g. GetSchema) don't fail with 
+           # RESOURCE_EXHAUSTED.       
+           ("grpc.max_receive_message_length", 32 * 1024 * 1024),
+       ],
+   )
    metadata = [("password", "<password>")]
    stub = settings_pb2_grpc.SettingsStub(channel)
 
