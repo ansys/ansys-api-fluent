@@ -97,9 +97,9 @@ with the appropriate gRPC plug-in against the files in ``ansys/api/fluent/v1/``.
          protoc \
              -I ansys/api/fluent/v1 \
              --go_out=<out> \
-             --go_opt=Mansys/api/fluent/v1/health.proto=github.com/ansys/ansys-api-fluent/ansys/api/fluent/v1 \
+             --go_opt=Mhealth.proto=github.com/ansys/ansys-api-fluent/ansys/api/fluent/v1 \
              --go-grpc_out=<out> \
-             --go-grpc_opt=Mansys/api/fluent/v1/health.proto=github.com/ansys/ansys-api-fluent/ansys/api/fluent/v1 \
+             --go-grpc_opt=Mhealth.proto=github.com/ansys/ansys-api-fluent/ansys/api/fluent/v1 \
              ansys/api/fluent/v1/health.proto
 
    .. tab:: Java
