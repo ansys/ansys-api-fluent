@@ -82,6 +82,12 @@ message SchemaMap {
   Schema value = 2;  // The schema information for this entry.
 }
 
+// String-String pair.
+message StringPair {
+  string key = 1;    // The name of the entry.
+  string value = 2;  // The value for this entry.
+}
+
 // Schema contains the static API description of a settings object, including its type, children, commands, and queries.
 message Schema {
   // Type identifier for the current object (for example, "group" or "named-object").
@@ -106,14 +112,40 @@ message Schema {
   bool user_creatable = 10;
   // Queries available for the current object.
   repeated SchemaMap queries = 11;
-  // Additional attributes for the current object.
-  map<string, Value> attrs = 12;
+  // Return type of the object.
+  string return_type = 12;
+  // Version in which the object was deprecated.
+  string deprecated_version = 13;
+  // API exposure level of the object.
+  string api_exposure_level = 14;
+  // Aliases for child objects of the current object.
+  repeated StringPair child_aliases = 15;
+  // Aliases for commands of the current object.
+  repeated StringPair command_aliases = 16;
+  // Aliases for queries of the current object.
+  repeated StringPair query_aliases = 17;
+  // Aliases for arguments of the current object.
+  repeated StringPair arguments_aliases = 18;
+  // Purpose/category specification for file settings.
+  string file_purpose = 19;
+  // Optional information for the current object, retrieved based on GetSchemaRequest.optional_attrs.
+  OptionalAttrs optional_attrs = 20;
+}
+
+// OptionalAttrs contains optional information for a settings object, as requested in GetSchemaRequest.optional_attrs.
+message OptionalAttrs {
+  repeated string allowed_values = 1;  // List of allowed values for the current object.
+  bool has_migration_adapter = 2;      // True if the current object has a migration adapter.
 }
 
 // GetSchemaRequest is the request message for GetSchema.
 message GetSchemaRequest {
-  string root = 1;                     // Root path of the settings tree whose schema will be returned.
-  repeated string optional_attrs = 2;  // Optional attributes to include in the returned schema.
+  string root = 1;  // Root path of the settings tree whose schema will be returned.
+
+  // Optional attributes to include in the returned schema.
+  // Valid values correspond to the field names of the OptionalAttrs message
+  // (e.g., "allowed_values", "has_migration_adapter").
+  repeated string optional_attrs = 2;
 }
 
 // GetSchemaResponse is the response message for GetSchema.
