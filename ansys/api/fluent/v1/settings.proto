@@ -83,7 +83,7 @@ message SchemaMap {
 }
 
 // String-String pair.
-message StringsPair {
+message StringPair {
   string key = 1;    // The name of the entry.
   string value = 2;  // The value for this entry.
 }
@@ -119,13 +119,13 @@ message Schema {
   // API exposure level of the object.
   string api_exposure_level = 14;
   // Aliases for child objects of the current object.
-  repeated StringsPair child_aliases = 15;
+  repeated StringPair child_aliases = 15;
   // Aliases for commands of the current object.
-  repeated StringsPair command_aliases = 16;
+  repeated StringPair command_aliases = 16;
   // Aliases for queries of the current object.
-  repeated StringsPair query_aliases = 17;
+  repeated StringPair query_aliases = 17;
   // Aliases for arguments of the current object.
-  repeated StringsPair arguments_aliases = 18;
+  repeated StringPair arguments_aliases = 18;
   // Purpose/category specification for file settings.
   string file_purpose = 19;
   // Optional information for the current object, retrieved based on GetSchemaRequest.optional_attrs.
