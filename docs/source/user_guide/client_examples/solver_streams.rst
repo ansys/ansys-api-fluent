@@ -10,6 +10,22 @@ for these services' complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
 
+.. testsetup:: *
+
+   import unittest, grpc
+   from ansys.api.fluent.v1 import (
+       events_pb2, events_pb2_grpc,
+       monitor_pb2, monitor_pb2_grpc,
+       transcript_pb2, transcript_pb2_grpc,
+   )
+   if _solver_channel is None:
+       raise unittest.SkipTest("No Fluent server available")
+   channel = _solver_channel
+   metadata = _solver_metadata
+   transcript_stub = transcript_pb2_grpc.TranscriptStub(channel)
+   events_stub = events_pb2_grpc.EventsStub(channel)
+   monitor_stub = monitor_pb2_grpc.MonitorStub(channel)
+
 .. code-block:: python
    :caption: Python
 
@@ -33,14 +49,13 @@ Opening a transcript stream
 ``Transcript.BeginStreaming`` opens a server-streaming call; each response
 carries one line (or chunk) of Fluent console output in ``resp.transcript``.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    stream = transcript_stub.BeginStreaming(
        transcript_pb2.TranscriptRequest(),
        metadata=metadata,
    )
-   print(stream is not None)  # -> True
+   assert stream is not None
    stream.cancel()
 
 Opening two independent transcript streams
@@ -49,8 +64,7 @@ Opening two independent transcript streams
 Multiple simultaneous ``BeginStreaming`` calls return independent stream
 objects and can be cancelled separately.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    stream1 = transcript_stub.BeginStreaming(
        transcript_pb2.TranscriptRequest(), metadata=metadata
@@ -58,7 +72,7 @@ objects and can be cancelled separately.
    stream2 = transcript_stub.BeginStreaming(
        transcript_pb2.TranscriptRequest(), metadata=metadata
    )
-   print(stream1 is not stream2)  # -> True
+   assert stream1 is not stream2
    stream1.cancel()
    stream2.cancel()
 
@@ -68,8 +82,7 @@ Cancelling a transcript stream
 Cancelling a stream and then iterating it raises ``grpc.StatusCode.CANCELLED``
 or ``StopIteration`` — both are normal.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    stream = transcript_stub.BeginStreaming(
        transcript_pb2.TranscriptRequest(),
@@ -80,7 +93,7 @@ or ``StopIteration`` — both are normal.
    try:
        next(iter(stream))
    except grpc.RpcError as e:
-       print(e.code() == grpc.StatusCode.CANCELLED)  # -> True
+       assert e.code() == grpc.StatusCode.CANCELLED
    except StopIteration:
        pass  # also acceptable
 
@@ -90,14 +103,13 @@ Opening an event stream
 ``Events.BeginStreaming`` opens a server-streaming call; each response carries
 exactly one event in its ``oneof as`` union.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    stream = events_stub.BeginStreaming(
        events_pb2.BeginStreamingRequest(),
        metadata=metadata,
    )
-   print(stream is not None)  # -> True
+   assert stream is not None
    stream.cancel()
 
 Decoding event types
@@ -107,7 +119,7 @@ Call ``WhichOneof("as")`` on each response to identify the event and then
 access its payload fields.
 
 .. code-block:: python
-   :caption: Python
+   :caption: Event decoding pattern (illustrative)
 
    valid_event_fields = {
        "pre_read_case_event", "case_read_event",
@@ -152,8 +164,7 @@ Registering a pause trigger
 ``PauseSolveFor`` registers a pause that fires after each iteration or time
 step; it returns a unique ``registration_id``.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    pause_registration = events_stub.PauseSolveFor(
        events_pb2.PauseSolveForRequest(
@@ -161,8 +172,8 @@ step; it returns a unique ``registration_id``.
        ),
        metadata=metadata,
    )
-   print(isinstance(pause_registration.registration_id, int))  # -> True
-   print(pause_registration.registration_id > 0)               # -> True
+   assert isinstance(pause_registration.registration_id, int)
+   assert (pause_registration.registration_id > 0)
 
    # Register a second trigger — IDs must be distinct.
    second_pause_registration = events_stub.PauseSolveFor(
@@ -171,7 +182,7 @@ step; it returns a unique ``registration_id``.
        ),
        metadata=metadata,
    )
-   print(pause_registration.registration_id != second_pause_registration.registration_id)  # -> True
+   assert pause_registration.registration_id != second_pause_registration.registration_id
 
 Registering a time-step pause trigger
 ---------------------------------------
@@ -179,8 +190,7 @@ Registering a time-step pause trigger
 ``SOLUTION_EVENT_TIME_STEP`` fires at the end of each time step in a
 transient simulation.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    timestep_pause_registration = events_stub.PauseSolveFor(
        events_pb2.PauseSolveForRequest(
@@ -188,15 +198,14 @@ transient simulation.
        ),
        metadata=metadata,
    )
-   print(timestep_pause_registration.registration_id > 0)  # -> True
+   assert timestep_pause_registration.registration_id > 0
 
 Cancelling a pause registration
 ---------------------------------
 
 ``CancelPauseSolve`` removes a previously registered pause trigger.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    cancel_response = events_stub.CancelPauseSolve(
        events_pb2.CancelPauseSolveRequest(
@@ -204,7 +213,7 @@ Cancelling a pause registration
        ),
        metadata=metadata,
    )
-   print(cancel_response is not None)  # -> True
+   assert cancel_response is not None
 
    # Clean up the other registrations.
    events_stub.CancelPauseSolve(
@@ -222,8 +231,7 @@ Resuming the solver
 ``ResumeSolve`` unpauses a session that was suspended by a ``PauseSolveFor``
 registration; passing an unknown ID is accepted without raising an error.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    events_stub.ResumeSolve(
        events_pb2.ResumeSolveRequest(registration_id=999999999),
@@ -264,7 +272,7 @@ Validating monitor set metadata
 Every monitor set must have a non-empty name, at least one monitor entry,
 and a non-negative frequency; ``unit_info.factor`` is non-negative when set.
 
-.. code-block:: python
+.. testcode-block:: python
    :caption: Python
 
    # Two consecutive calls must return identical monitor set names.
@@ -291,14 +299,13 @@ Opening a monitor stream
 ``Monitor.BeginStreaming`` streams live y-axis samples; each response contains
 an ``XAxisData`` point and one or more ``MonitorData`` entries.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    stream = monitor_stub.BeginStreaming(
        monitor_pb2.StreamingRequest(),
        metadata=metadata,
    )
-   print(stream is not None)  # -> True
+   assert stream is not None
    stream.cancel()
 
 Reading monitor samples
@@ -337,8 +344,7 @@ Filtering the monitor stream
 Pass a ``MonitorFilter`` with ``x_axis_type`` to receive only iteration- or
 time-based samples.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    stream = monitor_stub.BeginStreaming(
        monitor_pb2.StreamingRequest(
@@ -350,7 +356,7 @@ time-based samples.
        ),
        metadata=metadata,
    )
-   print(stream is not None)  # -> True
+   assert stream is not None
    stream.cancel()
 
 Cancelling a monitor stream
@@ -359,8 +365,7 @@ Cancelling a monitor stream
 Cancelling a monitor stream and then iterating it raises
 ``grpc.StatusCode.CANCELLED`` or ``StopIteration`` — both are normal.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    stream = monitor_stub.BeginStreaming(
        monitor_pb2.StreamingRequest(),
@@ -371,7 +376,7 @@ Cancelling a monitor stream and then iterating it raises
    try:
        next(iter(stream))
    except grpc.RpcError as e:
-       print(e.code() == grpc.StatusCode.CANCELLED)  # -> True
+       assert e.code() == grpc.StatusCode.CANCELLED
    except StopIteration:
        pass  # also acceptable
 
