@@ -5,6 +5,8 @@ All tests share the single Fluent solver session started by the
 
 A mixing-elbow case (mixing_elbow.cas.h5) is assumed to be loaded.
 """
+import os
+os.environ["PYFLUENT_FLUENT_ROOT"] = r"D:\ANSYSDev\vNNN\fluent"
 
 import grpc
 import pytest
@@ -21,7 +23,12 @@ MAX_MESSAGE_LENGTH = 256 * 1024 * 1024
 @pytest.fixture(scope="module")
 def stub(grpc_channel_and_metadata):
     channel, _ = grpc_channel_and_metadata
-    return settings_pb2_grpc.SettingsStub(channel)
+    options = [
+        ('grpc.max_receive_message_length', MAX_MESSAGE_LENGTH),
+        ('grpc.max_send_message_length', MAX_MESSAGE_LENGTH),
+    ]
+    large_channel = grpc.insecure_channel(channel._target, options=options)
+    return settings_pb2_grpc.SettingsStub(large_channel)
 
 
 # ---------------------------------------------------------------------------
@@ -52,12 +59,7 @@ def value_to_python(v):
 
 def test_get_schema_root_returns_info(stub, grpc_channel_and_metadata):
     """GetSchema at the root must return a Schema with a non-empty type."""
-    channel, metadata = grpc_channel_and_metadata
-    options = [
-        ('grpc.max_receive_message_length', MAX_MESSAGE_LENGTH),
-        ('grpc.max_send_message_length', MAX_MESSAGE_LENGTH),
-    ]
-    stub = settings_pb2_grpc.SettingsStub(grpc.insecure_channel(channel._target, options=options))
+    _, metadata = grpc_channel_and_metadata
     resp = stub.GetSchema(
         settings_pb2.GetSchemaRequest(root=_ROOT),
         metadata=metadata,
@@ -68,12 +70,7 @@ def test_get_schema_root_returns_info(stub, grpc_channel_and_metadata):
 
 def test_get_schema_has_children(stub, grpc_channel_and_metadata):
     """Root schema must expose at least one child entry."""
-    channel, metadata = grpc_channel_and_metadata
-    options = [
-        ('grpc.max_receive_message_length', MAX_MESSAGE_LENGTH),
-        ('grpc.max_send_message_length', MAX_MESSAGE_LENGTH),
-    ]
-    stub = settings_pb2_grpc.SettingsStub(grpc.insecure_channel(channel._target, options=options))
+    _, metadata = grpc_channel_and_metadata
     resp = stub.GetSchema(
         settings_pb2.GetSchemaRequest(root=_ROOT),
         metadata=metadata,
@@ -83,12 +80,7 @@ def test_get_schema_has_children(stub, grpc_channel_and_metadata):
 
 def test_get_schema_setup_path(stub, grpc_channel_and_metadata):
     """GetSchema for the 'setup' sub-tree must return a non-empty type."""
-    channel, metadata = grpc_channel_and_metadata
-    options = [
-        ('grpc.max_receive_message_length', MAX_MESSAGE_LENGTH),
-        ('grpc.max_send_message_length', MAX_MESSAGE_LENGTH),
-    ]
-    stub = settings_pb2_grpc.SettingsStub(grpc.insecure_channel(channel._target, options=options))
+    _, metadata = grpc_channel_and_metadata
     resp = stub.GetSchema(
         settings_pb2.GetSchemaRequest(root=_ROOT, optional_attrs=["type"]),
         metadata=metadata,
