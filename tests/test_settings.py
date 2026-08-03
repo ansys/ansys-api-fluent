@@ -5,8 +5,6 @@ All tests share the single Fluent solver session started by the
 
 A mixing-elbow case (mixing_elbow.cas.h5) is assumed to be loaded.
 """
-import os
-os.environ["PYFLUENT_FLUENT_ROOT"] = r"D:\ANSYSDev\vNNN\fluent"
 
 import grpc
 import pytest
