@@ -74,8 +74,13 @@ copybutton_prompt_is_regexp = True
 # Executed once before every test group.  Pulls the shared server connections
 # started by the doctest_fluent_server extension into the group namespace.
 doctest_global_setup = """\
+import warnings
+
 from doctest_fluent_server import get_connections as _get_connections
 _c = _get_connections()
+
+warnings.simplefilter("error")  # warnings as errors
+
 _solver_channel  = _c.get("solver_channel")
 _solver_metadata = _c.get("solver_metadata")
 _mesher_channel  = _c.get("mesher_channel")
