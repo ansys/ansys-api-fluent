@@ -1,76 +1,25 @@
-### ansys-api-fluent gRPC Interface Package
+# ansys-api-fluent
 
-This Python package contains the auto-generated gRPC Python interface files for
-Fluent.
+Python gRPC interface package for [Ansys Fluent](https://www.ansys.com/products/fluids/ansys-fluent).
 
+> **Note:** This package targets the **v1 API**, compatible with **Fluent 27R1 and later**.
+> The `v0` package is retained for backwards compatibility only and is not supported.
 
-#### Installation
+## Documentation
 
-Provided that these wheels have been published to public PyPI, they can be
-installed with:
+Full documentation — getting started, API reference, and client examples — is available at:
 
-```
+**<https://ansys-internal.github.io/ansys-api-fluent/>**
+
+## Installation
+
+```bash
 pip install ansys-api-fluent
 ```
 
-Otherwise, see the
-
-
-#### Build
-
-To build the gRPC packages, run:
-
-```
-pip install build
-python -m build
-```
-
-This will create both the source distribution containing just the protofiles
-along with the wheel containing the protofiles and build Python interface
-files.
-
-Note that the interface files are identical regardless of the version of Python
-used to generate them, but the last pre-built wheel for ``grpcio~=1.30`` was
-Python 3.7, so to improve your build time, use Python 3.7 when building the
-wheel.
-
-
-#### Build Documentation
-
-To build the documentation locally, install the documentation dependencies and run make:
+## Build documentation locally
 
 ```bash
 pip install -r requirements/requirements_docs.txt
-cd docs
-make html
-```
-
-The built HTML documentation will be in ``docs/_build/html/``. Open ``index.html`` in a web browser to view it.
-
-
-#### Manual Deployment
-
-After building the packages, manually deploy them with:
-
-```
-pip install twine
-twine upload dist/*
-```
-
-Note that this is automatically done through CI/CD.
-
-
-#### Automatic Deployment
-
-This repository contains GitHub CI/CD that enables the automatic building of
-source and wheel packages for these gRPC Python interface files. By default,
-these are built on PRs, the main branch, and on tags when pushing. Artifacts
-are uploaded for each PR.
-
-To publicly release wheels to PyPI, ensure your branch is up-to-date and then
-push tags. For example, for the version ``v0.5.0``.
-
-```bash
-git tag v0.5.0
-git push --tags
+cd docs && make html
 ```
