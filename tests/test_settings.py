@@ -57,8 +57,10 @@ def test_get_schema_root_returns_info(stub, grpc_channel_and_metadata):
         ('grpc.max_receive_message_length', MAX_MESSAGE_LENGTH),
         ('grpc.max_send_message_length', MAX_MESSAGE_LENGTH),
     ]
-    stub = settings_pb2_grpc.SettingsStub(grpc.insecure_channel(channel._target, options=options))
-    resp = stub.GetSchema(
+    large_channel = grpc.insecure_channel(channel._target, options=options)
+    grpc.channel_ready_future(large_channel).result(timeout=30)
+    schema_stub = settings_pb2_grpc.SettingsStub(large_channel)
+    resp = schema_stub.GetSchema(
         settings_pb2.GetSchemaRequest(root=_ROOT),
         metadata=metadata,
     )
@@ -73,8 +75,10 @@ def test_get_schema_has_children(stub, grpc_channel_and_metadata):
         ('grpc.max_receive_message_length', MAX_MESSAGE_LENGTH),
         ('grpc.max_send_message_length', MAX_MESSAGE_LENGTH),
     ]
-    stub = settings_pb2_grpc.SettingsStub(grpc.insecure_channel(channel._target, options=options))
-    resp = stub.GetSchema(
+    large_channel = grpc.insecure_channel(channel._target, options=options)
+    grpc.channel_ready_future(large_channel).result(timeout=30)
+    schema_stub = settings_pb2_grpc.SettingsStub(large_channel)
+    resp = schema_stub.GetSchema(
         settings_pb2.GetSchemaRequest(root=_ROOT),
         metadata=metadata,
     )
@@ -88,8 +92,10 @@ def test_get_schema_setup_path(stub, grpc_channel_and_metadata):
         ('grpc.max_receive_message_length', MAX_MESSAGE_LENGTH),
         ('grpc.max_send_message_length', MAX_MESSAGE_LENGTH),
     ]
-    stub = settings_pb2_grpc.SettingsStub(grpc.insecure_channel(channel._target, options=options))
-    resp = stub.GetSchema(
+    large_channel = grpc.insecure_channel(channel._target, options=options)
+    grpc.channel_ready_future(large_channel).result(timeout=30)
+    schema_stub = settings_pb2_grpc.SettingsStub(large_channel)
+    resp = schema_stub.GetSchema(
         settings_pb2.GetSchemaRequest(root=_ROOT, optional_attrs=["type"]),
         metadata=metadata,
     )
