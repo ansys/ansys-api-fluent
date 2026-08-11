@@ -17,3 +17,10 @@ repos:
   hooks:
   - id: protolint
     files: ^ansys/api/fluent/v1/.*\.proto$
+
+- repo: https://github.com/ansys/pre-commit-hooks
+  rev: 55c5b6a5439abd847613579c6924da750e8b78b2 # frozen: v0.8.0
+  hooks:
+    - id: add-license-headers
+      args:
+      - --start_year=2021
