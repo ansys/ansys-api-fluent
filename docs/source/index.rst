@@ -17,6 +17,13 @@ and can be used to generate clients in C++, Go, Java, C#, or any other language
 with gRPC support. Pre-generated `Python stubs <https://pypi.org/project/ansys-api-fluent/>`_
 are provided for building Python clients.
 
+.. note::
+
+   This documentation covers the **v1 API only**. The v1 API is compatible
+   with **Fluent 27R1 and later**. The ``v0`` package is retained solely for
+   backwards compatibility with existing clients and is neither documented nor
+   supported. All new development should target ``ansys.api.fluent.v1``.
+
 Getting started
 ~~~~~~~~~~~~~~~~
 
