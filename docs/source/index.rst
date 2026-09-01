@@ -34,7 +34,7 @@ are provided for building Python clients.
 
    <big><big><strong>Getting started</strong></big></big>
 
-|getting-started-label| -- see the :ref:`getting_started` page for an overview of the API structure,
+|getting-started-label| — see the :ref:`getting_started` page for an overview of the API structure,
 installation steps, and multi-language examples.
 
 .. |python-client-examples| raw:: html
