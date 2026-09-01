@@ -10,6 +10,22 @@ for these services' complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
 
+.. testsetup:: *
+
+   import unittest, grpc
+   from ansys.api.fluent.v1 import (
+       connection_pb2, connection_pb2_grpc,
+       health_pb2, health_pb2_grpc,
+       application_runtime_pb2, application_runtime_pb2_grpc,
+   )
+   if _solver_channel is None:
+       raise unittest.SkipTest("No Fluent server available")
+   channel = _solver_channel
+   metadata = _solver_metadata
+   connection_stub = connection_pb2_grpc.ConnectionStub(channel)
+   health_stub = health_pb2_grpc.HealthStub(channel)
+   application_runtime_stub = application_runtime_pb2_grpc.ApplicationRuntimeStub(channel)
+
 .. code-block:: python
    :caption: Python
 
@@ -39,15 +55,14 @@ Checking server health
 ``Health.Check`` returns the serving status; assert ``SERVING_STATUS_SERVING``
 before sending any other RPCs.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    # Check with an empty service name — covers the server as a whole.
    health_response = health_stub.Check(
        health_pb2.HealthCheckRequest(service=""),
        metadata=metadata,
    )
-   print(health_response.status)  # -> HealthCheckResponse.SERVING_STATUS_SERVING
+   assert health_response.status == health_pb2.HealthCheckResponse.SERVING_STATUS_SERVING
 
    # Check by fully-qualified service name.
    health_response = health_stub.Check(
@@ -56,19 +71,19 @@ before sending any other RPCs.
        ),
        metadata=metadata,
    )
-   print(health_response.status in {
+   assert health_response.status in {
        health_pb2.HealthCheckResponse.SERVING_STATUS_SERVING,
        health_pb2.HealthCheckResponse.SERVING_STATUS_NOT_SERVING,
        health_pb2.HealthCheckResponse.SERVING_STATUS_SERVICE_UNKNOWN,
        health_pb2.HealthCheckResponse.SERVING_STATUS_UNSPECIFIED,
-   })  # -> True
+   }
 
    # Repeated calls must all return the same status.
    statuses = [
        health_stub.Check(health_pb2.HealthCheckRequest(), metadata=metadata).status
        for _ in range(3)
    ]
-   print(len(set(statuses)) == 1)  # -> True
+   assert len(set(statuses)) == 1
 
 Connecting with version negotiation
 -------------------------------------
@@ -76,35 +91,37 @@ Connecting with version negotiation
 ``Connection.Connect`` opens a server-streaming call; read the first response
 to confirm the server accepted the version and password.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
+
+   # for demonstration purposes, use your actual password as a str
+   your_server_password = dict(metadata).get("password", "")
 
    stream = connection_stub.Connect(
        connection_pb2.ConnectRequest(
            request_type=connection_pb2.ConnectRequest.REQUEST_TYPE_CONNECT,
-           password="your-server-password",
+           password=your_server_password,  
            version="27.1.0",
        ),
        metadata=metadata,
    )
-   print(stream is not None)  # -> True
+   assert stream is not None
 
    first_response = next(iter(stream))
    stream.cancel()
-   print(hasattr(first_response, "error_code"))  # -> True
-   print(first_response.error_code)              # -> CONNECTION_ERROR_NONE
+   assert hasattr(first_response, "error_code")
+   assert first_response.error_code == connection_pb2.CONNECTION_ERROR_NONE
 
    # Connecting without specifying a version.
    stream = connection_stub.Connect(
        connection_pb2.ConnectRequest(
            request_type=connection_pb2.ConnectRequest.REQUEST_TYPE_CONNECT,
-           password="your-server-password",
+           password=your_server_password,
        ),
        metadata=metadata,
    )
    first_response = next(iter(stream))
    stream.cancel()
-   print(first_response.error_code == connection_pb2.CONNECTION_ERROR_UNKNOWN)  # -> True
+   assert first_response.error_code == connection_pb2.CONNECTION_ERROR_UNKNOWN
 
 Reading the product version
 -----------------------------
@@ -112,16 +129,15 @@ Reading the product version
 ``GetProductVersion`` returns the major, minor, and patch numbers of the
 running Fluent build.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    version_response = application_runtime_stub.GetProductVersion(
        application_runtime_pb2.GetProductVersionRequest(),
        metadata=metadata,
    )
-   print(version_response.major)  # -> 27
-   print(version_response.minor)  # -> 1
-   print(version_response.patch)  # -> 0  (or higher for a patched build)
+   assert version_response.major >= 27
+   assert version_response.minor >= 1
+   assert version_response.patch >= 0  # (or higher for a patched build)
 
 Reading build information
 --------------------------
@@ -129,17 +145,23 @@ Reading build information
 ``GetBuildInfo`` returns the build timestamp, numeric build ID, VCS revision,
 and branch of the running binary.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    build_info = application_runtime_stub.GetBuildInfo(
        application_runtime_pb2.GetBuildInfoRequest(),
        metadata=metadata,
    )
-   print(len(build_info.build_time) > 0)     # -> True  (e.g. '2025-01-15T10:30:00')
-   print(build_info.build_id > 0)            # -> True
-   print(len(build_info.vcs_revision) > 0)   # -> True  (e.g. 'abc123def')
-   print(len(build_info.vcs_branch) > 0)     # -> True  (e.g. 'main')
+   print(len(build_info.build_time) > 0)  # e.g. '2025-01-15T10:30:00'
+   print(build_info.build_id > 0)
+   print(len(build_info.vcs_revision) > 0)  # e.g. 'abc123def'
+   print(len(build_info.vcs_branch) > 0)  # e.g. 'main'
+
+.. testoutput::
+
+   True
+   True
+   True
+   True
 
 Reading process information
 -----------------------------
@@ -147,23 +169,30 @@ Reading process information
 ``GetControllerProcessInfo`` and ``GetSolverProcessInfo`` return hostname,
 PID, and working directory of the respective Fluent processes.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    controller_process_info = application_runtime_stub.GetControllerProcessInfo(
        application_runtime_pb2.GetControllerProcessInfoRequest(),
        metadata=metadata,
    )
-   print(controller_process_info.hostname)           # -> 'compute-node-01'
-   print(controller_process_info.process_id)         # -> 12345  (an integer PID)
-   print(controller_process_info.working_directory)  # -> '/scratch/my_project'
+   print(len(controller_process_info.hostname) > 0)  # e.g. 'compute-node-01'
+   print(controller_process_info.process_id > 0)  # e.g. 12345 (an integer PID)
+   print(len(controller_process_info.working_directory) > 0)  # e.g. '/scratch/my_project'
 
    solver_process_info = application_runtime_stub.GetSolverProcessInfo(
        application_runtime_pb2.GetSolverProcessInfoRequest(),
        metadata=metadata,
    )
-   print(solver_process_info.process_id > 0)        # -> True
-   print(len(solver_process_info.hostname) > 0)     # -> True
+   print(solver_process_info.process_id > 0)
+   print(len(solver_process_info.hostname) > 0)
+
+.. testoutput::
+
+   True
+   True
+   True
+   True
+   True
 
 Reading the application mode
 ------------------------------
@@ -171,23 +200,20 @@ Reading the application mode
 ``GetMode`` identifies whether Fluent is running as a meshing session,
 solver session, or a specialised variant.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    app_mode_response = application_runtime_stub.GetMode(
        application_runtime_pb2.GetModeRequest(),
        metadata=metadata,
    )
-   print(app_mode_response.mode)  # -> MODE_SOLVER  (or MODE_MESHING, etc.)
 
    valid_modes = {
-       application_runtime_pb2.MODE_UNSPECIFIED,
        application_runtime_pb2.MODE_MESHING,
        application_runtime_pb2.MODE_SOLVER,
        application_runtime_pb2.MODE_SOLVER_ICING,
        application_runtime_pb2.MODE_SOLVER_AERO,
    }
-   print(app_mode_response.mode in valid_modes)  # -> True
+   assert app_mode_response.mode in valid_modes
 
 Enabling beta features
 -----------------------
@@ -195,25 +221,29 @@ Enabling beta features
 ``IsBetaEnabled`` queries the current state; ``EnableBeta`` activates beta
 features for the session — the change persists until the server restarts.
 
-.. code-block:: python
-   :caption: Python
+.. doctest::
 
-   beta_status_response = application_runtime_stub.IsBetaEnabled(
-       application_runtime_pb2.IsBetaEnabledRequest(),
-       metadata=metadata,
-   )
-   print(isinstance(beta_status_response.is_beta_enabled, bool))  # -> True
+   >>> beta_status_response = application_runtime_stub.IsBetaEnabled(
+   ...     application_runtime_pb2.IsBetaEnabledRequest(),
+   ...     metadata=metadata,
+   ... )
+   >>> isinstance(beta_status_response.is_beta_enabled, bool)
+   True
 
-   application_runtime_stub.EnableBeta(
-       application_runtime_pb2.EnableBetaRequest(),
-       metadata=metadata,
-   )
+   >>> application_runtime_stub.EnableBeta(
+   ...     application_runtime_pb2.EnableBetaRequest(),
+   ...     metadata=metadata,
+   ... )
+   <BLANKLINE>
+   Beta features enabled.
+   <BLANKLINE>
 
-   beta_status_response = application_runtime_stub.IsBetaEnabled(
-       application_runtime_pb2.IsBetaEnabledRequest(),
-       metadata=metadata,
-   )
-   print(beta_status_response.is_beta_enabled)  # -> True
+   >>> beta_status_response = application_runtime_stub.IsBetaEnabled(
+   ...     application_runtime_pb2.IsBetaEnabledRequest(),
+   ...     metadata=metadata,
+   ... )
+   >>> beta_status_response.is_beta_enabled
+   True
 
 Recording a Python journal
 ---------------------------
@@ -221,8 +251,7 @@ Recording a Python journal
 ``StartPythonJournal`` begins recording all Fluent API calls; ``StopPythonJournal``
 ends recording and returns the journal as a string (when no file name was given).
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    # Start an in-memory journal (no file name).
    start_response = application_runtime_stub.StartPythonJournal(
@@ -239,7 +268,8 @@ ends recording and returns the journal as a string (when no file name was given)
        ),
        metadata=metadata,
    )
-   print(isinstance(stop_response.journal_str, str))  # -> True
+   assert isinstance(stop_response.journal_str, str)
+
 
 See :doc:`../../api/services/connection`, :doc:`../../api/services/health`,
 and :doc:`../../api/services/application_runtime` for the complete reference material.
