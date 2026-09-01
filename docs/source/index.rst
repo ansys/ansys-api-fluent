@@ -1,6 +1,6 @@
-================================================
-Drive Fluent programmatically from any language
-================================================
+======================
+Ansys Fluent gRPC API
+======================
 
 .. toctree::
    :hidden:
@@ -10,11 +10,14 @@ Drive Fluent programmatically from any language
    user_guide/index
    api/index
 
-.. |fluent-grpc-api| raw:: html
+.. |tag-line| raw:: html
 
-   <big><big><strong>Fluent gRPC API</strong></big></big>
+   <big><big><strong>Drive Fluent programmatically from any language</strong></big></big>
 
-The Ansys |fluent-grpc-api| exposes services and RPC methods for driving Fluent
+|tag-line|
+
+
+The Ansys Fluent gRPC API exposes services and RPC methods for driving Fluent
 programmatically from external clients. The
 `repository <https://github.com/ansys/ansys-api-fluent>`_ contains
 `.proto <https://protobuf.dev/overview/>`_ files that are language‑agnostic
