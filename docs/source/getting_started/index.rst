@@ -22,7 +22,7 @@ Getting the proto files
 
 The ``.proto`` files that define every Fluent gRPC service, method, and message
 are available in the
-`ansys-api-fluent repository <https://github.com/ansys-internal/ansys-api-fluent>`_.
+`ansys-api-fluent repository <https://github.com/ansys/ansys-api-fluent>`_.
 
 Prerequisites
 ~~~~~~~~~~~~~
@@ -54,7 +54,7 @@ Ensure ``protoc`` and any ``protoc-gen-*`` plug-ins are on ``PATH``, or pass
 Compiling proto files
 ~~~~~~~~~~~~~~~~~~~~~
 
-Clone the `ansys-api-fluent <https://github.com/ansys-internal/ansys-api-fluent>`_
+Clone the `ansys-api-fluent <https://github.com/ansys/ansys-api-fluent>`_
 repository, then run ``protoc``
 with the appropriate gRPC plug-in against the files in ``ansys/api/fluent/v1/``.
 

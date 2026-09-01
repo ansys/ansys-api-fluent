@@ -9,7 +9,7 @@ This repository contains the [Protocol Buffer](https://protobuf.dev/overview/) (
 
 Full documentation — getting started, API reference, and client examples — is available at:
 
-**<https://ansys-internal.github.io/ansys-api-fluent/>**
+**<https://ansys.github.io/ansys-api-fluent/>**
 
 ## Installation (Python)
 
