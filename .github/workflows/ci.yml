@@ -15,7 +15,7 @@ env:
   PYFLUENT_LAUNCH_CONTAINER: '1'
   PYFLUENT_LAUNCH_FLUENT_TIMEOUT: '180'
   ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
-  DOCUMENTATION_CNAME: 'api.fluent.docs.pyansys.com '
+  DOCUMENTATION_CNAME: 'api.fluent.docs.pyansys.com'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
