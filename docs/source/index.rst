@@ -11,7 +11,7 @@ Ansys Fluent gRPC API
 
 The Ansys Fluent gRPC API exposes services and RPC methods for driving Fluent
 programmatically from external clients. The
-`repository <https://github.com/ansys-internal/ansys-api-fluent>`_ contains
+`repository <https://github.com/ansys/ansys-api-fluent>`_ contains
 `.proto <https://protobuf.dev/overview/>`_ files that are language‑agnostic
 and can be used to generate clients in C++, Go, Java, C#, or any other language
 with gRPC support. Pre-generated `Python stubs <https://pypi.org/project/ansys-api-fluent/>`_
