@@ -1,3 +1,4 @@
+======================
 Ansys Fluent gRPC API
 ======================
 
@@ -29,7 +30,12 @@ are provided for building Python clients.
    - v0 is retained solely for backwards compatibility with existing clients; it is neither documented nor supported
 
 
-**Getting started** — see the :ref:`getting_started` page for an overview of the API structure,
+
+.. |getting-started-label| raw:: html
+
+   <big><strong>Getting started</strong></big>
+
+|getting-started-label| -- see the :ref:`getting_started` page for an overview of the API structure,
 installation steps, and multi-language examples.
 
 **Python client examples** — browse the :ref:`client_examples`, which include simulation setup,
