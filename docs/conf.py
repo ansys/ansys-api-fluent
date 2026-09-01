@@ -13,9 +13,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(DOCS_DIR, "_ext")))
 from ansys_sphinx_theme import ansys_favicon
 
 project = "Ansys Fluent gRPC API"
-copyright = "(c) 2026 ANSYS, Inc. All rights reserved"
-author = "ANSYS, Inc."
-cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
+copyright = "(c) 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved"
+author = "Synopsys, Inc. and ANSYS, Inc."
+cname = os.getenv("DOCUMENTATION_CNAME", "api.fluent.docs.pyansys.com")
 
 release = ""
 version = ""
