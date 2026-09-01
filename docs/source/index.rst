@@ -12,7 +12,7 @@ Ansys Fluent gRPC API
 
 .. |tag-line| raw:: html
 
-   <big><big><strong>Drive Fluent programmatically from any language</strong></big></big>
+   <big><big><big>Drive Fluent programmatically from any language</big></big></big>
 
 |tag-line|
 
