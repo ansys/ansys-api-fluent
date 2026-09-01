@@ -30,16 +30,23 @@ are provided for building Python clients.
    - v0 is retained solely for backwards compatibility with existing clients; it is neither documented nor supported
 
 
-
 .. |getting-started-label| raw:: html
 
-   <big><strong>Getting started</strong></big>
+   <big><big><strong>Getting started</strong></big></big>
 
 |getting-started-label| -- see the :ref:`getting_started` page for an overview of the API structure,
 installation steps, and multi-language examples.
 
-**Python client examples** — browse the :ref:`client_examples`, which include simulation setup,
+.. |python-client-examples| raw:: html
+
+   <big><big><strong>Python client examples</strong></big></big>
+
+|python-client-examples| — browse the :ref:`client_examples`, which include simulation setup,
 live solver streams, and simulation data access.
 
-**API reference** — use the :ref:`api_reference` to look up a service, its methods,
+.. |api-reference| raw:: html
+
+   <big><big><strong>API reference</strong></big></big>
+
+|api-reference| — use the :ref:`api_reference` to look up a service, its methods,
 and the corresponding request and response messages.
