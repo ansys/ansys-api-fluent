@@ -17,6 +17,10 @@ env:
   ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
   DOCUMENTATION_CNAME: 'api.fluent.docs.pyansys.com '
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   pre-commit:
     name: Run pre-commit checks
