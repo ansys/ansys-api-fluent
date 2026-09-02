@@ -1,0 +1,1034 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Settings service &#8212; Ansys Fluent gRPC API</title>
+  
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=f424389c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=f424389c" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+
+  <!-- Include desired assets -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+
+  
+    <link href="../../_static/css/breadcrumbs.css" rel="stylesheet" />
+  
+    <script src="../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=49e1bf35"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/client_examples/settings';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Solver output streams — events, monitors, and transcript" href="solver_streams.html" />
+    <link rel="prev" title="ObjectModel service" href="object_model.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  <link rel="canonical" href="https://api.fluent.docs.pyansys.com/version/stable/user_guide/client_examples/settings.html" />
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="Ansys Fluent gRPC API - Home"/>
+    <img src="../../_static/pyansys_logo_transparent_white.png" class="logo__image only-dark pst-js-only" alt="Ansys Fluent gRPC API - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="Ansys Fluent gRPC API home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-api-fluent" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+  
+
+  
+
+
+
+
+
+
+
+
+
+<div class="ast-announcement-wrap" role="region" aria-label="Announcement" hidden>
+    <div class="ast-announcement info">
+        <span class="ast-announcement-icon" aria-hidden="true"></span>
+        <span class="ast-announcement-text" id="ast-announcement-text"></span>
+        <!-- djlint:off H021-->
+        <!-- for inline styles -->
+        <a class="ast-announcement-details-btn" id="ast-announcement-details-btn"
+           href=""
+           data-ast-url=""
+           aria-label="View notifications"
+           style="display:none">View</a>
+        <!-- djlint:on -->
+        <!-- djlint:off H023-->
+        <!-- use entity reference for &times; -->
+        <button class="ast-announcement-close" id="ast-announcement-close" aria-label="Close announcement">&times;</button>
+        <!-- djlint:on -->
+    </div>
+</div>
+
+<!-- Modal overlay -->
+<!-- djlint:off H023-->
+<!-- use entity reference for &times; -->
+<div class="ast-announcement-overlay" id="ast-announcement-overlay" role="dialog" aria-modal="true" aria-label="Announcement details">
+    <div class="ast-announcement-modal info">
+        <div class="ast-announcement-modal-body"
+             data-ast-items='[]'>
+        </div>
+        <button class="ast-announcement-modal-close" id="ast-announcement-modal-close" aria-label="Close">&times;</button>
+    </div>
+</div>
+<!-- djlint:on -->
+
+<script src="../../_static/js/announcement_banner.js"
+        data-base-url="../../"></script>
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="Ansys Fluent gRPC API home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-api-fluent" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Python client examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="session_setup.html">Session setup — connection, health, and application runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object_model.html">ObjectModel service</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Settings service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solver_streams.html">Solver output streams — events, monitors, and transcript</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation_data.html">Reading and writing simulation data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html">Helper types</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com/" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="../index.html" class="nav-link">User guide</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="index.html" class="nav-link">Python client examples</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Settings service</span></li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+  
+
+  
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="settings-service">
+<h1>Settings service<a class="headerlink" href="#settings-service" title="Link to this heading">#</a></h1>
+<p>Python client examples for the <code class="docutils literal notranslate"><span class="pre">Settings</span></code> gRPC service.</p>
+<p>See <a class="reference internal" href="../../api/services/settings.html"><span class="doc">Settings</span></a>
+for this service’s complete reference material.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>All examples in this documentation require <strong>Ansys Fluent 27R1 or later</strong> as the server.</p></li>
+<li><p>The code snippets are provided to illustrate RPC usage and may not be
+directly runnable without a live Fluent server and valid path values for
+your specific case.</p></li>
+</ul>
+</div>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id1" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">grpc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.api.fluent.v1</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings_pb2</span><span class="p">,</span> <span class="n">settings_pb2_grpc</span>
+
+<span class="n">channel</span> <span class="o">=</span> <span class="n">grpc</span><span class="o">.</span><span class="n">insecure_channel</span><span class="p">(</span>
+    <span class="s2">"&lt;server-address&gt;"</span><span class="p">,</span>
+    <span class="n">options</span><span class="o">=</span><span class="p">[</span>
+        <span class="c1"># Defaults are 4 MiB receive / unlimited send. Raise the receive</span>
+        <span class="c1"># cap so large responses (e.g. GetSchema) don't fail with</span>
+        <span class="c1"># RESOURCE_EXHAUSTED.</span>
+        <span class="p">(</span><span class="s2">"grpc.max_receive_message_length"</span><span class="p">,</span> <span class="mi">32</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"password"</span><span class="p">,</span> <span class="s2">"&lt;password&gt;"</span><span class="p">)]</span>
+<span class="n">stub</span> <span class="o">=</span> <span class="n">settings_pb2_grpc</span><span class="o">.</span><span class="n">SettingsStub</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Every RPC addresses a settings node via a <code class="docutils literal notranslate"><span class="pre">PathInfo</span></code> message; pass
+<code class="docutils literal notranslate"><span class="pre">root=&quot;fluent&quot;</span></code> and a slash-separated <code class="docutils literal notranslate"><span class="pre">path</span></code> for the Fluent solver.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">path</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">settings_pb2</span><span class="o">.</span><span class="n">PathInfo</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">settings_pb2</span><span class="o">.</span><span class="n">PathInfo</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s2">"fluent"</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="discovering-the-schema">
+<h2>Discovering the schema<a class="headerlink" href="#discovering-the-schema" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">GetSchema</span></code> returns the static tree of objects, commands, and queries — walk
+it to confirm valid paths before making runtime calls.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id3" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">schema_response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetSchema</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetSchemaRequest</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s2">"fluent"</span><span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">schema_response</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>           <span class="c1"># -&gt; 'group'</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">schema_response</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">children</span><span class="p">))</span>  <span class="c1"># -&gt; 10  (number of top-level nodes)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">walk</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">"  "</span> <span class="o">*</span> <span class="n">indent</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">child</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">/"</span><span class="p">)</span>
+        <span class="n">walk</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">indent</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">commands</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">cmd</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">()"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">qry</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">queries</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">qry</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">?"</span><span class="p">)</span>
+
+<span class="n">walk</span><span class="p">(</span><span class="n">schema_response</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+
+<span class="c1"># Request only specific attributes on a sub-tree.</span>
+<span class="n">schema_response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetSchema</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetSchemaRequest</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s2">"fluent"</span><span class="p">,</span> <span class="n">optional_attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">assert</span> <span class="n">schema_response</span><span class="o">.</span><span class="n">info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+<details>
+<summary style="cursor:pointer;user-select:none;font-weight:bold;padding:4px 0">
+ Schema output (click to expand)
+</summary>
+<pre style="background:#2b2b2b;color:#f8f8f2;border:1px solid #444;border-radius:4px;padding:12px;margin-top:6px;overflow:auto;font-size:0.85em;line-height:1.5">
+file/
+mesh/
+server/
+setup/
+  general/
+    solver/
+    operating-conditions/
+      operating-pressure
+      gravity/
+      ...
+  models/
+    energy/
+      enabled
+      ...
+    viscous/
+    ...
+  materials/
+  boundary-conditions/
+    wall/
+    ...
+  cell-zone-conditions/
+  ...
+solution/
+  methods/
+  controls/
+  report-definitions/
+  monitor/
+  run-calculation/
+    iterate()
+    ...
+  ...
+results/
+  graphics/
+    contour/
+    lighting/
+      lights/
+    ...
+  ...
+...
+exit()
+switch-to-meshing-mode()
+get-modified-state?
+</pre>
+</details></section>
+<section id="reading-and-writing-state">
+<h2>Reading and writing state<a class="headerlink" href="#reading-and-writing-state" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">GetState</span></code> returns a <code class="docutils literal notranslate"><span class="pre">Value</span></code> carrying one active <code class="docutils literal notranslate"><span class="pre">oneof</span></code> field; call
+<code class="docutils literal notranslate"><span class="pre">WhichOneof(&quot;value&quot;)</span></code> to identify it before accessing it.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id4" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">value_to_python</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+    <span class="n">kind</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">WhichOneof</span><span class="p">(</span><span class="s2">"value"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"boolean"</span><span class="p">:</span>   <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">boolean</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"integer"</span><span class="p">:</span>   <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">integer</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"real"</span><span class="p">:</span>      <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">real</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"string"</span><span class="p">:</span>    <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">string</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"value_list"</span><span class="p">:</span> <span class="k">return</span> <span class="p">[</span><span class="n">value_to_python</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">value_list</span><span class="o">.</span><span class="n">lsts</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"value_map"</span><span class="p">:</span>  <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">value_to_python</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">value_map</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+<span class="c1"># Read a scalar parameter.</span>
+<span class="n">state_response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetState</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetStateRequest</span><span class="p">(</span>
+        <span class="n">path_info</span><span class="o">=</span><span class="n">path</span><span class="p">(</span><span class="s2">"/setup/general/operating-conditions/operating-pressure"</span><span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">value_to_python</span><span class="p">(</span><span class="n">state_response</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>  <span class="c1"># -&gt; 101325.0</span>
+
+<span class="c1"># Read the energy model map.</span>
+<span class="n">state_response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetState</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetStateRequest</span><span class="p">(</span><span class="n">path_info</span><span class="o">=</span><span class="n">path</span><span class="p">(</span><span class="s2">"/setup/models/energy"</span><span class="p">)),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">value_to_python</span><span class="p">(</span><span class="n">state_response</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>  <span class="c1"># -&gt; {'enabled': True, 'viscous-dissipation': False, ...}</span>
+</pre></div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">SetState</span></code> writes a <code class="docutils literal notranslate"><span class="pre">Value</span></code> back; the integer roundtrip below confirms the
+write is reflected by a subsequent <code class="docutils literal notranslate"><span class="pre">GetState</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id5" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">path_info</span> <span class="o">=</span> <span class="n">path</span><span class="p">(</span><span class="s2">"/setup/general/operating-conditions/operating-pressure"</span><span class="p">)</span>
+
+<span class="c1"># Read original value.</span>
+<span class="n">orig</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetState</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetStateRequest</span><span class="p">(</span><span class="n">path_info</span><span class="o">=</span><span class="n">path_info</span><span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+<span class="c1"># Write a new value.</span>
+<span class="n">stub</span><span class="o">.</span><span class="n">SetState</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">SetStateRequest</span><span class="p">(</span>
+        <span class="n">path_info</span><span class="o">=</span><span class="n">path_info</span><span class="p">,</span>
+        <span class="n">value</span><span class="o">=</span><span class="n">settings_pb2</span><span class="o">.</span><span class="n">Value</span><span class="p">(</span><span class="n">integer</span><span class="o">=</span><span class="mi">101000</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Confirm the change.</span>
+<span class="n">check</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetState</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetStateRequest</span><span class="p">(</span><span class="n">path_info</span><span class="o">=</span><span class="n">path_info</span><span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">value_to_python</span><span class="p">(</span><span class="n">check</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>  <span class="c1"># -&gt; 101000</span>
+
+<span class="c1"># Restore original.</span>
+<span class="n">stub</span><span class="o">.</span><span class="n">SetState</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">SetStateRequest</span><span class="p">(</span><span class="n">path_info</span><span class="o">=</span><span class="n">path_info</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">orig</span><span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="querying-attributes">
+<h2>Querying attributes<a class="headerlink" href="#querying-attributes" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">GetAttrs</span></code> returns type, active status, and read-only flag without a prior
+<code class="docutils literal notranslate"><span class="pre">GetSchema</span></code> call; pass <code class="docutils literal notranslate"><span class="pre">recursive=True</span></code> to include child nodes.</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id6" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read specific attributes for a single node.</span>
+<span class="n">attrs_response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetAttrs</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetAttrsRequest</span><span class="p">(</span>
+        <span class="n">path_info</span><span class="o">=</span><span class="n">path</span><span class="p">(</span><span class="s2">"/setup/models/energy/enabled"</span><span class="p">),</span>
+        <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">"type"</span><span class="p">,</span> <span class="s2">"active?"</span><span class="p">,</span> <span class="s2">"read-only?"</span><span class="p">],</span>
+        <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">assert</span> <span class="n">attrs_response</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">WhichOneof</span><span class="p">(</span><span class="s2">"value"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"value_map"</span>
+<span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">attrs_response</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">value_map</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value_to_python</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="c1"># 'type': 'boolean', 'active?': True, 'read-only?': False</span>
+
+<span class="c1"># Recursive read — populates group_children for every child node.</span>
+<span class="n">attrs_response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetAttrs</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetAttrsRequest</span><span class="p">(</span>
+        <span class="n">path_info</span><span class="o">=</span><span class="n">path</span><span class="p">(</span><span class="s2">"/setup/models"</span><span class="p">),</span>
+        <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">"type"</span><span class="p">],</span>
+        <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">attrs_response</span><span class="o">.</span><span class="n">group_children</span><span class="p">))</span>  <span class="c1"># -&gt; &gt; 4</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="managing-named-objects">
+<h2>Managing named objects<a class="headerlink" href="#managing-named-objects" title="Link to this heading">#</a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">CreateObject</span></code>, <code class="docutils literal notranslate"><span class="pre">GetObjectNames</span></code>, <code class="docutils literal notranslate"><span class="pre">Rename</span></code>, and <code class="docutils literal notranslate"><span class="pre">DeleteObject</span></code> to
+manage collections such as graphics contours under <code class="docutils literal notranslate"><span class="pre">/results/graphics/contour</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id7" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">OBJ_PATH</span> <span class="o">=</span> <span class="n">path</span><span class="p">(</span><span class="s2">"/results/graphics/contour"</span><span class="p">)</span>
+
+<span class="c1"># Create two contour objects.</span>
+<span class="n">stub</span><span class="o">.</span><span class="n">CreateObject</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">CreateObjectRequest</span><span class="p">(</span><span class="n">path_info</span><span class="o">=</span><span class="n">OBJ_PATH</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"contour-1"</span><span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">stub</span><span class="o">.</span><span class="n">CreateObject</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">CreateObjectRequest</span><span class="p">(</span><span class="n">path_info</span><span class="o">=</span><span class="n">OBJ_PATH</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"contour-2"</span><span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># List all names.</span>
+<span class="n">objects</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetObjectNames</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetObjectNamesRequest</span><span class="p">(</span><span class="n">path_info</span><span class="o">=</span><span class="n">OBJ_PATH</span><span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">objects</span><span class="o">.</span><span class="n">names</span><span class="p">))</span>  <span class="c1"># -&gt; ['contour-1', 'contour-2']</span>
+
+<span class="c1"># Rename contour-1.</span>
+<span class="n">stub</span><span class="o">.</span><span class="n">Rename</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">RenameRequest</span><span class="p">(</span>
+        <span class="n">path_info</span><span class="o">=</span><span class="n">OBJ_PATH</span><span class="p">,</span>
+        <span class="n">old_name</span><span class="o">=</span><span class="s2">"contour-1"</span><span class="p">,</span>
+        <span class="n">new_name</span><span class="o">=</span><span class="s2">"contour-renamed"</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">objects</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetObjectNames</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetObjectNamesRequest</span><span class="p">(</span><span class="n">path_info</span><span class="o">=</span><span class="n">OBJ_PATH</span><span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">objects</span><span class="o">.</span><span class="n">names</span><span class="p">))</span>  <span class="c1"># -&gt; ['contour-renamed', 'contour-2']</span>
+
+<span class="c1"># Delete both objects.</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"contour-renamed"</span><span class="p">,</span> <span class="s2">"contour-2"</span><span class="p">):</span>
+    <span class="n">stub</span><span class="o">.</span><span class="n">DeleteObject</span><span class="p">(</span>
+        <span class="n">settings_pb2</span><span class="o">.</span><span class="n">DeleteObjectRequest</span><span class="p">(</span><span class="n">path_info</span><span class="o">=</span><span class="n">OBJ_PATH</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="n">objects</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetObjectNames</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetObjectNamesRequest</span><span class="p">(</span><span class="n">path_info</span><span class="o">=</span><span class="n">OBJ_PATH</span><span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">objects</span><span class="o">.</span><span class="n">names</span><span class="p">))</span>  <span class="c1"># -&gt; []</span>
+</pre></div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">GetObjectNames</span></code> works on any named-object path, including boundary
+conditions; <code class="docutils literal notranslate"><span class="pre">GetListSize</span></code> returns the current count for list settings.</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id8" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Named objects under a boundary-condition path.</span>
+<span class="n">objects</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetObjectNames</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetObjectNamesRequest</span><span class="p">(</span>
+        <span class="n">path_info</span><span class="o">=</span><span class="n">path</span><span class="p">(</span><span class="s2">"/setup/boundary-conditions/wall"</span><span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">objects</span><span class="o">.</span><span class="n">names</span><span class="p">))</span>  <span class="c1"># -&gt; ['wall', ...]  (names of existing wall BCs)</span>
+
+<span class="c1"># Size of a list setting.</span>
+<span class="n">list_size_response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetListSize</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">GetListSizeRequest</span><span class="p">(</span>
+        <span class="n">path_info</span><span class="o">=</span><span class="n">path</span><span class="p">(</span><span class="s2">"/results/graphics/lighting/lights"</span><span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">list_size_response</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>  <span class="c1"># -&gt; 0  (or more if lights have been configured)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="executing-commands">
+<h2>Executing commands<a class="headerlink" href="#executing-commands" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ExecuteCommand</span></code> performs a state-mutating action; pass arguments as a
+<code class="docutils literal notranslate"><span class="pre">Value</span></code> message.</p>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id9" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">command_response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">ExecuteCommand</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">ExecuteCommandRequest</span><span class="p">(</span>
+        <span class="n">path_info</span><span class="o">=</span><span class="n">path</span><span class="p">(</span><span class="s2">"/solution/run-calculation"</span><span class="p">),</span>
+        <span class="n">command</span><span class="o">=</span><span class="s2">"iterate"</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="n">settings_pb2</span><span class="o">.</span><span class="n">Value</span><span class="p">(</span>
+            <span class="n">value_map</span><span class="o">=</span><span class="n">settings_pb2</span><span class="o">.</span><span class="n">Value</span><span class="o">.</span><span class="n">ValueMap</span><span class="p">(</span>
+                <span class="n">m</span><span class="o">=</span><span class="p">{</span><span class="s2">"number-of-iterations"</span><span class="p">:</span> <span class="n">settings_pb2</span><span class="o">.</span><span class="n">Value</span><span class="p">(</span><span class="n">integer</span><span class="o">=</span><span class="mi">0</span><span class="p">)}</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">command_response</span><span class="p">,</span> <span class="s2">"reply"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="executing-queries">
+<h2>Executing queries<a class="headerlink" href="#executing-queries" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ExecuteQuery</span></code> returns a computed result without side effects.</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id10" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">query_response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">ExecuteQuery</span><span class="p">(</span>
+    <span class="n">settings_pb2</span><span class="o">.</span><span class="n">ExecuteQueryRequest</span><span class="p">(</span>
+        <span class="n">path_info</span><span class="o">=</span><span class="n">path</span><span class="p">(</span><span class="s2">"/setup/models/system-coupling"</span><span class="p">),</span>
+        <span class="n">query</span><span class="o">=</span><span class="s2">"get-tensor-type"</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="n">settings_pb2</span><span class="o">.</span><span class="n">Value</span><span class="p">(),</span>
+    <span class="p">),</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">value_to_python</span><span class="p">(</span><span class="n">query_response</span><span class="o">.</span><span class="n">reply</span><span class="p">))</span>  <span class="c1"># -&gt; 'symmetric'  (or None)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="checking-wildcards">
+<h2>Checking wildcards<a class="headerlink" href="#checking-wildcards" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">IsWildcard</span></code> tests whether a string will be treated as a wildcard before
+passing it to other RPCs.</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Python</span><a class="headerlink" href="#id11" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"*"</span><span class="p">,</span> <span class="s2">"?"</span><span class="p">,</span> <span class="s2">"cold-inlet"</span><span class="p">,</span> <span class="s2">""</span><span class="p">):</span>
+    <span class="n">wildcard_response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">IsWildcard</span><span class="p">(</span>
+        <span class="n">settings_pb2</span><span class="o">.</span><span class="n">IsWildcardRequest</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">token</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">token</span><span class="si">!r:</span><span class="s2">15</span><span class="si">}</span><span class="s2"> -&gt; is_wildcard=</span><span class="si">{</span><span class="n">wildcard_response</span><span class="o">.</span><span class="n">is_wildcard</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="c1"># '*'             -&gt; is_wildcard=True</span>
+<span class="c1"># '?'             -&gt; is_wildcard=True  (or False, depending on Fluent version)</span>
+<span class="c1"># 'cold-inlet'    -&gt; is_wildcard=False</span>
+<span class="c1"># ''              -&gt; is_wildcard=False</span>
+</pre></div>
+</div>
+</div>
+<p>See <a class="reference internal" href="../../api/services/settings.html"><span class="doc">Settings</span></a> for the complete reference material.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discovering-the-schema">Discovering the schema</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-and-writing-state">Reading and writing state</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#querying-attributes">Querying attributes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#managing-named-objects">Managing named objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executing-commands">Executing commands</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executing-queries">Executing queries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-wildcards">Checking wildcards</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user_guide/client_examples/settings.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+
+  <!-- Include desired assets -->
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+
+<script>
+// Passing the search options to the search.js file
+const SEARCH_OPTIONS = JSON.parse('{"includeMatches": true, "includeScore": true, "keys": [{"name": "section", "weight": 3}, {"name": "title", "weight": 3}, {"name": "text", "weight": 1}, {"name": "objectID", "weight": 0.5}], "limit": 10, "threshold": 0.2}');
+const SEARCH_FILE = "../../_static/search.json";
+const ADVANCE_SEARCH_PATH = "../../search.html";
+const EXTRA_SOURCES = JSON.parse('""');
+</script>
+
+
+<script src="../../_static/js/search.js"></script>
+
+  
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<!--
+  Theme Version Footer
+  Displays the Sphinx theme version and the last updated date.
+  Accessibility and semantic improvements included.
+-->
+<footer class="theme-version" aria-label="Theme version and last update">
+  <span>
+    
+      Built with the
+      <a href="https://sphinxdocs.ansys.com/version/stable/index.html" target="_blank" rel="noopener noreferrer">
+        Ansys Sphinx Theme
+      </a>
+      1.11.0.
+    
+  </span>
+  <br />
+  <span>Last updated on <time id="ast_build_date"></time></span>
+</footer>
+<script>
+  // Set the last updated date in a readable format
+  (function() {
+    var options = { day: "numeric", month: "long", year: "numeric" };
+    var ast_lastModifiedDate = new Date(document.lastModified);
+    var ast_build_date = ast_lastModifiedDate.toLocaleDateString("en-US", options);
+    var dateElem = document.getElementById("ast_build_date");
+    if (dateElem) {
+      dateElem.textContent = ast_build_date;
+    }
+  })();
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

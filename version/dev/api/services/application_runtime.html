@@ -1,0 +1,1166 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ApplicationRuntime &#8212; Ansys Fluent gRPC API</title>
+  
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=f424389c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=f424389c" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+
+  <!-- Include desired assets -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+
+  
+    <link href="../../_static/css/breadcrumbs.css" rel="stylesheet" />
+  
+    <script src="../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=49e1bf35"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/application_runtime';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ObjectModel" href="object_model.html" />
+    <link rel="prev" title="Health" href="health.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  <link rel="canonical" href="https://api.fluent.docs.pyansys.com/version/stable/api/services/application_runtime.html" />
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="Ansys Fluent gRPC API - Home"/>
+    <img src="../../_static/pyansys_logo_transparent_white.png" class="logo__image only-dark pst-js-only" alt="Ansys Fluent gRPC API - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="Ansys Fluent gRPC API home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-api-fluent" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+  
+
+  
+
+
+
+
+
+
+
+
+
+<div class="ast-announcement-wrap" role="region" aria-label="Announcement" hidden>
+    <div class="ast-announcement info">
+        <span class="ast-announcement-icon" aria-hidden="true"></span>
+        <span class="ast-announcement-text" id="ast-announcement-text"></span>
+        <!-- djlint:off H021-->
+        <!-- for inline styles -->
+        <a class="ast-announcement-details-btn" id="ast-announcement-details-btn"
+           href=""
+           data-ast-url=""
+           aria-label="View notifications"
+           style="display:none">View</a>
+        <!-- djlint:on -->
+        <!-- djlint:off H023-->
+        <!-- use entity reference for &times; -->
+        <button class="ast-announcement-close" id="ast-announcement-close" aria-label="Close announcement">&times;</button>
+        <!-- djlint:on -->
+    </div>
+</div>
+
+<!-- Modal overlay -->
+<!-- djlint:off H023-->
+<!-- use entity reference for &times; -->
+<div class="ast-announcement-overlay" id="ast-announcement-overlay" role="dialog" aria-modal="true" aria-label="Announcement details">
+    <div class="ast-announcement-modal info">
+        <div class="ast-announcement-modal-body"
+             data-ast-items='[]'>
+        </div>
+        <button class="ast-announcement-modal-close" id="ast-announcement-modal-close" aria-label="Close">&times;</button>
+    </div>
+</div>
+<!-- djlint:on -->
+
+<script src="../../_static/js/announcement_banner.js"
+        data-base-url="../../"></script>
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="Ansys Fluent gRPC API home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-api-fluent" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Services</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="health.html">Health</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">ApplicationRuntime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object_model.html">ObjectModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="field_data.html">FieldData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reduction.html">Reduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solution_variable.html">SolutionVariable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript.html">Transcript</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connection.html">Connection</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../helpers/index.html">Helper modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legacy/index.html">Legacy</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com/" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="../index.html" class="nav-link">API reference</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="index.html" class="nav-link">Services</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">ApplicationRuntime</span></li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+  
+
+  
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="applicationruntime">
+<h1>ApplicationRuntime<a class="headerlink" href="#applicationruntime" title="Link to this heading">#</a></h1>
+<p><strong>Generated reference</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Source file<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="file docutils literal notranslate"><span class="pre">ansys/api/fluent/v1/application_runtime.proto</span></code></p>
+</dd>
+<dt class="field-even">Proto package<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">ansys.api.fluent.v1.application_runtime</span></code></p>
+</dd>
+<dt class="field-odd">Contains<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1 service, 37 messages, 6 enums</p>
+</dd>
+</dl>
+<p><strong>Services</strong></p>
+<hr class="docutils" id="proto-application-runtime-service-applicationruntime" />
+<p><strong>Service:</strong> <strong>ApplicationRuntime</strong></p>
+<p>ApplicationRuntime service provides methods that span the Fluent application lifecycle but do not belong
+to a domain-specific service. Typical uses include retrieving version and build metadata, managing
+feature flags, and controlling application startup and shutdown.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">GetProductVersion</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-getproductversionrequest"><span class="std std-ref">GetProductVersionRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-getproductversionresponse"><span class="std std-ref">GetProductVersionResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the product version of the running application.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetBuildInfo</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-getbuildinforequest"><span class="std std-ref">GetBuildInfoRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-getbuildinforesponse"><span class="std std-ref">GetBuildInfoResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns build metadata for the running application (build time, build id, and other related information).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetControllerProcessInfo</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-getcontrollerprocessinforequest"><span class="std std-ref">GetControllerProcessInfoRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-getcontrollerprocessinforesponse"><span class="std std-ref">GetControllerProcessInfoResponse</span></a></p>
+</dd>
+</dl>
+<p>Retrieves Controller process information when running in client-server mode (Controller -&gt; Solver)
+i.e., the Controller process commanding the Solver process.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetSolverProcessInfo</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-getsolverprocessinforequest"><span class="std std-ref">GetSolverProcessInfoRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-getsolverprocessinforesponse"><span class="std std-ref">GetSolverProcessInfoResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns solver-process information for the running application.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetMode</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-getmoderequest"><span class="std std-ref">GetModeRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-getmoderesponse"><span class="std std-ref">GetModeResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the current application mode (for example, meshing or solver).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetDimension</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-getdimensionrequest"><span class="std std-ref">GetDimensionRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-getdimensionresponse"><span class="std std-ref">GetDimensionResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the current application dimension (for example, 2d or 3d).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetPrecision</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-getprecisionrequest"><span class="std std-ref">GetPrecisionRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-getprecisionresponse"><span class="std std-ref">GetPrecisionResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the current application precision (for example, single or double).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetProcessorCount</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-getprocessorcountrequest"><span class="std std-ref">GetProcessorCountRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-getprocessorcountresponse"><span class="std std-ref">GetProcessorCountResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the current application processor count.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetUIMode</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-getuimoderequest"><span class="std std-ref">GetUIModeRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-getuimoderesponse"><span class="std std-ref">GetUIModeResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the current application UI mode.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetGraphicsDriver</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-getgraphicsdriverrequest"><span class="std std-ref">GetGraphicsDriverRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-getgraphicsdriverresponse"><span class="std std-ref">GetGraphicsDriverResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the current application graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetGPUConfig</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-getgpuconfigrequest"><span class="std std-ref">GetGPUConfigRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-getgpuconfigresponse"><span class="std std-ref">GetGPUConfigResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the current application GPU configuration.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">StartPythonJournal</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-startpythonjournalrequest"><span class="std std-ref">StartPythonJournalRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-startpythonjournalresponse"><span class="std std-ref">StartPythonJournalResponse</span></a></p>
+</dd>
+</dl>
+<p>Starts a Python journal recording session.
+If a journal file name is provided, the journal is written to that file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">StopPythonJournal</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-stoppythonjournalrequest"><span class="std std-ref">StopPythonJournalRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-stoppythonjournalresponse"><span class="std std-ref">StopPythonJournalResponse</span></a></p>
+</dd>
+</dl>
+<p>Stops a Python journal recording session.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">IsBetaEnabled</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-isbetaenabledrequest"><span class="std std-ref">IsBetaEnabledRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-isbetaenabledresponse"><span class="std std-ref">IsBetaEnabledResponse</span></a></p>
+</dd>
+</dl>
+<p>Checks whether beta/experimental features are enabled for this session.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EnableBeta</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-enablebetarequest"><span class="std std-ref">EnableBetaRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-enablebetaresponse"><span class="std std-ref">EnableBetaResponse</span></a></p>
+</dd>
+</dl>
+<p>Enables beta/experimental features for this session.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Exit</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-exitrequest"><span class="std std-ref">ExitRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-exitresponse"><span class="std std-ref">ExitResponse</span></a></p>
+</dd>
+</dl>
+<p>Terminates the application.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetWorkingDirectory</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-setworkingdirectoryrequest"><span class="std std-ref">SetWorkingDirectoryRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-setworkingdirectoryresponse"><span class="std std-ref">SetWorkingDirectoryResponse</span></a></p>
+</dd>
+</dl>
+<p>Changes the application’s current working directory.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetIdleTimeout</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-application-runtime-setidletimeoutrequest"><span class="std std-ref">SetIdleTimeoutRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-application-runtime-setidletimeoutresponse"><span class="std std-ref">SetIdleTimeoutResponse</span></a></p>
+</dd>
+</dl>
+<p>Sets the session idle timeout.
+When the session has been idle for the specified duration, Fluent will exit.
+Pass a zero duration to disable the idle timeout.</p>
+</dd>
+</dl>
+<p><strong>Messages</strong></p>
+<hr class="docutils" id="proto-application-runtime-getproductversionrequest" />
+<p><strong>GetProductVersionRequest</strong></p>
+<p>Request to retrieve product version information.</p>
+<hr class="docutils" id="proto-application-runtime-getproductversionresponse" />
+<p><strong>GetProductVersionResponse</strong></p>
+<p>Contains the product version information.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">major</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">int64</span></code></span></dt><dd><p>Major version number.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">minor</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">int64</span></code></span></dt><dd><p>Minor version number.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">patch</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">int64</span></code></span></dt><dd><p>Patch version number.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-getbuildinforequest" />
+<p><strong>GetBuildInfoRequest</strong></p>
+<p>Request to retrieve build information.</p>
+<hr class="docutils" id="proto-application-runtime-getbuildinforesponse" />
+<p><strong>GetBuildInfoResponse</strong></p>
+<p>Contains the build information.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">build_time</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Build timestamp (format is server-defined).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">build_id</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">int64</span></code></span></dt><dd><p>Build identifier (server-defined).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vcs_revision</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Version-control revision identifier (for example, a commit hash).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vcs_branch</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Version-control branch name.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-getcontrollerprocessinforequest" />
+<p><strong>GetControllerProcessInfoRequest</strong></p>
+<p>Request to retrieve Controller process information.</p>
+<hr class="docutils" id="proto-application-runtime-getcontrollerprocessinforesponse" />
+<p><strong>GetControllerProcessInfoResponse</strong></p>
+<p>Contains the Controller process information.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">hostname</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Hostname where the Controller process is running.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">process_id</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">int64</span></code></span></dt><dd><p>Operating-system process id of the Controller process.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">working_directory</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Controller process working directory.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-getsolverprocessinforequest" />
+<p><strong>GetSolverProcessInfoRequest</strong></p>
+<p>Request to retrieve Solver process information.</p>
+<hr class="docutils" id="proto-application-runtime-getsolverprocessinforesponse" />
+<p><strong>GetSolverProcessInfoResponse</strong></p>
+<p>Contains the Solver process information.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">hostname</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Hostname where the Solver process is running.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">process_id</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">int64</span></code></span></dt><dd><p>Operating-system process id of the Solver process.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">working_directory</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Solver process working directory.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-getmoderequest" />
+<p><strong>GetModeRequest</strong></p>
+<p>Request to retrieve the application mode.</p>
+<hr class="docutils" id="proto-application-runtime-getmoderesponse" />
+<p><strong>GetModeResponse</strong></p>
+<p>Contains the application mode.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">mode</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-application-runtime-mode"><span class="std std-ref">Mode</span></a></span></dt><dd><p>Current application mode.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-getdimensionrequest" />
+<p><strong>GetDimensionRequest</strong></p>
+<p>Request to retrieve the application dimension.</p>
+<hr class="docutils" id="proto-application-runtime-getdimensionresponse" />
+<p><strong>GetDimensionResponse</strong></p>
+<p>Contains the application dimension.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">dimension</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-application-runtime-dimension"><span class="std std-ref">Dimension</span></a></span></dt><dd><p>Current application dimension.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-getprecisionrequest" />
+<p><strong>GetPrecisionRequest</strong></p>
+<p>Request to retrieve the application precision.</p>
+<hr class="docutils" id="proto-application-runtime-getprecisionresponse" />
+<p><strong>GetPrecisionResponse</strong></p>
+<p>Contains the application precision.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">precision</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-application-runtime-precision"><span class="std std-ref">Precision</span></a></span></dt><dd><p>Current application precision.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-getprocessorcountrequest" />
+<p><strong>GetProcessorCountRequest</strong></p>
+<p>Request to retrieve the application processor count.</p>
+<hr class="docutils" id="proto-application-runtime-getprocessorcountresponse" />
+<p><strong>GetProcessorCountResponse</strong></p>
+<p>Contains the application processor count.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">processor_count</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Current application processor count.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-getuimoderequest" />
+<p><strong>GetUIModeRequest</strong></p>
+<p>Request to retrieve the application UI mode.</p>
+<hr class="docutils" id="proto-application-runtime-getuimoderesponse" />
+<p><strong>GetUIModeResponse</strong></p>
+<p>Contains the application UI mode.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">ui_mode</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-application-runtime-uimode"><span class="std std-ref">UIMode</span></a></span></dt><dd><p>Current application UI mode.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-getgraphicsdriverrequest" />
+<p><strong>GetGraphicsDriverRequest</strong></p>
+<p>Request to retrieve the application graphics driver.</p>
+<hr class="docutils" id="proto-application-runtime-getgraphicsdriverresponse" />
+<p><strong>GetGraphicsDriverResponse</strong></p>
+<p>Contains the application graphics driver details.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">windows_graphics_driver</span></code> (1)<span class="classifier">oneof driver <a class="reference internal" href="#proto-application-runtime-windowsgraphicsdriver"><span class="std std-ref">WindowsGraphicsDriver</span></a></span></dt><dd><p>Current Windows application graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">linux_graphics_driver</span></code> (2)<span class="classifier">oneof driver <a class="reference internal" href="#proto-application-runtime-linuxgraphicsdriver"><span class="std std-ref">LinuxGraphicsDriver</span></a></span></dt><dd><p>Current Linux application graphics driver.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-getgpuconfigrequest" />
+<p><strong>GetGPUConfigRequest</strong></p>
+<p>Request to retrieve the application GPU configuration.</p>
+<hr class="docutils" id="proto-application-runtime-getgpuconfigresponse" />
+<p><strong>GetGPUConfigResponse</strong></p>
+<p>Contains the application GPU configuration details.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">auto_allocate</span></code> (1)<span class="classifier">oneof config <code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>True when the GPUs are allocated automatically based on availability.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">specific_gpu_ids</span></code> (2)<span class="classifier">oneof config <a class="reference internal" href="#proto-application-runtime-gpuidlist"><span class="std std-ref">GpuIdList</span></a></span></dt><dd><p>A list of specific GPU device IDs explicitly allocated to the application.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-gpuidlist" />
+<p><strong>GpuIdList</strong></p>
+<p>Wrapper message to hold a collection of GPU device IDs.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">gpu_ids</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">uint32</span></code></span></dt><dd><p>List of integer IDs corresponding to the allocated GPUs.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-startpythonjournalrequest" />
+<p><strong>StartPythonJournalRequest</strong></p>
+<p>Initiates a Python journal recording session.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">journal_name</span></code> (1)<span class="classifier">oneof _journal_name <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Optional journal output file name.</p>
+<p>If set, the journal is written to this file on the server side.
+If not set, the journal text can be retrieved from StopPythonJournal.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-startpythonjournalresponse" />
+<p><strong>StartPythonJournalResponse</strong></p>
+<p>Contains the result of starting a Python journal.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">journal_id</span></code> (1)<span class="classifier">oneof _journal_id <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Optional journal identifier.</p>
+<p>Returned when no journal file name was provided and the journal is tracked in-memory/session state.
+Provide this id to StopPythonJournal to stop the correct recording session.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-stoppythonjournalrequest" />
+<p><strong>StopPythonJournalRequest</strong></p>
+<p>Terminates a Python journal recording session.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">journal_id</span></code> (1)<span class="classifier">oneof _journal_id <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Optional journal identifier to stop.</p>
+<p>Required when StartPythonJournal did not provide a file name and returned a journal_id.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-stoppythonjournalresponse" />
+<p><strong>StopPythonJournalResponse</strong></p>
+<p>Contains the result of stopping a Python journal.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">journal_str</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Journal content.</p>
+<p>Typically populated when StartPythonJournal did not specify a file name. If the journal was written
+to a file, this string may be empty (server-defined behavior).</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-isbetaenabledrequest" />
+<p><strong>IsBetaEnabledRequest</strong></p>
+<p>Request to check if beta features are enabled.</p>
+<hr class="docutils" id="proto-application-runtime-isbetaenabledresponse" />
+<p><strong>IsBetaEnabledResponse</strong></p>
+<p>Indicates whether beta features are enabled.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">is_beta_enabled</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>True if beta/experimental features are enabled for this session.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-enablebetarequest" />
+<p><strong>EnableBetaRequest</strong></p>
+<p>Requests to enable beta features.</p>
+<hr class="docutils" id="proto-application-runtime-enablebetaresponse" />
+<p><strong>EnableBetaResponse</strong></p>
+<p>Result of enabling beta features.</p>
+<hr class="docutils" id="proto-application-runtime-exitrequest" />
+<p><strong>ExitRequest</strong></p>
+<p>Requests to exit the application.</p>
+<hr class="docutils" id="proto-application-runtime-exitresponse" />
+<p><strong>ExitResponse</strong></p>
+<p>Result of an exit request.</p>
+<hr class="docutils" id="proto-application-runtime-setworkingdirectoryrequest" />
+<p><strong>SetWorkingDirectoryRequest</strong></p>
+<p>Changes the application’s working directory.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>New working directory path.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-setworkingdirectoryresponse" />
+<p><strong>SetWorkingDirectoryResponse</strong></p>
+<p>Result of setting the working directory.</p>
+<hr class="docutils" id="proto-application-runtime-setidletimeoutrequest" />
+<p><strong>SetIdleTimeoutRequest</strong></p>
+<p>Requests to set the session idle timeout.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">timeout</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">Duration</span></code></span></dt><dd><p>Idle timeout duration.
+When the session has been idle for this duration, Fluent will exit.
+Pass a zero duration to disable the idle timeout.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-setidletimeoutresponse" />
+<p><strong>SetIdleTimeoutResponse</strong></p>
+<p>Result of setting the idle timeout.</p>
+<p><strong>Enumerations</strong></p>
+<hr class="docutils" id="proto-application-runtime-mode" />
+<p><strong>Mode</strong> <em>(enum)</em></p>
+<p>Application operating mode.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MODE_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified application mode.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MODE_MESHING</span></code> (1)</dt><dd><p>Meshing mode.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MODE_SOLVER</span></code> (2)</dt><dd><p>Solver mode.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MODE_SOLVER_ICING</span></code> (3)</dt><dd><p>Solver icing mode.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MODE_SOLVER_AERO</span></code> (4)</dt><dd><p>Solver aero mode.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-dimension" />
+<p><strong>Dimension</strong> <em>(enum)</em></p>
+<p>Application operating dimension.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">DIMENSION_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified application dimension.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DIMENSION_TWO</span></code> (1)</dt><dd><p>Two dimensional.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DIMENSION_THREE</span></code> (2)</dt><dd><p>Three dimensional.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-precision" />
+<p><strong>Precision</strong> <em>(enum)</em></p>
+<p>Application operating precision.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">PRECISION_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified application precision.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PRECISION_SINGLE</span></code> (1)</dt><dd><p>Single precision.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PRECISION_DOUBLE</span></code> (2)</dt><dd><p>Double precision.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-uimode" />
+<p><strong>UIMode</strong> <em>(enum)</em></p>
+<p>Application UI mode.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">UI_MODE_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified application UI mode.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">UI_MODE_NO_GUI_OR_GRAPHICS</span></code> (1)</dt><dd><p>No gui or graphics UI mode.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">UI_MODE_NO_GRAPHICS</span></code> (2)</dt><dd><p>No graphics UI mode.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">UI_MODE_NO_GUI</span></code> (3)</dt><dd><p>No gui UI mode.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">UI_MODE_HIDDEN_GUI</span></code> (4)</dt><dd><p>Hidden gui UI mode.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">UI_MODE_GUI</span></code> (5)</dt><dd><p>Gui UI mode.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-linuxgraphicsdriver" />
+<p><strong>LinuxGraphicsDriver</strong> <em>(enum)</em></p>
+<p>Application graphics driver (Linux specific).</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">LINUX_GRAPHICS_DRIVER_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LINUX_GRAPHICS_DRIVER_NULL</span></code> (1)</dt><dd><p>Null graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LINUX_GRAPHICS_DRIVER_X11</span></code> (2)</dt><dd><p>X11 graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LINUX_GRAPHICS_DRIVER_OPENGL2</span></code> (3)</dt><dd><p>OpenGL2 graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LINUX_GRAPHICS_DRIVER_OPENGL</span></code> (4)</dt><dd><p>OpenGL graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LINUX_GRAPHICS_DRIVER_AUTO</span></code> (5)</dt><dd><p>Automatically choose graphics driver.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-application-runtime-windowsgraphicsdriver" />
+<p><strong>WindowsGraphicsDriver</strong> <em>(enum)</em></p>
+<p>Application graphics driver (Windows specific).</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">WINDOWS_GRAPHICS_DRIVER_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WINDOWS_GRAPHICS_DRIVER_NULL</span></code> (1)</dt><dd><p>Null graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WINDOWS_GRAPHICS_DRIVER_MSW</span></code> (2)</dt><dd><p>MSW graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WINDOWS_GRAPHICS_DRIVER_DX11</span></code> (3)</dt><dd><p>DX11 graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WINDOWS_GRAPHICS_DRIVER_OPENGL2</span></code> (4)</dt><dd><p>OpenGL2 graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WINDOWS_GRAPHICS_DRIVER_OPENGL</span></code> (5)</dt><dd><p>OpenGL graphics driver.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WINDOWS_GRAPHICS_DRIVER_AUTO</span></code> (6)</dt><dd><p>Automatically choose graphics driver.</p>
+</dd>
+</dl>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/services/application_runtime.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+
+  <!-- Include desired assets -->
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+
+<script>
+// Passing the search options to the search.js file
+const SEARCH_OPTIONS = JSON.parse('{"includeMatches": true, "includeScore": true, "keys": [{"name": "section", "weight": 3}, {"name": "title", "weight": 3}, {"name": "text", "weight": 1}, {"name": "objectID", "weight": 0.5}], "limit": 10, "threshold": 0.2}');
+const SEARCH_FILE = "../../_static/search.json";
+const ADVANCE_SEARCH_PATH = "../../search.html";
+const EXTRA_SOURCES = JSON.parse('""');
+</script>
+
+
+<script src="../../_static/js/search.js"></script>
+
+  
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<!--
+  Theme Version Footer
+  Displays the Sphinx theme version and the last updated date.
+  Accessibility and semantic improvements included.
+-->
+<footer class="theme-version" aria-label="Theme version and last update">
+  <span>
+    
+      Built with the
+      <a href="https://sphinxdocs.ansys.com/version/stable/index.html" target="_blank" rel="noopener noreferrer">
+        Ansys Sphinx Theme
+      </a>
+      1.11.0.
+    
+  </span>
+  <br />
+  <span>Last updated on <time id="ast_build_date"></time></span>
+</footer>
+<script>
+  // Set the last updated date in a readable format
+  (function() {
+    var options = { day: "numeric", month: "long", year: "numeric" };
+    var ast_lastModifiedDate = new Date(document.lastModified);
+    var ast_build_date = ast_lastModifiedDate.toLocaleDateString("en-US", options);
+    var dateElem = document.getElementById("ast_build_date");
+    if (dateElem) {
+      dateElem.textContent = ast_build_date;
+    }
+  })();
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

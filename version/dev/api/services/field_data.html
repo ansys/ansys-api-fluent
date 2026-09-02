@@ -1,0 +1,1783 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>FieldData &#8212; Ansys Fluent gRPC API</title>
+  
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=f424389c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=f424389c" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+
+  <!-- Include desired assets -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+
+  
+    <link href="../../_static/css/breadcrumbs.css" rel="stylesheet" />
+  
+    <script src="../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=49e1bf35"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/field_data';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Monitor" href="monitor.html" />
+    <link rel="prev" title="Events" href="events.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  <link rel="canonical" href="https://api.fluent.docs.pyansys.com/version/stable/api/services/field_data.html" />
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="Ansys Fluent gRPC API - Home"/>
+    <img src="../../_static/pyansys_logo_transparent_white.png" class="logo__image only-dark pst-js-only" alt="Ansys Fluent gRPC API - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="Ansys Fluent gRPC API home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-api-fluent" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+  
+
+  
+
+
+
+
+
+
+
+
+
+<div class="ast-announcement-wrap" role="region" aria-label="Announcement" hidden>
+    <div class="ast-announcement info">
+        <span class="ast-announcement-icon" aria-hidden="true"></span>
+        <span class="ast-announcement-text" id="ast-announcement-text"></span>
+        <!-- djlint:off H021-->
+        <!-- for inline styles -->
+        <a class="ast-announcement-details-btn" id="ast-announcement-details-btn"
+           href=""
+           data-ast-url=""
+           aria-label="View notifications"
+           style="display:none">View</a>
+        <!-- djlint:on -->
+        <!-- djlint:off H023-->
+        <!-- use entity reference for &times; -->
+        <button class="ast-announcement-close" id="ast-announcement-close" aria-label="Close announcement">&times;</button>
+        <!-- djlint:on -->
+    </div>
+</div>
+
+<!-- Modal overlay -->
+<!-- djlint:off H023-->
+<!-- use entity reference for &times; -->
+<div class="ast-announcement-overlay" id="ast-announcement-overlay" role="dialog" aria-modal="true" aria-label="Announcement details">
+    <div class="ast-announcement-modal info">
+        <div class="ast-announcement-modal-body"
+             data-ast-items='[]'>
+        </div>
+        <button class="ast-announcement-modal-close" id="ast-announcement-modal-close" aria-label="Close">&times;</button>
+    </div>
+</div>
+<!-- djlint:on -->
+
+<script src="../../_static/js/announcement_banner.js"
+        data-base-url="../../"></script>
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="Ansys Fluent gRPC API home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-api-fluent" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Services</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="health.html">Health</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application_runtime.html">ApplicationRuntime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object_model.html">ObjectModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html">Events</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">FieldData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reduction.html">Reduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solution_variable.html">SolutionVariable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript.html">Transcript</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connection.html">Connection</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../helpers/index.html">Helper modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legacy/index.html">Legacy</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com/" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="../index.html" class="nav-link">API reference</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="index.html" class="nav-link">Services</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">FieldData</span></li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+  
+
+  
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="fielddata">
+<h1>FieldData<a class="headerlink" href="#fielddata" title="Link to this heading">#</a></h1>
+<p><strong>Generated reference</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Source file<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="file docutils literal notranslate"><span class="pre">ansys/api/fluent/v1/field_data.proto</span></code></p>
+</dd>
+<dt class="field-even">Proto package<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">ansys.api.fluent.v1.field_data</span></code></p>
+</dd>
+<dt class="field-odd">Contains<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1 service, 73 messages, 5 enums</p>
+</dd>
+</dl>
+<p><strong>Services</strong></p>
+<hr class="docutils" id="proto-field-data-service-fielddata" />
+<p><strong>Service:</strong> <strong>FieldData</strong></p>
+<p>FieldData service provides methods for retrieving field and surface data from Fluent simulations.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">BeginFieldsStreaming</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-beginfieldsstreamingrequest"><span class="std std-ref">BeginFieldsStreamingRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-field-data-beginfieldsstreamingresponse"><span class="std std-ref">BeginFieldsStreamingResponse</span></a></p>
+</dd>
+</dl>
+<p>Configures and initiates a server-streaming field data session. The request sets the chunk
+size and encoding format (bytes or typed arrays); the server streams BeginFieldsStreamingResponse
+chunks back until all requested field data has been delivered.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetFields</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getfieldsrequest"><span class="std std-ref">GetFieldsRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-field-data-getfieldsresponse"><span class="std std-ref">GetFieldsResponse</span></a></p>
+</dd>
+</dl>
+<p>Retrieves multiple field types (scalar, vector, surface geometry) in a single request.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetRange</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getrangerequest"><span class="std std-ref">GetRangeRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-field-data-getrangeresponse"><span class="std std-ref">GetRangeResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the minimum and maximum values of a scalar field over the specified surfaces.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetSurfacesInfo</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getsurfacesinforequest"><span class="std std-ref">GetSurfacesInfoRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-field-data-getsurfacesinforesponse"><span class="std std-ref">GetSurfacesInfoResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns metadata for the available surfaces.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetVectorFieldsInfo</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getvectorfieldsinforequest"><span class="std std-ref">GetVectorFieldsInfoRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-field-data-getvectorfieldsinforesponse"><span class="std std-ref">GetVectorFieldsInfoResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns metadata for the available vector fields.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetFieldsInfo</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getfieldsinforequest"><span class="std std-ref">GetFieldsInfoRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-field-data-getfieldsinforesponse"><span class="std std-ref">GetFieldsInfoResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns metadata for the available scalar fields.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetSurfaces</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getsurfacesrequest"><span class="std std-ref">GetSurfacesRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-field-data-getsurfacesresponse"><span class="std std-ref">GetSurfacesResponse</span></a></p>
+</dd>
+</dl>
+<p>Retrieves surface geometry data (vertices, faces, centroids, and normals) for the specified surfaces.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetScalarField</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getscalarfieldrequest"><span class="std std-ref">GetScalarFieldRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-field-data-getscalarfieldresponse"><span class="std std-ref">GetScalarFieldResponse</span></a></p>
+</dd>
+</dl>
+<p>Retrieves scalar field data for the specified surfaces.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetVectorField</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getvectorfieldrequest"><span class="std std-ref">GetVectorFieldRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-field-data-getvectorfieldresponse"><span class="std std-ref">GetVectorFieldResponse</span></a></p>
+</dd>
+</dl>
+<p>Retrieves vector field data for the specified surfaces.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetPathlinesField</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getpathlinesfieldrequest"><span class="std std-ref">GetPathlinesFieldRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-field-data-getpathlinesfieldresponse"><span class="std std-ref">GetPathlinesFieldResponse</span></a></p>
+</dd>
+</dl>
+<p>Retrieves pathlines field data for particle tracking visualization.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetParticleTracksField</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getparticletracksfieldrequest"><span class="std std-ref">GetParticleTracksFieldRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-field-data-getparticletracksfieldresponse"><span class="std std-ref">GetParticleTracksFieldResponse</span></a></p>
+</dd>
+</dl>
+<p>Retrieves particle track field data.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">IsBoundaryValuesEnabled</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-isboundaryvaluesenabledrequest"><span class="std std-ref">IsBoundaryValuesEnabledRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-field-data-isboundaryvaluesenabledresponse"><span class="std std-ref">IsBoundaryValuesEnabledResponse</span></a></p>
+</dd>
+</dl>
+<p>Checks whether boundary values are enabled.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetSolverMeshNodesDouble</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getsolvermeshnodesrequest"><span class="std std-ref">GetSolverMeshNodesRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-field-data-getsolvermeshnodesdoubleresponse"><span class="std std-ref">GetSolverMeshNodesDoubleResponse</span></a></p>
+</dd>
+</dl>
+<p>Retrieves solver mesh nodes with double-precision coordinates.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetSolverMeshNodesFloat</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getsolvermeshnodesrequest"><span class="std std-ref">GetSolverMeshNodesRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-field-data-getsolvermeshnodesfloatresponse"><span class="std std-ref">GetSolverMeshNodesFloatResponse</span></a></p>
+</dd>
+</dl>
+<p>Retrieves solver mesh nodes with single-precision floating-point coordinates.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetSolverMeshElements</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-getsolvermeshelementsrequest"><span class="std std-ref">GetSolverMeshElementsRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-field-data-getsolvermeshelementsresponse"><span class="std std-ref">GetSolverMeshElementsResponse</span></a></p>
+</dd>
+</dl>
+<p>Retrieves solver mesh elements (cells).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">IsDataAvailable</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-field-data-isdataavailablerequest"><span class="std std-ref">IsDataAvailableRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-field-data-isdataavailableresponse"><span class="std std-ref">IsDataAvailableResponse</span></a></p>
+</dd>
+</dl>
+<p>Checks whether solution data is currently available.</p>
+</dd>
+</dl>
+<p><strong>Messages</strong></p>
+<hr class="docutils" id="proto-field-data-empty" />
+<p><strong>Empty</strong></p>
+<p>Empty represents an empty or null state</p>
+<hr class="docutils" id="proto-field-data-doublepayload" />
+<p><strong>DoublePayload</strong></p>
+<p>DoublePayload contains an array of double-precision floating-point values</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">payloads</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>The array of double values</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-floatpayload" />
+<p><strong>FloatPayload</strong></p>
+<p>FloatPayload contains an array of single-precision floating-point values</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">payloads</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">float</span></code></span></dt><dd><p>The array of float values</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-intpayload" />
+<p><strong>IntPayload</strong></p>
+<p>IntPayload contains an array of 32-bit signed integer values</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">payloads</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>The array of integer values</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-longpayload" />
+<p><strong>LongPayload</strong></p>
+<p>LongPayload contains an array of 64-bit signed integer values</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">payloads</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>The array of long integer values</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-fieldrequestinfo" />
+<p><strong>FieldRequestInfo</strong></p>
+<p>Request information. It is passed along with PayloadInfo.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_request</span></code> (1)<span class="classifier">oneof request <a class="reference internal" href="#proto-field-data-surfacerequest"><span class="std std-ref">SurfaceRequest</span></a></span></dt><dd><p>Surface request info.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_request</span></code> (2)<span class="classifier">oneof request <a class="reference internal" href="#proto-field-data-scalarfieldrequest"><span class="std std-ref">ScalarFieldRequest</span></a></span></dt><dd><p>Scalar field request info.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vector_field_request</span></code> (3)<span class="classifier">oneof request <a class="reference internal" href="#proto-field-data-vectorfieldrequest"><span class="std std-ref">VectorFieldRequest</span></a></span></dt><dd><p>Vector field request info.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">pathlines_field_request</span></code> (4)<span class="classifier">oneof request <a class="reference internal" href="#proto-field-data-pathlinesfieldrequest"><span class="std std-ref">PathlinesFieldRequest</span></a></span></dt><dd><p>Pathlines field request info.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-payloadinfo" />
+<p><strong>PayloadInfo</strong></p>
+<p>Information about payload</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Surface id corresponding to field data.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field_name</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Field name e.g. vertices, faces, temperature, vector etc.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field_type</span></code> (3)<span class="classifier"><a class="reference internal" href="#proto-field-data-fieldtype"><span class="std std-ref">FieldType</span></a></span></dt><dd><p>Field type.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field_size</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Field size. For bytes it will be number of bytes otherwise array size.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">payload_tags</span></code> (5)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-payloadtag"><span class="std std-ref">PayloadTag</span></a></span></dt><dd><p>PayloadTag to provide extra information about payload.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field_request_info</span></code> (6)<span class="classifier"><a class="reference internal" href="#proto-field-data-fieldrequestinfo"><span class="std std-ref">FieldRequestInfo</span></a></span></dt><dd><p>Request info for the payload.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getfieldsresponse" />
+<p><strong>GetFieldsResponse</strong></p>
+<p>GetFieldsResponse can be either bytePayload or one of double/float/long/int payload.
+Whether data is sent as bytes or as arrays of double/float/long/int depends upon value
+of provideBytesStream in GetFieldsRequest. During streaming first payloadInfo is
+streamed and then corresponding data is streamed.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">byte_payload</span></code> (1)<span class="classifier">oneof chunk <code class="docutils literal notranslate"><span class="pre">bytes</span></code></span></dt><dd><p>Bytes payload.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">double_payload</span></code> (2)<span class="classifier">oneof chunk <a class="reference internal" href="#proto-field-data-doublepayload"><span class="std std-ref">DoublePayload</span></a></span></dt><dd><p>Double payload.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">float_payload</span></code> (3)<span class="classifier">oneof chunk <a class="reference internal" href="#proto-field-data-floatpayload"><span class="std std-ref">FloatPayload</span></a></span></dt><dd><p>Float payload.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">long_payload</span></code> (4)<span class="classifier">oneof chunk <a class="reference internal" href="#proto-field-data-longpayload"><span class="std std-ref">LongPayload</span></a></span></dt><dd><p>Long payload.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">int_payload</span></code> (5)<span class="classifier">oneof chunk <a class="reference internal" href="#proto-field-data-intpayload"><span class="std std-ref">IntPayload</span></a></span></dt><dd><p>Int payload.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">payload_info</span></code> (6)<span class="classifier">oneof chunk <a class="reference internal" href="#proto-field-data-payloadinfo"><span class="std std-ref">PayloadInfo</span></a></span></dt><dd><p>Payload info.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-beginfieldsstreamingrequest" />
+<p><strong>BeginFieldsStreamingRequest</strong></p>
+<p>Request to stream fields.
+- Default chunk size is 256KB. Minimum chunk size is 8B and Maximum is 4MB.
+- If true chunks of bytes will be streamed. Otherwise chunks of int/long/float or double array will be streamed.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">chunk_size</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint32</span></code></span></dt><dd><p>Chunk size in bytes.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">provide_bytes_stream</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, streams bytes; if false, streams typed arrays (int/long/float/double).</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-beginfieldsstreamingresponse" />
+<p><strong>BeginFieldsStreamingResponse</strong></p>
+<p>BeginFieldsStreamingResponse can be either bytePayload or one of double/float/long/int payload.
+Whether data is sent as bytes or as arrays of double/float/long/int depends upon value
+of provideBytesStream in BeginFieldsStreamingRequest. During streaming first payloadInfo is
+streamed and then corresponding data is streamed.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">byte_payload</span></code> (1)<span class="classifier">oneof chunk <code class="docutils literal notranslate"><span class="pre">bytes</span></code></span></dt><dd><p>Bytes payload.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">double_payload</span></code> (2)<span class="classifier">oneof chunk <a class="reference internal" href="#proto-field-data-doublepayload"><span class="std std-ref">DoublePayload</span></a></span></dt><dd><p>Double payload.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">float_payload</span></code> (3)<span class="classifier">oneof chunk <a class="reference internal" href="#proto-field-data-floatpayload"><span class="std std-ref">FloatPayload</span></a></span></dt><dd><p>Float payload.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">long_payload</span></code> (4)<span class="classifier">oneof chunk <a class="reference internal" href="#proto-field-data-longpayload"><span class="std std-ref">LongPayload</span></a></span></dt><dd><p>Long payload.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">int_payload</span></code> (5)<span class="classifier">oneof chunk <a class="reference internal" href="#proto-field-data-intpayload"><span class="std std-ref">IntPayload</span></a></span></dt><dd><p>Int payload.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">payload_info</span></code> (6)<span class="classifier">oneof chunk <a class="reference internal" href="#proto-field-data-payloadinfo"><span class="std std-ref">PayloadInfo</span></a></span></dt><dd><p>Payload info.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-surfacerequest" />
+<p><strong>SurfaceRequest</strong></p>
+<p>Request for surface data.
+Surface data consists of information about vertices and faces.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Surface id.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">overset_mesh</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>Whether to include overset mesh.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">provide_vertices</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, vertices are included.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">provide_faces</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, face-to-vertex connectivity is included.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">provide_faces_centroid</span></code> (5)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, face centroids are included.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">provide_faces_normal</span></code> (6)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, face normals are included.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-scalarfieldrequest" />
+<p><strong>ScalarFieldRequest</strong></p>
+<p>Request for scalar field data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Surface id for scalar field.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_name</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Scalar field name.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">data_location</span></code> (3)<span class="classifier"><a class="reference internal" href="#proto-field-data-datalocation"><span class="std std-ref">DataLocation</span></a></span></dt><dd><p>Scalar Field location (Nodes/Elements).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">provide_boundary_values</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, includes boundary values.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-vectorfieldrequest" />
+<p><strong>VectorFieldRequest</strong></p>
+<p>Request for vector field data.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Surface id for vector field.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vector_field_name</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Vector field name.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-pathlinesfieldrequest" />
+<p><strong>PathlinesFieldRequest</strong></p>
+<p>Request for pathlines field data.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Surface id for pathlines.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Scalar Field name.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">additional_field</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Any additional scalar field if required for pathlines.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">provide_particle_time_field</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>Whether to provide particle time field.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">data_location</span></code> (5)<span class="classifier"><a class="reference internal" href="#proto-field-data-datalocation"><span class="std std-ref">DataLocation</span></a></span></dt><dd><p>Scalar Field location (Nodes/Elements).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">steps</span></code> (6)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>Pathlines step count.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">step_size</span></code> (7)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Pathlines step size.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">skip</span></code> (8)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>Pathlines skip count.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">reverse</span></code> (9)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, traces pathlines in reverse direction; if false, traces forward.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">accuracy_control_enabled</span></code> (10)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, enables pathlines accuracy control.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tolerance</span></code> (11)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Pathlines tolerance.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">coarsen</span></code> (12)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>Pathlines coarsen value.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">velocity_domain</span></code> (13)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Pathlines velocity domain.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">zones</span></code> (14)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Pathlines zones.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getfieldsrequest" />
+<p><strong>GetFieldsRequest</strong></p>
+<p>Request for fields.
+- Default chunk size is 256KB. Minimum chunk size is 8B and Maximum is 4MB.
+- If true chunks of bytes will be streamed. Otherwise chunks of int/long/float or double array will be streamed.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">chunk_size</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint32</span></code></span></dt><dd><p>Chunk size in bytes.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">provide_bytes_stream</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, streams bytes; if false, streams typed arrays (int/long/float/double).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_requests</span></code> (3)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfacerequest"><span class="std std-ref">SurfaceRequest</span></a></span></dt><dd><p>Surface request.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_requests</span></code> (4)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-scalarfieldrequest"><span class="std std-ref">ScalarFieldRequest</span></a></span></dt><dd><p>Scalar field request.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vector_field_requests</span></code> (5)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-vectorfieldrequest"><span class="std std-ref">VectorFieldRequest</span></a></span></dt><dd><p>Vector field request.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">pathlines_field_requests</span></code> (6)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-pathlinesfieldrequest"><span class="std std-ref">PathlinesFieldRequest</span></a></span></dt><dd><p>Pathlines field request.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-datastamping" />
+<p><strong>DataStamping</strong></p>
+<p>DataStamping contains stamping information for solution data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">data_stamping_type</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-datastampingtype"><span class="std std-ref">DataStampingType</span></a></span></dt><dd><p>The type of data stamping</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">doublevalue</span></code> (2)<span class="classifier">oneof as <code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Double-precision value for stamping</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">intvalue</span></code> (3)<span class="classifier">oneof as <code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>Integer value for stamping</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-unitinfo" />
+<p><strong>UnitInfo</strong></p>
+<p>UnitInfo contains unit system information for field data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">name</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The name of the quantity</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">unit</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The unit string</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">factor</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Unit conversion factor</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">offset</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Unit conversion offset</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">label</span></code> (5)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Display label for the unit</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-datastampinginfo" />
+<p><strong>DataStampingInfo</strong></p>
+<p>DataStampingInfo contains a collection of data stamping entries</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">data_stampings</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-datastamping"><span class="std std-ref">DataStamping</span></a></span></dt><dd><p>The list of data stamping entries</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-surfaceid" />
+<p><strong>SurfaceId</strong></p>
+<p>SurfaceId uniquely identifies a surface</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>The surface identifier</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getsurfacesrequest" />
+<p><strong>GetSurfacesRequest</strong></p>
+<p>GetSurfacesRequest is the request message for retrieving surface geometry</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_ids</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>The surface IDs to retrieve</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">overset_mesh</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, includes overset mesh data.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">data_stamping_info</span></code> (3)<span class="classifier"><a class="reference internal" href="#proto-field-data-datastampinginfo"><span class="std std-ref">DataStampingInfo</span></a></span></dt><dd><p>Data stamping information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">available_surfaces</span></code> (4)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>Available surfaces for validation</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-surfacemetadata" />
+<p><strong>SurfaceMetaData</strong></p>
+<p>SurfaceMetaData contains metadata for surface data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">data_stamping_info</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-datastampinginfo"><span class="std std-ref">DataStampingInfo</span></a></span></dt><dd><p>Data stamping information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">length_unit</span></code> (2)<span class="classifier"><a class="reference internal" href="#proto-field-data-unitinfo"><span class="std std-ref">UnitInfo</span></a></span></dt><dd><p>Length unit information</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-coordinate" />
+<p><strong>Coordinate</strong></p>
+<p>Coordinate represents a 3D point in space</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">x</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>X coordinate</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">y</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Y coordinate</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">z</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Z coordinate</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-facet" />
+<p><strong>Facet</strong></p>
+<p>Facet represents a face defined by node indices</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">nodes</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>Node indices defining the facet</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-surfaceinfo" />
+<p><strong>SurfaceInfo</strong></p>
+<p>SurfaceInfo contains information about a surface</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_ids</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>The surface identifiers</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">zone_id</span></code> (2)<span class="classifier"><a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>The zone identifier</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_name</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The name of the surface</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">zone_type</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The type of zone</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">type</span></code> (5)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The surface type</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-surfacedata" />
+<p><strong>SurfaceData</strong></p>
+<p>SurfaceData contains geometry data for a surface</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_id</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>The surface identifier</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">points</span></code> (2)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-coordinate"><span class="std std-ref">Coordinate</span></a></span></dt><dd><p>The vertex coordinates</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">facets</span></code> (3)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-facet"><span class="std std-ref">Facet</span></a></span></dt><dd><p>The face connectivity</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">empty_state</span></code> (5)<span class="classifier">oneof as <a class="reference internal" href="#proto-field-data-empty"><span class="std std-ref">Empty</span></a></span></dt><dd><p>Empty state indicator</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_metadata</span></code> (6)<span class="classifier">oneof as <a class="reference internal" href="#proto-field-data-surfacemetadata"><span class="std std-ref">SurfaceMetaData</span></a></span></dt><dd><p>Surface metadata</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getsurfacesresponse" />
+<p><strong>GetSurfacesResponse</strong></p>
+<p>GetSurfacesResponse is the streaming response containing surface data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_data</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-surfacedata"><span class="std std-ref">SurfaceData</span></a></span></dt><dd><p>The surface data</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getrangerequest" />
+<p><strong>GetRangeRequest</strong></p>
+<p>GetRangeRequest is the request message for retrieving field range</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">field_name</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The name of the field</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_ids</span></code> (2)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>The surface IDs to query</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">node_value</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>Whether to get node values (vs element values)</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getrangeresponse" />
+<p><strong>GetRangeResponse</strong></p>
+<p>GetRangeResponse contains the minimum and maximum values of a field</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">minimum</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>The minimum field value</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">maximum</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>The maximum field value</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-fieldinfo" />
+<p><strong>FieldInfo</strong></p>
+<p>FieldInfo contains metadata about a scalar field</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">display_name</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Display name for UI</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">solver_name</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Internal solver name</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">section</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Section or category</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">domain</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Domain information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">quantity_name</span></code> (5)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Physical quantity name</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getfieldsinforequest" />
+<p><strong>GetFieldsInfoRequest</strong></p>
+<p>GetFieldsInfoRequest is the request message for retrieving available fields</p>
+<hr class="docutils" id="proto-field-data-getfieldsinforesponse" />
+<p><strong>GetFieldsInfoResponse</strong></p>
+<p>GetFieldsInfoResponse contains information about available scalar fields</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">field_info</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-fieldinfo"><span class="std std-ref">FieldInfo</span></a></span></dt><dd><p>The list of available fields</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getvectorfieldsinforequest" />
+<p><strong>GetVectorFieldsInfoRequest</strong></p>
+<p>GetVectorFieldsInfoRequest is the request message for retrieving available vector fields</p>
+<hr class="docutils" id="proto-field-data-vectorfieldinfo" />
+<p><strong>VectorFieldInfo</strong></p>
+<p>VectorFieldInfo contains metadata about a vector field</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">display_name</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Display name for UI</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">x_component</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>X component field name</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">y_component</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Y component field name</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">z_component</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Z component field name</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getvectorfieldsinforesponse" />
+<p><strong>GetVectorFieldsInfoResponse</strong></p>
+<p>GetVectorFieldsInfoResponse contains information about available vector fields</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">vector_field_info</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-vectorfieldinfo"><span class="std std-ref">VectorFieldInfo</span></a></span></dt><dd><p>The list of available vector fields</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getsurfacesinforequest" />
+<p><strong>GetSurfacesInfoRequest</strong></p>
+<p>GetSurfacesInfoRequest is the request message for retrieving surface information</p>
+<hr class="docutils" id="proto-field-data-getsurfacesinforesponse" />
+<p><strong>GetSurfacesInfoResponse</strong></p>
+<p>GetSurfacesInfoResponse contains information about available surfaces</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_info</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceinfo"><span class="std std-ref">SurfaceInfo</span></a></span></dt><dd><p>The list of available surfaces</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getscalarfieldrequest" />
+<p><strong>GetScalarFieldRequest</strong></p>
+<p>GetScalarFieldRequest is the request message for retrieving scalar field data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_ids</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>The surface IDs to retrieve data for</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The scalar field name</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">node_value</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, returns node values; if false, returns element values.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">data_stamping_info</span></code> (4)<span class="classifier"><a class="reference internal" href="#proto-field-data-datastampinginfo"><span class="std std-ref">DataStampingInfo</span></a></span></dt><dd><p>Data stamping information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">available_surfaces</span></code> (5)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>Available surfaces for validation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">available_scalar_fields</span></code> (6)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>Available scalar fields for validation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">boundary_values</span></code> (7)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, includes boundary values.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-globalrange" />
+<p><strong>GlobalRange</strong></p>
+<p>GlobalRange contains the global minimum and maximum values</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">global_min</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Global minimum value</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">global_max</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Global maximum value</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-scalarfieldmetadata" />
+<p><strong>ScalarFieldMetaData</strong></p>
+<p>ScalarFieldMetaData contains metadata for scalar field data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">data_stamping_info</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-datastampinginfo"><span class="std std-ref">DataStampingInfo</span></a></span></dt><dd><p>Data stamping information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">length_unit</span></code> (2)<span class="classifier"><a class="reference internal" href="#proto-field-data-unitinfo"><span class="std std-ref">UnitInfo</span></a></span></dt><dd><p>Length unit information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_range</span></code> (3)<span class="classifier"><a class="reference internal" href="#proto-field-data-globalrange"><span class="std std-ref">GlobalRange</span></a></span></dt><dd><p>Scalar field value range</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_unit</span></code> (4)<span class="classifier"><a class="reference internal" href="#proto-field-data-unitinfo"><span class="std std-ref">UnitInfo</span></a></span></dt><dd><p>Scalar field unit information</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-vectorcomponents" />
+<p><strong>VectorComponents</strong></p>
+<p>VectorComponents represents a 3D vector</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">x</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>X component</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">y</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Y component</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">z</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Z component</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-scalarfield" />
+<p><strong>ScalarField</strong></p>
+<p>ScalarField contains scalar field data values</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">data</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>The scalar field values</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-vectorfield" />
+<p><strong>VectorField</strong></p>
+<p>VectorField contains vector field data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">vector_components</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-vectorcomponents"><span class="std std-ref">VectorComponents</span></a></span></dt><dd><p>The vector components at each point</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-activefield" />
+<p><strong>ActiveField</strong></p>
+<p>ActiveField indicates which elements are active</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">actives</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>Active element flags</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-scalarfielddata" />
+<p><strong>ScalarFieldData</strong></p>
+<p>ScalarFieldData contains scalar field data on a surface</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_id</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>The surface identifier</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_data</span></code> (2)<span class="classifier"><a class="reference internal" href="#proto-field-data-surfacedata"><span class="std std-ref">SurfaceData</span></a></span></dt><dd><p>The surface geometry data</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field</span></code> (3)<span class="classifier"><a class="reference internal" href="#proto-field-data-scalarfield"><span class="std std-ref">ScalarField</span></a></span></dt><dd><p>The scalar field values</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">active_field</span></code> (4)<span class="classifier"><a class="reference internal" href="#proto-field-data-activefield"><span class="std std-ref">ActiveField</span></a></span></dt><dd><p>Active element indicators</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">empty_state</span></code> (5)<span class="classifier">oneof as <a class="reference internal" href="#proto-field-data-empty"><span class="std std-ref">Empty</span></a></span></dt><dd><p>Empty state indicator</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_metadata</span></code> (6)<span class="classifier">oneof as <a class="reference internal" href="#proto-field-data-scalarfieldmetadata"><span class="std std-ref">ScalarFieldMetaData</span></a></span></dt><dd><p>Scalar field metadata</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getscalarfieldresponse" />
+<p><strong>GetScalarFieldResponse</strong></p>
+<p>GetScalarFieldResponse is the streaming response containing scalar field data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_data</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-scalarfielddata"><span class="std std-ref">ScalarFieldData</span></a></span></dt><dd><p>The scalar field data</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getvectorfieldrequest" />
+<p><strong>GetVectorFieldRequest</strong></p>
+<p>GetVectorFieldRequest is the request message for retrieving vector field data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_ids</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>The surface IDs to retrieve data for</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The scalar field name for coloring</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">node_value</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, returns node values; if false, returns element values.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vector_field</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The vector field name</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">data_stamping_info</span></code> (6)<span class="classifier"><a class="reference internal" href="#proto-field-data-datastampinginfo"><span class="std std-ref">DataStampingInfo</span></a></span></dt><dd><p>Data stamping information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">available_surfaces</span></code> (7)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>Available surfaces for validation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">available_scalar_fields</span></code> (8)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>Available scalar fields for validation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">available_vector_fields</span></code> (9)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>Available vector fields for validation</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-vectorfieldmetadata" />
+<p><strong>VectorFieldMetaData</strong></p>
+<p>VectorFieldMetaData contains metadata for vector field data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">data_stamping_info</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-datastampinginfo"><span class="std std-ref">DataStampingInfo</span></a></span></dt><dd><p>Data stamping information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">length_unit</span></code> (2)<span class="classifier"><a class="reference internal" href="#proto-field-data-unitinfo"><span class="std std-ref">UnitInfo</span></a></span></dt><dd><p>Length unit information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_range</span></code> (3)<span class="classifier"><a class="reference internal" href="#proto-field-data-globalrange"><span class="std std-ref">GlobalRange</span></a></span></dt><dd><p>Scalar field value range (for coloring)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_unit</span></code> (4)<span class="classifier"><a class="reference internal" href="#proto-field-data-unitinfo"><span class="std std-ref">UnitInfo</span></a></span></dt><dd><p>Scalar field unit information</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-vectorscale" />
+<p><strong>VectorScale</strong></p>
+<p>VectorScale contains the scale factor for vector visualization</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">data</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>The scale factor</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-vectorfielddata" />
+<p><strong>VectorFieldData</strong></p>
+<p>VectorFieldData contains vector field data on a surface</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_id</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>The surface identifier</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">surface_data</span></code> (2)<span class="classifier"><a class="reference internal" href="#proto-field-data-surfacedata"><span class="std std-ref">SurfaceData</span></a></span></dt><dd><p>The surface geometry data</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field</span></code> (3)<span class="classifier"><a class="reference internal" href="#proto-field-data-scalarfield"><span class="std std-ref">ScalarField</span></a></span></dt><dd><p>The scalar field values for coloring</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">active_field</span></code> (4)<span class="classifier"><a class="reference internal" href="#proto-field-data-activefield"><span class="std std-ref">ActiveField</span></a></span></dt><dd><p>Active element indicators</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">empty_state</span></code> (5)<span class="classifier">oneof as <a class="reference internal" href="#proto-field-data-empty"><span class="std std-ref">Empty</span></a></span></dt><dd><p>Empty state indicator</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vector_field_metadata</span></code> (6)<span class="classifier">oneof as <a class="reference internal" href="#proto-field-data-vectorfieldmetadata"><span class="std std-ref">VectorFieldMetaData</span></a></span></dt><dd><p>Vector field metadata</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">base</span></code> (7)<span class="classifier"><a class="reference internal" href="#proto-field-data-vectorfield"><span class="std std-ref">VectorField</span></a></span></dt><dd><p>Base position vectors</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vector</span></code> (8)<span class="classifier"><a class="reference internal" href="#proto-field-data-vectorfield"><span class="std std-ref">VectorField</span></a></span></dt><dd><p>The vector field values</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">normal</span></code> (9)<span class="classifier"><a class="reference internal" href="#proto-field-data-vectorfield"><span class="std std-ref">VectorField</span></a></span></dt><dd><p>Surface normal vectors</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vector_scale</span></code> (10)<span class="classifier"><a class="reference internal" href="#proto-field-data-vectorscale"><span class="std std-ref">VectorScale</span></a></span></dt><dd><p>Vector scale factor</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getvectorfieldresponse" />
+<p><strong>GetVectorFieldResponse</strong></p>
+<p>GetVectorFieldResponse is the streaming response containing vector field data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">vector_field_data</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-vectorfielddata"><span class="std std-ref">VectorFieldData</span></a></span></dt><dd><p>The vector field data</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getpathlinesfieldrequest" />
+<p><strong>GetPathlinesFieldRequest</strong></p>
+<p>GetPathlinesFieldRequest is the request message for retrieving pathlines data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">release_froms</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-surfaceid"><span class="std std-ref">SurfaceId</span></a></span></dt><dd><p>Surface IDs to release particles from</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field1</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Primary scalar field for visualization</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field2</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Secondary scalar field for visualization</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">node_value</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, uses node values; if false, uses element values.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">steps</span></code> (5)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>Number of pathline steps</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">step_size</span></code> (6)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Step size for pathline integration</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">skip</span></code> (8)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>Number of particles to skip</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">reverse</span></code> (9)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, traces pathlines in reverse direction; if false, traces forward.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">accuracy_control_enabled</span></code> (10)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, enables accuracy control for pathline integration.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tolerance</span></code> (11)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Tolerance for accuracy control</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">coarsen</span></code> (12)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>Coarsening factor for pathlines</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">zone</span></code> (13)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Deprecated. Use zones instead.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">velocity_domain</span></code> (14)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Velocity domain for pathline calculation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">data_stamping_info</span></code> (15)<span class="classifier"><a class="reference internal" href="#proto-field-data-datastampinginfo"><span class="std std-ref">DataStampingInfo</span></a></span></dt><dd><p>Data stamping information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">zones</span></code> (16)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Zones for pathline calculation</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-pathlinemetadata" />
+<p><strong>PathlineMetaData</strong></p>
+<p>PathlineMetaData contains metadata for pathline data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">data_stamping_info</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-datastampinginfo"><span class="std std-ref">DataStampingInfo</span></a></span></dt><dd><p>Data stamping information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">length_unit</span></code> (2)<span class="classifier"><a class="reference internal" href="#proto-field-data-unitinfo"><span class="std std-ref">UnitInfo</span></a></span></dt><dd><p>Length unit information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_range</span></code> (3)<span class="classifier"><a class="reference internal" href="#proto-field-data-globalrange"><span class="std std-ref">GlobalRange</span></a></span></dt><dd><p>Scalar field value range</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_unit</span></code> (4)<span class="classifier"><a class="reference internal" href="#proto-field-data-unitinfo"><span class="std std-ref">UnitInfo</span></a></span></dt><dd><p>Scalar field unit information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">twist_range</span></code> (5)<span class="classifier"><a class="reference internal" href="#proto-field-data-globalrange"><span class="std std-ref">GlobalRange</span></a></span></dt><dd><p>Twist range for ribbon visualization</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">time_unit</span></code> (6)<span class="classifier"><a class="reference internal" href="#proto-field-data-unitinfo"><span class="std std-ref">UnitInfo</span></a></span></dt><dd><p>Time unit information</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-pathlinefielddata" />
+<p><strong>PathlineFieldData</strong></p>
+<p>PathlineFieldData contains data for a single pathline</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">particle_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>Unique identifier for the particle</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">particle_positions</span></code> (2)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Particle positions along the pathline (x,y,z triplets)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">particle_times</span></code> (3)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Time values along the pathline</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field1s</span></code> (4)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Primary field values along the pathline</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field2s</span></code> (5)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Secondary field values along the pathline</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">begin_step</span></code> (6)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>Starting step index</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">end_step</span></code> (7)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>Ending step index</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-pathlinedata" />
+<p><strong>PathlineData</strong></p>
+<p>PathlineData contains either pathline field data or metadata</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">pathline_field_data</span></code> (1)<span class="classifier">oneof as <a class="reference internal" href="#proto-field-data-pathlinefielddata"><span class="std std-ref">PathlineFieldData</span></a></span></dt><dd><p>Pathline field data</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">pathline_metadata</span></code> (2)<span class="classifier">oneof as <a class="reference internal" href="#proto-field-data-pathlinemetadata"><span class="std std-ref">PathlineMetaData</span></a></span></dt><dd><p>Pathline metadata</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getpathlinesfieldresponse" />
+<p><strong>GetPathlinesFieldResponse</strong></p>
+<p>GetPathlinesFieldResponse is the streaming response containing pathline data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">pathline_data</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-pathlinedata"><span class="std std-ref">PathlineData</span></a></span></dt><dd><p>The pathline data</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-particletracksfilter" />
+<p><strong>ParticleTracksFilter</strong></p>
+<p>ParticleTracksFilter defines filtering criteria for particle tracks</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">field</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Field name to filter on</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">filter_range</span></code> (2)<span class="classifier"><a class="reference internal" href="#proto-field-data-globalrange"><span class="std std-ref">GlobalRange</span></a></span></dt><dd><p>Range of values to filter</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">inside_range</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, includes particles inside the range; if false, includes those outside.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getparticletracksfieldrequest" />
+<p><strong>GetParticleTracksFieldRequest</strong></p>
+<p>GetParticleTracksFieldRequest is the request message for retrieving particle track data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">release_froms</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Names of surfaces to release particles from</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field1</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Scalar field for coloring particles</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field2</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Scalar field for sphere size or ribbon twist</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field3</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Vector field for visualization</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">vector_field</span></code> (5)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Vector field name</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">node_value</span></code> (6)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, uses node values; if false, uses element values.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">skip</span></code> (7)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>Number of particles to skip</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">single_stream_id</span></code> (8)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>If &gt;= 0, track only this stream ID; if &lt; 0, track all streams</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">coarsen</span></code> (9)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>Coarsening factor for particle tracks</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">free_stream_particles</span></code> (10)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, includes free stream particles.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wall_film_particles</span></code> (11)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, includes wall film particles.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">pdf_particles</span></code> (12)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, includes PDF particles.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">filter</span></code> (13)<span class="classifier"><a class="reference internal" href="#proto-field-data-particletracksfilter"><span class="std std-ref">ParticleTracksFilter</span></a></span></dt><dd><p>Filter for particle tracks</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">data_stamping_info</span></code> (14)<span class="classifier"><a class="reference internal" href="#proto-field-data-datastampinginfo"><span class="std std-ref">DataStampingInfo</span></a></span></dt><dd><p>Data stamping information</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-particletrackmetadata" />
+<p><strong>ParticleTrackMetaData</strong></p>
+<p>ParticleTrackMetaData contains metadata for particle track data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">data_stamping_info</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-datastampinginfo"><span class="std std-ref">DataStampingInfo</span></a></span></dt><dd><p>Data stamping information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">length_unit</span></code> (2)<span class="classifier"><a class="reference internal" href="#proto-field-data-unitinfo"><span class="std std-ref">UnitInfo</span></a></span></dt><dd><p>Length unit information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_range</span></code> (3)<span class="classifier"><a class="reference internal" href="#proto-field-data-globalrange"><span class="std std-ref">GlobalRange</span></a></span></dt><dd><p>Scalar field value range</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scalar_field_unit</span></code> (4)<span class="classifier"><a class="reference internal" href="#proto-field-data-unitinfo"><span class="std std-ref">UnitInfo</span></a></span></dt><dd><p>Scalar field unit information</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">twist_range</span></code> (5)<span class="classifier"><a class="reference internal" href="#proto-field-data-globalrange"><span class="std std-ref">GlobalRange</span></a></span></dt><dd><p>Twist range for ribbon visualization</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">time_unit</span></code> (6)<span class="classifier"><a class="reference internal" href="#proto-field-data-unitinfo"><span class="std std-ref">UnitInfo</span></a></span></dt><dd><p>Time unit information</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-particletrackfielddata" />
+<p><strong>ParticleTrackFieldData</strong></p>
+<p>ParticleTrackFieldData contains data for a single particle track</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">particle_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>Unique identifier for the particle</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">particle_position</span></code> (2)<span class="classifier"><a class="reference internal" href="#proto-field-data-scalarfield"><span class="std std-ref">ScalarField</span></a></span></dt><dd><p>Particle positions along the track (x,y,z triplets)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">particle_time</span></code> (3)<span class="classifier"><a class="reference internal" href="#proto-field-data-scalarfield"><span class="std std-ref">ScalarField</span></a></span></dt><dd><p>Time values along the track</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field1</span></code> (4)<span class="classifier"><a class="reference internal" href="#proto-field-data-scalarfield"><span class="std std-ref">ScalarField</span></a></span></dt><dd><p>Primary field values along the track</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field2</span></code> (5)<span class="classifier"><a class="reference internal" href="#proto-field-data-scalarfield"><span class="std std-ref">ScalarField</span></a></span></dt><dd><p>Secondary field values along the track</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">field3</span></code> (6)<span class="classifier"><a class="reference internal" href="#proto-field-data-scalarfield"><span class="std std-ref">ScalarField</span></a></span></dt><dd><p>Tertiary field values along the track</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">particle_velocity</span></code> (7)<span class="classifier"><a class="reference internal" href="#proto-field-data-vectorfield"><span class="std std-ref">VectorField</span></a></span></dt><dd><p>Velocity vectors along the track</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">particle_start_time</span></code> (8)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Particle start time</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">particle_end_time</span></code> (9)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Particle end time</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-particletrackdata" />
+<p><strong>ParticleTrackData</strong></p>
+<p>ParticleTrackData contains either particle track field data or metadata</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">particle_track_field_data</span></code> (1)<span class="classifier">oneof as <a class="reference internal" href="#proto-field-data-particletrackfielddata"><span class="std std-ref">ParticleTrackFieldData</span></a></span></dt><dd><p>Particle track field data</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">particle_track_meta_data</span></code> (2)<span class="classifier">oneof as <a class="reference internal" href="#proto-field-data-particletrackmetadata"><span class="std std-ref">ParticleTrackMetaData</span></a></span></dt><dd><p>Particle track metadata</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getparticletracksfieldresponse" />
+<p><strong>GetParticleTracksFieldResponse</strong></p>
+<p>GetParticleTracksFieldResponse is the streaming response containing particle track data</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">particle_track_data</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-field-data-particletrackdata"><span class="std std-ref">ParticleTrackData</span></a></span></dt><dd><p>The particle track data</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-isboundaryvaluesenabledrequest" />
+<p><strong>IsBoundaryValuesEnabledRequest</strong></p>
+<p>IsBoundaryValuesEnabledRequest is the request message for checking boundary values status</p>
+<hr class="docutils" id="proto-field-data-isboundaryvaluesenabledresponse" />
+<p><strong>IsBoundaryValuesEnabledResponse</strong></p>
+<p>IsBoundaryValuesEnabledResponse indicates whether boundary values are enabled</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">is_boundary_values_enabled</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>True if boundary values are enabled</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getsolvermeshnodesrequest" />
+<p><strong>GetSolverMeshNodesRequest</strong></p>
+<p>GetSolverMeshNodesRequest is the request message for retrieving mesh nodes</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">domain_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Domain identifier</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">thread_id</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Thread (zone) identifier</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-nodedouble" />
+<p><strong>NodeDouble</strong></p>
+<p>NodeDouble represents a mesh node with double precision coordinates</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Node identifier</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">x</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>X coordinate</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">y</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Y coordinate</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">z</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Z coordinate</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-nodefloat" />
+<p><strong>NodeFloat</strong></p>
+<p>NodeFloat represents a mesh node with single precision coordinates</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Node identifier</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">x</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">float</span></code></span></dt><dd><p>X coordinate</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">y</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">float</span></code></span></dt><dd><p>Y coordinate</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">z</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">float</span></code></span></dt><dd><p>Z coordinate</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getsolvermeshnodesdoubleresponse" />
+<p><strong>GetSolverMeshNodesDoubleResponse</strong></p>
+<p>GetSolverMeshNodesDoubleResponse is the streaming response containing double precision nodes</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">nodes</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-nodedouble"><span class="std std-ref">NodeDouble</span></a></span></dt><dd><p>The mesh nodes</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getsolvermeshnodesfloatresponse" />
+<p><strong>GetSolverMeshNodesFloatResponse</strong></p>
+<p>GetSolverMeshNodesFloatResponse is the streaming response containing single precision nodes</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">nodes</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-nodefloat"><span class="std std-ref">NodeFloat</span></a></span></dt><dd><p>The mesh nodes</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getsolvermeshelementsrequest" />
+<p><strong>GetSolverMeshElementsRequest</strong></p>
+<p>GetSolverMeshElementsRequest is the request message for retrieving mesh elements</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">domain_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Domain identifier</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">thread_id</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Thread (zone) identifier</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-element" />
+<p><strong>Element</strong></p>
+<p>Element represents a mesh element (cell)</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Element identifier</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">element_type</span></code> (2)<span class="classifier"><a class="reference internal" href="#proto-field-data-cellelementtype"><span class="std std-ref">CellElementType</span></a></span></dt><dd><p>Element type</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">node_ids</span></code> (3)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">uint64</span></code></span></dt><dd><p>Node IDs for standard element types</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">facets</span></code> (4)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-facet"><span class="std std-ref">Facet</span></a></span></dt><dd><p>Face definitions for polyhedron element type</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-getsolvermeshelementsresponse" />
+<p><strong>GetSolverMeshElementsResponse</strong></p>
+<p>GetSolverMeshElementsResponse is the streaming response containing mesh elements</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">elements</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-field-data-element"><span class="std std-ref">Element</span></a></span></dt><dd><p>The mesh elements</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-isdataavailablerequest" />
+<p><strong>IsDataAvailableRequest</strong></p>
+<p>Request to check if solution data is available.</p>
+<hr class="docutils" id="proto-field-data-isdataavailableresponse" />
+<p><strong>IsDataAvailableResponse</strong></p>
+<p>Indicates whether solution data is available.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">is_data_available</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>True if solution data is currently available.</p>
+</dd>
+</dl>
+<p><strong>Enumerations</strong></p>
+<hr class="docutils" id="proto-field-data-fieldtype" />
+<p><strong>FieldType</strong> <em>(enum)</em></p>
+<p>Field Type</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">FIELD_TYPE_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified field type</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FIELD_TYPE_INT_ARRAY</span></code> (1)</dt><dd><p>Integer array</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FIELD_TYPE_LONG_ARRAY</span></code> (2)</dt><dd><p>Long array</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FIELD_TYPE_FLOAT_ARRAY</span></code> (3)</dt><dd><p>Float array</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FIELD_TYPE_DOUBLE_ARRAY</span></code> (4)</dt><dd><p>Double array</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-payloadtag" />
+<p><strong>PayloadTag</strong> <em>(enum)</em></p>
+<p>Payload tag, provides extra information about payload.
+For example it tells if payload data corresponds to cell or node location
+or it contains boundary values etc.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">PAYLOAD_TAG_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified payload tag</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PAYLOAD_TAG_OVERSET_MESH</span></code> (1)</dt><dd><p>This tag is set if oversetMesh flag in SurfaceRequest is set to True</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PAYLOAD_TAG_ELEMENT_LOCATION</span></code> (2)</dt><dd><p>This tag is set if dataLocation in ScalarFieldRequest is Elements</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PAYLOAD_TAG_NODE_LOCATION</span></code> (3)</dt><dd><p>This tag is set if dataLocation in ScalarFieldRequest is Nodes</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PAYLOAD_TAG_BOUNDARY_VALUES</span></code> (4)</dt><dd><p>This tag is set if provideBoundaryValues in ScalarFieldRequest is set to True</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-datalocation" />
+<p><strong>DataLocation</strong> <em>(enum)</em></p>
+<p>DataLocation specifies where data is located in the mesh</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">DATA_LOCATION_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified location</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATA_LOCATION_NODES</span></code> (1)</dt><dd><p>Data is located at mesh nodes</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATA_LOCATION_ELEMENTS</span></code> (2)</dt><dd><p>Data is located at mesh elements (cells)</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-datastampingtype" />
+<p><strong>DataStampingType</strong> <em>(enum)</em></p>
+<p>DataStampingType specifies the type of data stamping for solution data</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">DATA_STAMPING_TYPE_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified stamping type</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATA_STAMPING_TYPE_ITERATION_INDEX</span></code> (1)</dt><dd><p>Iteration index</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATA_STAMPING_TYPE_TIME_STEP_INDEX</span></code> (2)</dt><dd><p>Time step index</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATA_STAMPING_TYPE_FLOW_TIME</span></code> (3)</dt><dd><p>Flow time</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATA_STAMPING_TYPE_SOLID_TIME</span></code> (4)</dt><dd><p>Solid time</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATA_STAMPING_TYPE_CASE_ID</span></code> (5)</dt><dd><p>Case identifier</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATA_STAMPING_TYPE_MESH_ID</span></code> (6)</dt><dd><p>Mesh identifier</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATA_STAMPING_TYPE_DATA_ID</span></code> (7)</dt><dd><p>Data identifier</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-field-data-cellelementtype" />
+<p><strong>CellElementType</strong> <em>(enum)</em></p>
+<p>CellElementType defines the types of mesh elements (cells)</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified or unknown element type</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_TRIANGLE</span></code> (1)</dt><dd><p>Triangle: 3 nodes, 3 faces</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_TETRAHEDRON</span></code> (2)</dt><dd><p>Tetrahedron: 4 nodes, 4 faces</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_QUADRILATERAL</span></code> (3)</dt><dd><p>Quadrilateral: 4 nodes, 4 faces</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_HEXAHEDRON</span></code> (4)</dt><dd><p>Hexahedron: 8 nodes, 6 faces</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_PYRAMID</span></code> (5)</dt><dd><p>Pyramid: 5 nodes, 5 faces</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_WEDGE</span></code> (6)</dt><dd><p>Wedge (prism): 6 nodes, 5 faces</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_POLYHEDRON</span></code> (7)</dt><dd><p>Polyhedron: arbitrary number of nodes and faces</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_GHOST</span></code> (8)</dt><dd><p>Ghost cell: 2 nodes, 1 face (only in 2D)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_QUADRATIC_TETRAHEDRON</span></code> (9)</dt><dd><p>Quadratic tetrahedron: 10 nodes, 4 faces</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_QUADRATIC_HEXAHEDRON</span></code> (10)</dt><dd><p>Quadratic hexahedron: 20 nodes, 6 faces</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_QUADRATIC_PYRAMID</span></code> (11)</dt><dd><p>Quadratic pyramid: 13 nodes, 5 faces</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CELL_ELEMENT_TYPE_QUADRATIC_WEDGE</span></code> (12)</dt><dd><p>Quadratic wedge: 15 nodes, 5 faces</p>
+</dd>
+</dl>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/services/field_data.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+
+  <!-- Include desired assets -->
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+
+<script>
+// Passing the search options to the search.js file
+const SEARCH_OPTIONS = JSON.parse('{"includeMatches": true, "includeScore": true, "keys": [{"name": "section", "weight": 3}, {"name": "title", "weight": 3}, {"name": "text", "weight": 1}, {"name": "objectID", "weight": 0.5}], "limit": 10, "threshold": 0.2}');
+const SEARCH_FILE = "../../_static/search.json";
+const ADVANCE_SEARCH_PATH = "../../search.html";
+const EXTRA_SOURCES = JSON.parse('""');
+</script>
+
+
+<script src="../../_static/js/search.js"></script>
+
+  
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<!--
+  Theme Version Footer
+  Displays the Sphinx theme version and the last updated date.
+  Accessibility and semantic improvements included.
+-->
+<footer class="theme-version" aria-label="Theme version and last update">
+  <span>
+    
+      Built with the
+      <a href="https://sphinxdocs.ansys.com/version/stable/index.html" target="_blank" rel="noopener noreferrer">
+        Ansys Sphinx Theme
+      </a>
+      1.11.0.
+    
+  </span>
+  <br />
+  <span>Last updated on <time id="ast_build_date"></time></span>
+</footer>
+<script>
+  // Set the last updated date in a readable format
+  (function() {
+    var options = { day: "numeric", month: "long", year: "numeric" };
+    var ast_lastModifiedDate = new Date(document.lastModified);
+    var ast_build_date = ast_lastModifiedDate.toLocaleDateString("en-US", options);
+    var dateElem = document.getElementById("ast_build_date");
+    if (dateElem) {
+      dateElem.textContent = ast_build_date;
+    }
+  })();
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,970 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Events &#8212; Ansys Fluent gRPC API</title>
+  
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=f424389c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=f424389c" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+
+  <!-- Include desired assets -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+
+  
+    <link href="../../_static/css/breadcrumbs.css" rel="stylesheet" />
+  
+    <script src="../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=49e1bf35"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/events';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="FieldData" href="field_data.html" />
+    <link rel="prev" title="Settings" href="settings.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  <link rel="canonical" href="https://api.fluent.docs.pyansys.com/version/stable/api/services/events.html" />
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="Ansys Fluent gRPC API - Home"/>
+    <img src="../../_static/pyansys_logo_transparent_white.png" class="logo__image only-dark pst-js-only" alt="Ansys Fluent gRPC API - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="Ansys Fluent gRPC API home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-api-fluent" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+  
+
+  
+
+
+
+
+
+
+
+
+
+<div class="ast-announcement-wrap" role="region" aria-label="Announcement" hidden>
+    <div class="ast-announcement info">
+        <span class="ast-announcement-icon" aria-hidden="true"></span>
+        <span class="ast-announcement-text" id="ast-announcement-text"></span>
+        <!-- djlint:off H021-->
+        <!-- for inline styles -->
+        <a class="ast-announcement-details-btn" id="ast-announcement-details-btn"
+           href=""
+           data-ast-url=""
+           aria-label="View notifications"
+           style="display:none">View</a>
+        <!-- djlint:on -->
+        <!-- djlint:off H023-->
+        <!-- use entity reference for &times; -->
+        <button class="ast-announcement-close" id="ast-announcement-close" aria-label="Close announcement">&times;</button>
+        <!-- djlint:on -->
+    </div>
+</div>
+
+<!-- Modal overlay -->
+<!-- djlint:off H023-->
+<!-- use entity reference for &times; -->
+<div class="ast-announcement-overlay" id="ast-announcement-overlay" role="dialog" aria-modal="true" aria-label="Announcement details">
+    <div class="ast-announcement-modal info">
+        <div class="ast-announcement-modal-body"
+             data-ast-items='[]'>
+        </div>
+        <button class="ast-announcement-modal-close" id="ast-announcement-modal-close" aria-label="Close">&times;</button>
+    </div>
+</div>
+<!-- djlint:on -->
+
+<script src="../../_static/js/announcement_banner.js"
+        data-base-url="../../"></script>
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="Ansys Fluent gRPC API home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-api-fluent" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Services</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="health.html">Health</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application_runtime.html">ApplicationRuntime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object_model.html">ObjectModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="field_data.html">FieldData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reduction.html">Reduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solution_variable.html">SolutionVariable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript.html">Transcript</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connection.html">Connection</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../helpers/index.html">Helper modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legacy/index.html">Legacy</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com/" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="../index.html" class="nav-link">API reference</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="index.html" class="nav-link">Services</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Events</span></li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+  
+
+  
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="events">
+<h1>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h1>
+<p><strong>Generated reference</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Source file<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="file docutils literal notranslate"><span class="pre">ansys/api/fluent/v1/events.proto</span></code></p>
+</dd>
+<dt class="field-even">Proto package<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">ansys.api.fluent.v1.events</span></code></p>
+</dd>
+<dt class="field-odd">Contains<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1 service, 33 messages, 1 enum</p>
+</dd>
+</dl>
+<p><strong>Services</strong></p>
+<hr class="docutils" id="proto-events-service-events" />
+<p><strong>Service:</strong> <strong>Events</strong></p>
+<p>Events service provides streaming of solver and workflow events to clients.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">BeginStreaming</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-events-beginstreamingrequest"><span class="std std-ref">BeginStreamingRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-events-beginstreamingresponse"><span class="std std-ref">BeginStreamingResponse</span></a></p>
+</dd>
+</dl>
+<p>Streams solver events to the client.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PauseSolveFor</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-events-pausesolveforrequest"><span class="std std-ref">PauseSolveForRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-events-pausesolveforresponse"><span class="std std-ref">PauseSolveForResponse</span></a></p>
+</dd>
+</dl>
+<p>Registers a solution-event pause trigger; the solver pauses when the selected event
+occurs and waits until the client calls ResumeSolve.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ResumeSolve</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-events-resumesolverequest"><span class="std std-ref">ResumeSolveRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-events-resumesolveresponse"><span class="std std-ref">ResumeSolveResponse</span></a></p>
+</dd>
+</dl>
+<p>Resumes solver execution after it was paused by a PauseSolveFor trigger.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CancelPauseSolve</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-events-cancelpausesolverequest"><span class="std std-ref">CancelPauseSolveRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-events-cancelpausesolveresponse"><span class="std std-ref">CancelPauseSolveResponse</span></a></p>
+</dd>
+</dl>
+<p>Unregisters a pause trigger previously registered with PauseSolveFor.</p>
+</dd>
+</dl>
+<p><strong>Messages</strong></p>
+<hr class="docutils" id="proto-events-timestepstartedevent" />
+<p><strong>TimestepStartedEvent</strong></p>
+<p>Event at start of the time step.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">index</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>Time step index.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">size</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Time step size.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-timestependedevent" />
+<p><strong>TimestepEndedEvent</strong></p>
+<p>Event at end of the time step.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">index</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>Time step index.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">size</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Time step size.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-iterationstartedevent" />
+<p><strong>IterationStartedEvent</strong></p>
+<p>Event at start of the iteration.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">index</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>Iteration index.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-iterationendedevent" />
+<p><strong>IterationEndedEvent</strong></p>
+<p>Event at end of the iteration.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">index</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>Iteration index.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-calculationsstartedevent" />
+<p><strong>CalculationsStartedEvent</strong></p>
+<p>Event at start of calculation.</p>
+<hr class="docutils" id="proto-events-calculationsendedevent" />
+<p><strong>CalculationsEndedEvent</strong></p>
+<p>Event at end of calculation.</p>
+<hr class="docutils" id="proto-events-calculationspausedevent" />
+<p><strong>CalculationsPausedEvent</strong></p>
+<p>Event when calculations are paused.</p>
+<hr class="docutils" id="proto-events-calculationsresumedevent" />
+<p><strong>CalculationsResumedEvent</strong></p>
+<p>Event when calculations are resumed.</p>
+<hr class="docutils" id="proto-events-prereadcaseevent" />
+<p><strong>PreReadCaseEvent</strong></p>
+<p>Event before a case file is read.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">case_file_path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Case file path.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-casereadevent" />
+<p><strong>CaseReadEvent</strong></p>
+<p>Event after a case file is read.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">case_file_path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Case file path.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-prereaddataevent" />
+<p><strong>PreReadDataEvent</strong></p>
+<p>Event before a data file is read.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">data_file_path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Data file path.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-datareadevent" />
+<p><strong>DataReadEvent</strong></p>
+<p>Event after a data file is read.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">data_file_path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Data file path.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-preinitializeevent" />
+<p><strong>PreInitializeEvent</strong></p>
+<p>Event before solution initialization.</p>
+<hr class="docutils" id="proto-events-initializedevent" />
+<p><strong>InitializedEvent</strong></p>
+<p>Event after solution initialization.</p>
+<hr class="docutils" id="proto-events-reportdefinitionchangedevent" />
+<p><strong>ReportDefinitionChangedEvent</strong></p>
+<p>Event when a report definition changes.</p>
+<hr class="docutils" id="proto-events-plotsetchangedevent" />
+<p><strong>PlotSetChangedEvent</strong></p>
+<p>Event when a plot set changes.</p>
+<hr class="docutils" id="proto-events-residualplotchangedevent" />
+<p><strong>ResidualPlotChangedEvent</strong></p>
+<p>Event when residual plot settings change.</p>
+<hr class="docutils" id="proto-events-clearsettingsdoneevent" />
+<p><strong>ClearSettingsDoneEvent</strong></p>
+<p>Event after settings are cleared.</p>
+<hr class="docutils" id="proto-events-autopauseevent" />
+<p><strong>AutoPauseEvent</strong></p>
+<p>Event when auto-pause occurs.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">level</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>Auto-pause level.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">index</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint64</span></code></span></dt><dd><p>Associated iteration or time-step index.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-progressevent" />
+<p><strong>ProgressEvent</strong></p>
+<p>Event during solution progress.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">message</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Progress message text.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">percent_complete</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>Estimated solution progress, expressed as a percentage (0–100).
+This value is an estimate of the solution run progress only and does
+not apply to other operations.
+Percent completed.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-solvertimeestimateevent" />
+<p><strong>SolverTimeEstimateEvent</strong></p>
+<p>Event estimating remaining solver time.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">hours</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Estimated hours remaining.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">minutes</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Estimated minutes remaining.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">seconds</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">double</span></code></span></dt><dd><p>Estimated seconds remaining.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-errorevent" />
+<p><strong>ErrorEvent</strong></p>
+<p>Event when a fatal error is encountered.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">message</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Error message.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">error_code</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">sint32</span></code></span></dt><dd><p>Error code.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-commandcompletedevent" />
+<p><strong>CommandCompletedEvent</strong></p>
+<p>Event when a command completes.</p>
+<hr class="docutils" id="proto-events-beginstreamingrequest" />
+<p><strong>BeginStreamingRequest</strong></p>
+<p>Request to begin streaming solver events.</p>
+<hr class="docutils" id="proto-events-pausesolveforrequest" />
+<p><strong>PauseSolveForRequest</strong></p>
+<p>Request to register a solution-event pause trigger.
+protolint:disable:next MESSAGE_NAMES_EXCLUDE_PREPOSITIONS</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">solution_event</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-events-solutionevent"><span class="std std-ref">SolutionEvent</span></a></span></dt><dd><p>Solution event that triggers a pause.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-pausesolveforresponse" />
+<p><strong>PauseSolveForResponse</strong></p>
+<p>Contains the registration identifier.
+protolint:disable:next MESSAGE_NAMES_EXCLUDE_PREPOSITIONS</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">registration_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">int64</span></code></span></dt><dd><p>Registration id used to resume and/or unregister this pause registration.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-resumesolverequest" />
+<p><strong>ResumeSolveRequest</strong></p>
+<p>Request to resume solver execution after a PauseSolveFor trigger.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">registration_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">int64</span></code></span></dt><dd><p>Identifier of the registration to resume.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-resumesolveresponse" />
+<p><strong>ResumeSolveResponse</strong></p>
+<p>Response for ResumeSolve.</p>
+<hr class="docutils" id="proto-events-cancelpausesolverequest" />
+<p><strong>CancelPauseSolveRequest</strong></p>
+<p>Request to unregister a PauseSolveFor trigger.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">registration_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">int64</span></code></span></dt><dd><p>Identifier of the registration to unregister.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-cancelpausesolveresponse" />
+<p><strong>CancelPauseSolveResponse</strong></p>
+<p>Response for CancelPauseSolve.</p>
+<hr class="docutils" id="proto-events-datamodelchangedevent" />
+<p><strong>DataModelChangedEvent</strong></p>
+<p>Event when the data model changes.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">paths</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Data model paths that changed.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-clientexecuteevent" />
+<p><strong>ClientExecuteEvent</strong></p>
+<p>Event to execute a function call in the client.
+Internal event used by Fluent workflows to request a client-side function call.
+Not intended for end-user integrations; user-facing clients should ignore this event.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">function</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Client-side function to invoke.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">arguments</span></code> (2)<span class="classifier">repeated <a class="reference internal" href="../helpers/scheme_pointer.html#proto-scheme-pointer-schemepointer"><span class="std std-ref">SchemePointer</span></a></span></dt><dd><p>Arguments passed to the function.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-events-beginstreamingresponse" />
+<p><strong>BeginStreamingResponse</strong></p>
+<p>BeginStreamingResponse contains the server-streamed event union.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">pre_read_case_event</span></code> (1)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-prereadcaseevent"><span class="std std-ref">PreReadCaseEvent</span></a></span></dt><dd><p>Before reading a case file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">case_read_event</span></code> (2)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-casereadevent"><span class="std std-ref">CaseReadEvent</span></a></span></dt><dd><p>After reading a case file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">pre_initialize_event</span></code> (3)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-preinitializeevent"><span class="std std-ref">PreInitializeEvent</span></a></span></dt><dd><p>Before solution initialization.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">initialized_event</span></code> (4)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-initializedevent"><span class="std std-ref">InitializedEvent</span></a></span></dt><dd><p>After solution initialization.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">pre_read_data_event</span></code> (5)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-prereaddataevent"><span class="std std-ref">PreReadDataEvent</span></a></span></dt><dd><p>Before reading a data file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">data_read_event</span></code> (6)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-datareadevent"><span class="std std-ref">DataReadEvent</span></a></span></dt><dd><p>After reading a data file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">iteration_started_event</span></code> (7)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-iterationstartedevent"><span class="std std-ref">IterationStartedEvent</span></a></span></dt><dd><p>Iteration start.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">iteration_ended_event</span></code> (8)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-iterationendedevent"><span class="std std-ref">IterationEndedEvent</span></a></span></dt><dd><p>Iteration end.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">timestep_started_event</span></code> (9)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-timestepstartedevent"><span class="std std-ref">TimestepStartedEvent</span></a></span></dt><dd><p>Time step start.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">timestep_ended_event</span></code> (10)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-timestependedevent"><span class="std std-ref">TimestepEndedEvent</span></a></span></dt><dd><p>Time step end.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">calculations_started_event</span></code> (11)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-calculationsstartedevent"><span class="std std-ref">CalculationsStartedEvent</span></a></span></dt><dd><p>Calculations start.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">calculations_ended_event</span></code> (12)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-calculationsendedevent"><span class="std std-ref">CalculationsEndedEvent</span></a></span></dt><dd><p>Calculations end.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">report_definition_changed_event</span></code> (13)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-reportdefinitionchangedevent"><span class="std std-ref">ReportDefinitionChangedEvent</span></a></span></dt><dd><p>Report definition changed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">plot_set_changed_event</span></code> (14)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-plotsetchangedevent"><span class="std std-ref">PlotSetChangedEvent</span></a></span></dt><dd><p>Plot set changed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">residual_plot_changed_event</span></code> (15)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-residualplotchangedevent"><span class="std std-ref">ResidualPlotChangedEvent</span></a></span></dt><dd><p>Residual plot changed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">clear_settings_done_event</span></code> (16)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-clearsettingsdoneevent"><span class="std std-ref">ClearSettingsDoneEvent</span></a></span></dt><dd><p>Settings cleared.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">auto_pause_event</span></code> (17)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-autopauseevent"><span class="std std-ref">AutoPauseEvent</span></a></span></dt><dd><p>Auto-pause occurred.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">calculations_paused_event</span></code> (18)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-calculationspausedevent"><span class="std std-ref">CalculationsPausedEvent</span></a></span></dt><dd><p>Calculations paused.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">calculations_resumed_event</span></code> (19)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-calculationsresumedevent"><span class="std std-ref">CalculationsResumedEvent</span></a></span></dt><dd><p>Calculations resumed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">progress_event</span></code> (20)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-progressevent"><span class="std std-ref">ProgressEvent</span></a></span></dt><dd><p>Solver progress.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">error_event</span></code> (21)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-errorevent"><span class="std std-ref">ErrorEvent</span></a></span></dt><dd><p>Fatal error encountered.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command_completed_event</span></code> (22)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-commandcompletedevent"><span class="std std-ref">CommandCompletedEvent</span></a></span></dt><dd><p>Command completed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">data_model_changed_event</span></code> (23)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-datamodelchangedevent"><span class="std std-ref">DataModelChangedEvent</span></a></span></dt><dd><p>Data model changed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">solver_time_estimate_event</span></code> (24)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-solvertimeestimateevent"><span class="std std-ref">SolverTimeEstimateEvent</span></a></span></dt><dd><p>Remaining time estimate.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">client_execute_event</span></code> (25)<span class="classifier">oneof as <a class="reference internal" href="#proto-events-clientexecuteevent"><span class="std std-ref">ClientExecuteEvent</span></a></span></dt><dd><p>Internal workflow event; ignore in end-user clients.</p>
+</dd>
+</dl>
+<p><strong>Enumerations</strong></p>
+<hr class="docutils" id="proto-events-solutionevent" />
+<p><strong>SolutionEvent</strong> <em>(enum)</em></p>
+<p>Solution-related events that can be used to pause/resume execution.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">SOLUTION_EVENT_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified solution event.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SOLUTION_EVENT_ITERATION</span></code> (1)</dt><dd><p>Fired after an iteration completes.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SOLUTION_EVENT_TIME_STEP</span></code> (2)</dt><dd><p>Fired after a time step completes.</p>
+</dd>
+</dl>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/services/events.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+
+  <!-- Include desired assets -->
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+
+<script>
+// Passing the search options to the search.js file
+const SEARCH_OPTIONS = JSON.parse('{"includeMatches": true, "includeScore": true, "keys": [{"name": "section", "weight": 3}, {"name": "title", "weight": 3}, {"name": "text", "weight": 1}, {"name": "objectID", "weight": 0.5}], "limit": 10, "threshold": 0.2}');
+const SEARCH_FILE = "../../_static/search.json";
+const ADVANCE_SEARCH_PATH = "../../search.html";
+const EXTRA_SOURCES = JSON.parse('""');
+</script>
+
+
+<script src="../../_static/js/search.js"></script>
+
+  
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<!--
+  Theme Version Footer
+  Displays the Sphinx theme version and the last updated date.
+  Accessibility and semantic improvements included.
+-->
+<footer class="theme-version" aria-label="Theme version and last update">
+  <span>
+    
+      Built with the
+      <a href="https://sphinxdocs.ansys.com/version/stable/index.html" target="_blank" rel="noopener noreferrer">
+        Ansys Sphinx Theme
+      </a>
+      1.11.0.
+    
+  </span>
+  <br />
+  <span>Last updated on <time id="ast_build_date"></time></span>
+</footer>
+<script>
+  // Set the last updated date in a readable format
+  (function() {
+    var options = { day: "numeric", month: "long", year: "numeric" };
+    var ast_lastModifiedDate = new Date(document.lastModified);
+    var ast_build_date = ast_lastModifiedDate.toLocaleDateString("en-US", options);
+    var dateElem = document.getElementById("ast_build_date");
+    if (dateElem) {
+      dateElem.textContent = ast_build_date;
+    }
+  })();
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1495 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ObjectModel &#8212; Ansys Fluent gRPC API</title>
+  
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=f424389c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=f424389c" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+
+  <!-- Include desired assets -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+
+  
+    <link href="../../_static/css/breadcrumbs.css" rel="stylesheet" />
+  
+    <script src="../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=49e1bf35"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/object_model';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Settings" href="settings.html" />
+    <link rel="prev" title="ApplicationRuntime" href="application_runtime.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  <link rel="canonical" href="https://api.fluent.docs.pyansys.com/version/stable/api/services/object_model.html" />
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="Ansys Fluent gRPC API - Home"/>
+    <img src="../../_static/pyansys_logo_transparent_white.png" class="logo__image only-dark pst-js-only" alt="Ansys Fluent gRPC API - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="Ansys Fluent gRPC API home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-api-fluent" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+  
+
+  
+
+
+
+
+
+
+
+
+
+<div class="ast-announcement-wrap" role="region" aria-label="Announcement" hidden>
+    <div class="ast-announcement info">
+        <span class="ast-announcement-icon" aria-hidden="true"></span>
+        <span class="ast-announcement-text" id="ast-announcement-text"></span>
+        <!-- djlint:off H021-->
+        <!-- for inline styles -->
+        <a class="ast-announcement-details-btn" id="ast-announcement-details-btn"
+           href=""
+           data-ast-url=""
+           aria-label="View notifications"
+           style="display:none">View</a>
+        <!-- djlint:on -->
+        <!-- djlint:off H023-->
+        <!-- use entity reference for &times; -->
+        <button class="ast-announcement-close" id="ast-announcement-close" aria-label="Close announcement">&times;</button>
+        <!-- djlint:on -->
+    </div>
+</div>
+
+<!-- Modal overlay -->
+<!-- djlint:off H023-->
+<!-- use entity reference for &times; -->
+<div class="ast-announcement-overlay" id="ast-announcement-overlay" role="dialog" aria-modal="true" aria-label="Announcement details">
+    <div class="ast-announcement-modal info">
+        <div class="ast-announcement-modal-body"
+             data-ast-items='[]'>
+        </div>
+        <button class="ast-announcement-modal-close" id="ast-announcement-modal-close" aria-label="Close">&times;</button>
+    </div>
+</div>
+<!-- djlint:on -->
+
+<script src="../../_static/js/announcement_banner.js"
+        data-base-url="../../"></script>
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="Ansys Fluent gRPC API home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-api-fluent" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Services</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="health.html">Health</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application_runtime.html">ApplicationRuntime</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">ObjectModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="field_data.html">FieldData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reduction.html">Reduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solution_variable.html">SolutionVariable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transcript.html">Transcript</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connection.html">Connection</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../helpers/index.html">Helper modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legacy/index.html">Legacy</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com/" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="../index.html" class="nav-link">API reference</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="index.html" class="nav-link">Services</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">ObjectModel</span></li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+  
+
+  
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="objectmodel">
+<h1>ObjectModel<a class="headerlink" href="#objectmodel" title="Link to this heading">#</a></h1>
+<p><strong>Generated reference</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Source file<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="file docutils literal notranslate"><span class="pre">ansys/api/fluent/v1/object_model.proto</span></code></p>
+</dd>
+<dt class="field-even">Proto package<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">ansys.api.fluent.v1.object_model</span></code></p>
+</dd>
+<dt class="field-odd">Contains<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1 service, 58 messages, 2 enums</p>
+</dd>
+</dl>
+<p><strong>Services</strong></p>
+<hr class="docutils" id="proto-object-model-service-objectmodel" />
+<p><strong>Service:</strong> <strong>ObjectModel</strong></p>
+<p>ObjectModel service provides a way to access some Fluent features like
+meshing, workflow, preferences, and other specific areas. The rules string
+in each request selects the target feature area.
+Supported rules contexts are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">meshing_workflow</span></code>: The most up-to-date, intuitive exposure of meshing workflow.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">meshing_utilities</span></code>: Meshing queries and other utilities.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solver_workflow</span></code>: Solver workflows.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preferences</span></code>: Fluent preferences in both meshing and solution mode.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workflow</span></code>: Legacy exposure of the workflow component of meshing workflow.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">meshing</span></code>: Legacy exposure of the meshing component of meshing workflow.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">part_management</span></code>: Legacy exposure of the part management component of meshing workflow.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pm_file_management</span></code>: Legacy exposure of the part management - file-management component of meshing workflow.</p></li>
+</ul>
+<p>Note: StreamStateChanges is not supported for the “meshing_workflow” context.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">StreamStateChanges</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-streamstatechangesrequest"><span class="std std-ref">StreamStateChangesRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-object-model-streamstatechangesresponse"><span class="std std-ref">StreamStateChangesResponse</span></a></p>
+</dd>
+</dl>
+<p>Streams state changes and events.
+This method is not supported for the “meshing_workflow” rules context.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetState</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-getstaterequest"><span class="std std-ref">GetStateRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-getstateresponse"><span class="std std-ref">GetStateResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the current state at the specified path.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetState</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-setstaterequest"><span class="std std-ref">SetStateRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-setstateresponse"><span class="std std-ref">SetStateResponse</span></a></p>
+</dd>
+</dl>
+<p>Sets the state at the specified path.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">UpdateDict</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-updatedictrequest"><span class="std std-ref">UpdateDictRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-updatedictresponse"><span class="std std-ref">UpdateDictResponse</span></a></p>
+</dd>
+</dl>
+<p>Merges a dictionary of values into the state at the specified path.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CreateObject</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-createobjectrequest"><span class="std std-ref">CreateObjectRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-createobjectresponse"><span class="std std-ref">CreateObjectResponse</span></a></p>
+</dd>
+</dl>
+<p>Creates a new named object at the specified path.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DeleteObject</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-deleteobjectrequest"><span class="std std-ref">DeleteObjectRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-deleteobjectresponse"><span class="std std-ref">DeleteObjectResponse</span></a></p>
+</dd>
+</dl>
+<p>Deletes the object at the specified path.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetAttributeValue</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-getattributevaluerequest"><span class="std std-ref">GetAttributeValueRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-getattributevalueresponse"><span class="std std-ref">GetAttributeValueResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the value of a named attribute for the object at the specified path.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ExecuteCommand</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-executecommandrequest"><span class="std std-ref">ExecuteCommandRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-executecommandresponse"><span class="std std-ref">ExecuteCommandResponse</span></a></p>
+</dd>
+</dl>
+<p>Executes a command on the object at the specified path.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ExecuteQuery</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-executequeryrequest"><span class="std std-ref">ExecuteQueryRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-executequeryresponse"><span class="std std-ref">ExecuteQueryResponse</span></a></p>
+</dd>
+</dl>
+<p>Executes a query on the object at the specified path and returns the result.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CreateCommandArguments</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-createcommandargumentsrequest"><span class="std std-ref">CreateCommandArgumentsRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-createcommandargumentsresponse"><span class="std std-ref">CreateCommandArgumentsResponse</span></a></p>
+</dd>
+</dl>
+<p>Creates a command arguments object for the specified command.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DeleteCommandArguments</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-deletecommandargumentsrequest"><span class="std std-ref">DeleteCommandArgumentsRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-deletecommandargumentsresponse"><span class="std std-ref">DeleteCommandArgumentsResponse</span></a></p>
+</dd>
+</dl>
+<p>Deletes a created command arguments object.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetSchema</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-getschemarequest"><span class="std std-ref">GetSchemaRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-getschemaresponse"><span class="std std-ref">GetSchemaResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the API schema describing the structure of the object model.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Rename</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-renamerequest"><span class="std std-ref">RenameRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-renameresponse"><span class="std std-ref">RenameResponse</span></a></p>
+</dd>
+</dl>
+<p>Renames the object at the specified path.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FixState</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-fixstaterequest"><span class="std std-ref">FixStateRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-fixstateresponse"><span class="std std-ref">FixStateResponse</span></a></p>
+</dd>
+</dl>
+<p>Fixes the state of the object at the specified path to ensure internal consistency.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GetObjectNames</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-getobjectnamesrequest"><span class="std std-ref">GetObjectNamesRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-getobjectnamesresponse"><span class="std std-ref">GetObjectNamesResponse</span></a></p>
+</dd>
+</dl>
+<p>Returns the names of all objects at the specified path.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DeleteChildObjects</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-deletechildobjectsrequest"><span class="std std-ref">DeleteChildObjectsRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-deletechildobjectsresponse"><span class="std std-ref">DeleteChildObjectsResponse</span></a></p>
+</dd>
+</dl>
+<p>Deletes all child objects of the parent object at the specified path.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SubscribeEvents</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-subscribeeventsrequest"><span class="std std-ref">SubscribeEventsRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-subscribeeventsresponse"><span class="std std-ref">SubscribeEventsResponse</span></a></p>
+</dd>
+</dl>
+<p>Subscribes to one or more events.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">UnsubscribeEvents</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-unsubscribeeventsrequest"><span class="std std-ref">UnsubscribeEventsRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#proto-object-model-unsubscribeeventsresponse"><span class="std std-ref">UnsubscribeEventsResponse</span></a></p>
+</dd>
+</dl>
+<p>Unsubscribes from subscribed events.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">StreamEvents</span></code></dt><dd><dl class="field-list simple">
+<dt class="field-odd">Request<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#proto-object-model-streameventsrequest"><span class="std std-ref">StreamEventsRequest</span></a></p>
+</dd>
+<dt class="field-even">Response<span class="colon">:</span></dt>
+<dd class="field-even"><p>stream of <a class="reference internal" href="#proto-object-model-streameventsresponse"><span class="std std-ref">StreamEventsResponse</span></a></p>
+</dd>
+</dl>
+<p>Streams subscribed events.</p>
+</dd>
+</dl>
+<p><strong>Messages</strong></p>
+<hr class="docutils" id="proto-object-model-streamstatechangesrequest" />
+<p><strong>StreamStateChangesRequest</strong></p>
+<p>StreamStateChangesRequest is the request message for initiating state streaming</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the streaming operation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">return_state_changes</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, returns state changes in the stream.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">diff_state</span></code> (3)<span class="classifier"><a class="reference internal" href="#proto-object-model-diffstate"><span class="std std-ref">DiffState</span></a></span></dt><dd><p>The level of detail for state differences</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-streamstatechangesresponse" />
+<p><strong>StreamStateChangesResponse</strong></p>
+<p>StreamStateChangesResponse is the streaming response containing state updates</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">state</span></code> (1)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The current state or state changes</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">deleted_paths</span></code> (2)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Paths of deleted objects</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">events</span></code> (3)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Events that occurred</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-getstaterequest" />
+<p><strong>GetStateRequest</strong></p>
+<p>GetStateRequest is the request message for retrieving state</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the state query</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to retrieve state from</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-getstateresponse" />
+<p><strong>GetStateResponse</strong></p>
+<p>GetStateResponse is the response message containing the requested state</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">state</span></code> (1)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The state at the requested path</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-setstaterequest" />
+<p><strong>SetStateRequest</strong></p>
+<p>SetStateRequest is the request message for setting state</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the state update</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path where state should be set</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">state</span></code> (3)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The new state to set</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wait</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, waits for the operation to complete before returning.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-setstateresponse" />
+<p><strong>SetStateResponse</strong></p>
+<p>SetStateResponse is the response message containing the updated state</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">state</span></code> (1)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The updated state after the operation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">deleted_paths</span></code> (2)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Paths of deleted objects</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-updatedictrequest" />
+<p><strong>UpdateDictRequest</strong></p>
+<p>UpdateDictRequest is the request message for updating a dictionary</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the update</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to the dictionary to update</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">merge_dict</span></code> (3)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The dictionary values to merge</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wait</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, waits for the operation to complete before returning.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">recursive</span></code> (5)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, updates recursively.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-updatedictresponse" />
+<p><strong>UpdateDictResponse</strong></p>
+<p>UpdateDictResponse is the response message containing the updated state</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">state</span></code> (1)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The updated state after the dictionary merge</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">deleted_paths</span></code> (2)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Paths of deleted objects</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-createobjectrequest" />
+<p><strong>CreateObjectRequest</strong></p>
+<p>CreateObjectRequest is the request message for creating a new named object</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the creation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to the parent object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">name</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The name of the new object to create</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wait</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, waits for the operation to complete before returning.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-createobjectresponse" />
+<p><strong>CreateObjectResponse</strong></p>
+<p>CreateObjectResponse is the response message after creating a new named object</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">state</span></code> (1)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The updated state after creation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">deleted_paths</span></code> (2)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Paths of deleted objects</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-deleteobjectrequest" />
+<p><strong>DeleteObjectRequest</strong></p>
+<p>DeleteObjectRequest is the request message for deleting an object</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the deletion</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to the object to delete</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wait</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, waits for the operation to complete before returning.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-deleteobjectresponse" />
+<p><strong>DeleteObjectResponse</strong></p>
+<p>DeleteObjectResponse is the response message after deleting an object</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">state</span></code> (1)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The updated state after deletion</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">deleted_paths</span></code> (2)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Paths of deleted objects</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-getattributevaluerequest" />
+<p><strong>GetAttributeValueRequest</strong></p>
+<p>GetAttributeValueRequest is the request message for retrieving an attribute value</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the attribute query</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to the object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">attribute</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The name of the attribute to retrieve</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-getattributevalueresponse" />
+<p><strong>GetAttributeValueResponse</strong></p>
+<p>GetAttributeValueResponse is the response message containing the attribute value</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">result</span></code> (1)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The value of the requested attribute</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-executecommandrequest" />
+<p><strong>ExecuteCommandRequest</strong></p>
+<p>ExecuteCommandRequest is the request message for executing a command</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for command execution</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to the object with the command</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The name of the command to execute</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wait</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, waits for the command to complete before returning.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">args</span></code> (5)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>Arguments to pass to the command</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-executecommandresponse" />
+<p><strong>ExecuteCommandResponse</strong></p>
+<p>ExecuteCommandResponse is the response message containing command execution results</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">result</span></code> (1)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The return value from the command</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">state</span></code> (2)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The updated state after command execution</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">deleted_paths</span></code> (3)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Paths of deleted objects</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-executequeryrequest" />
+<p><strong>ExecuteQueryRequest</strong></p>
+<p>ExecuteQueryRequest is the request message for executing a query</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for query execution</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to the object with the query</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">query</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The name of the query to execute</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">args</span></code> (4)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>Arguments to pass to the query</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-executequeryresponse" />
+<p><strong>ExecuteQueryResponse</strong></p>
+<p>ExecuteQueryResponse is the response message containing query execution results</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">result</span></code> (1)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The return value from the query</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-createcommandargumentsrequest" />
+<p><strong>CreateCommandArgumentsRequest</strong></p>
+<p>CreateCommandArgumentsRequest is the request message for creating command arguments</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the operation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to the object with the command</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The name of the command</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-createcommandargumentsresponse" />
+<p><strong>CreateCommandArgumentsResponse</strong></p>
+<p>CreateCommandArgumentsResponse is the response message containing the command ID</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">command_id</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The unique identifier for the created command arguments</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-deletecommandargumentsrequest" />
+<p><strong>DeleteCommandArgumentsRequest</strong></p>
+<p>DeleteCommandArgumentsRequest is the request message for deleting command arguments</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the operation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to the object with the command</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The name of the command</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command_id</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The unique identifier of the command arguments to delete</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-deletecommandargumentsresponse" />
+<p><strong>DeleteCommandArgumentsResponse</strong></p>
+<p>DeleteCommandArgumentsResponse is the response message for a delete command arguments operation</p>
+<hr class="docutils" id="proto-object-model-commandarg" />
+<p><strong>CommandArg</strong></p>
+<p>CommandArg contains information about a command argument</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">type</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The type of the argument</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">name</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The name of the argument</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">info</span></code> (3)<span class="classifier"><a class="reference internal" href="#proto-object-model-schema"><span class="std std-ref">Schema</span></a></span></dt><dd><p>The schema information for this argument.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">help_string</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Help text for the argument</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">attrs</span></code> (5)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">AttrsEntry</span></code></span></dt><dd><p>Additional attributes for the argument</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">doc_string</span></code> (6)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Documentation string for the argument</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-commandinfo" />
+<p><strong>CommandInfo</strong></p>
+<p>CommandInfo contains information about a command or query</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">return_type</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The return type of the command</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">args</span></code> (2)<span class="classifier">repeated <a class="reference internal" href="#proto-object-model-commandarg"><span class="std std-ref">CommandArg</span></a></span></dt><dd><p>The arguments for the command</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">doc_string</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Documentation string for the command</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-schema" />
+<p><strong>Schema</strong></p>
+<p>Schema contains the static API description of objects, including types, parameters, commands, and queries.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">named_objects</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">NamedObjectsEntry</span></code></span></dt><dd><p>Named objects within this object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">singletons</span></code> (2)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">SingletonsEntry</span></code></span></dt><dd><p>Singleton objects within this object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">parameters</span></code> (3)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">ParametersEntry</span></code></span></dt><dd><p>Parameters within this object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">commands</span></code> (4)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">CommandsEntry</span></code></span></dt><dd><p>Commands available for this object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">type</span></code> (5)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The type of this object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command_info</span></code> (6)<span class="classifier"><a class="reference internal" href="#proto-object-model-commandinfo"><span class="std std-ref">CommandInfo</span></a></span></dt><dd><p>Information about the command (if this is a command)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">queries</span></code> (7)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">QueriesEntry</span></code></span></dt><dd><p>Queries available for this object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">query_info</span></code> (8)<span class="classifier"><a class="reference internal" href="#proto-object-model-commandinfo"><span class="std std-ref">CommandInfo</span></a></span></dt><dd><p>Information about the query (if this is a query)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">help_string</span></code> (9)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Help text for this object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">attrs</span></code> (10)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">AttrsEntry</span></code></span></dt><dd><p>Additional attributes for this object</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-getschemarequest" />
+<p><strong>GetSchemaRequest</strong></p>
+<p>GetSchemaRequest is the request message for GetSchema.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the schema query.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-getschemaresponse" />
+<p><strong>GetSchemaResponse</strong></p>
+<p>GetSchemaResponse is the response message for GetSchema.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">info</span></code> (1)<span class="classifier"><a class="reference internal" href="#proto-object-model-schema"><span class="std std-ref">Schema</span></a></span></dt><dd><p>The API schema for the object model.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-createdeventrequest" />
+<p><strong>CreatedEventRequest</strong></p>
+<p>CreatedEventRequest is used to subscribe to object creation events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">parent_path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>parent-path of the created object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">child_type</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>type of the created object</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-modifiedeventrequest" />
+<p><strong>ModifiedEventRequest</strong></p>
+<p>ModifiedEventRequest is used to subscribe to object modification events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>path of the modified object</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-deletedeventrequest" />
+<p><strong>DeletedEventRequest</strong></p>
+<p>DeletedEventRequest is used to subscribe to object deletion events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>path of the deleted object</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-affectedeventrequest" />
+<p><strong>AffectedEventRequest</strong></p>
+<p>AffectedEventRequest is used to subscribe to object affected events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>path of the affected object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">subtype</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>subtype of the affected event</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-attributechangedeventrequest" />
+<p><strong>AttributeChangedEventRequest</strong></p>
+<p>AttributeChangedEventRequest is used to subscribe to attribute change events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>path of the object whose attribute is changed</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">attribute</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>name of the attribute</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-commandattributechangedeventrequest" />
+<p><strong>CommandAttributeChangedEventRequest</strong></p>
+<p>CommandAttributeChangedEventRequest is used to subscribe to command attribute change events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>path of the object whose command attribute is changed</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>name of the command</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">attribute</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>name of the attribute</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-commandexecutedeventrequest" />
+<p><strong>CommandExecutedEventRequest</strong></p>
+<p>CommandExecutedEventRequest is used to subscribe to command execution events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>path of the object with the command</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>name of the command, deprecated since Fluent 2025 R2</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-objectmodeleventrequest" />
+<p><strong>ObjectModelEventRequest</strong></p>
+<p>ObjectModelEventRequest is a request to subscribe to specific events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the event subscription</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">created_event_request</span></code> (2)<span class="classifier">oneof event_request <a class="reference internal" href="#proto-object-model-createdeventrequest"><span class="std std-ref">CreatedEventRequest</span></a></span></dt><dd><p>Subscribe to creation events</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">modified_event_request</span></code> (3)<span class="classifier">oneof event_request <a class="reference internal" href="#proto-object-model-modifiedeventrequest"><span class="std std-ref">ModifiedEventRequest</span></a></span></dt><dd><p>Subscribe to modification events</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">deleted_event_request</span></code> (4)<span class="classifier">oneof event_request <a class="reference internal" href="#proto-object-model-deletedeventrequest"><span class="std std-ref">DeletedEventRequest</span></a></span></dt><dd><p>Subscribe to deletion events</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">affected_event_request</span></code> (5)<span class="classifier">oneof event_request <a class="reference internal" href="#proto-object-model-affectedeventrequest"><span class="std std-ref">AffectedEventRequest</span></a></span></dt><dd><p>Subscribe to affected events</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">attribute_changed_event_request</span></code> (6)<span class="classifier">oneof event_request <a class="reference internal" href="#proto-object-model-attributechangedeventrequest"><span class="std std-ref">AttributeChangedEventRequest</span></a></span></dt><dd><p>Subscribe to attribute change events</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command_attribute_changed_event_request</span></code> (7)<span class="classifier">oneof event_request <a class="reference internal" href="#proto-object-model-commandattributechangedeventrequest"><span class="std std-ref">CommandAttributeChangedEventRequest</span></a></span></dt><dd><p>Subscribe to command attribute change events</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command_executed_event_request</span></code> (8)<span class="classifier">oneof event_request <a class="reference internal" href="#proto-object-model-commandexecutedeventrequest"><span class="std std-ref">CommandExecutedEventRequest</span></a></span></dt><dd><p>Subscribe to command execution events</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-subscribeeventsrequest" />
+<p><strong>SubscribeEventsRequest</strong></p>
+<p>SubscribeEventsRequest is the request message for subscribing to events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">event_requests</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-object-model-objectmodeleventrequest"><span class="std std-ref">ObjectModelEventRequest</span></a></span></dt><dd><p>The list of event subscriptions to register</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-eventsubscription" />
+<p><strong>EventSubscription</strong></p>
+<p>EventSubscription contains information about a subscribed event</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">tag</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>tag is used to identify a subscribed event in server.
+A subscribed event can later be unsubscribed.
+Unique identifier for the subscription</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">status</span></code> (2)<span class="classifier"><a class="reference internal" href="#proto-object-model-subscriptionstatus"><span class="std std-ref">SubscriptionStatus</span></a></span></dt><dd><p>The status of the subscription</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-subscribeeventsresponse" />
+<p><strong>SubscribeEventsResponse</strong></p>
+<p>SubscribeEventsResponse is the response message containing subscription status</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">responses</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-object-model-eventsubscription"><span class="std std-ref">EventSubscription</span></a></span></dt><dd><p>The list of event subscriptions with their status</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-unsubscribeeventsrequest" />
+<p><strong>UnsubscribeEventsRequest</strong></p>
+<p>UnsubscribeEventsRequest is the request message for unsubscribing from events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">tags</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The list of subscription tags to unsubscribe</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-unsubscribeeventsresponse" />
+<p><strong>UnsubscribeEventsResponse</strong></p>
+<p>UnsubscribeEventsResponse is the response message containing unsubscription status</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">responses</span></code> (1)<span class="classifier">repeated <a class="reference internal" href="#proto-object-model-eventsubscription"><span class="std std-ref">EventSubscription</span></a></span></dt><dd><p>The list of unsubscribed events with their status</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-streameventsrequest" />
+<p><strong>StreamEventsRequest</strong></p>
+<p>StreamEventsRequest is the request message for starting event streaming</p>
+<hr class="docutils" id="proto-object-model-createdeventresponse" />
+<p><strong>CreatedEventResponse</strong></p>
+<p>CreatedEventResponse is the response message for object creation events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">parent_path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>parent-path of the created object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">child_type</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>type of the created object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">child_name</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>name of the created object</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-modifiedeventresponse" />
+<p><strong>ModifiedEventResponse</strong></p>
+<p>ModifiedEventResponse is the response message for object modification events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>path of the modified object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">value</span></code> (2)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>value of the modified object</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-deletedeventresponse" />
+<p><strong>DeletedEventResponse</strong></p>
+<p>DeletedEventResponse is the response message for object deletion events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>path of the deleted object</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-affectedeventresponse" />
+<p><strong>AffectedEventResponse</strong></p>
+<p>AffectedEventResponse is the response message for object affected events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>path of the affected object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">subtype</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>subtype of the affected event</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-attributechangedeventresponse" />
+<p><strong>AttributeChangedEventResponse</strong></p>
+<p>AttributeChangedEventResponse is the response message for attribute change events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>path of the object whose attribute is changed</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">attribute</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>name of the attribute</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">value</span></code> (3)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>value of the attribute</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-commandattributechangedeventresponse" />
+<p><strong>CommandAttributeChangedEventResponse</strong></p>
+<p>CommandAttributeChangedEventResponse is the response message for command attribute change events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>path of the object whose command attribute is changed</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>name of the command</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">attribute</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>name of the attribute</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">value</span></code> (4)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>value of the attribute</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-commandexecutedeventresponse" />
+<p><strong>CommandExecutedEventResponse</strong></p>
+<p>CommandExecutedEventResponse is the response message for command execution events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>path of the object with the command</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>name of the command</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">args</span></code> (3)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>command arguments</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-streameventsresponse" />
+<p><strong>StreamEventsResponse</strong></p>
+<p>StreamEventsResponse is the streaming response containing events</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">tag</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The tag identifying the subscription that generated this event</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the event</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">created_event_response</span></code> (3)<span class="classifier">oneof event_response <a class="reference internal" href="#proto-object-model-createdeventresponse"><span class="std std-ref">CreatedEventResponse</span></a></span></dt><dd><p>Object creation event</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">modified_event_response</span></code> (4)<span class="classifier">oneof event_response <a class="reference internal" href="#proto-object-model-modifiedeventresponse"><span class="std std-ref">ModifiedEventResponse</span></a></span></dt><dd><p>Object modification event</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">deleted_event_response</span></code> (5)<span class="classifier">oneof event_response <a class="reference internal" href="#proto-object-model-deletedeventresponse"><span class="std std-ref">DeletedEventResponse</span></a></span></dt><dd><p>Object deletion event</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">affected_event_response</span></code> (6)<span class="classifier">oneof event_response <a class="reference internal" href="#proto-object-model-affectedeventresponse"><span class="std std-ref">AffectedEventResponse</span></a></span></dt><dd><p>Object affected event</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">attribute_changed_event_response</span></code> (7)<span class="classifier">oneof event_response <a class="reference internal" href="#proto-object-model-attributechangedeventresponse"><span class="std std-ref">AttributeChangedEventResponse</span></a></span></dt><dd><p>Attribute change event</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command_attribute_changed_event_response</span></code> (8)<span class="classifier">oneof event_response <a class="reference internal" href="#proto-object-model-commandattributechangedeventresponse"><span class="std std-ref">CommandAttributeChangedEventResponse</span></a></span></dt><dd><p>Command attribute change event</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">command_executed_event_response</span></code> (9)<span class="classifier">oneof event_response <a class="reference internal" href="#proto-object-model-commandexecutedeventresponse"><span class="std std-ref">CommandExecutedEventResponse</span></a></span></dt><dd><p>Command execution event</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-renamerequest" />
+<p><strong>RenameRequest</strong></p>
+<p>RenameRequest is the request message for renaming an object</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the rename operation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to the object to rename</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">new_name</span></code> (3)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The new name for the object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wait</span></code> (4)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, waits for the operation to complete before returning.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-renameresponse" />
+<p><strong>RenameResponse</strong></p>
+<p>RenameResponse is the response message after renaming an object</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">state</span></code> (1)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The updated state after the rename</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">deleted_paths</span></code> (2)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Paths of deleted objects</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-getobjectnamesrequest" />
+<p><strong>GetObjectNamesRequest</strong></p>
+<p>GetObjectNamesRequest is the request message for retrieving object names</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the query</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to retrieve object names from</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-getobjectnamesresponse" />
+<p><strong>GetObjectNamesResponse</strong></p>
+<p>GetObjectNamesResponse is the response message containing object names</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">names</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The list of object names at the specified path</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-childnames" />
+<p><strong>ChildNames</strong></p>
+<p>ChildNames contains a list of child object names</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">names</span></code> (1)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The list of child names</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-deletechildobjectsrequest" />
+<p><strong>DeleteChildObjectsRequest</strong></p>
+<p>DeleteChildObjectsRequest is the request message for deleting child objects</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the deletion</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to the parent object</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">child_names</span></code> (3)<span class="classifier">oneof var <a class="reference internal" href="#proto-object-model-childnames"><span class="std std-ref">ChildNames</span></a></span></dt><dd><p>Specific child names to delete</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">delete_all</span></code> (4)<span class="classifier">oneof var <code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, deletes all child objects.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wait</span></code> (5)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">bool</span></code></span></dt><dd><p>If true, waits for the operation to complete before returning.</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-deletechildobjectsresponse" />
+<p><strong>DeleteChildObjectsResponse</strong></p>
+<p>DeleteChildObjectsResponse is the response message after deleting child objects</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">state</span></code> (1)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The updated state after deletion</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">deleted_paths</span></code> (2)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Paths of deleted objects</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-fixstaterequest" />
+<p><strong>FixStateRequest</strong></p>
+<p>FixStateRequest is the request message for fixing the state of an object</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">rules</span></code> (1)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The rules context for the fix operation</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code> (2)<span class="classifier"><code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>The path to the object to fix</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-fixstateresponse" />
+<p><strong>FixStateResponse</strong></p>
+<p>FixStateResponse is the response message after fixing state</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">state</span></code> (1)<span class="classifier"><a class="reference internal" href="../helpers/variant.html#proto-variant-variant"><span class="std std-ref">Variant</span></a></span></dt><dd><p>The fixed state</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">deleted_paths</span></code> (2)<span class="classifier">repeated <code class="docutils literal notranslate"><span class="pre">string</span></code></span></dt><dd><p>Paths of deleted objects during fix</p>
+</dd>
+</dl>
+<p><strong>Enumerations</strong></p>
+<hr class="docutils" id="proto-object-model-diffstate" />
+<p><strong>DiffState</strong> <em>(enum)</em></p>
+<p>DiffState specifies the level of detail for state differences</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">DIFF_STATE_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified diff state</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DIFF_STATE_FULL</span></code> (1)</dt><dd><p>Full state including commands</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DIFF_STATE_NOCOMMANDS</span></code> (2)</dt><dd><p>State without commands</p>
+</dd>
+</dl>
+<hr class="docutils" id="proto-object-model-subscriptionstatus" />
+<p><strong>SubscriptionStatus</strong> <em>(enum)</em></p>
+<p>SubscriptionStatus indicates the status of an event subscription</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">SUBSCRIPTION_STATUS_UNSPECIFIED</span></code> (0)</dt><dd><p>Unspecified subscription status</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SUBSCRIPTION_STATUS_SUBSCRIBED</span></code> (1)</dt><dd><p>Successfully subscribed</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SUBSCRIPTION_STATUS_UNSUBSCRIBED</span></code> (2)</dt><dd><p>Successfully unsubscribed</p>
+</dd>
+</dl>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/services/object_model.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+
+  <!-- Include desired assets -->
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+
+<script>
+// Passing the search options to the search.js file
+const SEARCH_OPTIONS = JSON.parse('{"includeMatches": true, "includeScore": true, "keys": [{"name": "section", "weight": 3}, {"name": "title", "weight": 3}, {"name": "text", "weight": 1}, {"name": "objectID", "weight": 0.5}], "limit": 10, "threshold": 0.2}');
+const SEARCH_FILE = "../../_static/search.json";
+const ADVANCE_SEARCH_PATH = "../../search.html";
+const EXTRA_SOURCES = JSON.parse('""');
+</script>
+
+
+<script src="../../_static/js/search.js"></script>
+
+  
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<!--
+  Theme Version Footer
+  Displays the Sphinx theme version and the last updated date.
+  Accessibility and semantic improvements included.
+-->
+<footer class="theme-version" aria-label="Theme version and last update">
+  <span>
+    
+      Built with the
+      <a href="https://sphinxdocs.ansys.com/version/stable/index.html" target="_blank" rel="noopener noreferrer">
+        Ansys Sphinx Theme
+      </a>
+      1.11.0.
+    
+  </span>
+  <br />
+  <span>Last updated on <time id="ast_build_date"></time></span>
+</footer>
+<script>
+  // Set the last updated date in a readable format
+  (function() {
+    var options = { day: "numeric", month: "long", year: "numeric" };
+    var ast_lastModifiedDate = new Date(document.lastModified);
+    var ast_build_date = ast_lastModifiedDate.toLocaleDateString("en-US", options);
+    var dateElem = document.getElementById("ast_build_date");
+    if (dateElem) {
+      dateElem.textContent = ast_build_date;
+    }
+  })();
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
