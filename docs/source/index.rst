@@ -1,3 +1,4 @@
+======================
 Ansys Fluent gRPC API
 ======================
 
@@ -9,6 +10,13 @@ Ansys Fluent gRPC API
    user_guide/index
    api/index
 
+.. |tag-line| raw:: html
+
+   <big><big><big>Drive Fluent programmatically from any language.</big></big></big>
+
+|tag-line|
+
+|
 The Ansys Fluent gRPC API exposes services and RPC methods for driving Fluent
 programmatically from external clients. The
 `repository <https://github.com/ansys/ansys-api-fluent>`_ contains
@@ -19,25 +27,30 @@ are provided for building Python clients.
 
 .. note::
 
-   This documentation covers the **v1 API only**. The v1 API is compatible
-   with **Fluent 27R1 and later**. The ``v0`` package is retained solely for
-   backwards compatibility with existing clients and is neither documented nor
-   supported. All new development should target ``ansys.api.fluent.v1``.
+   This documentation covers the **gRPC package v1** only:
 
-Getting started
-~~~~~~~~~~~~~~~~
+   - v1 is compatible with **Fluent 27R1 and later**
+   - v1 is the target for all new development -- use the ``ansys.api.fluent.v1`` package
+   - v0 is retained solely for backwards compatibility with existing clients; it is neither documented nor supported
 
-See the :ref:`getting_started` page for an overview of the API structure,
+
+.. |getting-started-label| raw:: html
+
+   <big><big><strong>Getting started</strong></big></big>
+
+|getting-started-label| — see the :ref:`getting_started` page for an overview of the API structure,
 installation steps, and multi-language examples.
 
-Python client examples
-~~~~~~~~~~~~~~~~~~~~~~~
+.. |python-client-examples| raw:: html
 
-Browse the :ref:`client_examples`, which include simulation setup,
+   <big><big><strong>Python client examples</strong></big></big>
+
+|python-client-examples| — browse the :ref:`client_examples`, which include simulation setup,
 live solver streams, and simulation data access.
 
-API reference
-~~~~~~~~~~~~~~
+.. |api-reference| raw:: html
 
-Use the :ref:`api_reference` to look up a service, its methods,
+   <big><big><strong>API reference</strong></big></big>
+
+|api-reference| — use the :ref:`api_reference` to look up a service, its methods,
 and the corresponding request and response messages.
