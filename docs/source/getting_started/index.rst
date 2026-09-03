@@ -4,9 +4,6 @@
 Getting started
 ===============
 
-Introduction
-~~~~~~~~~~~~
-
 You can use gRPC to drive your Fluent simulations from any
 language that supports gRPC. A suite of neatly segregated services allows you to
 perform meshing, solver setup and execution, live monitoring, field-data
@@ -29,8 +26,8 @@ Prerequisites
 
 Before compiling the ``.proto`` files you need:
 
-- A Protocol Buffers compiler (``protoc``) on your ``PATH``, at a version
-  compatible with the repository's ``.proto`` files.
+- A Protocol Buffers compiler (``protoc``), at a version compatible with the
+  repository's ``.proto`` files.
 - A language-specific `gRPC <https://grpc.io/>`_ plug-in or toolchain:
 
   - **Python** – ``grpcio-tools`` (``pip install grpcio-tools``), which bundles
@@ -44,27 +41,26 @@ Before compiling the ``.proto`` files you need:
 Ensure ``protoc`` and any ``protoc-gen-*`` plug-ins are on ``PATH``, or pass
 ``--plugin=protoc-gen-<lang>=<path>`` explicitly when invoking ``protoc``.
 
-.. note::
-
-   Each example shows the same core step (using the protocol
-   compiler) but relies on a different language plug-in. The Python example uses
-   the ``python -m grpc_tools.protoc`` wrapper, which bundles ``protoc`` and
-   the Python plug-in together.
-
 Compiling proto files
 ~~~~~~~~~~~~~~~~~~~~~
 
 Clone the `ansys-api-fluent <https://github.com/ansys/ansys-api-fluent>`_
 repository, then run ``protoc``
-with the appropriate gRPC plug-in against the files in ``ansys/api/fluent/v1/``.
+with the appropriate gRPC plug-in against the files in ``ansys/api/fluent/v1/``. To run
+these commands directly as they stand, the `protoc` executable and any
+`protoc-gen-*` plug-ins should be discoverable via the system path;
+alternatively, pass their locations explicitly with
+`--plugin=protoc-gen-<lang>=<path>`.
 
 .. note::
 
-   The commands below are illustrative. Exact flags and plug-in paths vary
-   by platform and installed toolchain. Each command compiles a single
-   ``.proto`` file (``health.proto`` is used as an example); repeat the
-   invocation for each service, or pass multiple ``.proto`` files in one call,
-   to generate stubs for the full API.
+   Each command below compiles a single ``.proto`` file (``health.proto`` is used
+   here) against one language's plug-in; repeat the invocation for each
+   service, or pass multiple ``.proto`` files in one call, to generate stubs for
+   the full API. The Python example uses the `python -m grpc_tools.protoc`
+   wrapper, installed via `pip install grpcio-tools`, which bundles `protoc`
+   and the Python plug-in together; the other languages require `protoc` and
+   their plug-in to be installed and available separately, as described above.
 
 .. tabs::
 
@@ -123,6 +119,18 @@ with the appropriate gRPC plug-in against the files in ``ansys/api/fluent/v1/``.
              --grpc_out=<out> \
              --plugin=protoc-gen-grpc=grpc_csharp_plugin \
              ansys/api/fluent/v1/health.proto
+
+Python package (Python 3.10+)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Python stubs are pre-generated and published to
+`PyPI <https://pypi.org/project/ansys-api-fluent/>`_, offering a ready-made
+alternative to compiling the proto files yourself. Install the package and
+import the generated modules directly:
+
+.. code-block:: bash
+
+   pip install ansys-api-fluent
 
 Making a service call
 ~~~~~~~~~~~~~~~~~~~~~
@@ -251,21 +259,3 @@ The following snippets illustrate the common pattern across languages.
              new CallOptions(headers: headers));
          Console.WriteLine($"Status: {resp.Status}");
          await channel.ShutdownAsync();
-
-Python package (Python 3.10+)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Python stubs are pre-generated and published to
-`PyPI <https://pypi.org/project/ansys-api-fluent/>`_ which provides a ready-made
-alternative to compiling the proto files to Python yourself. Install the Python
-package and import the generated modules directly:
-
-.. code-block:: bash
-
-   pip install ansys-api-fluent
-
-Next step
-~~~~~~~~~
-
-- :doc:`../user_guide/client_examples/index` — annotated Python examples for
-  every service
