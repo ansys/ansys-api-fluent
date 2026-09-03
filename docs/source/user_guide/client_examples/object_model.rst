@@ -6,8 +6,6 @@ Python client examples for the ``ObjectModel`` gRPC service.
 See :doc:`../../api/services/object_model`
 for this service's complete reference material.
 
-.. include:: ../../shared_example_assumptions.rst
-
 .. code-block:: python
    :caption: Python
 

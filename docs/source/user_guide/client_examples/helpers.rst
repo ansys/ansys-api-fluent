@@ -8,8 +8,6 @@ multiple services.
 See :doc:`../../api/helpers/variant` and :doc:`../../api/helpers/primitives`
 for the complete reference material.
 
-.. include:: ../../shared_example_assumptions.rst
-
 Variant
 -------
 

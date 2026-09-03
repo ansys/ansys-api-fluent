@@ -7,7 +7,7 @@ Ansys Fluent gRPC API
    :maxdepth: 2
 
    getting_started/index
-   user_guide/index
+   user_guide/client_examples/index
    api/index
 
 .. |tag-line| raw:: html

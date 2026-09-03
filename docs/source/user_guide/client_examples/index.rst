@@ -1,11 +1,16 @@
+.. _user_guide:
+
 .. _client_examples:
 
 ======================
 Python client examples
 ======================
 
-Runnable code examples for the major services in ``ansys.api.fluent.v1``.
+This page provides runnable code examples for the major services in
+``ansys.api.fluent.v1``.
 Full message and field listings are in the :ref:`api_reference`.
+
+.. include:: ../../shared_example_assumptions.rst
 
 Connecting and managing the session
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
