@@ -6,14 +6,13 @@
 Python client examples
 ======================
 
-This page provides runnable code examples for the services in
-``ansys.api.fluent.v1``.
+This page provides runnable code examples for Fluent's gRPC services.
 Full message and field listings are in the :ref:`api_reference`.
 
 .. include:: ../../shared_example_assumptions.rst
 
-Connecting and managing the session
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Connecting and managing sessions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See :doc:`session_setup` for health checks, version negotiation, product and
 build info, process info, app mode, beta features, and Python journalling via
@@ -23,8 +22,7 @@ Configuring the simulation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Use :doc:`object_model` to discover the schema, then read and write object
-state, run commands, and stream events via the meshing-oriented ``ObjectModel``
-service.
+state, run commands, and stream events via the ``ObjectModel`` service.
 
 Use :doc:`settings` to discover the schema, then read and write solver state,
 manage named objects, and call commands and queries via the solver-oriented
