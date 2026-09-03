@@ -6,8 +6,6 @@ Python client examples for the ``Settings`` gRPC service.
 See :doc:`../../api/services/settings`
 for this service's complete reference material.
 
-.. include:: ../../shared_example_assumptions.rst
-
 .. code-block:: python
    :caption: Python
 
