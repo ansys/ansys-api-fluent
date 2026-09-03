@@ -6,7 +6,7 @@
 Python client examples
 ======================
 
-This page provides runnable code examples for the major services in
+This page provides runnable code examples for the services in
 ``ansys.api.fluent.v1``.
 Full message and field listings are in the :ref:`api_reference`.
 
