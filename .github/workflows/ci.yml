@@ -159,7 +159,7 @@ jobs:
     needs: [ docs ]
     steps:
       - name: "Deploy the stable documentation"
-        uses: ansys/actions/doc-deploy-dev@0b23d99e6800f16337ff173fcfbfcc1251130e99 # v11.0.2
+        uses: ansys/actions/doc-deploy-dev@3ad3b285bd9b67045477dafc7f9865a3aa39f692 # v11.0.6
         with:
           doc-artifact-name: "ansys-api-fluent-docs"
           cname: ${{ env.DOCUMENTATION_CNAME }}
@@ -183,7 +183,7 @@ jobs:
           path: ansys-api-fluent-artifacts
 
       - name: Release
-        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           generate_release_notes: true
           files: |
