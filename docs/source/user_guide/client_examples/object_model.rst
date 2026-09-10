@@ -8,6 +8,17 @@ for this service's complete reference material.
 
 .. include:: ../../shared_example_assumptions.rst
 
+.. testsetup:: *
+
+   import unittest, grpc
+   from ansys.api.fluent.v1 import object_model_pb2, object_model_pb2_grpc
+   from ansys.api.fluent.v1 import variant_pb2
+   if _mesher_channel is None:
+       raise unittest.SkipTest("No Fluent server available")
+   channel = _mesher_channel
+   metadata = _mesher_metadata
+   stub = object_model_pb2_grpc.ObjectModelStub(channel)
+
 .. code-block:: python
    :caption: Python
 
@@ -88,7 +99,7 @@ parameters — walk it to discover valid paths before making runtime calls.
      FTMRegionData/
        AllRegionTypeList
        AllRegionMeshMethodList
-       AllRegionOversetComponenList
+       AllRegionOversetComponentList
        AllOversetVolumeFillList
        AllRegionSizeList
        ... (9 more parameters)
@@ -118,8 +129,7 @@ parameters — walk it to discover valid paths before making runtime calls.
 Reading and writing state
 --------------------------
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    # Fetch a current boolean value.
    state_response = stub.GetState(
@@ -130,7 +140,7 @@ Reading and writing state
        metadata=metadata,
    )
    current = state_response.state.bool_state  # use .string_state, .int_state, etc. for other types
-   print(current)  # prints the current value as a bool
+   assert isinstance(current, bool)  # would be None if not set
 
    # Modify the value at the same path.
    stub.SetState(
@@ -159,8 +169,7 @@ Querying attributes
 (range/min‑max, allowed/enumerated values), mutability (read-only/writable),
 availability (active/disabled), and default values.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    attribute_response = stub.GetAttributeValue(
        object_model_pb2.GetAttributeValueRequest(
@@ -170,7 +179,7 @@ availability (active/disabled), and default values.
        ),
        metadata=metadata,
    )
-   print(attribute_response.result.bool_state)  # -> False
+   assert isinstance(attribute_response.result.bool_state, bool)
 
 Executing commands
 -------------------
@@ -201,8 +210,7 @@ Building command arguments incrementally
 ``CreateCommandArguments`` creates a server-side argument object so you can
 set individual fields before calling ``ExecuteCommand``.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    # Allocate an argument object on the server.
    create_response = stub.CreateCommandArguments(
@@ -214,6 +222,7 @@ set individual fields before calling ``ExecuteCommand``.
        metadata=metadata,
    )
    command_id = create_response.command_id
+   assert command_id
 
    # ... populate fields via SetState using the command_id path ...
 
@@ -276,8 +285,11 @@ Subscribing to, streaming, and unsubscribing from events
        object_model_pb2.UnsubscribeEventsRequest(tags=tags),
        metadata=metadata,
    )
-   for r in unsubscribe_response.responses:
-       print(r.status)  # -> SUBSCRIPTION_STATUS_UNSUBSCRIBED
+   assert all(
+       r.status == object_model_pb2.SUBSCRIPTION_STATUS_UNSUBSCRIBED
+       for r in unsubscribe_response.responses
+   )
+
 
 Streaming state changes
 ------------------------
@@ -286,8 +298,7 @@ Streaming state changes
 it changes. Use ``DIFF_STATE_FULL`` for a complete snapshot or
 ``DIFF_STATE_NOCOMMANDS`` for a lighter diff without command metadata.
 
-.. code-block:: python
-   :caption: Python
+.. testcode::
 
    # Full snapshot on every change.
    stream = stub.StreamStateChanges(
@@ -300,9 +311,9 @@ it changes. Use ``DIFF_STATE_FULL`` for a complete snapshot or
    )
    first_response = next(iter(stream))
    stream.cancel()
-   print(list(first_response.deleted_paths))  # -> []  (empty list when nothing has been deleted)
-   print(list(first_response.events))         # -> []  (empty list when no events fired)
-
+   assert list(first_response.deleted_paths) == []  # (empty list when nothing has been deleted)
+   assert list(first_response.events) == []  # empty list when no events fired
+ 
    # Lighter diff without command metadata.
    stream = stub.StreamStateChanges(
        object_model_pb2.StreamStateChangesRequest(
