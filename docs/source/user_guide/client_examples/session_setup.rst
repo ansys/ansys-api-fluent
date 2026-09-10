@@ -8,8 +8,6 @@ See :doc:`../../api/services/connection`, :doc:`../../api/services/health`,
 and :doc:`../../api/services/application_runtime`
 for these services' complete reference material.
 
-.. include:: ../../shared_example_assumptions.rst
-
 .. code-block:: python
    :caption: Python
 
@@ -56,12 +54,9 @@ before sending any other RPCs.
        ),
        metadata=metadata,
    )
-   print(health_response.status in {
-       health_pb2.HealthCheckResponse.SERVING_STATUS_SERVING,
-       health_pb2.HealthCheckResponse.SERVING_STATUS_NOT_SERVING,
-       health_pb2.HealthCheckResponse.SERVING_STATUS_SERVICE_UNKNOWN,
-       health_pb2.HealthCheckResponse.SERVING_STATUS_UNSPECIFIED,
-   })  # -> True
+   status_enum = health_pb2.HealthCheckResponse.DESCRIPTOR.fields_by_name["status"].enum_type
+   print(status_enum.values_by_number[health_response.status].name)
+   # -> SERVING_STATUS_SERVING
 
    # Repeated calls must all return the same status.
    statuses = [
@@ -178,16 +173,8 @@ solver session, or a specialised variant.
        application_runtime_pb2.GetModeRequest(),
        metadata=metadata,
    )
-   print(app_mode_response.mode)  # -> MODE_SOLVER  (or MODE_MESHING, etc.)
-
-   valid_modes = {
-       application_runtime_pb2.MODE_UNSPECIFIED,
-       application_runtime_pb2.MODE_MESHING,
-       application_runtime_pb2.MODE_SOLVER,
-       application_runtime_pb2.MODE_SOLVER_ICING,
-       application_runtime_pb2.MODE_SOLVER_AERO,
-   }
-   print(app_mode_response.mode in valid_modes)  # -> True
+   print(application_runtime_pb2.Mode.Name(app_mode_response.mode))
+   # -> MODE_SOLVER  (or MODE_MESHING, etc.)
 
 Enabling beta features
 -----------------------

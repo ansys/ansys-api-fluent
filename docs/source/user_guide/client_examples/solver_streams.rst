@@ -1,4 +1,4 @@
-Solver output streams — events, monitors, and transcript
+Solver output streams — transcript, events, and monitors
 =========================================================
 
 Python client examples for the ``Transcript``, ``Events``, and ``Monitor``
@@ -7,8 +7,6 @@ gRPC services.
 See :doc:`../../api/services/transcript`, :doc:`../../api/services/events`,
 and :doc:`../../api/services/monitor`
 for these services' complete reference material.
-
-.. include:: ../../shared_example_assumptions.rst
 
 .. code-block:: python
    :caption: Python
@@ -110,19 +108,8 @@ access its payload fields.
    :caption: Python
 
    valid_event_fields = {
-       "pre_read_case_event", "case_read_event",
-       "pre_initialize_event", "initialized_event",
-       "pre_read_data_event", "data_read_event",
-       "iteration_started_event", "iteration_ended_event",
-       "timestep_started_event", "timestep_ended_event",
-       "calculations_started_event", "calculations_ended_event",
-       "report_definition_changed_event", "plot_set_changed_event",
-       "residual_plot_changed_event", "clear_settings_done_event",
-       "auto_pause_event", "calculations_paused_event",
-       "calculations_resumed_event", "progress_event",
-       "error_event", "command_completed_event",
-       "data_model_changed_event", "solver_time_estimate_event",
-       "client_execute_event",
+       field.name
+       for field in events_pb2.BeginStreamingResponse.DESCRIPTOR.oneofs_by_name["as"].fields
    }
 
    stream = events_stub.BeginStreaming(
@@ -247,16 +234,8 @@ including its name, type, x-axis type, update frequency, and unit metadata.
        print(ms.name)       # -> 'residuals'
        print(ms.monitors)   # -> ['continuity', 'x-velocity', 'energy']
        print(ms.frequency)  # -> 1
-       print(ms.type in {
-           monitor_pb2.MONITOR_TYPE_RESIDUAL,
-           monitor_pb2.MONITOR_TYPE_SOLUTION,
-           monitor_pb2.MONITOR_TYPE_UNSPECIFIED,
-       })                   # -> True
-       print(ms.axis in {
-           monitor_pb2.XAXIS_TYPE_ITERATION,
-           monitor_pb2.XAXIS_TYPE_TIME,
-           monitor_pb2.XAXIS_TYPE_UNSPECIFIED,
-       })                   # -> True
+       print(monitor_pb2.MonitorType.Name(ms.type))  # -> MONITOR_TYPE_RESIDUAL
+       print(monitor_pb2.XAxisType.Name(ms.axis))    # -> XAXIS_TYPE_ITERATION
 
 Validating monitor set metadata
 ---------------------------------
@@ -318,11 +297,7 @@ Each ``StreamingResponse`` exposes ``x_axis_data`` (index and type) and
    stream.cancel()
 
    print(hasattr(sample, "x_axis_data"))                 # -> True
-   print(sample.x_axis_data.x_axis_type in {
-       monitor_pb2.XAXIS_TYPE_ITERATION,
-       monitor_pb2.XAXIS_TYPE_TIME,
-       monitor_pb2.XAXIS_TYPE_UNSPECIFIED,
-   })                                                     # -> True
+   print(monitor_pb2.XAxisType.Name(sample.x_axis_data.x_axis_type))  # -> XAXIS_TYPE_ITERATION
    for y in sample.y_axis_values:
        print(len(y.name) > 0)                            # -> True
        print(isinstance(y.value, float))                 # -> True

@@ -8,8 +8,6 @@ See :doc:`../../api/services/field_data`, :doc:`../../api/services/reduction`,
 and :doc:`../../api/services/solution_variable`
 for these services' complete reference material.
 
-.. include:: ../../shared_example_assumptions.rst
-
 .. code-block:: python
    :caption: Python
 
@@ -211,8 +209,10 @@ single server-streaming call; each chunk carries a ``WhichOneof("chunk")`` tag.
        ),
        metadata=metadata,
    )
-   valid_chunks = {"byte_payload", "double_payload", "float_payload",
-                   "long_payload", "int_payload", "payload_info"}
+   valid_chunks = {
+       field.name
+       for field in field_data_pb2.GetFieldsResponse.DESCRIPTOR.oneofs_by_name["chunk"].fields
+   }
    for chunk in stream:
        chunk_type = chunk.WhichOneof("chunk")
        if chunk_type is not None:
