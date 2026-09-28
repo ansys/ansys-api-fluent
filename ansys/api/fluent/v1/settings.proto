@@ -286,7 +286,7 @@ message AttrInfoMap {
 // GetAttrsResponse is the response message containing attribute values
 message GetAttrsResponse {
   Value values = 1;                         // The attribute values for the requested object
-  repeated AttrInfoMap group_children = 2;  // Attribute information for child objects (when recursive is true)
+  repeated AttrInfoMap children = 2;  // Attribute information for child objects (when recursive is true)
 }
 
 // IsWildcardRequest is the request message for IsWildcard.
