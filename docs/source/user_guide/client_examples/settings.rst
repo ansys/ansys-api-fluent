@@ -214,7 +214,7 @@ Querying attributes
        print(f"{attr}: {value_to_python(val)}")
    # 'type': 'boolean', 'active?': True, 'read-only?': False
 
-   # Recursive read — populates group_children for every child node.
+   # Recursive read — populates children for every child node.
    attrs_response = stub.GetAttrs(
        settings_pb2.GetAttrsRequest(
            path_info=path("/setup/models"),
@@ -223,7 +223,7 @@ Querying attributes
        ),
        metadata=metadata,
    )
-   print(len(attrs_response.group_children))  # -> > 4
+   print(len(attrs_response.children))  # -> > 4
 
 Managing named objects
 -----------------------
