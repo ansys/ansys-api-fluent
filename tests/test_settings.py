@@ -376,8 +376,8 @@ def test_get_attrs_value_map_has_keys(stub, grpc_channel_and_metadata):
         assert attr in returned_keys, f"Attribute '{attr}' missing from GetAttrs response"
 
 
-def test_get_attrs_recursive_has_group_children(stub, grpc_channel_and_metadata):
-    """GetAttrs with recursive=True must populate group_children."""
+def test_get_attrs_recursive_has_children(stub, grpc_channel_and_metadata):
+    """GetAttrs with recursive=True must populate children."""
     _, metadata = grpc_channel_and_metadata
     resp = stub.GetAttrs(
         settings_pb2.GetAttrsRequest(
@@ -387,8 +387,8 @@ def test_get_attrs_recursive_has_group_children(stub, grpc_channel_and_metadata)
         ),
         metadata=metadata,
     )
-    assert hasattr(resp, "group_children")
-    assert len(resp.group_children) > 0
+    assert hasattr(resp, "children")
+    assert len(resp.children) > 0
 
 
 def test_is_wildcard_star_returns_true(stub, grpc_channel_and_metadata):
