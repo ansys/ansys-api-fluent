@@ -19,7 +19,7 @@ referenced across services.
      - The eleven gRPC services that make up the current Fluent API:
        :doc:`Health <services/health>`,
        :doc:`ApplicationRuntime <services/application_runtime>`,
-       :doc:`DataModel <services/object_model>`,
+       :doc:`ObjectModel <services/object_model>`,
        :doc:`Settings <services/settings>`,
        :doc:`Events <services/events>`,
        :doc:`FieldData <services/field_data>`,
