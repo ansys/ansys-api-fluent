@@ -20,7 +20,7 @@ with the messages and enums declared in the same proto file.
      - ``health.proto``
    * - :doc:`ApplicationRuntime <application_runtime>`
      - ``application_runtime.proto``
-   * - :doc:`DataModel <object_model>`
+   * - :doc:`ObjectModel <object_model>`
      - ``object_model.proto``
    * - :doc:`Settings <settings>`
      - ``settings.proto``
